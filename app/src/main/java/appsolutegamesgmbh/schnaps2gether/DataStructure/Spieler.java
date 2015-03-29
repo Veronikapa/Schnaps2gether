@@ -1,4 +1,4 @@
-package DataStructure;
+package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
 /**
  * Created by Kerstin on 29.03.2015.

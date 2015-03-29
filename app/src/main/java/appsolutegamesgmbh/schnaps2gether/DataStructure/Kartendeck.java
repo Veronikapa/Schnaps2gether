@@ -1,7 +1,6 @@
-package DataStructure;
+package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
