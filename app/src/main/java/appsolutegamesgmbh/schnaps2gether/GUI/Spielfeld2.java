@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import DataStructure.Spiel2;
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
