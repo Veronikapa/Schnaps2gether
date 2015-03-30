@@ -1,14 +1,24 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
-/**
- * Created by Kerstin on 29.03.2015.
- */
+import java.util.ArrayList;
+
 public class Spieler {
 
-    Kartendeck Hand;
-    int Punkte;
-    Kartendeck Gestochen;
-    boolean istdran;
+    public ArrayList<Karte> Hand;
+    private int Punkte;
+    public ArrayList<Karte> Gestochen;
+    private boolean istdran;
+
+
+
+    public int getPunkte() {
+        return Punkte;
+    }
+
+    public void setPunkte(int punkte) {
+        Punkte = punkte;
+    }
+
 
     public boolean isIstdran() {
         return istdran;
@@ -18,35 +28,11 @@ public class Spieler {
         this.istdran = istdran;
     }
 
-    public void setHand(Kartendeck hand) {
-        Hand = hand;
-    }
-
-    public void setPunkte(int punkte) {
-        Punkte = punkte;
-    }
-
-    public void setGestochen(Kartendeck gestochen) {
-        Gestochen = gestochen;
-    }
-
-    public Kartendeck getHand() {
-        return Hand;
-    }
-
-    public int getPunkte() {
-        return Punkte;
-    }
-
-    public Kartendeck getGestochen() {
-        return Gestochen;
-    }
-
     public Spieler()
     {
-        Hand = new Kartendeck();
+        Hand = new ArrayList<Karte>(5);
         Punkte = 0;
-        Gestochen = new Kartendeck();
+        Gestochen = new ArrayList<Karte>(20);
         istdran = false;
     }
 

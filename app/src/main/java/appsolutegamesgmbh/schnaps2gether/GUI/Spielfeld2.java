@@ -19,6 +19,7 @@ public class Spielfeld2 extends ActionBarActivity {
     *
     * TODO: Klick auf Zudrehen --> spiel.Zudrehen aufrufen, tbd..
     * TODO: Punkte auslesen von Spieler 1 nach Zugauswerten und anzeigen
+    * TODO: Überprüfen ob Spiel weitergeht oder neues Spiel begonnen wird; Auslesen wer Spiel gewonnen hat
     * */
     private Spiel2 spiel;
 
