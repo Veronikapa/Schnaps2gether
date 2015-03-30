@@ -10,7 +10,7 @@ public class Spiel2 {
     private Spieler s1;
     private Spieler s2;
     private String trumpf;
-    private Karte aufgedeckteTrumpf;
+    private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
 
     public Spiel2()
@@ -45,8 +45,8 @@ public class Spiel2 {
         stapel.remove(0);
 
         //Trumpfkarte ausgeben
-        aufgedeckteTrumpf = stapel.get(0);
-        trumpf = aufgedeckteTrumpf.getFarbe();
+        aufgedeckterTrumpf = stapel.get(0);
+        trumpf = aufgedeckterTrumpf.getFarbe();
         stapel.remove(0);
 
         //Spieler 1 bekommt 2 Karten
@@ -85,18 +85,257 @@ public class Spiel2 {
 
     public void Auspielen(Karte karteS1)
     {
-        //TODO: V
-        //TODO: S1 klickt im Spielfeld2 auf Karte; Karte aus Hand S1 löschen; Zudrehen berücksichtigen (bzw. Methode DarfKarteAuswaehlen verwenden)
+        //Ausgespielte Karte wird aus Hand von S1 entfernt
+        s1.Hand.remove(karteS1);
     }
 
-    public void AuspielenComputer(Karte karteS1)
-    {
-        //TODO: V
-        //TODO: wenn S1 Karte ausgespielt hat (karteS1 != null), basierend auf Karte, Karte ausspielen sonst beliebige Karte ausspielen; Zudrehen berücksichtigen (bzw. Methode DarfKarteAuswaehlen verwenden)
+    /*
+    / Enstcheidet welche Karte der Computer ausspielt.
+    / Wenn s1 bereits ausgespielt hat, entscheide basierend auf dieser Karte
+    / @return: Liefert Karte die der Computer ausspielt
+     */
+    public Karte AuspielenComputer(Karte karteS1) {
+        //Spieler1 hat bereits Karte ausgespielt, entscheide basierend auf dieser Karte
+        if (karteS1 != null) {
 
-        //TODO: istdrann = true, eventuell zudrehen
+            if(zugedreht)
+                return SpieleComputerKarteWennS1Zugedreht(karteS1);
 
-        //TODO: karteS1 == null, setze am Ende Spieler 1 ist dran
+            else
+                return SpieleComputerKarte(karteS1);
+        }
+
+        //Spiele die zur Zeit am sinnvollsten Karte aus
+        else {
+
+            if(!zugedreht && sollComputerZudrehen())
+                Zudrehen();
+
+            if(zugedreht)
+            {
+               //TODO VP: Extend logic
+            }
+
+            else
+            {
+
+            }
+
+            s1.isIstdran();
+        }
+
+        //TODO VP: Remove after finalization of logic above
+        return s2.Hand.get(0);
+    }
+
+    /*
+    / Überprüft ob Zudrehen des Computers sinnvoll ist
+    / Zudrehen, wenn ich die 2 höhsten Trümpfe habe und mindestens 2 weitere Asse oder 10er
+     */
+    private boolean sollComputerZudrehen() {
+
+        boolean zudrehen = false;
+
+        //Wenn der Computer weniger als Trümpfe hat, dann nicht zudrehen
+        if(!computerHat2HoechsteTruempfe())
+            return false;
+
+        //Wenn ich zusätzlich min. 2 10er habe zudrehen
+        //TODO VP: Add logic
+
+        return zudrehen;
+    }
+
+    /*
+    / Gibt zurück ob Computer mindestens 2 ausstehende Trümpfe besitzt.
+     */
+    private boolean computerHat2HoechsteTruempfe() {
+        boolean trumpfAssGestochen = false;
+        boolean trumpf10erGestochen = false;
+        boolean trumpfKoenigGestochen = false;
+        boolean trumpfDameGestochen = false;
+        boolean trumpfBubGestochen = false;
+
+        boolean habeTrumpfAss = false;
+        boolean habeTrumpf10er = false;
+        boolean habeTrumpfKoenig = false;
+        boolean habeTrumpfDame = false;
+        boolean habeTrumpfBub = false;
+
+        for (int i = 0; i < s2.Gestochen.size(); i++) {
+
+            if (s2.Gestochen.get(i).getFarbe() == aufgedeckterTrumpf.getFarbe()) {
+                if (!trumpfAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "Ass")
+                    trumpfAssGestochen = true;
+
+                else if (!trumpf10erGestochen && s2.Gestochen.get(i).getWertigkeit() == "10er")
+                    trumpf10erGestochen = true;
+
+                else if (!trumpfKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "König")
+                    trumpfKoenigGestochen = true;
+
+                else if (!trumpfDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
+                    trumpfDameGestochen = true;
+
+                else if (!trumpfBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                    trumpfBubGestochen = true;
+            }
+        }
+
+        for (int i = 0; i < s2.Hand.size(); i++) {
+
+            if (s2.Hand.get(i).getFarbe() == aufgedeckterTrumpf.getFarbe()) {
+                if (!trumpfAssGestochen && s2.Hand.get(i).getWertigkeit() == "Ass")
+                    habeTrumpfAss = true;
+
+                else if (!trumpf10erGestochen && s2.Hand.get(i).getWertigkeit() == "10er")
+                    habeTrumpf10er = true;
+
+                else if (!trumpfKoenigGestochen && s2.Hand.get(i).getWertigkeit() == "König")
+                    habeTrumpfKoenig= true;
+
+                else if (!trumpfDameGestochen && s2.Hand.get(i).getWertigkeit() == "Dame")
+                    habeTrumpfDame= true;
+
+                else if (!trumpfBubGestochen && s2.Hand.get(i).getWertigkeit() == "Bub")
+                    habeTrumpfBub = true;
+            }
+        }
+
+        if(habeTrumpfAss && habeTrumpf10er)
+            return true;
+
+        if(trumpfAssGestochen && habeTrumpf10er && habeTrumpfKoenig)
+            return true;
+
+        if(trumpf10erGestochen && habeTrumpfAss && habeTrumpfKoenig)
+            return true;
+
+        if(trumpfAssGestochen && trumpf10erGestochen && habeTrumpfKoenig && habeTrumpfDame)
+            return true;
+
+        if(trumpfAssGestochen && trumpf10erGestochen && trumpfKoenigGestochen && habeTrumpfDame && habeTrumpfBub)
+            return true;
+
+        return false;
+    }
+
+    /*
+    / Findet beste Karte zum Ausspielen, wenn s1 bereits gespielt
+     */
+    private Karte SpieleComputerKarte(Karte karteS1) {
+
+        //Habe ich Karte mit selber Farbe
+        Karte karteMitSelberFarbe = computerKannFaerbeln(karteS1);
+
+        //Habe ich Trumph mit dem ich stechen könnte, wenn S1 keinen Trumpf gespielt hat
+        Karte trumpfKarte = null;
+        if(aufgedeckterTrumpf.getFarbe()!=karteS1.getFarbe())
+        {
+            trumpfKarte = computerHatTrumpf();
+        }
+
+        //Habe karteMitSelberFarbe die höher als die von s1 gespielte ist, spiele diese
+        if(karteMitSelberFarbe!=null && karteMitSelberFarbe.getPunkte() > karteS1.getPunkte())
+        {
+            return karteMitSelberFarbe;
+        }
+
+        //Habe eine Trumpfkarte mit der ich stechen kann und s1 hat nicht Trumpf gespielt
+        else if(trumpfKarte!=null)
+            return trumpfKarte;
+
+        //Wenn ich nicht stechen kann --> niedrigste Karte zugeben
+        return niedrigsteKarteComputer();
+    }
+
+    /*
+    / Findet beste Karte zum Ausspielen, wenn S1 schon gespielt hat und zugedreht wurde bzw.
+    / wenn keine Karten mehr zum Heben vorhanden sind.
+     */
+    private Karte SpieleComputerKarteWennS1Zugedreht(Karte karteS1) {
+            //Habe ich Karte mit selber Farbe
+            Karte karteMitSelberFarbe = computerKannFaerbeln(karteS1);
+
+            //Habe ich Trumph mit dem ich stechen könnte, wenn S1 keinen Trumpf gespielt hat
+            Karte trumpfKarte = null;
+            if(aufgedeckterTrumpf.getFarbe()!=karteS1.getFarbe())
+            {
+                trumpfKarte = computerHatTrumpf();
+            }
+
+            //Habe karteMitSelberFarbe, spiele diese (Faerbeln)
+            if(karteMitSelberFarbe!=null)
+            {
+                return karteMitSelberFarbe;
+            }
+
+            //Habe eine Trumpfkarte mit der ich stechen kann und s1 hat nicht Trumpf gespielt
+            else if(trumpfKarte!=null)
+                return trumpfKarte;
+
+            //Wenn ich nicht faerbeln kann und nicht stechen kann --> niedrigse Karte zugeben
+            return niedrigsteKarteComputer();
+    }
+
+    /*
+    / Sucht niedrigste Karte, nimmt keine Rücksicht auf Farbe
+    / Gibt die niedrigste Karte zurück, die der Computer besitzt
+     */
+    private Karte niedrigsteKarteComputer() {
+      Karte niedrigsteKarte = null;
+
+        for(int i=0; i<s2.Hand.size(); i++)
+        {
+            if(niedrigsteKarte == null)
+                niedrigsteKarte = s2.Hand.get(i);
+
+            else if(niedrigsteKarte.getPunkte() > s2.Hand.get(i).getPunkte())
+                niedrigsteKarte = s2.Hand.get(i);
+        }
+    }
+
+    /*
+    / Such niedrigsten Trumpf den der Computer besitzt
+    /  Wenn der Computer einen Trumpf in der Hand hat wird dieser zurückgegeben, sonst null
+     */
+    private Karte computerHatTrumpf() {
+
+        Karte niedrigsterTrumpf = null;
+        for (int i =0; i < s2.Hand.size(); i++)
+        {
+            if(s2.Hand.get(i).getFarbe()==aufgedeckterTrumpf.getFarbe())
+            {
+                if(niedrigsterTrumpf==null)
+                    niedrigsterTrumpf = s2.Hand.get(i);
+
+                else if(s2.Hand.get(i).getPunkte()<niedrigsterTrumpf.getPunkte())
+                    niedrigsterTrumpf = s2.Hand.get(i);
+            }
+        }
+        return niedrigsterTrumpf;
+    }
+
+    /*
+    / Wenn der Computer eine Karte mit derselben Farbe hat, wird diese Karte zurückgegeben.
+    / Wenn es mehrere solche Karten gibt. Gib die höchste Karte zurück.
+    / Sonst wird null zurückgegeben.
+    */
+    private Karte computerKannFaerbeln(Karte karteS1) {
+
+        Karte karteZumFaerbeln = null;
+        for (int i =0; i < s2.Hand.size(); i++)
+        {
+            if(s2.Hand.get(i).getFarbe()==karteS1.getFarbe())
+            {
+                if(karteZumFaerbeln==null)
+                    karteZumFaerbeln = s2.Hand.get(i);
+
+                else if(s2.Hand.get(i).getPunkte()>karteZumFaerbeln.getPunkte())
+                    karteZumFaerbeln = s2.Hand.get(i);
+            }
+        }
+        return karteZumFaerbeln;
     }
 
     public void ZugAuswerten(Karte karteS1, Karte karteS2)
@@ -356,8 +595,8 @@ public class Spiel2 {
     {
         if(karte.getFarbe() == trumpf && karte.getWertigkeit() == "Bube")
         {
-            Karte Rueckgabekarte = aufgedeckteTrumpf;
-            aufgedeckteTrumpf = karte;
+            Karte Rueckgabekarte = aufgedeckterTrumpf;
+            aufgedeckterTrumpf = karte;
             return Rueckgabekarte;
         }
         else

@@ -9,8 +9,6 @@ public class Spieler {
     public ArrayList<Karte> Gestochen;
     private boolean istdran;
 
-
-
     public int getPunkte() {
         return Punkte;
     }
@@ -18,7 +16,6 @@ public class Spieler {
     public void setPunkte(int punkte) {
         Punkte = punkte;
     }
-
 
     public boolean isIstdran() {
         return istdran;
