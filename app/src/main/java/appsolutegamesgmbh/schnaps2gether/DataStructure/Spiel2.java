@@ -605,6 +605,21 @@ public class Spiel2 {
         }
     }
 
+    public ArrayList<String> hat20er(Spieler s)
+    {
+        ArrayList<String> h20er = new ArrayList<String>(4);
+        if(s.Hand.contains(new Karte("Herz","Dame", 3))&&s.Hand.contains(new Karte("Herz","König", 4)))
+            h20er.add("Herz");
+        if(s.Hand.contains(new Karte("Pik","Dame", 3))&&s.Hand.contains(new Karte("Pik","König", 4)))
+            h20er.add("Pik");
+        if(s.Hand.contains(new Karte("Karo","Dame", 3))&&s.Hand.contains(new Karte("Karo","König", 4)))
+            h20er.add("Karo");
+        if(s.Hand.contains(new Karte("Kreuz","Dame", 3))&&s.Hand.contains(new Karte("Kreuz","König", 4)))
+            h20er.add("Kreuz");
+
+        return h20er;
+    }
+
     public boolean DarfKarteAuswaehlen(Karte karteamTisch, Karte karte)
     {
         if(karteamTisch == null || !zugedreht)

@@ -33,6 +33,24 @@ public class Karte {
         Punkte = punkte;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null)
+            return false;
+        if (getClass() != o.getClass())
+            return false;
+        Karte other = (Karte) o;
+        if (Farbe != other.Farbe)
+            return false;
+        if (Wertigkeit != other.Wertigkeit)
+            return false;
+        if (Punkte != other.Punkte)
+            return false;
+        return true;
+    }
+
     public Karte(String farbe, String wertigkeit, int punkte) {
         Farbe = farbe;
         Wertigkeit = wertigkeit;
