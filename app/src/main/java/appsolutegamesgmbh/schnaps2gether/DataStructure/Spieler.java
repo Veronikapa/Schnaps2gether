@@ -33,7 +33,4 @@ public class Spieler {
         istdran = false;
     }
 
-
-
-
 }

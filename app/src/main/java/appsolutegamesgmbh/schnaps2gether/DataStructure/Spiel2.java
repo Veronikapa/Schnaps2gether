@@ -94,15 +94,24 @@ public class Spiel2 {
     / Wenn s1 bereits ausgespielt hat, entscheide basierend auf dieser Karte
     / @return: Liefert Karte die der Computer ausspielt
      */
-    public Karte AuspielenComputer(Karte karteS1) {
-        //Spieler1 hat bereits Karte ausgespielt, entscheide basierend auf dieser Karte
+    public Karte AuspielenComputer(Karte karteAndererSpieler) {
+
+        Karte zuspielen = null;
+        zuspielen = findeAuszuspielendeKarte(karteAndererSpieler);
+
+        s1.isIstdran();
+        return zuspielen;
+    }
+
+    private Karte findeAuszuspielendeKarte(Karte karteS1) {
+        Karte zuspielen;//Spieler1 hat bereits Karte ausgespielt, entscheide basierend auf dieser Karte
         if (karteS1 != null) {
 
             if(zugedreht)
-                return SpieleComputerKarteWennS1Zugedreht(karteS1);
+                zuspielen =  SpieleComputerKarteWennS1Zugedreht(karteS1);
 
             else
-                return SpieleComputerKarte(karteS1);
+                zuspielen = SpieleComputerKarte(karteS1);
         }
 
         //Spiele die zur Zeit am sinnvollsten Karte aus
@@ -113,19 +122,145 @@ public class Spiel2 {
 
             if(zugedreht)
             {
-               //TODO VP: Extend logic
+               //Spiele höchsten Trumpf der noch offen ist, wenn ich ihn besitze
+                zuspielen = spieleHoechsteAusstehendeKarteEinerFarbe(aufgedeckterTrumpf.getFarbe());
+
+                //Spiele Farbe wo ich die höchste noch ausstehende Farbe habe
+                zuspielen = spieleHoechsteAusstehendeKarte();
+
+                //Sonst spiele höchste Karte die ich besitze
+                zuspielen =  hoechsteKarteSpieler();
             }
 
             else
             {
+                //Spiele Farbe wo ich die höchste noch ausstehende Farbe habe
+               zuspielen = spieleHoechsteAusstehendeKarte();
 
+                //Sonst spiele höchste Karte die ich besitze
+                zuspielen = hoechsteKarteSpieler();
             }
+        }
+        return zuspielen;
+    }
 
-            s1.isIstdran();
+    /*
+    / Gibt die höchste Karte zurück die ein Spieler besitzt
+     */
+    private Karte hoechsteKarteSpieler() {
+        Karte hoechsteKarte = null;
+
+        for(int i=0; i<s2.Hand.size(); i++)
+        {
+            if(hoechsteKarte == null)
+                hoechsteKarte = s2.Hand.get(i);
+
+            else if(hoechsteKarte.getPunkte() > s2.Hand.get(i).getPunkte())
+                hoechsteKarte = s2.Hand.get(i);
+        }
+        return hoechsteKarte;
+    }
+
+    /*
+    / Finde hoechste Karte des Computers üer alle Farben hinweg
+     */
+    private Karte spieleHoechsteAusstehendeKarte() {
+
+        Karte hoechsteKarteHerz = null;
+        Karte hoechsteKarteKaro = null;
+        Karte hoechsteKarteKreuz = null;
+        Karte hoechsteKartePik = null;
+        Karte hoechsteKarte = null;
+
+        hoechsteKarteHerz = spieleHoechsteAusstehendeKarteEinerFarbe("Herz");
+        hoechsteKarteKaro = spieleHoechsteAusstehendeKarteEinerFarbe("Karo");
+        hoechsteKarteKreuz = spieleHoechsteAusstehendeKarteEinerFarbe("Kreuz");
+        hoechsteKartePik = spieleHoechsteAusstehendeKarteEinerFarbe("Pik");
+
+        if(hoechsteKarteHerz.getPunkte() >= hoechsteKarteKaro.getPunkte())
+            hoechsteKarte = hoechsteKarteHerz;
+
+        else
+            hoechsteKarte = hoechsteKarteKaro;
+
+        if(hoechsteKarteKreuz.getPunkte() >= hoechsteKarte.getPunkte())
+            hoechsteKarte = hoechsteKarteKreuz;
+
+        if(hoechsteKartePik.getPunkte() >= hoechsteKarte.getPunkte())
+            hoechsteKarte = hoechsteKartePik;
+
+        return hoechsteKarte;
+    }
+
+    /*
+    / Wenn der Computer den höchste, noch ausstehenden Karte einer Farbe besitzt wird diese zurückgegeben,
+    / sonst wird null zurückgegeben.
+     */
+    private Karte spieleHoechsteAusstehendeKarteEinerFarbe(String farbe) {
+        Karte hoechsteKarteFarbe = null;
+
+        boolean farbeAssGestochen = false;
+        boolean farbe10erGestochen = false;
+        boolean farbeKoenigGestochen = false;
+        boolean farbeDameGestochen = false;
+        boolean farbeBubGestochen = false;
+
+        boolean habeFarbeAss = false;
+        boolean habeFarbe10er = false;
+        boolean habeFarbeKoenig = false;
+        boolean habeFarbeDame = false;
+        boolean habeFarbeBub = false;
+
+        for (int i = 0; i < s2.Gestochen.size(); i++) {
+
+            if (s2.Gestochen.get(i).getFarbe() == farbe) {
+                if (!farbeAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "Ass")
+                    farbeAssGestochen = true;
+
+                else if (!farbe10erGestochen && s2.Gestochen.get(i).getWertigkeit() == "10er")
+                    farbe10erGestochen = true;
+
+                else if (!farbeKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "König")
+                    farbeKoenigGestochen = true;
+
+                else if (!farbeDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
+                    farbeDameGestochen = true;
+
+                else if (!farbeBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                    farbeBubGestochen = true;
+            }
         }
 
-        //TODO VP: Remove after finalization of logic above
-        return s2.Hand.get(0);
+        for (int i = 0; i < s2.Hand.size(); i++) {
+
+            if (s2.Hand.get(i).getFarbe() == farbe) {
+
+                if(hoechsteKarteFarbe == null)
+                    hoechsteKarteFarbe = s2.Hand.get(i);
+
+                else if(hoechsteKarteFarbe.getPunkte()<s2.Hand.get(i).getPunkte())
+                    hoechsteKarteFarbe = s2.Hand.get(i);
+            }
+        }
+
+        if(hoechsteKarteFarbe == null)
+            return null;
+
+        if(hoechsteKarteFarbe.getPunkte()==11)
+            return hoechsteKarteFarbe;
+
+        if(hoechsteKarteFarbe.getPunkte() == 10 && farbeAssGestochen)
+            return hoechsteKarteFarbe;
+
+        if(hoechsteKarteFarbe.getPunkte() == 4 && farbeAssGestochen && farbe10erGestochen)
+            return hoechsteKarteFarbe;
+
+        if(hoechsteKarteFarbe.getPunkte() == 3 && farbeAssGestochen && farbe10erGestochen && farbeKoenigGestochen)
+            return hoechsteKarteFarbe;
+
+        //Wenn mein höchste Karte einer Farbe weniger als 3 Punkte hat und alle anderen gestochen sind, habe
+        //ich letzte Karte von Farbe.
+        return hoechsteKarteFarbe;
     }
 
     /*
@@ -133,17 +268,39 @@ public class Spiel2 {
     / Zudrehen, wenn ich die 2 höhsten Trümpfe habe und mindestens 2 weitere Asse oder 10er
      */
     private boolean sollComputerZudrehen() {
-
-        boolean zudrehen = false;
-
         //Wenn der Computer weniger als Trümpfe hat, dann nicht zudrehen
         if(!computerHat2HoechsteTruempfe())
             return false;
 
         //Wenn ich zusätzlich min. 2 10er habe zudrehen
-        //TODO VP: Add logic
+        if(computerHat2HoheKarten())
+            return true;
 
-        return zudrehen;
+        return false;
+    }
+
+    /*
+    / Gibt true zurück wennn der Computer min. 2 Karten in der Hand hält die
+    / ein 10er oder eine Ass sind. Trümpfe zählen nicht. Sonst wird false zurück gegeben.
+     */
+    private boolean computerHat2HoheKarten()
+    {
+       int counterHoheKarten = 0;
+
+       for(int i = 0; i<s2.Hand.size(); i++)
+       {
+           if(s2.Hand.get(i).getPunkte()>=10)
+           {
+               if(s2.Hand.get(i).getFarbe()!=aufgedeckterTrumpf.getFarbe())
+                   counterHoheKarten++;
+           }
+       }
+
+        if(counterHoheKarten>=2)
+            return true;
+
+        else
+            return false;
     }
 
     /*
@@ -293,6 +450,7 @@ public class Spiel2 {
             else if(niedrigsteKarte.getPunkte() > s2.Hand.get(i).getPunkte())
                 niedrigsteKarte = s2.Hand.get(i);
         }
+        return niedrigsteKarte;
     }
 
     /*
