@@ -1,11 +1,87 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld"
+    android:gravity="center_vertical">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/pointsText"
+        android:text="@string/punktestand2" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:textColor="#000000" />
+    <TextView
+        android:id="@+id/Enemy"
+        android:text="@string/spieler2" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#000000" />
+    <Button
+        android:id="@+id/main_buttonE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="0dp"
+        android:text="@string/buttonE"
+        android:layout_gravity="center" />
+    <Button
+        android:id="@+id/main_buttonI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:text="@string/buttonI"
+        android:layout_gravity="center" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <Button
+            android:id="@+id/main_button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button1" />
+        <Button
+            android:id="@+id/main_button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button2" />
+        <Button
+            android:id="@+id/main_button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button3" />
+        <Button
+            android:id="@+id/main_button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button4" />
+        <Button
+            android:id="@+id/main_button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button5" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/I"
+        android:text="@string/spieler1" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:textColor="#ff0000" />
 
-</RelativeLayout>
+</LinearLayout>
