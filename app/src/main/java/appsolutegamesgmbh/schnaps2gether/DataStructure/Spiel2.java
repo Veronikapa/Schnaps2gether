@@ -13,6 +13,18 @@ public class Spiel2 {
     private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
 
+    public Spieler getS1() {
+        return s1;
+    }
+
+    public Spieler getS2() {
+        return s2;
+    }
+
+    public boolean isZugedreht() {
+        return zugedreht;
+    }
+
     public Spiel2()
     {
         kartendeck = Karte.erstelleKartendeck();
