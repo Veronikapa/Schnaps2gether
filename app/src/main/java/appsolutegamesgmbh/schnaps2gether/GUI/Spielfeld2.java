@@ -6,12 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
-public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener {
+public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener, Observer {
 
     /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
     * TODO: Klick auf Karte Spieler 1
@@ -31,6 +37,14 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     private Button button5;
     private Button buttonI;
     private Button buttonE;
+    private Spieler s1;
+    private Spieler s2;
+    private Karte k1;
+    private Karte k2;
+    private Karte k3;
+    private Karte k4;
+    private Karte k5;
+    private TextView punkte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,8 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         setContentView(R.layout.activity_spielfeld2);
 
         spiel = new Spiel2();
+        s1 = spiel.getS1();
+        s2 = spiel.getS2();
 
         button1 = (Button) findViewById(R.id.main_button1);
         button1.setOnClickListener(this);
@@ -51,6 +67,8 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         button5.setOnClickListener(this);
         buttonI = (Button) findViewById(R.id.main_buttonI);
         buttonE = (Button) findViewById(R.id.main_buttonE);
+
+        punkte = (TextView) findViewById(R.id.pointsText);
 
     }
 
@@ -105,6 +123,44 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
                 button5.setText("gespielt");
                 buttonI.setText(b5);
                 break;
+        }
+        button1.setActivated(false);
+        button2.setActivated(false);
+        button3.setActivated(false);
+        button4.setActivated(false);
+        button5.setActivated(false);
+        while(!s1.isIstdran()) {}
+        button1.setActivated(true);
+        button2.setActivated(true);
+        button3.setActivated(true);
+        button4.setActivated(true);
+        button5.setActivated(true);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (o.equals("Zug")) {
+            boolean temp = !button1.isActivated();
+            button1.setActivated(temp);
+            button2.setActivated(temp);
+            button3.setActivated(temp);
+            button4.setActivated(temp);
+            button5.setActivated(temp);
+        } else if (o.equals("Ziehen")) {
+            k1 = s1.Hand.get(0);
+            k2 = s1.Hand.get(1);
+            k3 = s1.Hand.get(2);
+            k4 = s1.Hand.get(3);
+            k5 = s1.Hand.get(4);
+            button1.setText(k1.getFarbe()+k1.getWertigkeit());
+            button2.setText(k2.getFarbe()+k2.getWertigkeit());
+            button3.setText(k3.getFarbe()+k3.getWertigkeit());
+            button4.setText(k4.getFarbe()+k4.getWertigkeit());
+            button5.setText(k5.getFarbe()+k5.getWertigkeit());
+        } else if (o.equals("Stichauswertung")) {
+            int p1 = s1.getPunkte();
+            int p2 = s2.getPunkte();
+            punkte.setText(p1+":"+p2);
         }
     }
 }

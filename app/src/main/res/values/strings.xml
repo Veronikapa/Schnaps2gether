@@ -4,13 +4,17 @@
     <string name="punktestand2">0:0</string>
     <string name="action_settings">Settings</string>
     <string name="buttonE">geg. Karte</string>
-    <string name="buttonI">meine Karte</string>
+    <string name="buttonI">mei. Karte</string>
     <string name="button1">Karte 1</string>
     <string name="button2">Karte 2</string>
     <string name="button3">Karte 3</string>
     <string name="button4">Karte 4</string>
     <string name="button5">Karte 5</string>
+    <string name="title_activity_spielfeld3">Spielfeld3</string>
     <string name="title_activity_spielfeld4">Spielfeld4</string>
     <string name="spieler1">Ich</string>
     <string name="spieler2">Gegner</string>
+    <string name="trumpf">Trumpf</string>
+    <string name="deck">Deck</string>
+
 </resources>
