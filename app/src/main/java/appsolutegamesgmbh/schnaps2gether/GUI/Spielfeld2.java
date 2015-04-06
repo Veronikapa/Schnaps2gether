@@ -1,5 +1,6 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -37,6 +39,7 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     private Button button5;
     private Button buttonI;
     private Button buttonE;
+    private Button buttonT;
     private Spieler s1;
     private Spieler s2;
     private Karte k1;
@@ -44,7 +47,12 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     private Karte k3;
     private Karte k4;
     private Karte k5;
+    private Karte e1;
+    private Karte t;
     private TextView punkte;
+    private TextView i;
+    private TextView enemy;
+    private ArrayList<Karte> stapel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +75,13 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         button5.setOnClickListener(this);
         buttonI = (Button) findViewById(R.id.main_buttonI);
         buttonE = (Button) findViewById(R.id.main_buttonE);
+        buttonT = (Button) findViewById(R.id.main_buttonT);
 
         punkte = (TextView) findViewById(R.id.pointsText);
+        i = (TextView) findViewById(R.id.I);
+        enemy = (TextView) findViewById(R.id.Enemy);
 
+        buttonT.setText("20");
     }
 
 
@@ -129,24 +141,27 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         button3.setActivated(false);
         button4.setActivated(false);
         button5.setActivated(false);
-        while(!s1.isIstdran()) {}
-        button1.setActivated(true);
-        button2.setActivated(true);
-        button3.setActivated(true);
-        button4.setActivated(true);
-        button5.setActivated(true);
     }
 
     @Override
     public void update(Observable observable, Object o) {
         if (o.equals("Zug")) {
-            boolean temp = !button1.isActivated();
+            boolean temp = s1.isIstdran();
             button1.setActivated(temp);
             button2.setActivated(temp);
             button3.setActivated(temp);
             button4.setActivated(temp);
             button5.setActivated(temp);
+            if (temp) {
+                i.setTextColor(0xff0000);
+                enemy.setTextColor(0x555555);
+            } else {
+                i.setTextColor(0x555555);
+                enemy.setTextColor(0xff0000);
+            }
         } else if (o.equals("Ziehen")) {
+            //stapel = spiel.getStapel();
+            buttonT.setText(stapel.size());
             k1 = s1.Hand.get(0);
             k2 = s1.Hand.get(1);
             k3 = s1.Hand.get(2);
@@ -157,10 +172,21 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
             button3.setText(k3.getFarbe()+k3.getWertigkeit());
             button4.setText(k4.getFarbe()+k4.getWertigkeit());
             button5.setText(k5.getFarbe()+k5.getWertigkeit());
-        } else if (o.equals("Stichauswertung")) {
+        } else if (o.equals("Punkte")) {
+            buttonI.setText("");
+            buttonE.setText("");
             int p1 = s1.getPunkte();
             int p2 = s2.getPunkte();
             punkte.setText(p1+":"+p2);
+        } else if (o.equals("Trumpfkarte")) {
+            //t = spiel.getAufgedeckterTrumpf();
+            buttonT.setText(t.getFarbe()+t.getWertigkeit());
+        } else if (o.equals("KI-gespielteKarte")) {
+            //e1 = spiel.getComputerAusgespielteKarte();
+            buttonE.setText(e1.getFarbe()+e1.getWertigkeit());
+        } else if (o.equals("Spielende")) {
+            DialogFragment newFragment = new GameEnd();
+            newFragment.show(getFragmentManager(), "Game End");
         }
     }
 }
