@@ -89,6 +89,8 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         enemy = (TextView) findViewById(R.id.Enemy);
 
         buttonT.setText("20");
+        t = spiel.getAufgedeckterTrumpf();
+        buttonT.setText(t.getFarbe()+t.getWertigkeit());
 
         bummerl = new Bummerl2();
         e1 = null;
@@ -141,6 +143,7 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
                 DialogFragment newFragment = new GameEnd();
                 newFragment.show(getFragmentManager(), "GameEnd");
             }
+            karteGezogen();
         }
     }
 
@@ -181,6 +184,11 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         button3.setText(k3.getFarbe()+k3.getWertigkeit());
         button4.setText(k4.getFarbe()+k4.getWertigkeit());
         button5.setText(k5.getFarbe()+k5.getWertigkeit());
+        button1.setVisibility(View.VISIBLE);
+        button2.setVisibility(View.VISIBLE);
+        button3.setVisibility(View.VISIBLE);
+        button4.setVisibility(View.VISIBLE);
+        button5.setVisibility(View.VISIBLE);
     }
 
     private void punkteAktualisieren() {
@@ -204,9 +212,4 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
             button5.setVisibility(View.INVISIBLE);
         }
     }
-
-        /*} else if (o.equals("Trumpfkarte")) {
-            //t = spiel.getAufgedeckterTrumpf();
-            buttonT.setText(t.getFarbe()+t.getWertigkeit());
-        }*/
 }
