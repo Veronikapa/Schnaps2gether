@@ -9,6 +9,15 @@ public class Spiel2 {
     private ArrayList<Karte> stapel;
     private Spieler s1;
     private Spieler s2;
+
+    public String getTrumpf() {
+        return trumpf;
+    }
+
+    public Karte getAufgedeckterTrumpf() {
+        return aufgedeckterTrumpf;
+    }
+
     private String trumpf;
     private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
@@ -820,6 +829,14 @@ public class Spiel2 {
         }
 
 
+    }
+
+    public boolean istStapelleer()
+    {
+        if(stapel.isEmpty())
+            return true;
+        else
+            return false;
     }
 
 
