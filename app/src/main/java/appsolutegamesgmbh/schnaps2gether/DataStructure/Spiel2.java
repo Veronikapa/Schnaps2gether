@@ -839,5 +839,9 @@ public class Spiel2 {
             return false;
     }
 
+    public int AnzahlKartenStapel()
+    {
+        return stapel.size();
+    }
 
 }
