@@ -61,6 +61,14 @@
         android:layout_marginLeft="145dp"
         android:text="@string/buttonI"
         android:layout_gravity="center" />
+        <Button
+            android:id="@+id/main_buttonZ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="135dp"
+            android:text="@string/buttonZ"
+            android:layout_gravity="right|end" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
