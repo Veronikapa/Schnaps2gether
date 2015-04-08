@@ -36,6 +36,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Button button5;
     private Button buttonI;
     private Button buttonE;
+    private Button buttonD;
     private Button buttonT;
     private Button buttonZ;
     private Spieler s1;
@@ -81,6 +82,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonI = (Button) findViewById(R.id.main_buttonI);
         buttonE = (Button) findViewById(R.id.main_buttonE);
         buttonT = (Button) findViewById(R.id.main_buttonT);
+        buttonD = (Button) findViewById(R.id.main_buttonD);
 
         punkte = (TextView) findViewById(R.id.pointsText);
         i = (TextView) findViewById(R.id.I);
@@ -164,7 +166,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void karteGezogen() {
-        buttonT.setText(spiel.AnzahlKartenStapel());
+        buttonD.setText(Integer.toString(spiel.AnzahlKartenStapel()));
         k1 = s1.Hand.get(0);
         k2 = s1.Hand.get(1);
         k3 = s1.Hand.get(2);
