@@ -16,7 +16,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
-public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener {
+public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener, GameEnd.GameEndDialogListener {
 
     /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
     * TODO: Klick auf Karte Spieler 1
@@ -40,6 +40,7 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     private Button buttonZ;
     private Spieler s1;
     private Spieler s2;
+    private ArrayList<Karte> hand;
     private Karte k1;
     private Karte k2;
     private Karte k3;
@@ -50,7 +51,6 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     private TextView punkte;
     private TextView i;
     private TextView enemy;
-    private ArrayList<Karte> stapel;
     private Bummerl2 bummerl;
 
     @Override
@@ -58,9 +58,7 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
 
-        spiel = new Spiel2();
-        s1 = spiel.getS1();
-        s2 = spiel.getS2();
+        bummerl = new Bummerl2();
 
         button1 = (Button) findViewById(R.id.main_button1);
         button1.setOnClickListener(this);
@@ -88,37 +86,30 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         i = (TextView) findViewById(R.id.I);
         enemy = (TextView) findViewById(R.id.Enemy);
 
-        buttonT.setText("20");
-        t = spiel.getAufgedeckterTrumpf();
-        buttonT.setText(t.getFarbe()+t.getWertigkeit());
-
-        bummerl = new Bummerl2();
-        e1 = null;
-        karteGezogen();
-        zugWechsel();
+        spielStart();
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.main_button1:
-                zugAusführen(k1);
+                zugAusführen(0);
                 button1.setText("");
                 break;
             case R.id.main_button2:
-                zugAusführen(k2);
+                zugAusführen(1);
                 button2.setText("");
                 break;
             case R.id.main_button3:
-                zugAusführen(k3);
+                zugAusführen(2);
                 button3.setText("");
                 break;
             case R.id.main_button4:
-                zugAusführen(k4);
+                zugAusführen(3);
                 button4.setText("");
                 break;
             case R.id.main_button5:
-                zugAusführen(k5);
+                zugAusführen(4);
                 button5.setText("");
                 break;
             case R.id.main_buttonZ:
@@ -128,10 +119,11 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         }
     }
 
-    private void zugAusführen(Karte k) {
+    private void zugAusführen(int i) {
+        Karte k = hand.get(i);
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
             spiel.Auspielen(k);
-            gespielteKarteEntfernen();
+            gespielteKarteEntfernen(i);
             buttonI.setText(k.getFarbe()+k.getWertigkeit());
             if (e1.equals(null)) {
                 zugWechsel();
@@ -172,8 +164,7 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
     }
 
     private void karteGezogen() {
-        //stapel = spiel.getStapel();
-        //buttonT.setText(stapel.size());
+        buttonT.setText(spiel.AnzahlKartenStapel());
         k1 = s1.Hand.get(0);
         k2 = s1.Hand.get(1);
         k3 = s1.Hand.get(2);
@@ -199,17 +190,43 @@ public class Spielfeld2 extends ActionBarActivity implements View.OnClickListene
         punkte.setText(p1+":"+p2);
     }
 
-    private void gespielteKarteEntfernen() {
-        if (s1.Hand.get(0)==null) {
-            button1.setVisibility(View.INVISIBLE);
-        } else if (s1.Hand.get(1)==null) {
-            button2.setVisibility(View.INVISIBLE);
-        } else if (s1.Hand.get(2)==null) {
-            button3.setVisibility(View.INVISIBLE);
-        } else if (s1.Hand.get(3)==null) {
-            button4.setVisibility(View.INVISIBLE);
-        } else if (s1.Hand.get(4)==null) {
-            button5.setVisibility(View.INVISIBLE);
+    private void gespielteKarteEntfernen(int i) {
+        switch (i) {
+            case 0: button1.setVisibility(View.INVISIBLE); break;
+            case 1: button2.setVisibility(View.INVISIBLE); break;
+            case 2: button3.setVisibility(View.INVISIBLE); break;
+            case 3: button4.setVisibility(View.INVISIBLE); break;
+            case 4: button5.setVisibility(View.INVISIBLE); break;
+            default: break;
         }
+    }
+
+    private void spielStart() {
+        spiel = new Spiel2();
+        s1 = spiel.getS1();
+        s2 = spiel.getS2();
+
+        buttonT.setText("20");
+        t = spiel.getAufgedeckterTrumpf();
+        buttonT.setText(t.getFarbe()+t.getWertigkeit());
+
+        buttonZ.setActivated(true);
+        i.setTextColor(0xff0000);
+        enemy.setTextColor(0x555555);
+        buttonI.setText("");
+        buttonE.setText("");
+        e1 = null;
+        karteGezogen();
+        zugWechsel();
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        spielStart();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        finish();
     }
 }
