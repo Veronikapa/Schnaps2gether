@@ -41,7 +41,6 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Button buttonZ;
     private Spieler s1;
     private Spieler s2;
-    private ArrayList<Karte> hand;
     private Karte k1;
     private Karte k2;
     private Karte k3;
@@ -122,7 +121,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void zugAusführen(int i) {
-        Karte k = hand.get(i);
+        Karte k = s1.Hand.get(i);
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
             spiel.Auspielen(k);
             gespielteKarteEntfernen(i);
