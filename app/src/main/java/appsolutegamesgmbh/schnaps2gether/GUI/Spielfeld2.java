@@ -1,6 +1,5 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +16,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
-public class Spielfeld2 extends Activity implements View.OnClickListener {
+public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener {
 
     /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
     * TODO: Klick auf Karte Spieler 1
@@ -132,7 +131,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener {
     private void zugAusführen(Karte k) {
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
             spiel.Auspielen(k);
-            //gespielteKarteEntfernen();
+            gespielteKarteEntfernen();
             buttonI.setText(k.getFarbe()+k.getWertigkeit());
             if (e1.equals(null)) {
                 zugWechsel();
@@ -197,7 +196,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener {
         buttonE.setText("");
         int p1 = s1.getPunkte();
         int p2 = s2.getPunkte();
-        punkte.setText(p1 + ":" + p2);
+        punkte.setText(p1+":"+p2);
     }
 
     private void gespielteKarteEntfernen() {
