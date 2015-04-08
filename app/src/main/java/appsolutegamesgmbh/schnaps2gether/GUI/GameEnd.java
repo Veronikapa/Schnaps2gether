@@ -10,7 +10,7 @@ import android.os.Bundle;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 /**
- * Created by kirederf on 06.04.2015.
+ * Created by Frederik on 06.04.2015.
  */
 public class GameEnd extends DialogFragment {
 

@@ -1,8 +1,8 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,7 +16,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
-public class Spielfeld2 extends ActionBarActivity implements View.OnClickListener, GameEnd.GameEndDialogListener {
+public class Spielfeld2 extends Activity implements View.OnClickListener, GameEnd.GameEndDialogListener {
 
     /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
     * TODO: Klick auf Karte Spieler 1
