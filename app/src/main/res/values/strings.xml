@@ -17,14 +17,8 @@
     <string name="spieler2">Gegner</string>
     <string name="trumpf">Trumpf</string>
     <string name="deck">Deck</string>
-<<<<<<< HEAD
     <string name="dialog_game_end">Diese Runde ist zu Ende.</string>
-    <string name="play_again">Nochmalspielen</string>
+    <string name="play_again">Nochmal spielen</string>
     <string name="exit">Beenden</string>
-=======
-    <string name="dialog_game_end">This round is finished.</string>
-    <string name="play_again">Play again</string>
-    <string name="exit">Exit</string>
->>>>>>> origin/master
 
 </resources>
