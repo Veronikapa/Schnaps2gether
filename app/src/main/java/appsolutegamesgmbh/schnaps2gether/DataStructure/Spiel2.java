@@ -108,6 +108,7 @@ public class Spiel2 {
     {
         //Ausgespielte Karte wird aus Hand von S1 entfernt
         s1.Hand.remove(karteS1);
+        s1.setIstdran(false);
     }
 
     /*
@@ -120,7 +121,7 @@ public class Spiel2 {
         Karte zuspielen = null;
         zuspielen = findeAuszuspielendeKarte(karteAndererSpieler);
 
-        s1.isIstdran();
+        s1.setIstdran(true);
         return zuspielen;
     }
 

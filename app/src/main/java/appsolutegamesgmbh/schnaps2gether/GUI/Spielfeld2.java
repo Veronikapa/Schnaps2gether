@@ -125,7 +125,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             gespielteKarteEntfernen(i);
             buttonI.setText(k.getFarbe()+k.getWertigkeit());
             if (e1 == null) {
-                zugWechsel();
+                zugWechsel(k1);
             }
             spiel.ZugAuswerten(k1, e1);
             punkteAktualisieren();
@@ -138,7 +138,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         }
     }
 
-    private void zugWechsel() {
+    private void zugWechsel(Karte karteS1) {
         boolean temp = s1.isIstdran();
         button1.setClickable(temp);
         button2.setClickable(temp);
@@ -156,9 +156,9 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             button3.setClickable(false);
             button4.setClickable(false);
             button5.setClickable(false);
-            e1 = spiel.AuspielenComputer(null);
+            e1 = spiel.AuspielenComputer(karteS1);
             buttonE.setText(e1.getFarbe()+e1.getWertigkeit());
-            zugWechsel();
+            zugWechsel(null);
         }
     }
 
@@ -216,7 +216,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonE.setText("");
         e1 = null;
         karteGezogen();
-        zugWechsel();
+        zugWechsel(null);
     }
 
     @Override
