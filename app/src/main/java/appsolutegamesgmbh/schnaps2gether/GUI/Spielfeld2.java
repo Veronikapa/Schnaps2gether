@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
@@ -207,7 +205,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         s1 = spiel.getS1();
         s2 = spiel.getS2();
 
-        buttonT.setText("20");
+        buttonD.setText("20");
         t = spiel.getAufgedeckterTrumpf();
         buttonT.setText(t.getFarbe()+t.getWertigkeit());
 

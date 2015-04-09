@@ -26,18 +26,27 @@
         android:layout_marginTop="20dp">
         <Button
             android:id="@+id/main_buttonD"
+            android:text="@string/deck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:layout_marginLeft="0dp"
-            android:text="@string/deck"
             android:layout_gravity="start" />
+        <TextView
+            android:id="@+id/Deck"
+            android:text="@string/deck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:layout_marginLeft="145dp"
+        android:layout_marginLeft="105dp"
         android:text="@string/buttonE"
         android:layout_gravity="center" />
     </LinearLayout>
@@ -47,18 +56,27 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/main_buttonT"
+            android:text="@string/trumpf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:layout_marginLeft="0dp"
-            android:text="@string/trumpf"
             android:layout_gravity="left" />
+        <TextView
+            android:id="@+id/Trumpf"
+            android:text="@string/trumpf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:layout_marginLeft="145dp"
+        android:layout_marginLeft="90dp"
         android:text="@string/buttonI"
         android:layout_gravity="center" />
         <Button
@@ -66,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_marginLeft="135dp"
+            android:layout_marginLeft="90dp"
             android:text="@string/buttonZ"
             android:layout_gravity="right" />
     </LinearLayout>
