@@ -124,7 +124,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             spiel.Auspielen(k);
             gespielteKarteEntfernen(i);
             buttonI.setText(k.getFarbe()+k.getWertigkeit());
-            if (e1.equals(null)) {
+            if (e1 == null) {
                 zugWechsel();
             }
             spiel.ZugAuswerten(k1, e1);
