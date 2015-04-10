@@ -36,6 +36,7 @@ public class KartenKomparatorTest {
 	@Test
 	public void testCompareKreuzDame_HerzBube() {
 		assertEquals("Kreuz Dame ist kleiner als Herz Bube", -1, (kk.compare((s1.Hand.get(0)),(kartendeck.get(0)))));
+	
 	}
 	
 	@Test
