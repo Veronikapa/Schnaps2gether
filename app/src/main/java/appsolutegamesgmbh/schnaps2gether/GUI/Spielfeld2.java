@@ -3,6 +3,7 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -123,18 +124,26 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
             spiel.Auspielen(k);
             gespielteKarteEntfernen(i);
-            buttonI.setText(k.getFarbe()+k.getWertigkeit());
+            buttonI.setText(k.getFarbe() + k.getWertigkeit());
             if (e1 == null) {
                 zugWechsel(k1);
             }
-            spiel.ZugAuswerten(k1, e1);
-            punkteAktualisieren();
-            e1 = null;
-            if (spiel.istSpielzuEnde(bummerl)) {
-                DialogFragment newFragment = new GameEnd();
-                newFragment.show(getFragmentManager(), "GameEnd");
-            }
-            karteGezogen();
+            // Execute some code after 2 seconds have passed
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    spiel.ZugAuswerten(k1, e1);
+                    punkteAktualisieren();
+                    e1 = null;
+                    if (spiel.istSpielzuEnde(bummerl)) {
+                        DialogFragment newFragment = new GameEnd();
+                        newFragment.show(getFragmentManager(), "GameEnd");
+                    }
+                    if (!spiel.isZugedreht()) {
+                        karteGezogen();
+                    }
+                }
+            }, 2000);
         }
     }
 
