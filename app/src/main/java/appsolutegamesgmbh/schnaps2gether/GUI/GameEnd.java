@@ -41,9 +41,17 @@ public class GameEnd extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        boolean win;
+        String dialogText;
+        Bundle args = getArguments();
+        win = args.getBoolean("win");
+        dialogText = "Sieg";
+        if (!win) {
+            dialogText = "Niederlage";
+        }
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.dialog_game_end)
+        builder.setMessage(dialogText)
                 .setPositiveButton(R.string.play_again, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity

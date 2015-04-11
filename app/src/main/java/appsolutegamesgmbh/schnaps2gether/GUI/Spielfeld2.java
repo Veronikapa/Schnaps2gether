@@ -47,7 +47,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Karte k5;
     private Karte e1;
     private Karte t;
-    private TextView punkte;
+    private TextView punkteE;
+    private TextView punkteI;
     private TextView i;
     private TextView enemy;
     private Bummerl2 bummerl;
@@ -82,7 +83,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonT = (Button) findViewById(R.id.main_buttonT);
         buttonD = (Button) findViewById(R.id.main_buttonD);
 
-        punkte = (TextView) findViewById(R.id.pointsText);
+        punkteE = (TextView) findViewById(R.id.pointsText);
+        punkteI = (TextView) findViewById(R.id.pointsText2);
         i = (TextView) findViewById(R.id.I);
         enemy = (TextView) findViewById(R.id.Enemy);
 
@@ -136,7 +138,14 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                     punkteAktualisieren();
                     e1 = null;
                     if (spiel.istSpielzuEnde(bummerl)) {
+                        boolean win = true;
+                        if (s1.getPunkte()<66) {
+                            win = false;
+                        }
+                        Bundle args = new Bundle();
+                        args.putBoolean("win", win);
                         DialogFragment newFragment = new GameEnd();
+                        newFragment.setArguments(args);
                         newFragment.show(getFragmentManager(), "GameEnd");
                     }
                     if (!spiel.isZugedreht()) {
@@ -195,7 +204,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonE.setText("");
         int p1 = s1.getPunkte();
         int p2 = s2.getPunkte();
-        punkte.setText(p1+":"+p2);
+        punkteE.setText(Integer.toString(p2));
+        punkteI.setText(Integer.toString(p1));
     }
 
     private void gespielteKarteEntfernen(int i) {

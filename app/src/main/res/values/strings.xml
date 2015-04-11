@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Schnaps2gether</string>
 
-    <string name="punktestand2">0:0</string>
+    <string name="punktestand2">0</string>
     <string name="action_settings">Einstellungen</string>
     <string name="buttonE">geg. Karte</string>
     <string name="buttonI">mei. Karte</string>
@@ -17,7 +17,6 @@
     <string name="spieler2">Gegner</string>
     <string name="trumpf">Trumpf</string>
     <string name="deck">Deck</string>
-    <string name="dialog_game_end">Diese Runde ist zu Ende.</string>
     <string name="play_again">Nochmal spielen</string>
     <string name="exit">Beenden</string>
 
