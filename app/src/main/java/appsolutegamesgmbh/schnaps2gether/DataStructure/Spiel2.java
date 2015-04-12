@@ -585,18 +585,7 @@ public class Spiel2 {
             }
             else
             {
-                if(karteS1.getFarbe() == trumpf)
-                {
-                    s1.Gestochen.add(karteS1);
-                    s1.Gestochen.add(karteS2);
-
-                    s1.setPunkte(s1.getPunkte()+karteS1.getPunkte()+karteS2.getPunkte());
-
-                    s1.setIstdran(true);
-                    s2.setIstdran(false);
-
-                }
-                else
+                if(karteS2.getFarbe() == trumpf)
                 {
                     s2.Gestochen.add(karteS1);
                     s2.Gestochen.add(karteS2);
@@ -605,6 +594,17 @@ public class Spiel2 {
 
                     s2.setIstdran(true);
                     s1.setIstdran(false);
+
+                }
+                else
+                {
+                    s1.Gestochen.add(karteS1);
+                    s1.Gestochen.add(karteS2);
+
+                    s1.setPunkte(s1.getPunkte()+karteS1.getPunkte()+karteS2.getPunkte());
+
+                    s1.setIstdran(true);
+                    s2.setIstdran(false);
 
                 }
             }
