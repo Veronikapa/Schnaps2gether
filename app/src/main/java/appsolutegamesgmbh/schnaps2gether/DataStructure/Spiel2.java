@@ -732,11 +732,18 @@ public class Spiel2 {
                 {
                     s1.Hand.add(stapel.get(0));
                     stapel.remove(0);
-                    s2.Hand.add(stapel.get(0));
-                    stapel.remove(0);
 
-                    if(stapel.isEmpty())
+                    //Wenn Kartenstapel leer ist, trumphanzeigende Karte nehmen
+                    if(stapel.size()==0) {
+                        s2.Hand.add(aufgedeckterTrumpf);
                         zugedreht = true;
+                    }
+
+                    else
+                    {
+                        s2.Hand.add(stapel.get(0));
+                        stapel.remove(0);
+                    }
 
                     //Hand Spieler 1 sortieren
                     Collections.sort(s1.Hand,new KartenKomparator());
@@ -748,11 +755,18 @@ public class Spiel2 {
                 {
                     s2.Hand.add(stapel.get(0));
                     stapel.remove(0);
-                    s1.Hand.add(stapel.get(0));
-                    stapel.remove(0);
 
-                    if(stapel.isEmpty())
+                    //Wenn Kartenstapel leer ist, trumphanzeigende Karte nehmen
+                    if(stapel.size()==0) {
+                        s1.Hand.add(aufgedeckterTrumpf);
                         zugedreht = true;
+                    }
+
+                    else
+                    {
+                        s1.Hand.add(stapel.get(0));
+                        stapel.remove(0);
+                    }
 
                     //Hand Spieler 1 sortieren
                     Collections.sort(s1.Hand,new KartenKomparator());
