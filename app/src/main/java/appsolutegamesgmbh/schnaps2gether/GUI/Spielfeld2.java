@@ -45,6 +45,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Karte k3;
     private Karte k4;
     private Karte k5;
+    private Karte karteS1Gespielt;
     private Karte e1;
     private Karte t;
     private TextView punkteE;
@@ -122,19 +123,19 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void zugAusführen(int i) {
-        Karte k = s1.Hand.get(i);
-        if (spiel.DarfKarteAuswaehlen(e1, k)) {
-            spiel.Auspielen(k);
+        karteS1Gespielt = s1.Hand.get(i);
+        if (spiel.DarfKarteAuswaehlen(e1, karteS1Gespielt)) {
+            spiel.Auspielen(karteS1Gespielt);
             gespielteKarteEntfernen(i);
-            buttonI.setText(k.getFarbe() + k.getWertigkeit());
+            buttonI.setText(karteS1Gespielt.getFarbe() + karteS1Gespielt.getWertigkeit());
             if (e1 == null) {
-                zugWechsel(k1);
+                zugWechsel(karteS1Gespielt);
             }
             // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    spiel.ZugAuswerten(k1, e1);
+                    spiel.ZugAuswerten(karteS1Gespielt, e1);
                     punkteAktualisieren();
                     e1 = null;
                     if (spiel.istSpielzuEnde(bummerl)) {
@@ -182,21 +183,40 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     private void karteGezogen() {
         buttonD.setText(Integer.toString(spiel.AnzahlKartenStapel()));
-        k1 = s1.Hand.get(0);
-        k2 = s1.Hand.get(1);
-        k3 = s1.Hand.get(2);
-        k4 = s1.Hand.get(3);
-        k5 = s1.Hand.get(4);
-        button1.setText(k1.getFarbe()+k1.getWertigkeit());
-        button2.setText(k2.getFarbe()+k2.getWertigkeit());
-        button3.setText(k3.getFarbe()+k3.getWertigkeit());
-        button4.setText(k4.getFarbe()+k4.getWertigkeit());
-        button5.setText(k5.getFarbe()+k5.getWertigkeit());
-        button1.setVisibility(View.VISIBLE);
-        button2.setVisibility(View.VISIBLE);
-        button3.setVisibility(View.VISIBLE);
-        button4.setVisibility(View.VISIBLE);
-        button5.setVisibility(View.VISIBLE);
+
+        if(s1.Hand.size()>=1)
+        {
+            k1 = s1.Hand.get(0);
+            button1.setText(k1.getFarbe()+k1.getWertigkeit());
+            button1.setVisibility(View.VISIBLE);
+        }
+
+        if(s1.Hand.size()>=2)
+        {
+            k2 = s1.Hand.get(1);
+            button2.setText(k2.getFarbe()+k2.getWertigkeit());
+            button2.setVisibility(View.VISIBLE);
+        }
+
+        if(s1.Hand.size()>=3)
+        {
+            k3 = s1.Hand.get(2);
+            button3.setText(k3.getFarbe()+k3.getWertigkeit());
+            button3.setVisibility(View.VISIBLE);
+        }
+
+        if(s1.Hand.size()>=4) {
+            k4 = s1.Hand.get(3);
+            button4.setText(k4.getFarbe() + k4.getWertigkeit());
+            button4.setVisibility(View.VISIBLE);
+        }
+
+        if(s1.Hand.size()>=5)
+        {
+            k5 = s1.Hand.get(4);
+            button5.setText(k5.getFarbe()+k5.getWertigkeit());
+            button5.setVisibility(View.VISIBLE);
+        }
     }
 
     private void punkteAktualisieren() {
