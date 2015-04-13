@@ -82,6 +82,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonE = (Button) findViewById(R.id.main_buttonE);
         buttonT = (Button) findViewById(R.id.main_buttonT);
         buttonD = (Button) findViewById(R.id.main_buttonD);
+        nichtKlickbar();
 
         punkteE = (TextView) findViewById(R.id.pointsText);
         punkteI = (TextView) findViewById(R.id.pointsText2);
@@ -96,34 +97,30 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         switch(view.getId()) {
             case R.id.main_button1:
                 zugAusführen(0);
-                button1.setText("");
                 break;
             case R.id.main_button2:
                 zugAusführen(1);
-                button2.setText("");
                 break;
             case R.id.main_button3:
                 zugAusführen(2);
-                button3.setText("");
                 break;
             case R.id.main_button4:
                 zugAusführen(3);
-                button4.setText("");
                 break;
             case R.id.main_button5:
                 zugAusführen(4);
-                button5.setText("");
                 break;
             case R.id.main_buttonZ:
                 spiel.Zudrehen();
-                buttonZ.setActivated(false);
+                buttonZ.setEnabled(false);
                 buttonZ.setText("Zugedreht");
                 break;
         }
     }
 
     private void zugAusführen(int i) {
-        Karte k = s1.Hand.get(i);
+        kartenNichtKlickbar();
+        final Karte k = s1.Hand.get(i);
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
             spiel.Auspielen(k);
             gespielteKarteEntfernen(i);
@@ -131,11 +128,15 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             if (e1 == null) {
                 zugWechsel(k1);
             }
+            if (spiel.isZugedreht()) {
+                buttonZ.setEnabled(false);
+                buttonZ.setText("Zugedreht");
+            }
             // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    spiel.ZugAuswerten(k1, e1);
+                    spiel.ZugAuswerten(k, e1);
                     punkteAktualisieren();
                     e1 = null;
                     if (spiel.istSpielzuEnde(bummerl)) {
@@ -149,12 +150,11 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                         newFragment.setArguments(args);
                         newFragment.show(getFragmentManager(), "GameEnd");
                     }
-                    if (!spiel.isZugedreht()) {
-                        karteGezogen();
-                    }
+                    handAktualisieren();
                     if (s2.isIstdran()) {
                         zugWechsel(null);
                     }
+                    kartenKlickbar();
                 }
             }, 2000);
         }
@@ -162,40 +162,45 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     private void zugWechsel(Karte karteS1) {
         boolean temp = s1.isIstdran();
-        button1.setClickable(temp);
-        button2.setClickable(temp);
-        button3.setClickable(temp);
-        button4.setClickable(temp);
-        button5.setClickable(temp);
         if (!temp) {
-            button1.setClickable(false);
-            button2.setClickable(false);
-            button3.setClickable(false);
-            button4.setClickable(false);
-            button5.setClickable(false);
             e1 = spiel.AuspielenComputer(karteS1);
+            System.out.print(e1.getFarbe()+e1.getWertigkeit());
             buttonE.setText(e1.getFarbe()+e1.getWertigkeit());
             zugWechsel(null);
         }
     }
 
-    private void karteGezogen() {
+    private void handAktualisieren() {
         buttonD.setText(Integer.toString(spiel.AnzahlKartenStapel()));
-        k1 = s1.Hand.get(0);
-        k2 = s1.Hand.get(1);
-        k3 = s1.Hand.get(2);
-        k4 = s1.Hand.get(3);
-        k5 = s1.Hand.get(4);
-        button1.setText(k1.getFarbe()+k1.getWertigkeit());
-        button2.setText(k2.getFarbe()+k2.getWertigkeit());
-        button3.setText(k3.getFarbe()+k3.getWertigkeit());
-        button4.setText(k4.getFarbe()+k4.getWertigkeit());
-        button5.setText(k5.getFarbe()+k5.getWertigkeit());
-        button1.setVisibility(View.VISIBLE);
-        button2.setVisibility(View.VISIBLE);
-        button3.setVisibility(View.VISIBLE);
-        button4.setVisibility(View.VISIBLE);
-        button5.setVisibility(View.VISIBLE);
+        switch (s1.Hand.size()) {
+            case 5: k5 = s1.Hand.get(4);
+                button5.setText(k5.getFarbe()+k5.getWertigkeit());
+                button5.setVisibility(View.VISIBLE);
+            case 4: k4 = s1.Hand.get(3);
+                button4.setText(k4.getFarbe()+k4.getWertigkeit());
+                button4.setVisibility(View.VISIBLE);
+            case 3: k3 = s1.Hand.get(2);
+                button3.setText(k3.getFarbe()+k3.getWertigkeit());
+                button3.setVisibility(View.VISIBLE);
+            case 2: k2 = s1.Hand.get(1);
+                button2.setText(k2.getFarbe()+k2.getWertigkeit());
+                button2.setVisibility(View.VISIBLE);
+            case 1: k1 = s1.Hand.get(0);
+                button1.setText(k1.getFarbe()+k1.getWertigkeit());
+                button1.setVisibility(View.VISIBLE);
+            default: ;
+        }
+        switch (s1.Hand.size()) {
+            case 1:
+                button2.setVisibility(View.INVISIBLE);
+            case 2:
+                button3.setVisibility(View.INVISIBLE);
+            case 3:
+                button4.setVisibility(View.INVISIBLE);
+            case 4:
+                button5.setVisibility(View.INVISIBLE);
+            default: ;
+        }
     }
 
     private void punkteAktualisieren() {
@@ -227,16 +232,38 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         t = spiel.getAufgedeckterTrumpf();
         buttonT.setText(t.getFarbe()+t.getWertigkeit());
 
-        buttonZ.setActivated(true);
-        i.setTextColor(0xff0000);
-        enemy.setTextColor(0x555555);
+        kartenKlickbar();
+        buttonZ.setEnabled(true);
         buttonI.setText("");
         buttonE.setText("");
         punkteI.setText("0");
         punkteE.setText("0");
         e1 = null;
-        karteGezogen();
+        handAktualisieren();
         zugWechsel(null);
+    }
+
+    private void kartenNichtKlickbar() {
+        button1.setEnabled(false);
+        button2.setEnabled(false);
+        button3.setEnabled(false);
+        button4.setEnabled(false);
+        button5.setEnabled(false);
+    }
+
+    private void kartenKlickbar() {
+        button1.setEnabled(true);
+        button2.setEnabled(true);
+        button3.setEnabled(true);
+        button4.setEnabled(true);
+        button5.setEnabled(true);
+    }
+
+    private void nichtKlickbar() {
+        buttonD.setEnabled(false);
+        buttonT.setEnabled(false);
+        buttonI.setEnabled(false);
+        buttonE.setEnabled(false);
     }
 
     @Override
