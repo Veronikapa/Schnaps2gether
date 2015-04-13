@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="#00aa00" />
+        android:textColor="#aa00aa" />
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonE"
-        android:layout_width="wrap_content"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:layout_marginLeft="105dp"
@@ -73,7 +73,7 @@
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonI"
-        android:layout_width="wrap_content"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:layout_marginLeft="90dp"
@@ -135,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:textColor="#ff0000" />
+        android:textColor="#aa00aa" />
     <TextView
         android:id="@+id/pointsText2"
         android:text="@string/punktestand2"

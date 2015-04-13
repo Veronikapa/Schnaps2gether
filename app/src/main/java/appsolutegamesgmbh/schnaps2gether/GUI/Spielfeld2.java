@@ -151,6 +151,9 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                     if (!spiel.isZugedreht()) {
                         karteGezogen();
                     }
+                    if (s2.isIstdran()) {
+                        zugWechsel(null);
+                    }
                 }
             }, 2000);
         }
@@ -163,12 +166,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         button3.setClickable(temp);
         button4.setClickable(temp);
         button5.setClickable(temp);
-        if (temp) {
-            i.setTextColor(0xff0000);
-            enemy.setTextColor(0x555555);
-        } else {
-            i.setTextColor(0x555555);
-            enemy.setTextColor(0xff0000);
+        if (!temp) {
             button1.setClickable(false);
             button2.setClickable(false);
             button3.setClickable(false);
