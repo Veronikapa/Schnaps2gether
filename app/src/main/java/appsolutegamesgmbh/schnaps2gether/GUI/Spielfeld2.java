@@ -117,6 +117,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             case R.id.main_buttonZ:
                 spiel.Zudrehen();
                 buttonZ.setActivated(false);
+                buttonZ.setText("Zugedreht");
                 break;
         }
     }
@@ -231,6 +232,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         enemy.setTextColor(0x555555);
         buttonI.setText("");
         buttonE.setText("");
+        punkteI.setText("0");
+        punkteE.setText("0");
         e1 = null;
         karteGezogen();
         zugWechsel(null);
