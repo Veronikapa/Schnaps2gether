@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:textColor="#0000ff"
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonE"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:textColor="#0000ff"
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonI"
