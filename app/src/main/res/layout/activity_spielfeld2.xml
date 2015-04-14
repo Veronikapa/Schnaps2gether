@@ -39,7 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:textColor="#0066cc"
+            android:enabled="true"
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonE"
@@ -69,22 +70,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:textColor="#0066cc"
             android:textSize="@dimen/abc_text_size_medium_material" />
         <Button
         android:id="@+id/main_buttonI"
         android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:layout_marginLeft="65dp"
+        android:layout_marginLeft="68dp"
         android:text="@string/buttonI"
         android:layout_gravity="center" />
         <Button
             android:id="@+id/main_buttonZ"
-            android:layout_width="wrap_content"
+            android:layout_width="95dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_marginLeft="90dp"
+            android:layout_marginLeft="60dp"
             android:text="@string/buttonZ"
             android:layout_gravity="right" />
     </LinearLayout>

@@ -164,9 +164,11 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         boolean temp = s1.isIstdran();
         if (!temp) {
             e1 = spiel.AuspielenComputer(karteS1);
-            System.out.print(e1.getFarbe()+e1.getWertigkeit());
-            buttonE.setText(e1.getFarbe()+e1.getWertigkeit());
+
+            System.out.print(e1.getFarbe() + e1.getWertigkeit());
+            buttonE.setText(e1.getFarbe() + e1.getWertigkeit());
             zugWechsel(null);
+
         }
     }
 

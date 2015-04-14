@@ -122,8 +122,8 @@ public class Spiel2 {
 
         Karte zuspielen = null;
         zuspielen = findeAuszuspielendeKarte(karteAndererSpieler);
+
         s2.Hand.remove(zuspielen);
-        //Log.d("k2", zuspielen.getFarbe()+zuspielen.getWertigkeit());
 
         s1.setIstdran(true);
         return zuspielen;
