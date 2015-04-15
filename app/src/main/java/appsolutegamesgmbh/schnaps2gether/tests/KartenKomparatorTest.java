@@ -1,4 +1,4 @@
-package DataStructure;
+package appsolutegamesgmbh.schnaps2gether.tests;
 
 import static org.junit.Assert.*;
 

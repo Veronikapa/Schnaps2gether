@@ -1,5 +1,4 @@
-//package appsolutegamesgmbh.schnaps2gether.DataStructure;
-package DataStructure;
+package appsolutegamesgmbh.schnaps2gether.tests;
 
 public class Bummerl2 {
 
