@@ -19,5 +19,8 @@
     <string name="deck">Deck</string>
     <string name="play_again">Nochmal spielen</string>
     <string name="exit">Beenden</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Abbrechen</string>
+
 
 </resources>
