@@ -130,20 +130,46 @@
             android:layout_marginLeft="0dp"
             android:text="@string/button5" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/I"
-        android:text="@string/spieler1" android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textColor="#aa00aa" />
-    <TextView
-        android:id="@+id/pointsText2"
-        android:text="@string/punktestand2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="#aa00aa" />
+        android:orientation="horizontal"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="210dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/I"
+                android:text="@string/spieler1" android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:textColor="#aa00aa" />
+            <TextView
+                android:id="@+id/pointsText2"
+                android:text="@string/punktestand2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#aa00aa" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/main_button20er"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:text="@string/button20er" />
+        <Button
+            android:id="@+id/main_button40er"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button40er" />
+    </LinearLayout>
 
 
 </LinearLayout>

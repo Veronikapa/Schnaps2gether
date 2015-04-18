@@ -6,6 +6,12 @@
     <string name="buttonE">geg. Karte</string>
     <string name="buttonI">mei. Karte</string>
     <string name="buttonZ">Zudrehen</string>
+    <string name="button20er">20er</string>
+    <string name="button40er">40er</string>
+    <string name="herz">Herz</string>
+    <string name="karo">Karo</string>
+    <string name="pik">Pik</string>
+    <string name="kreuz">Kreuz</string>
     <string name="button1">Karte 1</string>
     <string name="button2">Karte 2</string>
     <string name="button3">Karte 3</string>

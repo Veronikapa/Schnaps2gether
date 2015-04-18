@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
@@ -15,7 +19,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
-public class Spielfeld2 extends Activity implements View.OnClickListener, GameEnd.GameEndDialogListener {
+public class Spielfeld2 extends Activity implements View.OnClickListener, GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener {
 
     /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
     * TODO: Klick auf Karte Spieler 1
@@ -38,6 +42,12 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Button buttonD;
     private Button buttonT;
     private Button buttonZ;
+    private Button button20er;
+    private Button button40er;
+    private MenuItem herz;
+    private MenuItem karo;
+    private MenuItem pik;
+    private MenuItem kreuz;
     private Spieler s1;
     private Spieler s2;
     private Karte k1;
@@ -82,6 +92,14 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonE = (Button) findViewById(R.id.main_buttonE);
         buttonT = (Button) findViewById(R.id.main_buttonT);
         buttonD = (Button) findViewById(R.id.main_buttonD);
+        button20er = (Button) findViewById(R.id.main_button20er);
+        button40er = (Button) findViewById(R.id.main_button40er);
+
+        herz = (MenuItem) findViewById(R.id.herz_20er);
+        karo = (MenuItem) findViewById(R.id.karo_20er);
+        pik = (MenuItem) findViewById(R.id.pik_20er);
+        kreuz = (MenuItem) findViewById(R.id.kreuz_20er);
+
         nichtKlickbar();
 
         punkteE = (TextView) findViewById(R.id.pointsText);
@@ -115,6 +133,42 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 buttonZ.setEnabled(false);
                 buttonZ.setText("Zugedreht");
                 break;
+            case R.id.main_button20er:
+                spiel.Zudrehen();
+                PopupMenu popup = new PopupMenu(this, button20er);
+                popup.setOnMenuItemClickListener(this);
+                ArrayList<String> a = spiel.hat20er(s1);
+                herz.setVisible(false);
+                karo.setVisible(false);
+                pik.setVisible(false);
+                kreuz.setVisible(false);
+                for(int i=0; i<a.size(); i++) {
+                    switch(a.get(i)) {
+                        case "Herz":
+                            herz.setVisible(true);
+                            break;
+                        case "Karo":
+                            karo.setVisible(true);
+                            break;
+                        case "Pik":
+                            pik.setVisible(true);
+                            break;
+                        case "Kreuz":
+                            kreuz.setVisible(true);
+                            break;
+                        default:;
+                    }
+                }
+                popup.inflate(R.menu.popup_menu_20er);
+                popup.show();
+                spiel.istSpielzuEnde(bummerl);
+                break;
+            case R.id.main_button40er:
+                spiel.Ansagen20er(spiel.getTrumpf(), s1);
+                spiel.istSpielzuEnde(bummerl);
+                button40er.setEnabled(false);
+                break;
+            default:;
         }
     }
 
@@ -155,6 +209,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                         zugWechsel(null);
                     }
                     kartenKlickbar();
+                    button20er.setEnabled(true);
                 }
             }, 2000);
         }
@@ -169,6 +224,20 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             buttonE.setText(e1.getFarbe() + e1.getWertigkeit());
             zugWechsel(null);
 
+        }
+        else {
+            if(hat20er()) {
+                button20er.setEnabled(true);
+            }
+            else {
+                button20er.setEnabled(false);
+            }
+            if(hat40er()) {
+                button40er.setEnabled(true);
+            }
+            else {
+                button40er.setEnabled(false);
+            }
         }
     }
 
@@ -212,6 +281,10 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         int p2 = s2.getPunkte();
         punkteE.setText(Integer.toString(p2));
         punkteI.setText(Integer.toString(p1));
+        if (p1 != 0) {
+            button20er.setEnabled(false);
+            button40er.setEnabled(false);
+        }
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -223,6 +296,18 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             case 4: button5.setVisibility(View.INVISIBLE); break;
             default: break;
         }
+    }
+
+    private boolean hat20er() {
+        if ((spiel.hat20er(s1).size()>0 && !hat40er()) || spiel.hat20er(s1).size()>1)
+            return true;
+        return false;
+    }
+
+    private boolean hat40er() {
+        if(spiel.hat20er(s1).contains(spiel.getTrumpf()))
+            return true;
+        return false;
     }
 
     private void spielStart() {
@@ -276,5 +361,26 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         finish();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        button20er.setEnabled(false);
+        switch (menuItem.getItemId()) {
+            case R.id.herz_20er:
+                spiel.Ansagen20er("Herz", s1);
+                return true;
+            case R.id.karo_20er:
+                spiel.Ansagen20er("Karo", s1);
+                return true;
+            case R.id.pik_20er:
+                spiel.Ansagen20er("Pik", s1);
+                return true;
+            case R.id.kreuz_20er:
+                spiel.Ansagen20er("Kreuz", s1);
+                return true;
+            default:
+                return false;
+        }
     }
 }
