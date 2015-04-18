@@ -1,5 +1,6 @@
 package appsolutegamesgmbh.schnaps2gether.tests;
 
+/*
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -24,13 +25,15 @@ public class KartenKomparatorTest {
 		s1.Hand.add(kartendeck.get(12)); // Pik Königer 4
 		
 		Collections.sort(s1.Hand, new KartenKomparator());
-		/** Sortiert
+		*/
+/** Sortiert
 		 * Kreuz Dame 3
 		 * Pik König 4
 		 * Karo Bube 2
 		 * Herz Bube 2
 		 * Herz Ass 11
-		 */
+		 *//*
+
 	}
 
 	@Test
@@ -60,3 +63,4 @@ public class KartenKomparatorTest {
 	}
 
 }
+*/

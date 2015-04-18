@@ -1,3 +1,4 @@
+/*
 package appsolutegamesgmbh.schnaps2gether.tests;
 
 import static org.junit.Assert.*;
@@ -95,13 +96,15 @@ public class Spiel2RundenEnde_Spielstand_Stich_ZuegeTest {
 		spiel.getS2().Hand.remove(4);
 		assertTrue("Spiel ist zu Ende", spiel.istSpielzuEnde(bummerl));
 		
-		/**
+		*/
+/**
 		System.out.println("S1 ist dran " + spiel.getS1().isIstdran() + " S2 ist dran " + spiel.getS2().isIstdran());
 		System.out.println("S1 Punkte: " + spiel.getS1().getPunkte() + " S2 Punkte " + spiel.getS2().getPunkte());
 	
 		getCards("S1", spiel.getS1().Hand);
 		getCards("S2", spiel.getS2().Hand);
-		*/
+		*//*
+
 	}
 	
 	@Test
@@ -382,3 +385,4 @@ public class Spiel2RundenEnde_Spielstand_Stich_ZuegeTest {
 	}
 
 }
+*/

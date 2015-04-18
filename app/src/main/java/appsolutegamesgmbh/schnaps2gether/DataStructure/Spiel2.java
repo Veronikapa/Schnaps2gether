@@ -9,15 +9,6 @@ public class Spiel2 {
     private ArrayList<Karte> stapel;
     private Spieler s1;
     private Spieler s2;
-
-    public String getTrumpf() {
-        return trumpf;
-    }
-
-    public Karte getAufgedeckterTrumpf() {
-        return aufgedeckterTrumpf;
-    }
-
     private String trumpf;
     private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
@@ -32,6 +23,14 @@ public class Spiel2 {
 
     public boolean isZugedreht() {
         return zugedreht;
+    }
+
+    public String getTrumpf() {
+        return trumpf;
+    }
+
+    public Karte getAufgedeckterTrumpf() {
+        return aufgedeckterTrumpf;
     }
 
     public Spiel2()
@@ -539,6 +538,9 @@ public class Spiel2 {
     {
         //Spieler mit höherer Karte istdran = true; Karten werden in Gestochen von Gewinner gelegt; Punkte werden bei Gewinner dazugezählt;
 
+
+
+
         if(s1.isIstdran() == true)
         {
             //Log.d("dran", "s1");
@@ -715,6 +717,21 @@ public class Spiel2 {
                 }
             }
         }
+
+        //s.isIstdran()=true --> Spieler hat den Stich gemacht, falls er einen 20er vor seinen ersten Stich angesagt hat werden diese Punkte nachträglich hinzugezählt
+        if(s2.isIstdran() && s2.isAngesagt20er())
+        {
+            s2.setPunkte(s2.getPunkte()+s2.getMerkePunkte());
+            s2.setMerkePunkte(0);
+            s2.setAngesagt20er(false);
+        }
+        else if(s1.isIstdran() && s1.isAngesagt20er())
+        {
+            s1.setPunkte(s1.getPunkte()+s1.getMerkePunkte());
+            s1.setMerkePunkte(0);
+            s1.setAngesagt20er(false);
+        }
+
         //Log.d("Punkte", s1.getPunkte()+" "+s2.getPunkte());
         //Log.d("kartengestochen", karteS1.getFarbe()+karteS1.getWertigkeit()+"+"+karteS2.getFarbe()+karteS2.getWertigkeit());
         //Log.d("PlusPunkte", karteS1.getPunkte()+"+"+karteS2.getPunkte());
@@ -835,6 +852,28 @@ public class Spiel2 {
 
         return h20er;
     }
+
+    public void Ansagen20er(String farbe,Spieler s)
+    {
+        s.setAngesagt20er(true);
+
+        if(s.getPunkte()== 0)
+        {
+            if(farbe.equals(trumpf))
+                s.setMerkePunkte(40);
+            else
+                s.setMerkePunkte(20);
+        }
+        else
+        {
+            if(farbe.equals(trumpf))
+                s.setPunkte(s.getPunkte()+40);
+            else
+                s.setPunkte(s.getPunkte()+20);
+        }
+
+    }
+
 
     public boolean DarfKarteAuswaehlen(Karte karteamTisch, Karte karte)
     {

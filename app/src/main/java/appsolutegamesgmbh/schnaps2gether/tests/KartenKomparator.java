@@ -1,3 +1,4 @@
+/*
 package appsolutegamesgmbh.schnaps2gether.tests;
 
 import java.util.Comparator;
@@ -31,3 +32,4 @@ public class KartenKomparator implements Comparator<Karte> {
         }
     }
 }
+*/

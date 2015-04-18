@@ -1,3 +1,4 @@
+/*
 package appsolutegamesgmbh.schnaps2gether.tests;
 
 import java.util.ArrayList;
@@ -111,11 +112,13 @@ public class Spiel2 {
         s1.setIstdran(false);
     }
 
-    /*
+    */
+/*
     / Enstcheidet welche Karte der Computer ausspielt.
     / Wenn s1 bereits ausgespielt hat, entscheide basierend auf dieser Karte
     / @return: Liefert Karte die der Computer ausspielt
-     */
+     *//*
+
     public Karte AuspielenComputer(Karte karteAndererSpieler) {
 
         Karte zuspielen = null;
@@ -166,9 +169,11 @@ public class Spiel2 {
         return zuspielen;
     }
 
-    /*
+    */
+/*
     / Gibt die höchste Karte zurück die ein Spieler besitzt
-     */
+     *//*
+
     private Karte hoechsteKarteSpieler() {
         Karte hoechsteKarte = null;
 
@@ -183,9 +188,11 @@ public class Spiel2 {
         return hoechsteKarte;
     }
 
-    /*
+    */
+/*
     / Finde hoechste Karte des Computers üer alle Farben hinweg
-     */
+     *//*
+
     private Karte spieleHoechsteAusstehendeKarte() {
 
         Karte hoechsteKarteHerz = null;
@@ -214,10 +221,12 @@ public class Spiel2 {
         return hoechsteKarte;
     }
 
-    /*
+    */
+/*
     / Wenn der Computer den höchste, noch ausstehenden Karte einer Farbe besitzt wird diese zurückgegeben,
     / sonst wird null zurückgegeben.
-     */
+     *//*
+
     private Karte spieleHoechsteAusstehendeKarteEinerFarbe(String farbe) {
         Karte hoechsteKarteFarbe = null;
 
@@ -285,10 +294,12 @@ public class Spiel2 {
         return hoechsteKarteFarbe;
     }
 
-    /*
+    */
+/*
     / Überprüft ob Zudrehen des Computers sinnvoll ist
     / Zudrehen, wenn ich die 2 höhsten Trümpfe habe und mindestens 2 weitere Asse oder 10er
-     */
+     *//*
+
     private boolean sollComputerZudrehen() {
         //Wenn der Computer weniger als Trümpfe hat, dann nicht zudrehen
         if(!computerHat2HoechsteTruempfe())
@@ -301,10 +312,12 @@ public class Spiel2 {
         return false;
     }
 
-    /*
+    */
+/*
     / Gibt true zurück wennn der Computer min. 2 Karten in der Hand hält die
     / ein 10er oder eine Ass sind. Trümpfe zählen nicht. Sonst wird false zurück gegeben.
-     */
+     *//*
+
     private boolean computerHat2HoheKarten()
     {
        int counterHoheKarten = 0;
@@ -325,9 +338,11 @@ public class Spiel2 {
             return false;
     }
 
-    /*
+    */
+/*
     / Gibt zurück ob Computer mindestens 2 ausstehende Trümpfe besitzt.
-     */
+     *//*
+
     private boolean computerHat2HoechsteTruempfe() {
         boolean trumpfAssGestochen = false;
         boolean trumpf10erGestochen = false;
@@ -399,9 +414,11 @@ public class Spiel2 {
         return false;
     }
 
-    /*
+    */
+/*
     / Findet beste Karte zum Ausspielen, wenn s1 bereits gespielt
-     */
+     *//*
+
     private Karte SpieleComputerKarte(Karte karteS1) {
 
         //Habe ich Karte mit selber Farbe
@@ -428,10 +445,12 @@ public class Spiel2 {
         return niedrigsteKarteComputer();
     }
 
-    /*
+    */
+/*
     / Findet beste Karte zum Ausspielen, wenn S1 schon gespielt hat und zugedreht wurde bzw.
     / wenn keine Karten mehr zum Heben vorhanden sind.
-     */
+     *//*
+
     private Karte SpieleComputerKarteWennS1Zugedreht(Karte karteS1) {
             //Habe ich Karte mit selber Farbe
             Karte karteMitSelberFarbe = computerKannFaerbeln(karteS1);
@@ -457,10 +476,12 @@ public class Spiel2 {
             return niedrigsteKarteComputer();
     }
 
-    /*
+    */
+/*
     / Sucht niedrigste Karte, nimmt keine Rücksicht auf Farbe
     / Gibt die niedrigste Karte zurück, die der Computer besitzt
-     */
+     *//*
+
     private Karte niedrigsteKarteComputer() {
       Karte niedrigsteKarte = null;
 
@@ -475,10 +496,12 @@ public class Spiel2 {
         return niedrigsteKarte;
     }
 
-    /*
+    */
+/*
     / Such niedrigsten Trumpf den der Computer besitzt
     /  Wenn der Computer einen Trumpf in der Hand hat wird dieser zurückgegeben, sonst null
-     */
+     *//*
+
     private Karte computerHatTrumpf() {
 
         Karte niedrigsterTrumpf = null;
@@ -496,11 +519,13 @@ public class Spiel2 {
         return niedrigsterTrumpf;
     }
 
-    /*
+    */
+/*
     / Wenn der Computer eine Karte mit derselben Farbe hat, wird diese Karte zurückgegeben.
     / Wenn es mehrere solche Karten gibt. Gib die höchste Karte zurück.
     / Sonst wird null zurückgegeben.
-    */
+    *//*
+
     private Karte computerKannFaerbeln(Karte karteS1) {
 
         Karte karteZumFaerbeln = null;
@@ -846,3 +871,4 @@ public class Spiel2 {
     }
 
 }
+*/

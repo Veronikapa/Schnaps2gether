@@ -1,3 +1,4 @@
+/*
 package appsolutegamesgmbh.schnaps2gether.tests;
 
 public class Bummerl2 {
@@ -35,3 +36,4 @@ public class Bummerl2 {
     }
 
 }
+*/

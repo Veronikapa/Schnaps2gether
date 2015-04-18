@@ -8,6 +8,8 @@ public class Spieler {
     private int Punkte;
     public ArrayList<Karte> Gestochen;
     private boolean istdran;
+    private boolean angesagt20er;
+    private int merkePunkte;
 
     public int getPunkte() {
         return Punkte;
@@ -23,6 +25,22 @@ public class Spieler {
 
     public void setIstdran(boolean istdran) {
         this.istdran = istdran;
+    }
+
+    public boolean isAngesagt20er() {
+        return angesagt20er;
+    }
+
+    public void setAngesagt20er(boolean angesagt20er) {
+        this.angesagt20er = angesagt20er;
+    }
+
+    public int getMerkePunkte() {
+        return merkePunkte;
+    }
+
+    public void setMerkePunkte(int merkePunkte) {
+        this.merkePunkte = merkePunkte;
     }
 
     public Spieler()

@@ -21,6 +21,16 @@
     <string name="exit">Beenden</string>
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
+    <string name="title_activity_startmenu">Startmenu</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_startmenue">Startmenue</string>
+    <string name="String">spielen</string>
+    <string name="spielen">spielen</string>
+    <string name="name">name ändern</string>
+    <string name="statistik">Statistik</string>
+    <string name="beenden">beenden</string>
+    <string name="spielregeln">spielregeln</string>
+    <string name="optionen">optionen</string>
 
 
 </resources>

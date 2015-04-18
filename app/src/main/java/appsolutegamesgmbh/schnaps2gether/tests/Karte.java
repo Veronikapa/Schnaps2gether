@@ -1,3 +1,4 @@
+/*
 package appsolutegamesgmbh.schnaps2gether.tests;
 
 import java.util.ArrayList;
@@ -88,3 +89,4 @@ public class Karte {
         return Kartendeck;
     }
 }
+*/
