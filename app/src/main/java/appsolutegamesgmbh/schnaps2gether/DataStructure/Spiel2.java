@@ -67,7 +67,6 @@ public class Spiel2 {
         //Trumpfkarte ausgeben
         aufgedeckterTrumpf = stapel.get(0);
         trumpf = aufgedeckterTrumpf.getFarbe();
-        //Log.d("trumpf", aufgedeckterTrumpf.getFarbe()+aufgedeckterTrumpf.getWertigkeit());
         stapel.remove(0);
 
         //Spieler 1 bekommt 2 Karten
@@ -108,7 +107,6 @@ public class Spiel2 {
     {
         //Ausgespielte Karte wird aus Hand von S1 entfernt
         s1.Hand.remove(karteS1);
-        //Log.d("k1", karteS1.getFarbe()+karteS1.getWertigkeit());
         s1.setIstdran(false);
     }
 
@@ -216,7 +214,6 @@ public class Spiel2 {
         else if (hoechsteKartePik != null)
             hoechsteKarte = hoechsteKartePik;
         else
-            //Log.d("error", "keine groesste karte");
 
         if(hoechsteKarteKaro != null && hoechsteKarteKaro.getPunkte() >= hoechsteKarte.getPunkte())
             hoechsteKarte = hoechsteKarteKaro;
@@ -543,7 +540,6 @@ public class Spiel2 {
 
         if(s1.isIstdran() == true)
         {
-            //Log.d("dran", "s1");
             if (karteS1.getFarbe() == trumpf && karteS2.getFarbe() == trumpf)
             {
                 if(karteS1.getPunkte()>karteS2.getPunkte())
@@ -631,7 +627,6 @@ public class Spiel2 {
         }
         else
         {
-            //Log.d("dran", "s2");
             if (karteS1.getFarbe() == trumpf && karteS2.getFarbe() == trumpf)
             {
                 if(karteS1.getPunkte()>karteS2.getPunkte())
@@ -732,10 +727,6 @@ public class Spiel2 {
             s1.setAngesagt20er(false);
         }
 
-        //Log.d("Punkte", s1.getPunkte()+" "+s2.getPunkte());
-        //Log.d("kartengestochen", karteS1.getFarbe()+karteS1.getWertigkeit()+"+"+karteS2.getFarbe()+karteS2.getWertigkeit());
-        //Log.d("PlusPunkte", karteS1.getPunkte()+"+"+karteS2.getPunkte());
-        //Log.d("PlusPunkte", Integer.toString(karteS1.getPunkte()+karteS2.getPunkte()));
     }
 
     //Gibt aus ob Spiel zu Ende ist, wenn nicht werden neue Karten ausgeteilt(falls Stapel nicht leer), wenn ja ändern der Punkte im Bummerl

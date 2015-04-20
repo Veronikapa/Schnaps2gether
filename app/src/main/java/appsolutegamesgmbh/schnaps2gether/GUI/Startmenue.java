@@ -1,5 +1,6 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
+import android.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -70,6 +71,12 @@ public class Startmenue extends ActionBarActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-
+        switch(v.getId()) {
+            case R.id.cmd_name:
+                DialogFragment nameFragment = new ChangeNickname();
+                nameFragment.show(getFragmentManager(), "ChangeNickname");
+                break;
+            default:;
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -93,12 +94,9 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonT = (Button) findViewById(R.id.main_buttonT);
         buttonD = (Button) findViewById(R.id.main_buttonD);
         button20er = (Button) findViewById(R.id.main_button20er);
+        button20er.setOnClickListener(this);
         button40er = (Button) findViewById(R.id.main_button40er);
-
-        herz = (MenuItem) findViewById(R.id.herz_20er);
-        karo = (MenuItem) findViewById(R.id.karo_20er);
-        pik = (MenuItem) findViewById(R.id.pik_20er);
-        kreuz = (MenuItem) findViewById(R.id.kreuz_20er);
+        button40er.setOnClickListener(this);
 
         nichtKlickbar();
 
@@ -135,8 +133,12 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 break;
             case R.id.main_button20er:
                 spiel.Zudrehen();
-                PopupMenu popup = new PopupMenu(this, button20er);
-                popup.setOnMenuItemClickListener(this);
+                PopupMenu popup = new PopupMenu(Spielfeld2.this, button20er);
+                popup.inflate(R.menu.popup_menu_20er);
+                herz = (MenuItem) popup.getMenu().getItem(0);
+                karo = (MenuItem) popup.getMenu().getItem(1);
+                pik = (MenuItem) popup.getMenu().getItem(2);
+                kreuz = (MenuItem) popup.getMenu().getItem(3);
                 ArrayList<String> a = spiel.hat20er(s1);
                 herz.setVisible(false);
                 karo.setVisible(false);
@@ -159,7 +161,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                         default:;
                     }
                 }
-                popup.inflate(R.menu.popup_menu_20er);
+                popup.setOnMenuItemClickListener(this);
                 popup.show();
                 spiel.istSpielzuEnde(bummerl);
                 break;
@@ -173,18 +175,14 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void zugAusführen(int i) {
-        kartenNichtKlickbar();
         final Karte k = s1.Hand.get(i);
         if (spiel.DarfKarteAuswaehlen(e1, k)) {
+            kartenNichtKlickbar();
             spiel.Auspielen(k);
             gespielteKarteEntfernen(i);
             buttonI.setText(k.getFarbe() + k.getWertigkeit());
             if (e1 == null) {
                 zugWechsel(k1);
-            }
-            if (spiel.isZugedreht()) {
-                buttonZ.setEnabled(false);
-                buttonZ.setText("Zugedreht");
             }
             // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
@@ -203,13 +201,13 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                         DialogFragment newFragment = new GameEnd();
                         newFragment.setArguments(args);
                         newFragment.show(getFragmentManager(), "GameEnd");
+                    } else {
+                        handAktualisieren();
+                        if (s2.isIstdran()) {
+                            zugWechsel(null);
+                        }
+                        kartenKlickbar();
                     }
-                    handAktualisieren();
-                    if (s2.isIstdran()) {
-                        zugWechsel(null);
-                    }
-                    kartenKlickbar();
-                    button20er.setEnabled(true);
                 }
             }, 2000);
         }
@@ -222,21 +220,27 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
             System.out.print(e1.getFarbe() + e1.getWertigkeit());
             buttonE.setText(e1.getFarbe() + e1.getWertigkeit());
+            if (spiel.isZugedreht()) {
+                buttonZ.setEnabled(false);
+                buttonZ.setText("Zugedreht");
+            }
             zugWechsel(null);
 
         }
         else {
-            if(hat20er()) {
-                button20er.setEnabled(true);
-            }
-            else {
-                button20er.setEnabled(false);
-            }
-            if(hat40er()) {
-                button40er.setEnabled(true);
-            }
-            else {
-                button40er.setEnabled(false);
+            if (s1.getPunkte() == 0) {
+                if(hat20er()) {
+                    button20er.setEnabled(true);
+                }
+                else {
+                    button20er.setEnabled(false);
+                }
+                if(hat40er()) {
+                    button40er.setEnabled(true);
+                }
+                else {
+                    button40er.setEnabled(false);
+                }
             }
         }
     }
@@ -321,6 +325,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
         kartenKlickbar();
         buttonZ.setEnabled(true);
+        buttonZ.setText(R.string.buttonZ);
         buttonI.setText("");
         buttonE.setText("");
         punkteI.setText("0");
