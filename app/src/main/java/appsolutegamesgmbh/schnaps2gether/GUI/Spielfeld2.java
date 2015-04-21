@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -365,6 +364,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+        //Intent intent = new Intent(this, Startmenue.class);
         finish();
     }
 

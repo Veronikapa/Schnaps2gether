@@ -1,12 +1,13 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import appsolutegamesgmbh.schnaps2gether.R;
 
@@ -19,6 +20,7 @@ public class Startmenue extends ActionBarActivity implements View.OnClickListene
     private Button beenden;
     private Button name;
     private Button optionen;
+    private EditText nickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,12 @@ public class Startmenue extends ActionBarActivity implements View.OnClickListene
             case R.id.cmd_name:
                 DialogFragment nameFragment = new ChangeNickname();
                 nameFragment.show(getFragmentManager(), "ChangeNickname");
+                break;
+            case R.id.cmd_Beenden:
+                finish();
+                break;
+            case R.id.cmd_spielen:
+                //Intent intent = new Intent(this, Spielfeld2.class);
                 break;
             default:;
         }
