@@ -21,16 +21,6 @@ import appsolutegamesgmbh.schnaps2gether.R;
 
 public class Spielfeld2 extends Activity implements View.OnClickListener, GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener {
 
-    /* TODO: Hand von Spieler1 auslesen und anzeigen; Trumpf Karte anzeigen;
-    * TODO: Klick auf Karte Spieler 1
-    * * Ist Spieler1 dran (zu Spielbeginn immer) und spiel.DarfKarteAusspielen() = true -->  spiel.Ausspielen() aufrufen, spiel.AusspielenComputer(), spiel.ZugAuswerten aufrufen()
-    * * Ist danach Spieler1 wieder dran. Tu nix.
-    * * Ist Spieler2 dran. Triggere AusspielenComputer
-    *
-    * TODO: Klick auf Zudrehen --> spiel.Zudrehen aufrufen, tbd..
-    * TODO: Punkte auslesen von Spieler 1 nach Zugauswerten und anzeigen
-    * TODO: Überprüfen ob Spiel weitergeht oder neues Spiel begonnen wird; Auslesen wer Spiel gewonnen hat
-    * */
     private Spiel2 spiel;
     private Button button1;
     private Button button2;
@@ -175,41 +165,37 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     private void zugAusführen(int i) {
         final Karte k = s1.Hand.get(i);
-        if (spiel.DarfKarteAuswaehlen(e1, k)) {
-            kartenNichtKlickbar();
-            spiel.Auspielen(k);
-            gespielteKarteEntfernen(i);
-            buttonI.setText(k.getFarbe() + k.getWertigkeit());
-            if (e1 == null) {
-                zugWechsel(k1);
-            }
-            // Execute some code after 2 seconds have passed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    spiel.ZugAuswerten(k, e1);
-                    punkteAktualisieren();
-                    e1 = null;
-                    if (spiel.istSpielzuEnde(bummerl)) {
-                        boolean win = true;
-                        if (s1.getPunkte()<66) {
-                            win = false;
-                        }
-                        Bundle args = new Bundle();
-                        args.putBoolean("win", win);
-                        DialogFragment newFragment = new GameEnd();
-                        newFragment.setArguments(args);
-                        newFragment.show(getFragmentManager(), "GameEnd");
-                    } else {
-                        handAktualisieren();
-                        if (s2.isIstdran()) {
-                            zugWechsel(null);
-                        }
-                        kartenKlickbar();
-                    }
-                }
-            }, 2000);
+        kartenNichtKlickbar();
+        spiel.Auspielen(k);
+        gespielteKarteEntfernen(i);
+        buttonI.setText(k.getFarbe() + k.getWertigkeit());
+        if (e1 == null) {
+            zugWechsel(k1);
         }
+        // Execute some code after 2 seconds have passed
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                spiel.ZugAuswerten(k, e1);
+                punkteAktualisieren();
+                e1 = null;
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    boolean win = true;
+                    if (s1.getPunkte()<66) {
+                        win = false;
+                    }
+                    Bundle args = new Bundle();
+                    args.putBoolean("win", win);
+                    DialogFragment newFragment = new GameEnd();
+                    newFragment.setArguments(args);
+                    newFragment.show(getFragmentManager(), "GameEnd");
+                } else {
+                    handAktualisieren();
+                    zugWechsel(null);
+                    kartenKlickbar();
+                }
+            }
+        }, 2000);
     }
 
     private void zugWechsel(Karte karteS1) {
@@ -343,11 +329,39 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void kartenKlickbar() {
-        button1.setEnabled(true);
-        button2.setEnabled(true);
-        button3.setEnabled(true);
-        button4.setEnabled(true);
-        button5.setEnabled(true);
+        if (spiel.isZugedreht()) {
+            if (s1.Hand.size()>0 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(0))) {
+                button1.setEnabled(true);
+            } else {
+                button1.setEnabled(false);
+            }
+            if (s1.Hand.size()>1 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(1))) {
+                button2.setEnabled(true);
+            } else {
+                button2.setEnabled(false);
+            }
+            if (s1.Hand.size()>2 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(2))) {
+                button3.setEnabled(true);
+            } else {
+                button3.setEnabled(false);
+            }
+            if (s1.Hand.size()>3 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(3))) {
+                button4.setEnabled(true);
+            } else {
+                button4.setEnabled(false);
+            }
+            if (s1.Hand.size()>4 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(4))) {
+                button5.setEnabled(true);
+            } else {
+                button5.setEnabled(false);
+            }
+        } else {
+            button1.setEnabled(true);
+            button2.setEnabled(true);
+            button3.setEnabled(true);
+            button4.setEnabled(true);
+            button5.setEnabled(true);
+        }
     }
 
     private void nichtKlickbar() {
