@@ -37,6 +37,16 @@
     <string name="beenden">beenden</string>
     <string name="spielregeln">spielregeln</string>
     <string name="optionen">optionen</string>
+    <string name="title_activity_lobby">Lobby</string>
+    <string name="neu">Neues Spiel</string>
+    <string name="beitreten">Spiel beitreten</string>
+    <string name="abbrechen">abbrechen</string>
+    <string name="title_activity_neues_spiel">NeuesSpiel</string>
+    <string name="AnzahlSpieler">Anzahl Spieler</string>
+    <string name="zwei">2</string>
+    <string name="drei">3</string>
+    <string name="vier">4</string>
+    <string name="Spielstarten">Spiel starten</string>
 
 
 </resources>

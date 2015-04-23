@@ -30,6 +30,14 @@
             android:name=".GUI.Startmenue"
             android:label="@string/title_activity_startmenue" >
         </activity>
+        <activity
+            android:name=".GUI.Lobby"
+            android:label="@string/title_activity_lobby" >
+        </activity>
+        <activity
+            android:name=".GUI.NeuesSpiel"
+            android:label="@string/title_activity_neues_spiel" >
+        </activity>
     </application>
 
 </manifest>
