@@ -1,6 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -72,5 +73,10 @@ public class Startmenue extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+    }
+
+    //öffnet die Lobby --> onClick:"neu" in .xml - Datei hinzugefügt
+    public void neu(View v){
+        Intent intent = new Intent(this, Lobby.class);
     }
 }

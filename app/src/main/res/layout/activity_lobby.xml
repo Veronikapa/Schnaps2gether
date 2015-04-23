@@ -16,7 +16,8 @@
         android:id="@+id/cmd_neu"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="neu" />
 
     <Button
         android:layout_width="wrap_content"

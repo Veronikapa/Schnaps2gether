@@ -32,7 +32,8 @@
         android:text="@string/drei"
         android:id="@+id/button2"
         android:layout_alignTop="@+id/button"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="neu" />
 
     <Button
         android:layout_width="wrap_content"

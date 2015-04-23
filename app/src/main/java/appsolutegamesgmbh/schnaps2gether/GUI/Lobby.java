@@ -1,10 +1,12 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import appsolutegamesgmbh.schnaps2gether.R;
 
@@ -37,5 +39,10 @@ public class Lobby extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void neu(View v){
+        Intent intent = new Intent(this, NeuesSpiel.class);
     }
 }

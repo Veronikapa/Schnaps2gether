@@ -58,7 +58,9 @@
         android:text="@string/spielregeln"
         android:id="@+id/cmd_spielregeln"
         android:layout_alignBottom="@+id/cmd_spielen"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="neu"
+        />
 
     <Button
         android:layout_width="wrap_content"
