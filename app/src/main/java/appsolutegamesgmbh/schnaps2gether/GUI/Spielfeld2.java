@@ -158,6 +158,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 spiel.Ansagen20er(spiel.getTrumpf(), s1);
                 spiel.istSpielzuEnde(bummerl);
                 button40er.setEnabled(false);
+                kartenKlickbar();
                 break;
             default:;
         }
@@ -329,38 +330,30 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     }
 
     private void kartenKlickbar() {
-        if (spiel.isZugedreht()) {
-            if (s1.Hand.size()>0 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(0))) {
-                button1.setEnabled(true);
-            } else {
-                button1.setEnabled(false);
-            }
-            if (s1.Hand.size()>1 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(1))) {
-                button2.setEnabled(true);
-            } else {
-                button2.setEnabled(false);
-            }
-            if (s1.Hand.size()>2 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(2))) {
-                button3.setEnabled(true);
-            } else {
-                button3.setEnabled(false);
-            }
-            if (s1.Hand.size()>3 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(3))) {
-                button4.setEnabled(true);
-            } else {
-                button4.setEnabled(false);
-            }
-            if (s1.Hand.size()>4 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(4))) {
-                button5.setEnabled(true);
-            } else {
-                button5.setEnabled(false);
-            }
-        } else {
+        if (s1.Hand.size()>0 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(0))) {
             button1.setEnabled(true);
+        } else {
+            button1.setEnabled(false);
+        }
+        if (s1.Hand.size()>1 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(1))) {
             button2.setEnabled(true);
+        } else {
+            button2.setEnabled(false);
+        }
+        if (s1.Hand.size()>2 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(2))) {
             button3.setEnabled(true);
+        } else {
+            button3.setEnabled(false);
+        }
+        if (s1.Hand.size()>3 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(3))) {
             button4.setEnabled(true);
+        } else {
+            button4.setEnabled(false);
+        }
+        if (s1.Hand.size()>4 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(4))) {
             button5.setEnabled(true);
+        } else {
+            button5.setEnabled(false);
         }
     }
 
@@ -388,15 +381,23 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", s1);
+                spiel.istSpielzuEnde(bummerl);
+                kartenKlickbar();
                 return true;
             case R.id.karo_20er:
                 spiel.Ansagen20er("Karo", s1);
+                spiel.istSpielzuEnde(bummerl);
+                kartenKlickbar();
                 return true;
             case R.id.pik_20er:
                 spiel.Ansagen20er("Pik", s1);
+                spiel.istSpielzuEnde(bummerl);
+                kartenKlickbar();
                 return true;
             case R.id.kreuz_20er:
                 spiel.Ansagen20er("Kreuz", s1);
+                spiel.istSpielzuEnde(bummerl);
+                kartenKlickbar();
                 return true;
             default:
                 return false;

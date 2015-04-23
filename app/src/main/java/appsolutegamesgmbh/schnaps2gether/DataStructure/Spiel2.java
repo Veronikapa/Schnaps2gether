@@ -1,5 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,6 +14,7 @@ public class Spiel2 {
     private String trumpf;
     private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
+    private String angesagteFarbe;
 
     public Spieler getS1() {
         return s1;
@@ -40,6 +43,7 @@ public class Spiel2 {
         s1.setIstdran(true);
         zugedreht = false;
         s2 = new Spieler();
+        angesagteFarbe = null;
         Anfangsdeck();
     }
 
@@ -536,6 +540,7 @@ public class Spiel2 {
         //Spieler mit höherer Karte istdran = true; Karten werden in Gestochen von Gewinner gelegt; Punkte werden bei Gewinner dazugezählt;
 
 
+        angesagteFarbe = null;
 
 
         if(s1.isIstdran() == true)
@@ -847,6 +852,7 @@ public class Spiel2 {
     public void Ansagen20er(String farbe,Spieler s)
     {
         s.setAngesagt20er(true);
+        angesagteFarbe = farbe;
 
         if(s.getPunkte()== 0)
         {
@@ -868,6 +874,15 @@ public class Spiel2 {
 
     public boolean DarfKarteAuswaehlen(Karte karteamTisch, Karte karte)
     {
+        if (angesagteFarbe != null) {
+            if (karte.getFarbe().equals(angesagteFarbe) &&
+                    (karte.getWertigkeit().equals("König") || karte.getWertigkeit().equals("Dame"))) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
         if(karteamTisch == null || !zugedreht)
             return true;
 
