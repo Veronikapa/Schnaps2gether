@@ -38,6 +38,13 @@
             android:name=".GUI.NeuesSpiel"
             android:label="@string/title_activity_neues_spiel" >
         </activity>
+        <!-- permissions for WIFI connection of application -->
+        <uses-sdk android:minSdkVersion="14" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+        <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     </application>
 
 </manifest>
