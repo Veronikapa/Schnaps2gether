@@ -1,14 +1,19 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+<<<<<<< HEAD
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
+=======
+import android.content.Intent;
+>>>>>>> origin/master
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.nio.channels.Channel;
 
@@ -64,6 +69,7 @@ public class Lobby extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+<<<<<<< HEAD
     //VP: Registrierung des broadcast receivers
     @Override
     protected void onResume() {
@@ -76,5 +82,10 @@ public class Lobby extends Activity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(w2p2BroadCastReceiver);
+=======
+
+    public void neu(View v){
+        Intent intent = new Intent(this, NeuesSpiel.class);
+>>>>>>> origin/master
     }
 }
