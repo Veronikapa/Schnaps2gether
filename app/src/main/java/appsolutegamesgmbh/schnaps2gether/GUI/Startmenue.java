@@ -1,8 +1,8 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,7 +72,19 @@ public class Startmenue extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        switch(v.getId()) {
+            case R.id.cmd_name:
+                DialogFragment nameFragment = new ChangeNickname();
+                nameFragment.show(getFragmentManager(), "ChangeNickname");
+                break;
+            case R.id.cmd_Beenden:
+                finish();
+                break;
+            case R.id.cmd_spielen:
+                //Intent intent = new Intent(this, Spielfeld2.class);
+                break;
+            default:;
+        }
     }
 
     //öffnet die Lobby --> onClick:"neu" in .xml - Datei hinzugefügt

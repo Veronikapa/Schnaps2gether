@@ -12,11 +12,6 @@
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".GUI.Spielfeld3"
@@ -28,15 +23,26 @@
         </activity>
         <activity
             android:name=".GUI.Startmenue"
-            android:label="@string/title_activity_startmenue" >
+            android:label="@string/title_activity_startmenue"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".GUI.Lobby"
-            android:label="@string/title_activity_lobby" >
+            android:label="@string/title_activity_lobby"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".GUI.NeuesSpiel"
-            android:label="@string/title_activity_neues_spiel" >
+            android:label="@string/title_activity_neues_spiel"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <!-- permissions for WIFI connection of application -->
         <uses-sdk android:minSdkVersion="14" />
