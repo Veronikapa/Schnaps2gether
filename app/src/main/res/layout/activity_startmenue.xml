@@ -50,7 +50,8 @@
         android:layout_marginTop="54dp"
         android:layout_toStartOf="@+id/cmd_spielregeln"
         android:layout_alignRight="@+id/cmd_name"
-        android:layout_alignEnd="@+id/cmd_name" />
+        android:layout_alignEnd="@+id/cmd_name"
+        android:onClick="neu" />
 
     <Button
         android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
         android:id="@+id/cmd_spielregeln"
         android:layout_alignBottom="@+id/cmd_spielen"
         android:layout_centerHorizontal="true"
-        android:onClick="neu"
+
         />
 
     <Button

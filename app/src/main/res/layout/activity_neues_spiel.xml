@@ -19,28 +19,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/zwei"
-        android:id="@+id/button"
+        android:id="@+id/cmd_zwei"
         android:layout_marginRight="34dp"
         android:layout_marginEnd="34dp"
         android:layout_below="@+id/lbl_anzahlSpieler"
         android:layout_toLeftOf="@+id/lbl_anzahlSpieler"
-        android:layout_toStartOf="@+id/lbl_anzahlSpieler" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/drei"
-        android:id="@+id/button2"
-        android:layout_alignTop="@+id/button"
-        android:layout_centerHorizontal="true"
+        android:layout_toStartOf="@+id/lbl_anzahlSpieler"
         android:onClick="neu" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/drei"
+        android:id="@+id/cmd_drei"
+        android:layout_alignTop="@+id/cmd_zwei"
+        android:layout_centerHorizontal="true"
+         />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/vier"
-        android:id="@+id/button3"
-        android:layout_alignTop="@+id/button2"
+        android:id="@+id/cmd_vier"
+        android:layout_alignTop="@+id/cmd_drei"
         android:layout_toRightOf="@+id/lbl_anzahlSpieler"
         android:layout_toEndOf="@+id/lbl_anzahlSpieler"
         android:layout_marginLeft="37dp"
