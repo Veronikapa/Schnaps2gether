@@ -1,6 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -77,7 +78,8 @@ public class Lobby extends Activity {
         unregisterReceiver(w2p2BroadCastReceiver);
     }
 
+
     public void neu(View v){
-        Intent intent = new Intent(this, NeuesSpiel.class);
+        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
     }
 }

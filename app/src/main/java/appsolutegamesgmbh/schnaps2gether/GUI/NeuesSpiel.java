@@ -42,6 +42,6 @@ public class NeuesSpiel extends Activity {
     }
 
     public void neu(View v){
-        Intent intent = new Intent(this, Spielfeld2.class);
+        startActivity(new Intent(this, Spielfeld2.class));
     }
 }
