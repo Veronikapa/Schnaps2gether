@@ -81,14 +81,11 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.cmd_spielen:
-                //Intent intent = new Intent(this, Spielfeld2.class);
+                startActivity(new Intent(Startmenue.this, Lobby.class));
                 break;
             default:;
         }
     }
 
-    //öffnet die Lobby --> onClick:"neu" in .xml - Datei hinzugefügt
-    public void neu(View v){
-        Intent intent = new Intent(this, Lobby.class);
-    }
+
 }

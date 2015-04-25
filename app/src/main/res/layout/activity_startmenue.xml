@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="appsolutegamesgmbh.schnaps2gether.GUI.Startmenue">
+    tools:context=".GUI.Startmenue">
 
     <Button
         android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         android:layout_toStartOf="@+id/cmd_spielregeln"
         android:layout_alignRight="@+id/cmd_name"
         android:layout_alignEnd="@+id/cmd_name"
-        android:onClick="neu" />
+        android:layout_alignParentStart="false" />
 
     <Button
         android:layout_width="wrap_content"
