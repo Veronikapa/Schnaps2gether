@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="appsolutegamesgmbh.schnaps2gether" >
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -48,12 +45,19 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <!-- permissions for WIFI connection of application -->
-        <uses-sdk android:minSdkVersion="14" />
-        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+        <uses-sdk android:minSdkVersion="16" />
         <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-        <uses-permission android:name="android.permission.INTERNET" />
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+        <uses-permission
+            android:required="true"
+            android:name="android.permission.ACCESS_WIFI_STATE"/>
+        <uses-permission
+            android:required="true"
+            android:name="android.permission.CHANGE_WIFI_STATE"/>
+        <uses-permission
+            android:required="true"
+            android:name="android.permission.INTERNET"/>
     </application>
 
 </manifest>
