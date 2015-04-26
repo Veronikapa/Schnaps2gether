@@ -1,7 +1,5 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -762,6 +760,9 @@ public class Spiel2 {
         }
         else if (s1.Hand.isEmpty() && zugedreht) {
             return true;
+        }
+        else if (angesagteFarbe != null) {
+            return false;
         }
         else
         {

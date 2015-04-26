@@ -82,6 +82,7 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 break;
             case R.id.cmd_spielen:
                 startActivity(new Intent(Startmenue.this, Lobby.class));
+                finish();
                 break;
             default:;
         }

@@ -2,6 +2,7 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -156,7 +157,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 break;
             case R.id.main_button40er:
                 spiel.Ansagen20er(spiel.getTrumpf(), s1);
-                spiel.istSpielzuEnde(bummerl);
+                if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+                punkteAktualisieren();
                 button40er.setEnabled(false);
                 kartenKlickbar();
                 break;
@@ -181,15 +183,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 punkteAktualisieren();
                 e1 = null;
                 if (spiel.istSpielzuEnde(bummerl)) {
-                    boolean win = true;
-                    if (s1.getPunkte()<66) {
-                        win = false;
-                    }
-                    Bundle args = new Bundle();
-                    args.putBoolean("win", win);
-                    DialogFragment newFragment = new GameEnd();
-                    newFragment.setArguments(args);
-                    newFragment.show(getFragmentManager(), "GameEnd");
+                    spielEnde();
                 } else {
                     handAktualisieren();
                     zugWechsel(null);
@@ -214,19 +208,17 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
         }
         else {
-            if (s1.getPunkte() == 0) {
-                if(hat20er()) {
-                    button20er.setEnabled(true);
-                }
-                else {
-                    button20er.setEnabled(false);
-                }
-                if(hat40er()) {
-                    button40er.setEnabled(true);
-                }
-                else {
-                    button40er.setEnabled(false);
-                }
+            if(hat20er()) {
+                button20er.setEnabled(true);
+            }
+            else {
+                button20er.setEnabled(false);
+            }
+            if(hat40er()) {
+                button40er.setEnabled(true);
+            }
+            else {
+                button40er.setEnabled(false);
             }
         }
     }
@@ -271,10 +263,6 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         int p2 = s2.getPunkte();
         punkteE.setText(Integer.toString(p2));
         punkteI.setText(Integer.toString(p1));
-        if (p1 != 0) {
-            button20er.setEnabled(false);
-            button40er.setEnabled(false);
-        }
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -364,6 +352,18 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         buttonE.setEnabled(false);
     }
 
+    private void spielEnde() {
+        boolean win = true;
+        if (s1.getPunkte()<66) {
+            win = false;
+        }
+        Bundle args = new Bundle();
+        args.putBoolean("win", win);
+        DialogFragment newFragment = new GameEnd();
+        newFragment.setArguments(args);
+        newFragment.show(getFragmentManager(), "GameEnd");
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         spielStart();
@@ -371,7 +371,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        //Intent intent = new Intent(this, Startmenue.class);
+        startActivity(new Intent(Spielfeld2.this, Startmenue.class));
         finish();
     }
 
@@ -381,22 +381,26 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", s1);
-                spiel.istSpielzuEnde(bummerl);
+                if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+                punkteAktualisieren();
                 kartenKlickbar();
                 return true;
             case R.id.karo_20er:
                 spiel.Ansagen20er("Karo", s1);
-                spiel.istSpielzuEnde(bummerl);
+                if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+                punkteAktualisieren();
                 kartenKlickbar();
                 return true;
             case R.id.pik_20er:
                 spiel.Ansagen20er("Pik", s1);
-                spiel.istSpielzuEnde(bummerl);
+                if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+                punkteAktualisieren();
                 kartenKlickbar();
                 return true;
             case R.id.kreuz_20er:
                 spiel.Ansagen20er("Kreuz", s1);
-                spiel.istSpielzuEnde(bummerl);
+                if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+                punkteAktualisieren();
                 kartenKlickbar();
                 return true;
             default:

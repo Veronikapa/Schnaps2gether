@@ -1,12 +1,11 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,5 +80,6 @@ public class Lobby extends Activity {
 
     public void neu(View v){
         startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+        finish();
     }
 }
