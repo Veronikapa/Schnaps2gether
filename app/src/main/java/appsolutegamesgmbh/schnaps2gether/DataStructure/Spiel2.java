@@ -34,6 +34,8 @@ public class Spiel2 {
         return aufgedeckterTrumpf;
     }
 
+
+
     public Spiel2()
     {
         kartendeck = Karte.erstelleKartendeck();
@@ -821,12 +823,14 @@ public class Spiel2 {
         zugedreht = true;
     }
 
-    public Karte TrumpfkarteAustauschen(Karte karte)
+    public Karte TrumpfkarteAustauschen(Karte karte, Spieler s)
     {
         if(karte.getFarbe() == trumpf && karte.getWertigkeit() == "Bube")
         {
             Karte Rueckgabekarte = aufgedeckterTrumpf;
             aufgedeckterTrumpf = karte;
+            s1.Hand.remove(karte);
+            s1.Hand.add(Rueckgabekarte);
             return Rueckgabekarte;
         }
         else

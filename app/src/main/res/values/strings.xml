@@ -47,6 +47,7 @@
     <string name="drei">3</string>
     <string name="vier">4</string>
     <string name="Spielstarten">Spiel starten</string>
+    <string name="TrumpAustauschen">Trumpf austauschen</string>
 
 
 </resources>

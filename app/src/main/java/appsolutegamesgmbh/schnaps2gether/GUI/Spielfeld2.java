@@ -35,6 +35,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     private Button buttonZ;
     private Button button20er;
     private Button button40er;
+    private Button buttonTtauschen;
     private MenuItem herz;
     private MenuItem karo;
     private MenuItem pik;
@@ -87,6 +88,8 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         button20er.setOnClickListener(this);
         button40er = (Button) findViewById(R.id.main_button40er);
         button40er.setOnClickListener(this);
+        buttonTtauschen = (Button) findViewById(R.id.main_buttonTtauschen);
+        buttonTtauschen.setOnClickListener(this);
 
         nichtKlickbar();
 
@@ -122,7 +125,6 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 buttonZ.setText("Zugedreht");
                 break;
             case R.id.main_button20er:
-                spiel.Zudrehen();
                 PopupMenu popup = new PopupMenu(Spielfeld2.this, button20er);
                 popup.inflate(R.menu.popup_menu_20er);
                 herz = (MenuItem) popup.getMenu().getItem(0);
@@ -161,6 +163,9 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 punkteAktualisieren();
                 button40er.setEnabled(false);
                 kartenKlickbar();
+                break;
+            case R.id.main_buttonTtauschen:
+                spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2),s1);
                 break;
             default:;
         }
@@ -220,11 +225,17 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
             else {
                 button40er.setEnabled(false);
             }
+            if (s1.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
+                buttonTtauschen.setEnabled(true);
+            }
+            else {
+                buttonTtauschen.setEnabled(false);
+            }
         }
     }
 
     private void handAktualisieren() {
-        buttonD.setText(Integer.toString(spiel.AnzahlKartenStapel()));
+        buttonD.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
         switch (s1.Hand.size()) {
             case 5: k5 = s1.Hand.get(4);
                 button5.setText(k5.getFarbe()+k5.getWertigkeit());
@@ -378,6 +389,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         button20er.setEnabled(false);
+        buttonTtauschen.setEnabled(false);
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", s1);
