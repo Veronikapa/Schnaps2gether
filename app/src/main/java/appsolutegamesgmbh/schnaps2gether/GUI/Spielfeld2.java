@@ -155,14 +155,13 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 }
                 popup.setOnMenuItemClickListener(this);
                 popup.show();
-                spiel.istSpielzuEnde(bummerl);
                 break;
             case R.id.main_button40er:
                 spiel.Ansagen20er(spiel.getTrumpf(), s1);
                 if (spiel.istSpielzuEnde(bummerl)) spielEnde();
                 punkteAktualisieren();
                 button40er.setEnabled(false);
-                kartenKlickbar();
+                handKartenKlickbar();
                 break;
             case R.id.main_buttonTtauschen:
                 spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2),s1);
@@ -173,12 +172,12 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
 
     private void zugAusführen(int i) {
         final Karte k = s1.Hand.get(i);
-        kartenNichtKlickbar();
+        buttonsNichtKlickbar();
         spiel.Auspielen(k);
         gespielteKarteEntfernen(i);
         buttonI.setText(k.getFarbe() + k.getWertigkeit());
         if (e1 == null) {
-            zugWechsel(k1);
+            gegnerischerZug(k1);
         }
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
@@ -191,46 +190,49 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                     spielEnde();
                 } else {
                     handAktualisieren();
-                    zugWechsel(null);
-                    kartenKlickbar();
+                    if (s1.isIstdran()) {
+                        eigenerZug();
+                    } else {
+                        gegnerischerZug(null);
+                    }
+                    handKartenKlickbar();
                 }
             }
         }, 2000);
     }
 
-    private void zugWechsel(Karte karteS1) {
-        boolean temp = s1.isIstdran();
-        if (!temp) {
-            e1 = spiel.AuspielenComputer(karteS1);
-
-            System.out.print(e1.getFarbe() + e1.getWertigkeit());
-            buttonE.setText(e1.getFarbe() + e1.getWertigkeit());
-            if (spiel.isZugedreht()) {
-                buttonZ.setEnabled(false);
-                buttonZ.setText("Zugedreht");
-            }
-            zugWechsel(null);
-
+    private void eigenerZug() {
+        if (!spiel.isZugedreht()) {
+            buttonZ.setEnabled(true);
+        }
+        if(hat20er()) {
+            button20er.setEnabled(true);
         }
         else {
-            if(hat20er()) {
-                button20er.setEnabled(true);
-            }
-            else {
-                button20er.setEnabled(false);
-            }
-            if(hat40er()) {
-                button40er.setEnabled(true);
-            }
-            else {
-                button40er.setEnabled(false);
-            }
-            if (s1.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
-                buttonTtauschen.setEnabled(true);
-            }
-            else {
-                buttonTtauschen.setEnabled(false);
-            }
+            button20er.setEnabled(false);
+        }
+        if(hat40er()) {
+            button40er.setEnabled(true);
+        }
+        else {
+            button40er.setEnabled(false);
+        }
+        if (s1.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
+            buttonTtauschen.setEnabled(true);
+        }
+        else {
+            buttonTtauschen.setEnabled(false);
+        }
+    }
+
+    private void gegnerischerZug(Karte karteS1) {
+        e1 = spiel.AuspielenComputer(karteS1);
+
+        System.out.print(e1.getFarbe() + e1.getWertigkeit());
+        buttonE.setText(e1.getFarbe() + e1.getWertigkeit());
+        if (spiel.isZugedreht()) {
+            buttonZ.setEnabled(false);
+            buttonZ.setText("Zugedreht");
         }
     }
 
@@ -308,7 +310,7 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         t = spiel.getAufgedeckterTrumpf();
         buttonT.setText(t.getFarbe()+t.getWertigkeit());
 
-        kartenKlickbar();
+        handKartenKlickbar();
         buttonZ.setEnabled(true);
         buttonZ.setText(R.string.buttonZ);
         buttonI.setText("");
@@ -317,18 +319,22 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
         punkteE.setText("0");
         e1 = null;
         handAktualisieren();
-        zugWechsel(null);
+        eigenerZug();
     }
 
-    private void kartenNichtKlickbar() {
+    private void buttonsNichtKlickbar() {
         button1.setEnabled(false);
         button2.setEnabled(false);
         button3.setEnabled(false);
         button4.setEnabled(false);
         button5.setEnabled(false);
+        button20er.setEnabled(false);
+        button40er.setEnabled(false);
+        buttonZ.setEnabled(false);
+        buttonTtauschen.setEnabled(false);
     }
 
-    private void kartenKlickbar() {
+    private void handKartenKlickbar() {
         if (s1.Hand.size()>0 && spiel.DarfKarteAuswaehlen(e1, s1.Hand.get(0))) {
             button1.setEnabled(true);
         } else {
@@ -395,25 +401,25 @@ public class Spielfeld2 extends Activity implements View.OnClickListener, GameEn
                 spiel.Ansagen20er("Herz", s1);
                 if (spiel.istSpielzuEnde(bummerl)) spielEnde();
                 punkteAktualisieren();
-                kartenKlickbar();
+                handKartenKlickbar();
                 return true;
             case R.id.karo_20er:
                 spiel.Ansagen20er("Karo", s1);
                 if (spiel.istSpielzuEnde(bummerl)) spielEnde();
                 punkteAktualisieren();
-                kartenKlickbar();
+                handKartenKlickbar();
                 return true;
             case R.id.pik_20er:
                 spiel.Ansagen20er("Pik", s1);
                 if (spiel.istSpielzuEnde(bummerl)) spielEnde();
                 punkteAktualisieren();
-                kartenKlickbar();
+                handKartenKlickbar();
                 return true;
             case R.id.kreuz_20er:
                 spiel.Ansagen20er("Kreuz", s1);
                 if (spiel.istSpielzuEnde(bummerl)) spielEnde();
                 punkteAktualisieren();
-                kartenKlickbar();
+                handKartenKlickbar();
                 return true;
             default:
                 return false;
