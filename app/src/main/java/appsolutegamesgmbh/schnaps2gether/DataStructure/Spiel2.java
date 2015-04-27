@@ -831,6 +831,7 @@ public class Spiel2 {
             aufgedeckterTrumpf = karte;
             s1.Hand.remove(karte);
             s1.Hand.add(Rueckgabekarte);
+            Collections.sort(s1.Hand,new KartenKomparator());
             return Rueckgabekarte;
         }
         else
@@ -894,7 +895,22 @@ public class Spiel2 {
         else
         {
             if(karteamTisch.getFarbe().equals(karte.getFarbe()))
-                return true;
+            {
+                if(karteamTisch.getPunkte() < karte.getPunkte())
+                    return true;
+                else
+                {
+                    if(karteamTisch.getPunkte() == 3 &&  (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
+                            s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                        return false;
+                    else if(karteamTisch.getPunkte() == 4 && (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                        return false;
+                    else if(karteamTisch.getPunkte() == 10 && s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
+                        return false;
+                    else
+                        return true;
+                }
+            }
             else if(s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Bube",2)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Dame",3)) ||
                 s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
                 s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
