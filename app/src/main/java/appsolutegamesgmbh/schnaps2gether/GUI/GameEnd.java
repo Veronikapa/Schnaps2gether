@@ -64,6 +64,7 @@ public class GameEnd extends DialogFragment {
                         mListener.onDialogNegativeClick(GameEnd.this);
                     }
                 });
+        setCancelable(false);
         // Create the AlertDialog object and return it
         return builder.create();
     }
