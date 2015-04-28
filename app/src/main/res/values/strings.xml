@@ -48,6 +48,7 @@
     <string name="vier">4</string>
     <string name="Spielstarten">Spiel starten</string>
     <string name="TrumpAustauschen">Trumpf austauschen</string>
+    <string name="no_game_available">no game available</string>
 
 
 </resources>

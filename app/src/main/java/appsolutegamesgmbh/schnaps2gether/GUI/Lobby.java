@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.InetAddress;
@@ -32,6 +33,8 @@ import appsolutegamesgmbh.schnaps2gether.R;
 import appsolutegamesgmbh.schnaps2gether.W2P2.WP2PBroadCastReceiver;
 
 public class Lobby extends Activity {
+
+    private TextView spielliste;
 
     // Variablen für die w2p2 Verbindung
     private IntentFilter w2p2IntentFilter;
@@ -57,6 +60,8 @@ public class Lobby extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+
+        spielliste = (TextView) findViewById(R.id.spielliste);
 
         //Initialisieren und Erstellen der w2p2 Objekte für die Aktivity
         w2p2Manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -111,7 +116,8 @@ public class Lobby extends Activity {
 
     public void neu(View v){
         startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-        finish();
+        //finish();
+        startRegistration();
     }
 
     private void discoverOtherDevicesinPeer()
@@ -176,13 +182,14 @@ public class Lobby extends Activity {
     private void startRegistration() {
         //  Create a string map containing information about your service.
         Map record = new HashMap();
-        record.put("available", "visible");
+        record.put("Spiel Veronika verfügbar", "sichtbar");
 
         // Service information.  Pass it an instance name, service type
         // _protocol._transportlayer , and the map containing
         // information other devices will want once they connect to this one.
         WifiP2pDnsSdServiceInfo serviceInfo =
-                WifiP2pDnsSdServiceInfo.newInstance("_test", "_presence._tcp", record);
+                WifiP2pDnsSdServiceInfo.newInstance("_Veronika", "_presence._tcp", record);
+
 
         // Add the local service, sending the service info, network channel,
         // and listener that will be used to indicate success or failure of
@@ -192,11 +199,15 @@ public class Lobby extends Activity {
             public void onSuccess() {
                 // Command successful! Code isn't necessarily needed here,
                 // Unless you want to update the UI or add logging statements.
+                Log.d("add local Service","Local Service has been created successfully!");
+                players.put("Veronika","Spiel2");
+                spielliste.setText("Veronika");
             }
 
             @Override
             public void onFailure(int arg0) {
                 // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
+                Log.d("add local Service","Local Service has not been created!");
             }
         });
     }
@@ -215,7 +226,7 @@ public class Lobby extends Activity {
             public void onDnsSdTxtRecordAvailable(
                     String fullDomain, Map record, WifiP2pDevice device) {
                 Log.d("Service available", "DnsSdTxtRecord available -" + record.toString());
-                players.put(device.deviceAddress, (String) record.get("buddyname"));
+                players.put(device.deviceAddress, (String) record.get("Veronika"));
             }
         };
 
@@ -245,6 +256,7 @@ public class Lobby extends Activity {
             @Override
             public void onFailure(int code) {
                 // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
+                Log.d("failure ", "failure");
             }
         });
     }
@@ -266,5 +278,9 @@ public class Lobby extends Activity {
             // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
         }
     });
+    }
+
+    public void beitreten(View view) {
+        discoverService();
     }
 }
