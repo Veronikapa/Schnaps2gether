@@ -16,6 +16,9 @@ public class Spiel3 {
     private String angesagteFarbe;
     private Karte hoechstekarteamTisch;
     private Spieler Besitzer; //Besitzer der höchsten Karte, die am Tisch liegt
+    private String Spiel;
+    private Spieler spieler; //derjenige, der das Spiel macht (die anderen zwei Spieler spielen zusammen)
+
 
     public ArrayList<Karte> getTalon() {
         return talon;
@@ -41,73 +44,223 @@ public class Spiel3 {
         return angesagteFarbe;
     }
 
-    public Spiel3()
+    public Spiel3(int AnzahlSpiele)
     {
         kartendeck = Karte.erstelleKartendeck();
         s1 = new Spieler();
-        s1.setIstdran(true);
         s2 = new Spieler();
         s3 = new Spieler();
-        Anfangsdeck();
+        angesagteFarbe = null;
+
+        if(AnzahlSpiele%3 == 0) {
+            s1.setIstdran(true);
+            spieler = s1;
+        }
+        else if(AnzahlSpiele%3 == 1) {
+            s2.setIstdran(true);
+            spieler = s2;
+        }
+        else {
+            s3.setIstdran(true);
+            spieler = s3;
+        }
+
+        Spiel = "normal";
+
+        Anfangsdeck(AnzahlSpiele);
     }
 
-    private void Anfangsdeck()
+    private void Anfangsdeck(int AnzahlSpiele)
     {
         KartenMischen();
 
-        //Spieler 1 bekommt 3 Karten
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
+        if(AnzahlSpiele%3 == 0) {
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 2 bekommt 3 Karten
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 3 bekommt 3 Karten
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Talonkarten ausgeben
-        talon.add(stapel.get(0));
-        stapel.remove(0);
-        talon.add(stapel.get(0));
-        stapel.remove(0);
+            //Talonkarten ausgeben
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+        }
+        else if(AnzahlSpiele%3 == 1)
+        {
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 1 bekommt 3 Karten
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 2 bekommt 3 Karten
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 3 bekommt 3 Karten
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s3.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Talonkarten ausgeben
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+        }
+        else
+        {
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Talonkarten ausgeben
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+            talon.add(stapel.get(0));
+            stapel.remove(0);
+        }
+
+    }
+
+    //nächste Karte am Stapel gibt die Trumpf an
+    private Karte Aufdrehen()
+    {
+        return stapel.get(0);
+    }
+
+
+    //Ansagen der Trumpf und Austeilen der restlichen Karten
+    private void Trumpfansagen(String trumpf, int AnzahlSpiele)
+    {
+        this.trumpf = trumpf;
+
+        if(AnzahlSpiele%3 == 0) {
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        }
+        else if(AnzahlSpiele%3 == 1)
+        {
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        }
+        else
+        {
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        }
 
 
         //Hand Spieler 1 sortieren
@@ -118,7 +271,6 @@ public class Spiel3 {
 
         //Hand Spieler 3 sortieren
         Collections.sort(s3.Hand,new KartenKomparator());
-
     }
 
     private void KartenMischen()
@@ -147,11 +299,15 @@ public class Spiel3 {
         {
             if(hoechstekarteamTisch.getFarbe().equals(karte.getFarbe()))
             {
-                if(hoechstekarteamTisch.getPunkte() < karte.getPunkte())
+                if(hoechstekarteamTisch.getPunkte() < karte.getPunkte()) {
                     hoechstekarteamTisch = karte;
+                    Besitzer = s;
+                }
             }
-            else if(karte.getFarbe().equals(trumpf))
+            else if(karte.getFarbe().equals(trumpf)) {
                 hoechstekarteamTisch = karte;
+                Besitzer = s;
+            }
         }
     }
 
@@ -441,6 +597,12 @@ public class Spiel3 {
         return false;
 
 
+    }
+
+    //TODO:
+    public boolean DarfSpielAnsagen()
+    {
+        return false;
     }
 
     public void TalonAustauschen(Karte talon, Karte spielerkarte, Spieler s)

@@ -34,57 +34,94 @@ public class Spiel2 {
         return aufgedeckterTrumpf;
     }
 
-
-
-    public Spiel2()
+    public Spiel2(int AnzahlSpiele)
     {
         kartendeck = Karte.erstelleKartendeck();
         s1 = new Spieler();
-        s1.setIstdran(true);
         zugedreht = false;
         s2 = new Spieler();
         angesagteFarbe = null;
-        Anfangsdeck();
+        if(AnzahlSpiele%2 == 0)
+            s1.setIstdran(true);
+        else
+            s2.setIstdran(true);
+        Anfangsdeck(AnzahlSpiele);
     }
 
-    private void Anfangsdeck()
+    private void Anfangsdeck(int AnzahlSpiele)
     {
         KartenMischen();
 
-        //Spieler 1 bekommt 3 Karten
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
+        if(AnzahlSpiele%2==0) {
 
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 2 bekommt 3 Karten
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Trumpfkarte ausgeben
-        aufgedeckterTrumpf = stapel.get(0);
-        trumpf = aufgedeckterTrumpf.getFarbe();
-        stapel.remove(0);
+            //Trumpfkarte ausgeben
+            aufgedeckterTrumpf = stapel.get(0);
+            trumpf = aufgedeckterTrumpf.getFarbe();
+            stapel.remove(0);
 
-        //Spieler 1 bekommt 2 Karten
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s1.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 1 bekommt 2 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
+            //Spieler 2 bekommt 2 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        }
+        else
+        {
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
 
-        //Spieler 2 bekommt 2 Karten
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
-        s2.Hand.add(stapel.get(0));
-        stapel.remove(0);
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Trumpfkarte ausgeben
+            aufgedeckterTrumpf = stapel.get(0);
+            trumpf = aufgedeckterTrumpf.getFarbe();
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 2 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 1 bekommt 2 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        }
 
 
         //Hand Spieler 1 sortieren

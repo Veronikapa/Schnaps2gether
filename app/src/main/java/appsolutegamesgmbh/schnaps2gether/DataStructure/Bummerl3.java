@@ -1,10 +1,9 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
-
-public class Bummerl2 {
-
+public class Bummerl3 {
     private int punkteS1;
     private int punkteS2;
+    private int punkteS3;
     private int AnzahlSpiele;
 
     public int getPunkteS1() {
@@ -23,23 +22,24 @@ public class Bummerl2 {
         this.punkteS2 = punkteS2;
     }
 
-    public int getAnzahlSpiele() {
-        return AnzahlSpiele;
+    public int getPunkteS3() {
+        return punkteS3;
     }
 
-    public void setAnzahlSpiele(int anzahlSpiele) {
-        AnzahlSpiele = anzahlSpiele;
+    public void setPunkteS3(int punkteS3) {
+        this.punkteS3 = punkteS3;
     }
 
-    public Bummerl2() {
+    public Bummerl3() {
         punkteS1 = 0;
         punkteS2 = 0;
+        punkteS3 = 0;
         AnzahlSpiele = 0;
     }
 
     public boolean istBummerlzuEnde()
     {
-        if(punkteS1 >= 7 || punkteS2 >= 7)
+        if(punkteS1 >= 24 || punkteS2 >= 24 || punkteS3 >= 24)
             return true;
         else
             return false;

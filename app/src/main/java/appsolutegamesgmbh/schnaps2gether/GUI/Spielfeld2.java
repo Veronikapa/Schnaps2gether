@@ -181,7 +181,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     private void spielStart() {
-        spiel = new Spiel2();
+        spiel = new Spiel2(bummerl.getAnzahlSpiele());
         selbst = spiel.getS1();
         gegner = spiel.getS2();
 
