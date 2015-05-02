@@ -17,6 +17,10 @@
         android:required="true"
         android:name="android.permission.INTERNET"/>
 
+    <!-- Required for Nearby Connections API -->
+    <meta-data android:name="com.google.android.gms.nearby.connection.SERVICEID"
+        android:value="@string/service_id" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
