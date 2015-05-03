@@ -84,7 +84,7 @@ public class Lobby extends Activity implements
     public void neu(View v) {
 
         //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
-        if(m_GoogleApiClient.isConnected()) {
+        if (m_GoogleApiClient.isConnected()) {
             startAdvertising();
         }
     }
@@ -94,17 +94,16 @@ public class Lobby extends Activity implements
     * verbinden sich die Geräte.
     * TODO VP: Ermöglichen der Spielauwahl und Einschränken der Spieler
      */
-    public void beitreten(View v)
-    {
-        if(m_GoogleApiClient.isConnected()) {
-            Toast.makeText(appContext,"Suche nach offenen Spielen...",Toast.LENGTH_SHORT).show();
+    public void beitreten(View v) {
+        if (m_GoogleApiClient.isConnected()) {
+            Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
             startDiscovery();
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(appContext,"GoogleApiConnection erfolgreich.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(appContext, "GoogleApiConnection erfolgreich.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -121,7 +120,7 @@ public class Lobby extends Activity implements
 
         //TODO VP: Spiel in Lobby anzeigen und erst nach Auswahl verbinden
         //TODO VP: Bereits vorhandene Spieler anzeigen
-        connectTo(s,s4);
+        connectTo(s, s4);
     }
 
     @Override
@@ -143,7 +142,7 @@ public class Lobby extends Activity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-       Toast.makeText(appContext,"Verbindung fehlgeschlagen!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(appContext, "Verbindung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -184,8 +183,8 @@ public class Lobby extends Activity implements
 
         //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
         if (!isConnectedToNetwork()) {
-           Toast.makeText(appContext,"Sie sind mit keinem Netzwerk verbunden.",Toast.LENGTH_SHORT).show();
-           return;
+            Toast.makeText(appContext, "Sie sind mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // Gerät das Service anbietet ist der Host des Spiels.
@@ -198,8 +197,8 @@ public class Lobby extends Activity implements
         appIdentifierList.add(new AppIdentifier(getPackageName()));
         AppMetadata appMetadata = new AppMetadata(appIdentifierList);
 
-       //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
-       //via stopAdvertising();
+        //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
+        //via stopAdvertising();
         long NO_TIMEOUT = 0L;
 
         String name = null; //TODO VP: SHOW correct name
@@ -217,13 +216,13 @@ public class Lobby extends Activity implements
                 }
             }
         });
-       }
+    }
 
     private void startDiscovery() {
         //Gerät das auf der Suche nach Services ist, muss mit einem Wifi oder einem Ethernet
         //verbunden sein.
         if (!isConnectedToNetwork()) {
-            Toast.makeText(appContext,"Sie sind leider mit keinem Netzwerk verbunden.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(appContext, "Sie sind leider mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -245,14 +244,14 @@ public class Lobby extends Activity implements
                             String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
                             String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
                             //Aufruf der Methode zur Handhabung des gefundenen Geräts
-                            onEndpointFound(endPointId,deviceId,serviceId,"Discoverer");
+                            onEndpointFound(endPointId, deviceId, serviceId, "Discoverer");
 
                         }
 
                         //Es konnte kein Service in der Nähe gefunen werden.
                         else {
 
-                            Toast.makeText(appContext,"Es konnten leider keine offenen Spiele gefunden werden.:(",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(appContext, "Es konnten leider keine offenen Spiele gefunden werden.:(", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -269,11 +268,14 @@ public class Lobby extends Activity implements
                     public void onConnectionResponse(String remoteEndpointId, Status status,
                                                      byte[] bytes) {
                         if (status.isSuccess()) {
-                            // Successful connection
-                            Toast.makeText(appContext,"Geräte wurden verbunden! ",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
+
+                            //Starten der Nächsten Activity nach Verbindung
+                            startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+                            finish();
                         } else {
-                            // Failed connection
-                            Toast.makeText(appContext,"Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
+                            // Verbindung fehlgeschlagen
+                            Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, this);
@@ -293,8 +295,14 @@ public class Lobby extends Activity implements
                 @Override
                 public void onResult(Status status) {
                     if (status.isSuccess()) {
-                        Toast.makeText(appContext,"Vebindung hergestellt zu" + remoteEndpointName,
+                        Toast.makeText(appContext, "Vebindung hergestellt zu" + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
+                        //Beenden der Service anzeige nach Verbindung der Geräte
+                        Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+                        //Starten der nächsten Activity
+                        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+                        finish();
+
                     } else {
                         Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
