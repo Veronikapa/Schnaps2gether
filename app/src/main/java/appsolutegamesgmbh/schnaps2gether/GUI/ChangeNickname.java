@@ -18,7 +18,7 @@ import appsolutegamesgmbh.schnaps2gether.R;
  */
 public class ChangeNickname extends DialogFragment {
 
-    private EditText editNickname;
+    public static EditText editNickname;
 
     @Override
     public void onAttach(Activity activity) {

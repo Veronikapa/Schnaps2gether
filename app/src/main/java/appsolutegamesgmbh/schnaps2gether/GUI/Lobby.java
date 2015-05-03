@@ -1,76 +1,62 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.WpsInfo;
-import android.net.wifi.p2p.WifiP2pConfig;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
-import android.os.Build;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.net.InetAddress;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.connection.AppIdentifier;
+import com.google.android.gms.nearby.connection.AppMetadata;
+import com.google.android.gms.nearby.connection.Connections;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import appsolutegamesgmbh.schnaps2gether.R;
-import appsolutegamesgmbh.schnaps2gether.W2P2.WP2PBroadCastReceiver;
 
-public class Lobby extends Activity {
+public class Lobby extends Activity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener,
+        Connections.ConnectionRequestListener,
+        Connections.MessageListener,
+        Connections.EndpointDiscoveryListener {
 
-    // Variablen für die w2p2 Verbindung
-    private IntentFilter w2p2IntentFilter;
-    private WifiP2pManager w2p2Manager;
-    private WifiP2pManager.Channel w2p2Kanal;
-    private BroadcastReceiver w2p2BroadCastReceiver;
-    private WifiP2pDnsSdServiceRequest request;
-    private List peers = new ArrayList();
+    private Context appContext;
 
-    final HashMap<String, String> players = new HashMap<String, String>();
+    // Legt fest ob das Gerät der Host ist
+    private boolean m_IsHost = false;
+    //Api Client der pro Gerät verfügbar sein muss
+    private GoogleApiClient m_GoogleApiClient;
 
-    private WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
-        @Override
-        public void onPeersAvailable(WifiP2pDeviceList peerList) {
-
-            // Out with the old, in with the new.
-            peers.clear();
-            peers.addAll(peerList.getDeviceList());
-        }
-    };
+    //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
+    private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
+            ConnectivityManager.TYPE_ETHERNET};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
-        //Initialisieren und Erstellen der w2p2 Objekte für die Aktivity
-        w2p2Manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        w2p2Kanal = w2p2Manager.initialize(this, getMainLooper(), null);
-        w2p2BroadCastReceiver = new WP2PBroadCastReceiver(w2p2Manager, w2p2Kanal, this,peerListListener);
-
-        //Registrieren der w2p2 Aktionen in Activity
-        w2p2IntentFilter = new IntentFilter();
-        w2p2IntentFilter.addAction(w2p2Manager.WIFI_P2P_STATE_CHANGED_ACTION);
-        w2p2IntentFilter.addAction(w2p2Manager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        w2p2IntentFilter.addAction(w2p2Manager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        w2p2IntentFilter.addAction(w2p2Manager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
+        //angelegt werden
+        m_GoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Nearby.CONNECTIONS_API)
+                .build();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,177 +80,253 @@ public class Lobby extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    //VP: Registrierung des broadcast receivers
+    //Anlegen eines neuen Spiel-Services
+    public void neu(View v) {
+
+        //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
+        if (m_GoogleApiClient.isConnected()) {
+            startAdvertising();
+        }
+    }
+
+    /*
+    * In dieser Methode wird nach vorhanden Spielen gesucht. Wenn ein Spiel verfügbar ist,
+    * verbinden sich die Geräte.
+    * TODO VP: Ermöglichen der Spielauwahl und Einschränken der Spieler
+     */
+    public void beitreten(View v) {
+        if (m_GoogleApiClient.isConnected()) {
+            Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
+            startDiscovery();
+        }
+    }
+
     @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(w2p2BroadCastReceiver, w2p2IntentFilter);
+    public void onConnected(Bundle bundle) {
+        Toast.makeText(appContext, "GoogleApiConnection erfolgreich.", Toast.LENGTH_SHORT).show();
     }
 
-    // De-Registierung des w2p2 broadcast receivers
     @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(w2p2BroadCastReceiver);
+    public void onConnectionSuspended(int i) {
+        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn die Verbindung
+        //via GoogleApiClient fehlschlägt.
     }
 
+    @Override
+    /*
+    * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
+     */
+    public void onEndpointFound(String s, String s2, String s3, String s4) {
 
-    public void neu(View v){
-        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-        finish();
+        //TODO VP: Spiel in Lobby anzeigen und erst nach Auswahl verbinden
+        //TODO VP: Bereits vorhandene Spieler anzeigen
+        connectTo(s, s4);
     }
 
-    private void discoverOtherDevicesinPeer()
-    {
-        w2p2Manager.discoverPeers(w2p2Kanal, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                // Code for when the discovery initiation is successful goes here.
-                // No services have actually been discovered yet, so this method
-                // can often be left blank.  Code for peer discovery goes in the
-                // onReceive method, detailed below.
-            }
-
-            @Override
-            public void onFailure(int reasonCode) {
-                // Code for when the discovery initiation fails goes here.
-                // Alert the user that something went wrong.
-            }
-        });
+    @Override
+    public void onEndpointLost(String s) {
+        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn ein Service
+        // nicht mehr verfügbar ist.
     }
 
-    public void connect() {
-        // Picking the first device found on the network.
-        WifiP2pDevice device = (WifiP2pDevice) peers.get(0);
-
-        WifiP2pConfig config = new WifiP2pConfig();
-        config.deviceAddress = device.deviceAddress;
-        config.wps.setup = WpsInfo.PBC;
-
-        w2p2Manager.connect(w2p2Kanal, config, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
-            }
-
-            @Override
-            public void onFailure(int reason) {;
-            }
-        });
+    @Override
+    public void onMessageReceived(String s, byte[] bytes, boolean b) {
+        //Hier ist Datenübertragung zu implementieren!!
     }
 
-    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+    @Override
+    public void onDisconnected(String s) {
+        //Zurzeit keine Implementierung. Hier ist anzugeben was passieren soll, wenn
+        //Verbindung beendet wird.
+    }
 
-        // InetAddress from WifiP2pInfo struct.
-        String groupOwnerAddress = info.groupOwnerAddress.getHostAddress();
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Toast.makeText(appContext, "Verbindung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
+    }
 
-        // After the group negotiation, we can determine the group owner.
-        if (info.groupFormed && info.isGroupOwner) {
-            // Do whatever tasks are specific to the group owner.
-            // One common case is creating a server thread and accepting
-            // incoming connections.
-        } else if (info.groupFormed) {
-            // The other device acts as the client. In this case,
-            // you'll want to create a client thread that connects to the group
-            // owner.
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
+        m_GoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
+        //Verbindung beendet werden.
+        if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
+            m_GoogleApiClient.disconnect();
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void startRegistration() {
-        //  Create a string map containing information about your service.
-        Map record = new HashMap();
-        record.put("available", "visible");
-
-        // Service information.  Pass it an instance name, service type
-        // _protocol._transportlayer , and the map containing
-        // information other devices will want once they connect to this one.
-        WifiP2pDnsSdServiceInfo serviceInfo =
-                WifiP2pDnsSdServiceInfo.newInstance("_test", "_presence._tcp", record);
-
-        // Add the local service, sending the service info, network channel,
-        // and listener that will be used to indicate success or failure of
-        // the request.
-        w2p2Manager.addLocalService(w2p2Kanal, serviceInfo, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                // Command successful! Code isn't necessarily needed here,
-                // Unless you want to update the UI or add logging statements.
+    /*
+    * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.
+    * Diese Methode muss aufgerufen werden, bevor ein Gerät sich mit anderen Geräten verbinden möchte.
+     */
+    private boolean isConnectedToNetwork() {
+        ConnectivityManager connManager =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        for (int networkType : NETWORK_TYPES) {
+            NetworkInfo info = connManager.getNetworkInfo(networkType);
+            if (info != null && info.isConnectedOrConnecting()) {
+                return true;
             }
+        }
+        return false;
+    }
 
+    private void startAdvertising() {
+
+        //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
+        if (!isConnectedToNetwork()) {
+            Toast.makeText(appContext, "Sie sind mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Gerät das Service anbietet ist der Host des Spiels.
+        m_IsHost = true;
+
+        //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
+        // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
+        // zu Installation aufgefordert.
+        List<AppIdentifier> appIdentifierList = new ArrayList<>();
+        appIdentifierList.add(new AppIdentifier(getPackageName()));
+        AppMetadata appMetadata = new AppMetadata(appIdentifierList);
+
+        //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
+        //via stopAdvertising();
+        long NO_TIMEOUT = 0L;
+
+        String name = null; //TODO VP: SHOW correct name
+
+        //Anbieten eines Services für andere Geräte.
+        Nearby.Connections.startAdvertising(m_GoogleApiClient, name, appMetadata, NO_TIMEOUT,
+                this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
             @Override
-            public void onFailure(int arg0) {
-                // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
+            public void onResult(Connections.StartAdvertisingResult result) {
+                if (result.getStatus().isSuccess()) {
+                    // Device is advertising
+                } else {
+                    int statusCode = result.getStatus().getStatusCode();
+                    // Advertising failed - see statusCode for more details
+                }
             }
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void discoverService() {
-
-        WifiP2pManager.DnsSdTxtRecordListener txtListener = new WifiP2pManager.DnsSdTxtRecordListener() {
-            @Override
-        /* Callback includes:
-         * fullDomain: full domain name: e.g "printer._ipp._tcp.local."
-         * record: TXT record dta as a map of key/value pairs.
-         * device: The device running the advertised service.
-         */
-
-            public void onDnsSdTxtRecordAvailable(
-                    String fullDomain, Map record, WifiP2pDevice device) {
-                Log.d("Service available", "DnsSdTxtRecord available -" + record.toString());
-                players.put(device.deviceAddress, (String) record.get("buddyname"));
-            }
-        };
-
-        WifiP2pManager.DnsSdServiceResponseListener servListener = new WifiP2pManager.DnsSdServiceResponseListener() {
-            @Override
-            public void onDnsSdServiceAvailable(String instanceName, String registrationType,
-                                                WifiP2pDevice resourceType) {
-
-                // Update the device name with the human-friendly version from
-                // the DnsTxtRecord, assuming one arrived.
-                resourceType.deviceName = players
-                        .containsKey(resourceType.deviceAddress) ? players
-                        .get(resourceType.deviceAddress) : resourceType.deviceName;
-
-            }
-        };
-
-        w2p2Manager.setDnsSdResponseListeners(w2p2Kanal, servListener, txtListener);
-
-        w2p2Manager.discoverServices(w2p2Kanal, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess() {
-                // Success!
-            }
-
-            @Override
-            public void onFailure(int code) {
-                // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
-            }
-        });
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void createRequest() {
-
-    request = WifiP2pDnsSdServiceRequest.newInstance();
-    w2p2Manager.addServiceRequest(w2p2Kanal,
-    request,
-            new WifiP2pManager.ActionListener() {
-        @Override
-        public void onSuccess() {
-            // Success!
+    private void startDiscovery() {
+        //Gerät das auf der Suche nach Services ist, muss mit einem Wifi oder einem Ethernet
+        //verbunden sein.
+        if (!isConnectedToNetwork()) {
+            Toast.makeText(appContext, "Sie sind leider mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        @Override
-        public void onFailure(int code) {
-            // Command failed.  Check for P2P_UNSUPPORTED, ERROR, or BUSY
-        }
-    });
+        //Nach Services mit der angegebenen ServiceId wird gesucht.
+        final String serviceId = getString(R.string.service_id);
+
+        //Timeout für Serive-Suche ist auf 1 Minute gesetzt.
+        long DISCOVER_TIMEOUT = 6000L;
+
+        // Suche nach Services die in der Nähe sind und unserer App entsprechen.
+        Nearby.Connections.startDiscovery(m_GoogleApiClient, serviceId, DISCOVER_TIMEOUT, this)
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+
+                        //Service wurde gefunden
+                        if (status.isSuccess()) {
+
+                            String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
+                            String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
+                            //Aufruf der Methode zur Handhabung des gefundenen Geräts
+                            onEndpointFound(endPointId, deviceId, serviceId, "Discoverer");
+
+                        }
+
+                        //Es konnte kein Service in der Nähe gefunen werden.
+                        else {
+
+                            Toast.makeText(appContext, "Es konnten leider keine offenen Spiele gefunden werden.:(", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
+
+    //Senden einer Verbindungsanfrage zu Host und Verbindung wenn möglich.
+    private void connectTo(String endpointId, final String endpointName) {
+
+        String myName = null; //TODO VP: Nickname verwenden
+        byte[] myPayload = null;
+        Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, myName, endpointId, myPayload,
+                new Connections.ConnectionResponseCallback() {
+                    @Override
+                    public void onConnectionResponse(String remoteEndpointId, Status status,
+                                                     byte[] bytes) {
+                        if (status.isSuccess()) {
+                            Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
+
+                            //Starten der Nächsten Activity nach Verbindung
+                            startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+                            finish();
+                        } else {
+                            // Verbindung fehlgeschlagen
+                            Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, this);
+    }
+
+    @Override
+    //Empfangen einer Verbindungsanfrage von Client
+    public void onConnectionRequest(final String remoteEndpointId, String remoteDeviceId,
+                                    final String remoteEndpointName, byte[] payload) {
+        if (m_IsHost) {
+            byte[] myPayload = null;
+
+            //Automatisches Akzeptieren aller Anfragen.
+            //TODO VP: Einschränken auf max. 4 Spieler
+            Nearby.Connections.acceptConnectionRequest(m_GoogleApiClient, remoteEndpointId,
+                    myPayload, this).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        Toast.makeText(appContext, "Vebindung hergestellt zu" + remoteEndpointName,
+                                Toast.LENGTH_SHORT).show();
+                        //Beenden der Service anzeige nach Verbindung der Geräte
+                        Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+                        //Starten der nächsten Activity
+                        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+                        finish();
+
+                    } else {
+                        Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            // Verbindungsanfragen zu Clients werden unterbunden. Nur zu Hosts sollten
+            // verbindungsanfragen versendet werden können.
+            Nearby.Connections.rejectConnectionRequest(m_GoogleApiClient, remoteEndpointId);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onClick(View view) {
+    }
+
 }
