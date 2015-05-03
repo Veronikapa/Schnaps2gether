@@ -49,7 +49,7 @@
     <string name="Spielstarten">Spiel starten</string>
     <string name="TrumpAustauschen">Trumpf austauschen</string>
     <string name="no_game_available">no game available</string>
-    <string name="service_id">appsolutegamesgmbh.schnaps2gether.app</string>
+    <string name="service_id">appsolutegamesgmbh.schnaps2gether.service</string>
 
 
 </resources>

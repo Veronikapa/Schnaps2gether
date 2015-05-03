@@ -1,12 +1,8 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -42,33 +37,25 @@ public class Lobby extends Activity implements
 
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
+    //Api Client der pro Gerät verfügbar sein muss
     private GoogleApiClient m_GoogleApiClient;
 
+    //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
             ConnectivityManager.TYPE_ETHERNET};
-
-    // Request code to use when launching the resolution activity
-    private static final int REQUEST_RESOLVE_ERROR = 1001;
-    // Unique tag for the error dialog fragment
-    private static final String DIALOG_ERROR = "dialog_error";
-    // Bool to track whether the app is already resolving an error
-    private boolean mResolvingError = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
-        appContext = getApplicationContext();
-
+        //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
+        //angelegt werden
         m_GoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
-
-        mResolvingError = savedInstanceState != null
-                && savedInstanceState.getBoolean(STATE_RESOLVING_ERROR, false);
     }
 
     @Override
@@ -93,84 +80,85 @@ public class Lobby extends Activity implements
         return super.onOptionsItemSelected(item);
     }
 
+    //Anlegen eines neuen Spiel-Services
     public void neu(View v) {
-        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-        //finish();
-        //TODO VP: Überprüfen ob 2, 3 oder 4 Spieler
-        if(m_GoogleApiClient.isConnected())
+
+        //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
+        if(m_GoogleApiClient.isConnected()) {
             startAdvertising();
+        }
     }
 
+    /*
+    * In dieser Methode wird nach vorhanden Spielen gesucht. Wenn ein Spiel verfügbar ist,
+    * verbinden sich die Geräte.
+    * TODO VP: Ermöglichen der Spielauwahl und Einschränken der Spieler
+     */
     public void beitreten(View v)
     {
-
+        if(m_GoogleApiClient.isConnected()) {
+            Toast.makeText(appContext,"Suche nach offenen Spielen...",Toast.LENGTH_SHORT).show();
+            startDiscovery();
+        }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(appContext,"GoogleApiConnection succeeded.",Toast.LENGTH_SHORT);
+        Toast.makeText(appContext,"GoogleApiConnection erfolgreich.",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn die Verbindung
+        //via GoogleApiClient fehlschlägt.
     }
 
     @Override
+    /*
+    * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
+     */
     public void onEndpointFound(String s, String s2, String s3, String s4) {
 
+        //TODO VP: Spiel in Lobby anzeigen und erst nach Auswahl verbinden
+        //TODO VP: Bereits vorhandene Spieler anzeigen
+        connectTo(s,s4);
     }
 
     @Override
     public void onEndpointLost(String s) {
-
+        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn ein Service
+        // nicht mehr verfügbar ist.
     }
 
     @Override
     public void onMessageReceived(String s, byte[] bytes, boolean b) {
-
+        //Hier ist Datenübertragung zu implementieren!!
     }
 
     @Override
     public void onDisconnected(String s) {
-
+        //Zurzeit keine Implementierung. Hier ist anzugeben was passieren soll, wenn
+        //Verbindung beendet wird.
     }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        if (mResolvingError) {
-            // Already attempting to resolve an error.
-            return;
-        } else if (result.hasResolution()) {
-            try {
-                mResolvingError = true;
-                result.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
-            } catch (IntentSender.SendIntentException e) {
-                // There was an error with the resolution intent. Try again.
-                m_GoogleApiClient.connect();
-            }
-        } else {
-            // Show dialog using GooglePlayServicesUtil.getErrorDialog()
-            showErrorDialog(result.getErrorCode());
-            mResolvingError = true;
-        }
+       Toast.makeText(appContext,"Verbindung fehlgeschlagen!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
         m_GoogleApiClient.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
+        //Verbindung beendet werden.
         if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
             m_GoogleApiClient.disconnect();
         }
@@ -194,70 +182,86 @@ public class Lobby extends Activity implements
 
     private void startAdvertising() {
 
-        if (!this.isConnectedToNetwork()) {
-            // Implement logic when device is not connected to a network
-            Toast.makeText(appContext,"Sie sind mit keinem Netzwerk verbunden.",Toast.LENGTH_SHORT);
+        //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
+        if (!isConnectedToNetwork()) {
+           Toast.makeText(appContext,"Sie sind mit keinem Netzwerk verbunden.",Toast.LENGTH_SHORT).show();
+           return;
         }
 
-        // Identify that this device is the host
+        // Gerät das Service anbietet ist der Host des Spiels.
         m_IsHost = true;
 
-        // Advertising with an AppIdentifer lets other devices on the
-        // network discover this application and prompt the user to
-        // install the application.
+        //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
+        // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
+        // zu Installation aufgefordert.
         List<AppIdentifier> appIdentifierList = new ArrayList<>();
         appIdentifierList.add(new AppIdentifier(getPackageName()));
         AppMetadata appMetadata = new AppMetadata(appIdentifierList);
 
-        // The advertising timeout is set to run indefinitely
-        // Positive values represent timeout in milliseconds
+       //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
+       //via stopAdvertising();
         long NO_TIMEOUT = 0L;
 
-        String name = "Veronika";
-                //ChangeNickname.editNickname.getText().toString();
+        String name = null; //TODO VP: SHOW correct name
+
+        //Anbieten eines Services für andere Geräte.
         Nearby.Connections.startAdvertising(m_GoogleApiClient, name, appMetadata, NO_TIMEOUT,
                 this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
             @Override
             public void onResult(Connections.StartAdvertisingResult result) {
                 if (result.getStatus().isSuccess()) {
-                    Toast.makeText(appContext,"Verbindung wurde erfolgreich angelegt.",Toast.LENGTH_SHORT);
+                    // Device is advertising
                 } else {
                     int statusCode = result.getStatus().getStatusCode();
-                    Toast.makeText(appContext,"Verbindung konnte nicht angelegt werden.",Toast.LENGTH_SHORT);
+                    // Advertising failed - see statusCode for more details
                 }
             }
         });
-    }
+       }
 
     private void startDiscovery() {
+        //Gerät das auf der Suche nach Services ist, muss mit einem Wifi oder einem Ethernet
+        //verbunden sein.
         if (!isConnectedToNetwork()) {
-            // Implement logic when device is not connected to a network
+            Toast.makeText(appContext,"Sie sind leider mit keinem Netzwerk verbunden.",Toast.LENGTH_SHORT).show();
+            return;
         }
-        String serviceId = getString(R.string.service_id);
 
-        // Set an appropriate timeout length in milliseconds
-        long DISCOVER_TIMEOUT = 1000L;
+        //Nach Services mit der angegebenen ServiceId wird gesucht.
+        final String serviceId = getString(R.string.service_id);
 
-        // Discover nearby apps that are advertising with the required service ID.
+        //Timeout für Serive-Suche ist auf 1 Minute gesetzt.
+        long DISCOVER_TIMEOUT = 6000L;
+
+        // Suche nach Services die in der Nähe sind und unserer App entsprechen.
         Nearby.Connections.startDiscovery(m_GoogleApiClient, serviceId, DISCOVER_TIMEOUT, this)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
+
+                        //Service wurde gefunden
                         if (status.isSuccess()) {
-                            // Device is discovering
-                        } else {
-                            // Advertising failed - see statusCode for more details
+
+                            String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
+                            String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
+                            //Aufruf der Methode zur Handhabung des gefundenen Geräts
+                            onEndpointFound(endPointId,deviceId,serviceId,"Discoverer");
+
                         }
 
+                        //Es konnte kein Service in der Nähe gefunen werden.
+                        else {
+
+                            Toast.makeText(appContext,"Es konnten leider keine offenen Spiele gefunden werden.:(",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
+
+    //Senden einer Verbindungsanfrage zu Host und Verbindung wenn möglich.
     private void connectTo(String endpointId, final String endpointName) {
 
-        // Send a connection request to a remote endpoint. By passing 'null' for the name,
-        // the Nearby Connections API will construct a default name based on device model
-        // such as 'LGE Nexus 5'.
-        String myName = null;
+        String myName = null; //TODO VP: Nickname verwenden
         byte[] myPayload = null;
         Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, myName, endpointId, myPayload,
                 new Connections.ConnectionResponseCallback() {
@@ -266,91 +270,55 @@ public class Lobby extends Activity implements
                                                      byte[] bytes) {
                         if (status.isSuccess()) {
                             // Successful connection
+                            Toast.makeText(appContext,"Geräte wurden verbunden! ",Toast.LENGTH_SHORT).show();
                         } else {
                             // Failed connection
+                            Toast.makeText(appContext,"Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, this);
     }
 
     @Override
+    //Empfangen einer Verbindungsanfrage von Client
     public void onConnectionRequest(final String remoteEndpointId, String remoteDeviceId,
                                     final String remoteEndpointName, byte[] payload) {
         if (m_IsHost) {
             byte[] myPayload = null;
-            // Automatically accept all requests
+
+            //Automatisches Akzeptieren aller Anfragen.
+            //TODO VP: Einschränken auf max. 4 Spieler
             Nearby.Connections.acceptConnectionRequest(m_GoogleApiClient, remoteEndpointId,
                     myPayload, this).setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(Status status) {
                     if (status.isSuccess()) {
-                        Toast.makeText(appContext,"Connected to " + remoteEndpointName,
+                        Toast.makeText(appContext,"Vebindung hergestellt zu" + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(appContext, "Failed to connect to: " + remoteEndpointName,
+                        Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         } else {
-            // Clients should not be advertising and will reject all connection requests.
+            // Verbindungsanfragen zu Clients werden unterbunden. Nur zu Hosts sollten
+            // verbindungsanfragen versendet werden können.
             Nearby.Connections.rejectConnectionRequest(m_GoogleApiClient, remoteEndpointId);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_RESOLVE_ERROR) {
-            mResolvingError = false;
-            if (resultCode == RESULT_OK) {
-                // Make sure the app is not already connected or attempting to connect
-                if (!m_GoogleApiClient.isConnecting() &&
-                        !m_GoogleApiClient.isConnected()) {
-                    m_GoogleApiClient.connect();
-                }
-            }
-        }
     }
-    private static final String STATE_RESOLVING_ERROR = "resolving_error";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_RESOLVING_ERROR, mResolvingError);
     }
 
-    /* Creates a dialog for an error message */
-    private void showErrorDialog(int errorCode) {
-        // Create a fragment for the error dialog
-        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-        // Pass the error that should be displayed
-        Bundle args = new Bundle();
-        args.putInt(DIALOG_ERROR, errorCode);
-        dialogFragment.setArguments(args);
-        dialogFragment.show(getFragmentManager(), "errordialog");
-    }
-
-    /* Called from ErrorDialogFragment when the dialog is dismissed. */
-    public void onDialogDismissed() {
-        mResolvingError = false;
-    }
-
-    /* A fragment to display an error dialog */
-    public static class ErrorDialogFragment extends DialogFragment {
-        public ErrorDialogFragment() { }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Get the error code and retrieve the appropriate dialog
-            int errorCode = this.getArguments().getInt(DIALOG_ERROR);
-            return GooglePlayServicesUtil.getErrorDialog(errorCode,
-                    this.getActivity(), REQUEST_RESOLVE_ERROR);
-        }
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            ((Lobby)getActivity()).onDialogDismissed();
-        }
+    @Override
+    public void onClick(View view) {
     }
 
 }
