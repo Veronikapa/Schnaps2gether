@@ -798,6 +798,24 @@ public class Spiel2 {
 
         }
         else if (s1.Hand.isEmpty() && zugedreht) {
+            if(s1.isIstdran())
+            {
+                if(s2.getPunkte()>= 33)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
+                else if(s2.getPunkte() > 0)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
+                else
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+            }
+            else
+            {
+                if(s1.getPunkte()>= 33)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
+                else if(s1.getPunkte() > 0)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
+                else
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+            }
             return true;
         }
         else if (angesagteFarbe != null) {

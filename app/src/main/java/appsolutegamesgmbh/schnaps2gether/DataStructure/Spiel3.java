@@ -15,9 +15,10 @@ public class Spiel3 {
     private String trumpf;
     private String angesagteFarbe;
     private Karte hoechstekarteamTisch;
-    private Spieler Besitzer; //Besitzer der höchsten Karte, die am Tisch liegt
-    private String Spiel;
+    private Spieler besitzer; //Besitzer der höchsten Karte, die am Tisch liegt
+    private Rufspiel spiel;
     private Spieler spieler; //derjenige, der das Spiel macht (die anderen zwei Spieler spielen zusammen)
+    private int flecken;
 
 
     public ArrayList<Karte> getTalon() {
@@ -44,7 +45,7 @@ public class Spiel3 {
         return angesagteFarbe;
     }
 
-    public Spiel3(int AnzahlSpiele)
+    public Spiel3(int AnzahlSpiele) throws WrongGameException
     {
         kartendeck = Karte.erstelleKartendeck();
         s1 = new Spieler();
@@ -65,7 +66,8 @@ public class Spiel3 {
             spieler = s3;
         }
 
-        Spiel = "normal";
+        spiel = new Rufspiel("normal");
+        flecken = 1;
 
         Anfangsdeck(AnzahlSpiele);
     }
@@ -301,12 +303,12 @@ public class Spiel3 {
             {
                 if(hoechstekarteamTisch.getPunkte() < karte.getPunkte()) {
                     hoechstekarteamTisch = karte;
-                    Besitzer = s;
+                    besitzer = s;
                 }
             }
             else if(karte.getFarbe().equals(trumpf)) {
                 hoechstekarteamTisch = karte;
-                Besitzer = s;
+                besitzer = s;
             }
         }
     }
@@ -567,41 +569,82 @@ public class Spiel3 {
 
     }
 
-    //TODO: daweil nur Kopie von Spiel2
-    public boolean istSpielzuEnde(Bummerl2 bummerl) {
-        if (s1.getPunkte() >= 66) {
-            if (s2.getPunkte() >= 33)
-                bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
-            else if (s2.getPunkte() > 0)
-                bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
-            else
-                bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+    //TODO:
+    public boolean istSpielzuEnde(Bummerl3 bummerl) {
 
-            return true;
-        } else if (s2.getPunkte() >= 66) {
-            if (s1.getPunkte() >= 33)
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
-            else if (s1.getPunkte() > 0)
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
-            else
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
 
-            return true;
 
-        } else if (s1.Hand.isEmpty()) {
-            return true;
-        } else if (angesagteFarbe != null) {
-            return false;
+        if(spiel.getSpiel() == "normal") {
+            if (s1 == spieler) {
+                if (s1.getPunkte() >= 66) {
+                    if (s2.getPunkte() + s3.getPunkte() >= 33)
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
+                    else if (s2.getPunkte() + s3.getPunkte() > 0)
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
+                    else
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+
+                    return true;
+                } else if (s2.getPunkte() + s3.getPunkte() >= 66) {
+                    if (s1.getPunkte() >= 33) {
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 1);
+                    } else if (s1.getPunkte() > 0) {
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 2);
+                    } else {
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 3);
+                    }
+
+                } else if (s1.Hand.isEmpty()) {
+                    if (s1.isIstdran()) {
+                        //TODO:
+                    }
+                    return true;
+                }
+            } else if (s2 == spieler) {
+                //TODO
+            } else if (s3 == spieler) {
+                //TODO
+            }
         }
+        else if(spiel.getSpiel() == "Schnapser"){
 
+        }
+        else if(spiel.getSpiel() == "Bauernschnapser"){
+
+        }
+        else if(spiel.getSpiel() == "Kontraschnapser"){
+
+        }
+        else if(spiel.getSpiel() == "Kontrabauernschnapser"){
+
+        }
+        else if(spiel.getSpiel() == "Land"){
+
+        }
         return false;
 
 
     }
 
-    //TODO:
-    public boolean DarfSpielAnsagen()
+    public boolean DarfSpielAnsagen(Rufspiel Spiel, Spieler s)
     {
+        if(Spiel.getSpiel() == "Schnapser" || Spiel.getSpiel() == "Bauernschnapser")
+        {
+            if(s == spieler)
+                return true;
+            else
+                return false;
+        }
+        else if(Spiel.getSpiel() == "Land" || Spiel.getSpiel() == "Kontraschnapser" || Spiel.getSpiel() == "Kontrabauernschnapser")
+        {
+            if(Spiel.getPunkte() > spiel.getPunkte())
+                return true;
+            else
+                return false;
+        }
         return false;
     }
 
@@ -648,6 +691,20 @@ public class Spiel3 {
                 s.setPunkte(s.getPunkte()+20);
         }
 
+    }
+
+    public boolean kannFlecken(Spieler s)
+    {
+        if(flecken == 1 && s != spieler)
+            return true;
+        else if(flecken == 2 && s == spieler)
+            return true;
+        return false;
+    }
+
+    public void Flecken()
+    {
+        flecken = flecken * 2;
     }
 
 
