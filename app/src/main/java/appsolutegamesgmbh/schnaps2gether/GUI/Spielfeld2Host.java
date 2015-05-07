@@ -34,6 +34,10 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         Connections.MessageListener,
         Connections.EndpointDiscoveryListener {
 
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    private static final String KARTEGESPIELT = "0";
+    private static final String WEITER = "1";
+
     // Identify if the device is the host
     private boolean mIsHost = false;
     private GoogleApiClient mGoogleApiClient;
@@ -71,6 +75,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private TextView txtSelbst;
     private TextView txtGegner;
     private Bummerl2 bummerl;
+    private ArrayList<String> endpointIDs;
 
     @Override
     public void onStart() {
@@ -96,6 +101,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 .addOnConnectionFailedListener(this)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
+        endpointIDs = new ArrayList<String>();
 
         bummerl = new Bummerl2();
 
@@ -127,14 +133,15 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         spielStart();
     }
-
     private void zugAusführen(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
         spiel.Auspielen(k);
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT+":"+k.toString()).getBytes());
         gespielteKarteEntfernen(i);
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, WEITER.getBytes());
             gegnerischerZug(karte1);
         }
         //spiel.ZugAuswerten(k, gegnerischeKarte);
@@ -394,7 +401,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     @Override
-    public void onMessageReceived(String s, byte[] bytes, boolean b) {
+    public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
+        String message = new String(payload);
+        switch ((message.substring(0,1))) {
+            case KARTEGESPIELT: break;
+            case WEITER: break;
+            default: break;
+        }
 
     }
 
