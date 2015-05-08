@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.nearby.connection.Connections;
+
 import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
@@ -22,7 +26,24 @@ import appsolutegamesgmbh.schnaps2gether.R;
 /**
  * Created by kirederf on 06.05.15.
  */
-public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener {
+public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        Connections.ConnectionRequestListener,
+        Connections.MessageListener,
+        Connections.EndpointDiscoveryListener {
+
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    private static final String KARTEGESPIELT = "0";
+    private static final String WEITER = "1";
+    private static final String PUNKTE = "2";
+    private static final String ZUGEDREHT = "3";
+    private static final String ANGESAGT20ER = "4";
+    private static final String ANGESAGT40ER = "5";
+    private static final String TRUMPFGETAUSCHT = "6";
+    private static final String SPIELENDE = "7";
+    private static final String BUMMERL = "8";
+
     private Spiel2 spiel;
     private Button buttonKarte1;
     private Button buttonKarte2;
@@ -61,8 +82,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
-
-        bummerl = new Bummerl2();
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
@@ -182,9 +201,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void spielStart() {
-        /*spiel = new Spiel2(bummerl.getAnzahlSpiele());
-        selbst = spiel.getS1();
-        gegner = spiel.getS2();*/
 
         buttonStapel.setText("20");
         //trumpfkarte = spiel.getAufgedeckterTrumpf();
@@ -351,6 +367,51 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         punkteAktualisieren();
         handKartenKlickbar();
         return true;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionRequest(String s, String s1, String s2, byte[] bytes) {
+
+    }
+
+    @Override
+    public void onEndpointFound(String s, String s1, String s2, String s3) {
+
+    }
+
+    @Override
+    public void onEndpointLost(String s) {
+
+    }
+
+    @Override
+    public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
+        String message = new String(payload);
+        switch ((message.substring(0,1))) {
+            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+                break;
+            default: break;
+        }
+    }
+
+    @Override
+    public void onDisconnected(String s) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     class Zugende implements Runnable {

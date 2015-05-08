@@ -37,6 +37,13 @@ public class Bummerl2 {
         AnzahlSpiele = 0;
     }
 
+    public Bummerl2(String punkteUndAnzSpiele) {
+        String[] punkteAnzSpiele = punkteUndAnzSpiele.split(" ");
+        punkteS1 = Integer.getInteger(punkteAnzSpiele[0]);
+        punkteS2 = Integer.getInteger(punkteAnzSpiele[1]);
+        AnzahlSpiele = Integer.getInteger(punkteAnzSpiele[2]);
+    }
+
     public boolean istBummerlzuEnde()
     {
         if(punkteS1 >= 7 || punkteS2 >= 7)
@@ -45,4 +52,8 @@ public class Bummerl2 {
             return false;
     }
 
+    @Override
+    public String toString() {
+        return getPunkteS1()+" "+getPunkteS2()+" "+getAnzahlSpiele();
+    }
 }
