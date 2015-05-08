@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.nearby.connection.Connections;
+
 import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
@@ -19,8 +23,26 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
+/**
+ * Created by kirederf on 06.05.15.
+ */
+public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        Connections.ConnectionRequestListener,
+        Connections.MessageListener,
+        Connections.EndpointDiscoveryListener {
 
-public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener {
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    private static final String KARTEGESPIELT = "0";
+    private static final String WEITER = "1";
+    private static final String PUNKTE = "2";
+    private static final String ZUGEDREHT = "3";
+    private static final String ANGESAGT20ER = "4";
+    private static final String ANGESAGT40ER = "5";
+    private static final String TRUMPFGETAUSCHT = "6";
+    private static final String SPIELENDE = "7";
+    private static final String BUMMERL = "8";
 
     private Spiel2 spiel;
     private Button buttonKarte1;
@@ -61,8 +83,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
 
-        bummerl = new Bummerl2();
-
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
         buttonKarte3 = (Button) findViewById(R.id.main_button3);
@@ -95,20 +115,20 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private void zugAusführen(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
-        spiel.Auspielen(k);
+        //spiel.Auspielen(k);
         gespielteKarteEntfernen(i);
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
             gegnerischerZug(karte1);
         }
-        spiel.ZugAuswerten(k, gegnerischeKarte);
+        //spiel.ZugAuswerten(k, gegnerischeKarte);
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
     }
 
     private void eigenerZug() {
-        if (!spiel.isZugedreht()) {
+        /*if (!spiel.isZugedreht()) {
             buttonZudrehen.setEnabled(true);
 
             if (selbst.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
@@ -129,21 +149,21 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
             else {
                 button40er.setEnabled(false);
             }
-        }
+        }*/
     }
 
     private void gegnerischerZug(Karte karteS1) {
-        gegnerischeKarte = spiel.AuspielenComputer(karteS1);
+        /*gegnerischeKarte = spiel.AuspielenComputer(karteS1);
         buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
         if (spiel.isZugedreht()) {
             buttonZudrehen.setEnabled(false);
             buttonZudrehen.setText("Zugedreht");
-        }
+        }*/
     }
 
     private void handAktualisieren() {
-        int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        //int handkartenAnz = selbst.Hand.size();
+        /*for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
             if (i<handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
@@ -152,16 +172,16 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
             } else {
                 buttonK.setVisibility(View.INVISIBLE);
             }
-        }
+        }*/
     }
 
     private void punkteAktualisieren() {
         buttonEigeneKarte.setText("");
         buttonGegnerischeKarte.setText("");
-        int p1 = selbst.getPunkte();
+        /*int p1 = selbst.getPunkte();
         int p2 = gegner.getPunkte();
         punkteGegner.setText(Integer.toString(p2));
-        punkteSelbst.setText(Integer.toString(p1));
+        punkteSelbst.setText(Integer.toString(p1));*/
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -169,24 +189,21 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     private boolean hat20er() {
-        if ((spiel.hat20er(selbst).size()>0 && !hat40er()) || spiel.hat20er(selbst).size()>1)
-            return true;
+        /*if ((spiel.hat20er(selbst).size()>0 && !hat40er()) || spiel.hat20er(selbst).size()>1)
+            return true;*/
         return false;
     }
 
     private boolean hat40er() {
-        if(spiel.hat20er(selbst).contains(spiel.getTrumpf()))
-            return true;
+        /*if(spiel.hat20er(selbst).contains(spiel.getTrumpf()))
+            return true;*/
         return false;
     }
 
     private void spielStart() {
-        spiel = new Spiel2(bummerl.getAnzahlSpiele());
-        selbst = spiel.getS1();
-        gegner = spiel.getS2();
 
         buttonStapel.setText("20");
-        trumpfkarte = spiel.getAufgedeckterTrumpf();
+        //trumpfkarte = spiel.getAufgedeckterTrumpf();
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
 
         handKartenKlickbar();
@@ -214,7 +231,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     private void handKartenKlickbar() {
-        int handkartenAnz = selbst.Hand.size();
+        /*int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
             if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i))) {
@@ -222,7 +239,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
             } else {
                 buttonK.setEnabled(false);
             }
-        }
+        }*/
     }
 
     private void spielEnde() {
@@ -238,13 +255,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     public void zudrehen(View view) {
-        spiel.Zudrehen();
+        //spiel.Zudrehen();
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
     }
 
     public void popup20er(View view) {
-        PopupMenu popup = new PopupMenu(Spielfeld2.this, button20er);
+        PopupMenu popup = new PopupMenu(Spielfeld2Client.this, button20er);
         popup.inflate(R.menu.popup_menu_20er);
         herz20er = (MenuItem) popup.getMenu().getItem(0);
         karo20er = (MenuItem) popup.getMenu().getItem(1);
@@ -254,7 +271,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         karo20er.setVisible(false);
         pik20er.setVisible(false);
         kreuz20er.setVisible(false);
-        ArrayList<String> a = spiel.hat20er(selbst);
+        /*ArrayList<String> a = spiel.hat20er(selbst);
         for (int i = 0; i < a.size(); i++) {
             switch (a.get(i)) {
                 case "Herz":
@@ -272,14 +289,14 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                 default:
                     ;
             }
-        }
+        }*/
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
 
     public void ansagen40er(View view) {
-        spiel.Ansagen20er(spiel.getTrumpf(), selbst);
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        /*spiel.Ansagen20er(spiel.getTrumpf(), selbst);
+        if (spiel.istSpielzuEnde(bummerl)) spielEnde();*/
         punkteAktualisieren();
         button40er.setEnabled(false);
         button20er.setEnabled(false);
@@ -287,9 +304,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     public void trumpfkarteTauschen(View view) {
-        spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
+        /*spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
         trumpfkarte = spiel.getAufgedeckterTrumpf();
-        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());*/
         handAktualisieren();
         buttonTrumpfTauschen.setEnabled(false);
         eigenerZug();
@@ -322,13 +339,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        startActivity(new Intent(Spielfeld2.this, Startmenue.class));
+        startActivity(new Intent(Spielfeld2Client.this, Startmenue.class));
         finish();
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
+        /*switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", selbst);
                 break;
@@ -346,10 +363,55 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         }
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        if (spiel.istSpielzuEnde(bummerl)) spielEnde();*/
         punkteAktualisieren();
         handKartenKlickbar();
         return true;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionRequest(String s, String s1, String s2, byte[] bytes) {
+
+    }
+
+    @Override
+    public void onEndpointFound(String s, String s1, String s2, String s3) {
+
+    }
+
+    @Override
+    public void onEndpointLost(String s) {
+
+    }
+
+    @Override
+    public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
+        String message = new String(payload);
+        switch ((message.substring(0,1))) {
+            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+                break;
+            default: break;
+        }
+    }
+
+    @Override
+    public void onDisconnected(String s) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     class Zugende implements Runnable {
@@ -358,7 +420,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         public void run() {
             punkteAktualisieren();
             gegnerischeKarte = null;
-            if (spiel.istSpielzuEnde(bummerl)) {
+            /*if (spiel.istSpielzuEnde(bummerl)) {
                 spielEnde();
             } else {
                 handAktualisieren();
@@ -372,7 +434,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                     gegnerischerZug(null);
                 }
                 handKartenKlickbar();
-            }
+            }*/
         }
     }
 }

@@ -5,6 +5,7 @@ public class Bummerl2 {
 
     private int punkteS1;
     private int punkteS2;
+    private int AnzahlSpiele;
 
     public int getPunkteS1() {
         return punkteS1;
@@ -22,9 +23,25 @@ public class Bummerl2 {
         this.punkteS2 = punkteS2;
     }
 
+    public int getAnzahlSpiele() {
+        return AnzahlSpiele;
+    }
+
+    public void setAnzahlSpiele(int anzahlSpiele) {
+        AnzahlSpiele = anzahlSpiele;
+    }
+
     public Bummerl2() {
         punkteS1 = 0;
         punkteS2 = 0;
+        AnzahlSpiele = 0;
+    }
+
+    public Bummerl2(String punkteUndAnzSpiele) {
+        String[] punkteAnzSpiele = punkteUndAnzSpiele.split(" ");
+        punkteS1 = Integer.getInteger(punkteAnzSpiele[0]);
+        punkteS2 = Integer.getInteger(punkteAnzSpiele[1]);
+        AnzahlSpiele = Integer.getInteger(punkteAnzSpiele[2]);
     }
 
     public boolean istBummerlzuEnde()
@@ -35,4 +52,8 @@ public class Bummerl2 {
             return false;
     }
 
+    @Override
+    public String toString() {
+        return getPunkteS1()+" "+getPunkteS2()+" "+getAnzahlSpiele();
+    }
 }

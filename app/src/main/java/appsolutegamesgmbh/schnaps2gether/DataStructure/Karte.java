@@ -57,6 +57,29 @@ public class Karte {
         Punkte = punkte;
     }
 
+    public Karte(String farbeUndWertigkeit) {
+        String[] farbeWertigkeit = farbeUndWertigkeit.split(" ");
+        Farbe = farbeWertigkeit[0];
+        Wertigkeit = farbeWertigkeit[1];
+        Punkte = getPunkte(Wertigkeit);
+    }
+
+    public int getPunkte(String wertigkeit) {
+        switch (wertigkeit) {
+            case "Bube": return 2;
+            case "Dame": return 3;
+            case "König": return 4;
+            case "10er": return 10;
+            case "Ass": return 11;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return this.getFarbe()+" "+this.getWertigkeit();
+    }
+
     public static ArrayList<Karte> erstelleKartendeck()
     {
         ArrayList<Karte> Kartendeck = new ArrayList<Karte>(20);
