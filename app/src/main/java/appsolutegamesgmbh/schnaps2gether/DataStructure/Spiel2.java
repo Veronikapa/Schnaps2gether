@@ -144,11 +144,11 @@ public class Spiel2 {
         }
     }
 
-    public void Auspielen(Karte karteS1)
+    public void Auspielen(Karte karteS1, Spieler s)
     {
         //Ausgespielte Karte wird aus Hand von S1 entfernt
-        s1.Hand.remove(karteS1);
-        s1.setIstdran(false);
+        s.Hand.remove(karteS1);
+        s.setIstdran(false);
     }
 
     /*

@@ -45,10 +45,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String SPIELENDE = "7";
     private static final String BUMMERL = "8";
     private static final String HANDKARTEN = "9";
+    private static final String TRUMPFKARTE = "10";
+    private static final String ZUGENDE = "11";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
     private GoogleApiClient mGoogleApiClient;
+    private ArrayList<String> endpointIDs;
 
     private Spiel2 spiel;
     private Button buttonKarte1;
@@ -84,7 +87,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private TextView txtSelbst;
     private TextView txtGegner;
     private Bummerl2 bummerl;
-    private ArrayList<String> endpointIDs;
 
     @Override
     public void onStart() {
@@ -147,12 +149,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         final Karte k = selbst.Hand.get(i);
         eigeneKarte = k;
         buttonsNichtKlickbar();
-        spiel.Auspielen(k);
+        spiel.Auspielen(k, selbst);
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, WEITER.getBytes());
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
         } else {
             zugEnde();
         }
@@ -161,6 +163,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte);
         eigeneKarte = gegnerischeKarte = null;
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGENDE.getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
@@ -176,13 +179,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             else {
                 buttonTrumpfTauschen.setEnabled(false);
             }
-            if(hat20er()) {
+            if(hat20er(selbst)) {
                 button20er.setEnabled(true);
             }
             else {
                 button20er.setEnabled(false);
             }
-            if(hat40er()) {
+            if(hat40er(selbst)) {
                 button40er.setEnabled(true);
             }
             else {
@@ -208,7 +211,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
             gegnerischeHand += gegner.Hand.get(i).toString();
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand).getBytes());
+        int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+" "+gegnerischeHand).getBytes());
     }
 
     private void punkteAktualisieren() {
@@ -225,14 +229,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenButtons.get(i).setVisibility(View.INVISIBLE);
     }
 
-    private boolean hat20er() {
-        if ((spiel.hat20er(selbst).size()>0 && !hat40er()) || spiel.hat20er(selbst).size()>1)
+    private boolean hat20er(Spieler s) {
+        if ((spiel.hat20er(s).size()>0 && !hat40er(s)) || spiel.hat20er(s).size()>1)
             return true;
         return false;
     }
 
-    private boolean hat40er() {
-        if(spiel.hat20er(selbst).contains(spiel.getTrumpf()))
+    private boolean hat40er(Spieler s) {
+        if(spiel.hat20er(s).contains(spiel.getTrumpf()))
             return true;
         return false;
     }
@@ -245,6 +249,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonStapel.setText("20");
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte).getBytes());
 
         handKartenKlickbar();
         buttonZudrehen.setEnabled(true);
@@ -427,11 +432,15 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String message = new String(payload);
         switch ((message.substring(0,1))) {
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
+                spiel.Auspielen(gegnerischeKarte, gegner);
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 if (eigeneKarte!=null) {
                     zugEnde();
-                } else {
-                    handKartenKlickbar();
+                }
+                break;
+            case WEITER: handKartenKlickbar();
+                if (message.substring(2,3).equals("1")) {
+                    eigenerZug();
                 }
                 break;
             default: break;
@@ -487,7 +496,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     eigenerZug();
                     handKartenKlickbar();
                 } else {
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, WEITER.getBytes());
+                    int hast20er = hat20er(gegner) ? 1 : 0;
+                    int hast40er = hat40er(gegner) ? 1 : 0;
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er).getBytes());
                 }
             }
         }

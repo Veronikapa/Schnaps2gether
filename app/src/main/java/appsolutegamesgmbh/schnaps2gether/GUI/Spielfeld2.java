@@ -95,7 +95,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private void zugAusführen(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
-        spiel.Auspielen(k);
+        spiel.Auspielen(k, selbst);
         gespielteKarteEntfernen(i);
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
