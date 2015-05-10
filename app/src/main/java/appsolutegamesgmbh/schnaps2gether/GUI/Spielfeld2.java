@@ -37,6 +37,12 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private Button button20er;
     private Button button40er;
     private Button buttonTrumpfTauschen;
+    private Button buttonGKarte1I;
+    private Button buttonGKarte2I;
+    private Button buttonGestochenI;
+    private Button buttonGKarte1G;
+    private Button buttonGKarte2G;
+    private Button buttonGestochenG;
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
@@ -55,6 +61,8 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private TextView txtSelbst;
     private TextView txtGegner;
     private Bummerl2 bummerl;
+    private boolean pruefegestochenG;
+    private boolean pruefegestochenI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         buttonGegnerischeKarte = (Button) findViewById(R.id.main_buttonE);
         buttonTrumpfkarte = (Button) findViewById(R.id.main_buttonT);
         buttonStapel = (Button) findViewById(R.id.main_buttonD);
+
+        buttonGKarte1I = (Button) findViewById(R.id.cmd_1K_I);
+        buttonGKarte2I = (Button) findViewById(R.id.cmd_2K_I);
+        buttonGestochenI = (Button) findViewById(R.id.cmd_gestochen_I);
+        buttonGKarte1G = (Button) findViewById(R.id.cmd_1K_G);
+        buttonGKarte2G = (Button) findViewById(R.id.cmd_2K_G);
+        buttonGestochenG = (Button) findViewById(R.id.cmd_gestochen_G);
 
         handkartenButtons = new ArrayList<Button>();
         handkartenButtons.add(0, buttonKarte1);
@@ -362,6 +377,33 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                 spielEnde();
             } else {
                 handAktualisieren();
+                if(pruefegestochenG)
+                {
+                   if(spiel.getS2().Gestochen.size()==2)
+                   {
+                       buttonGKarte1G.setText(spiel.getS2().Gestochen.get(0).getFarbe() + spiel.getS2().Gestochen.get(0).getWertigkeit());
+                       buttonGKarte2G.setText(spiel.getS2().Gestochen.get(1).getFarbe() + spiel.getS2().Gestochen.get(1).getWertigkeit());
+
+                   }
+                   else if(spiel.getS2().Gestochen.size()>2)
+                   {
+                       buttonGestochenG.setVisibility(View.VISIBLE);
+                       pruefegestochenG = false;
+                   }
+                }
+                if(pruefegestochenI)
+                {
+                    if(spiel.getS1().Gestochen.size()==2)
+                    {
+                        buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
+                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());
+                    }
+                    else if(spiel.getS1().Gestochen.size()>2)
+                    {
+                        buttonGestochenI.setVisibility(View.VISIBLE);
+                        pruefegestochenI = false;
+                    }
+                }
                 if(spiel.AnzahlKartenStapel()!=0)
                     buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
                 else

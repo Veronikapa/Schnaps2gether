@@ -52,6 +52,33 @@
         android:text="@string/buttonE"
         android:layout_gravity="center"
         android:enabled="false" />
+
+        <Button
+            android:id="@+id/cmd_1K_G"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:text="@string/button1"
+            android:onClick="popup20er"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/cmd_2K_G"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button2"
+            android:onClick="ansagen40er"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:text="New Button"
+            android:id="@+id/cmd_gestochen_G"
+            android:visibility="invisible" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -191,6 +218,33 @@
             android:layout_marginLeft="0dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er" />
+
+        <Button
+            android:id="@+id/cmd_1K_I"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="40dp"
+            android:text="@string/button1"
+            android:onClick="popup20er"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/cmd_2K_I"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="0dp"
+            android:text="@string/button2"
+            android:onClick="ansagen40er"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="54dp"
+            android:layout_height="34dp"
+            android:text="New Button"
+            android:id="@+id/cmd_gestochen_I"
+            android:visibility="invisible" />
     </LinearLayout>
 
 
