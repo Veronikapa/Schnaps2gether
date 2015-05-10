@@ -37,4 +37,28 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:height="0dp"
+        android:text="Lobby - Warteraum"
+        android:id="@+id/textView"
+        android:textSize="25dp"
+        android:textAlignment="center" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView_Spieluebersicht"
+        android:visibility="visible"
+        style="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
+        android:choiceMode="singleChoice"
+        android:clickable="true"
+        android:fastScrollEnabled="true"
+        android:fastScrollAlwaysVisible="true"
+        android:focusable="false"
+        android:layout_above="@+id/cmd_neu"
+        android:layout_alignRight="@+id/cmd_abbrechen"
+        android:layout_alignEnd="@+id/cmd_abbrechen" />
+
 </RelativeLayout>

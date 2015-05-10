@@ -3,14 +3,25 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.ads.mediation.customevent.CustomEventAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -21,8 +32,12 @@ import com.google.android.gms.nearby.connection.AppMetadata;
 import com.google.android.gms.nearby.connection.Connections;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 public class Lobby extends Activity implements
@@ -34,6 +49,9 @@ public class Lobby extends Activity implements
         Connections.EndpointDiscoveryListener {
 
     private Context appContext;
+    private ListView spieleListView;
+    private ArrayList<ArrayList<String>> spieleArrayList;
+    private ArrayAdapter<ArrayList<String>> adapterSpieleListView;
 
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
@@ -49,6 +67,8 @@ public class Lobby extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
+        appContext = this.getApplicationContext();
+
         //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
         //angelegt werden
         m_GoogleApiClient = new GoogleApiClient.Builder(this)
@@ -56,6 +76,27 @@ public class Lobby extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
+
+        spieleListView = (ListView) this.findViewById(R.id.listView_Spieluebersicht);
+        spieleArrayList = new ArrayList<ArrayList<String>>();
+        adapterSpieleListView = new ArrayAdapter<ArrayList<String>>(this,R.layout.abc_activity_chooser_view_list_item, spieleArrayList);
+
+        spieleListView.setAdapter(adapterSpieleListView);
+
+        //Anzeigen der bereits zum Spiel verbundenen Spieler
+        //Verbinden des Spielers zu Spiel
+        //Wenn Spiel genügend Spieler hat wird Spiel begonnen
+        spieleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Verbinden der 2 Geräte
+                connectTo(spieleArrayList.get(0).get(1), spieleArrayList.get(0).get(2));
+
+                //Starten der nächsten Activity
+                startActivity(new Intent(Lobby.this, Spielfeld2.class));
+                finish();
+            }
+        });
     }
 
     @Override
@@ -85,6 +126,14 @@ public class Lobby extends Activity implements
 
         //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
         if (m_GoogleApiClient.isConnected()) {
+
+            //Starten der nächsten Activity
+            //startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+            String spielerName = "Spieler1"; //ChangeNickname.editNickname.getText().toString();
+            spieleArrayList.add(0,new ArrayList<String>(3));
+            spieleArrayList.get(0).add(0, "Spiel2 von" + spielerName);
+            spieleArrayList.get(0).add(1,spielerName);
+            adapterSpieleListView.notifyDataSetChanged();
             startAdvertising();
         }
     }
@@ -118,9 +167,7 @@ public class Lobby extends Activity implements
      */
     public void onEndpointFound(String s, String s2, String s3, String s4) {
 
-        //TODO VP: Spiel in Lobby anzeigen und erst nach Auswahl verbinden
-        //TODO VP: Bereits vorhandene Spieler anzeigen
-        connectTo(s, s4);
+
     }
 
     @Override
@@ -270,9 +317,6 @@ public class Lobby extends Activity implements
                         if (status.isSuccess()) {
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
 
-                            //Starten der Nächsten Activity nach Verbindung
-                            startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-                            finish();
                         } else {
                             // Verbindung fehlgeschlagen
                             Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
@@ -299,9 +343,6 @@ public class Lobby extends Activity implements
                                 Toast.LENGTH_SHORT).show();
                         //Beenden der Service anzeige nach Verbindung der Geräte
                         Nearby.Connections.stopAdvertising(m_GoogleApiClient);
-                        //Starten der nächsten Activity
-                        startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-                        finish();
 
                     } else {
                         Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
@@ -328,5 +369,4 @@ public class Lobby extends Activity implements
     @Override
     public void onClick(View view) {
     }
-
 }

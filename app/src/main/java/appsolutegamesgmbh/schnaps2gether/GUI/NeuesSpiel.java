@@ -2,11 +2,13 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 public class NeuesSpiel extends Activity {
@@ -41,7 +43,7 @@ public class NeuesSpiel extends Activity {
     }
 
     public void neu(View v){
-        startActivity(new Intent(this, Spielfeld2.class));
+        startActivity(new Intent(this, Lobby.class));
         finish();
     }
 }
