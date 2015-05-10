@@ -30,6 +30,14 @@ public class Bummerl3 {
         this.punkteS3 = punkteS3;
     }
 
+    public int getAnzahlSpiele() {
+        return AnzahlSpiele;
+    }
+
+    public void setAnzahlSpiele(int anzahlSpiele) {
+        AnzahlSpiele = anzahlSpiele;
+    }
+
     public Bummerl3() {
         punkteS1 = 0;
         punkteS2 = 0;

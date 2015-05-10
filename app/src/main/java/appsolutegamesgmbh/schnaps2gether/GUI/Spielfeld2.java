@@ -204,6 +204,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
 
+        pruefegestochenG = true;
+        pruefegestochenI = true;
+
         handKartenKlickbar();
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setText(R.string.buttonZ);

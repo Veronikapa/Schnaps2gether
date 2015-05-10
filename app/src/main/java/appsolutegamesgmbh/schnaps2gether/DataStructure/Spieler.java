@@ -10,6 +10,7 @@ public class Spieler {
     private boolean istdran;
     private boolean angesagt20er;
     private int merkePunkte;
+    private Spieler mitspieler;
 
     public int getPunkte() {
         return Punkte;
@@ -41,6 +42,14 @@ public class Spieler {
 
     public void setMerkePunkte(int merkePunkte) {
         this.merkePunkte = merkePunkte;
+    }
+
+    public Spieler getMitspieler() {
+        return mitspieler;
+    }
+
+    public void setMitspieler(Spieler mitspieler) {
+        this.mitspieler = mitspieler;
     }
 
     public Spieler()
