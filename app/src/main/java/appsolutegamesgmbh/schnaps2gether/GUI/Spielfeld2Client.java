@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
-import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
@@ -53,7 +52,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> endpointIDs;
 
-    private Spiel2 spiel;
     private Button buttonKarte1;
     private Button buttonKarte2;
     private Button buttonKarte3;
@@ -73,12 +71,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private MenuItem pik20er;
     private MenuItem kreuz20er;
     private Spieler selbst;
-    private Spieler gegner;
     private Karte karte1;
     private Karte karte2;
     private Karte karte3;
     private Karte karte4;
     private Karte karte5;
+    private ArrayList<Boolean> kartenSpielbar;
     private Karte gegnerischeKarte;
     private Karte trumpfkarte;
     private TextView punkteGegner;
@@ -89,6 +87,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private boolean zugedreht;
     private boolean hat20er;
     private boolean hat40er;
+    private ArrayList<String> hab20er;
     private int stapelKartenAnz;
     private int p1;
     private int p2;
@@ -164,7 +163,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         if (!zugedreht) {
             buttonZudrehen.setEnabled(true);
 
-            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
+            if (selbst.Hand.contains(new Karte(trumpfkarte.getFarbe(),"Bube",2))) {
                 buttonTrumpfTauschen.setEnabled(true);
             }
             else {
@@ -241,7 +240,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
-            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i))) {
+            if (i<handkartenAnz && kartenSpielbar.get(i)) {
                 buttonK.setEnabled(true);
             } else {
                 buttonK.setEnabled(false);
@@ -249,11 +248,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private void spielEnde() {
-        boolean win = true;
-        if (selbst.getPunkte()<66) {
-            win = false;
-        }
+    private void spielEnde(boolean win) {
         Bundle args = new Bundle();
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
@@ -262,9 +257,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void zudrehen(View view) {
-        //spiel.Zudrehen();
+        zugedreht = true;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGEDREHT.getBytes());
     }
 
     public void popup20er(View view) {
@@ -278,7 +274,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         karo20er.setVisible(false);
         pik20er.setVisible(false);
         kreuz20er.setVisible(false);
-        /*ArrayList<String> a = spiel.hat20er(selbst);
+        ArrayList<String> a = hab20er;
         for (int i = 0; i < a.size(); i++) {
             switch (a.get(i)) {
                 case "Herz":
@@ -296,25 +292,21 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 default:
                     ;
             }
-        }*/
+        }
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
 
     public void ansagen40er(View view) {
-        /*spiel.Ansagen20er(spiel.getTrumpf(), selbst);
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();*/
-        punkteAktualisieren();
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ANGESAGT40ER.getBytes());
         button40er.setEnabled(false);
         button20er.setEnabled(false);
-        handKartenKlickbar();
     }
 
     public void trumpfkarteTauschen(View view) {
-        /*spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
-        trumpfkarte = spiel.getAufgedeckterTrumpf();
-        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());*/
-        handAktualisieren();
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
+        trumpfkarte = new Karte(trumpfkarte.getFarbe(), "Bube", 2);
+        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         buttonTrumpfTauschen.setEnabled(false);
         eigenerZug();
     }
@@ -352,27 +344,24 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        /*switch (menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                spiel.Ansagen20er("Herz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
                 break;
             case R.id.karo_20er:
-                spiel.Ansagen20er("Karo", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
                 break;
             case R.id.pik_20er:
-                spiel.Ansagen20er("Pik", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                spiel.Ansagen20er("Kreuz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
                 break;
             default:
                 return false;
         }
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();*/
-        punkteAktualisieren();
-        handKartenKlickbar();
         return true;
     }
 
@@ -410,11 +399,15 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
-            case HANDKARTEN: stapelKartenAnz = Integer.getInteger(message.substring(2,3));
-                String[] hand = message.substring(4).split(" ");
+            case HANDKARTEN: String[] messageParts = message.split(":");
+                stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
+                String[] hand = messageParts[1].substring(2).split(" ");
+                String[] spielbar = messageParts[2].split(" ");
                 selbst.Hand = new ArrayList<Karte>();
+                kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
                     selbst.Hand.add(new Karte(hand[i]));
+                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
                 }
                 handAktualisieren();
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
@@ -424,9 +417,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case WEITER: handKartenKlickbar();
                 if (message.substring(2,3).equals("1")) {
-                    eigenerZug();
                     hat20er = message.substring(4,5).equals("1") ? true : false;
                     hat40er = message.substring(6,7).equals("1") ? true : false;
+                    hab20er = new ArrayList<String>();
+                    if (hat20er) {
+                        String[] meine20er = message.substring(8).split(" ");
+                        for (String farbe: meine20er) {
+                            hab20er.add(farbe);
+                        }
+                    }
+                    eigenerZug();
                 }
                 break;
             case ZUGEDREHT: zugedreht = true;
@@ -437,6 +437,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 handler.postDelayed(new Zugende(), 2000);
             case PUNKTE: p1 = Integer.getInteger(message.substring(2,3));
                 p2 = Integer.getInteger(message.substring(4,5));
+                break;
+            case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
+                spielEnde(win);
                 break;
             default: break;
         }

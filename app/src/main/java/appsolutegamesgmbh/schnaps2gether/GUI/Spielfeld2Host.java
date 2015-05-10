@@ -205,14 +205,20 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             } else {
                 buttonK.setVisibility(View.INVISIBLE);
             }
+            gegnerischeHandAktualisieren();
         }
+    }
+
+    private void gegnerischeHandAktualisieren() {
         String gegnerischeHand = "";
+        String gegKartenSpielBar = "";
         int gegnerischeHandkartenAnz = gegner.Hand.size();
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
-            gegnerischeHand += gegner.Hand.get(i).toString();
+            gegnerischeHand += " "+gegner.Hand.get(i).toString();
+            gegKartenSpielBar += spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0;
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+" "+gegnerischeHand).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
     }
 
     private void punkteAktualisieren() {
@@ -239,6 +245,17 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         if(spiel.hat20er(s).contains(spiel.getTrumpf()))
             return true;
         return false;
+    }
+
+    private void gegnerHat20er() {
+        int hast20er = hat20er(gegner) ? 1 : 0;
+        int hast40er = hat40er(gegner) ? 1 : 0;
+        String hastDie20er = "";
+        ArrayList<String> geg20er = spiel.hat20er(gegner);
+        for(String farbe: geg20er) {
+            hastDie20er += " "+farbe;
+        }
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
     }
 
     private void spielStart() {
@@ -443,6 +460,29 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     eigenerZug();
                 }
                 break;
+            case ZUGEDREHT: spiel.Zudrehen();
+                buttonZudrehen.setEnabled(false);
+                buttonZudrehen.setText("Zugedreht");
+                break;
+            case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                break;
+            case ANGESAGT20ER: String farbe = message.substring(2);
+                spiel.Ansagen20er(farbe, gegner);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                break;
+            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
+                gegnerischeHandAktualisieren();
+                gegnerHat20er();
+                break;
             default: break;
         }
 
@@ -496,9 +536,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     eigenerZug();
                     handKartenKlickbar();
                 } else {
-                    int hast20er = hat20er(gegner) ? 1 : 0;
-                    int hast40er = hat40er(gegner) ? 1 : 0;
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er).getBytes());
+                    gegnerHat20er();
                 }
             }
         }
