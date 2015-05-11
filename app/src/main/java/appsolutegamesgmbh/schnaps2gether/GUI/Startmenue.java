@@ -3,6 +3,7 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ public class Startmenue extends Activity implements View.OnClickListener {
     private Button beenden;
     private Button name;
     private Button optionen;
+    public static String SpielerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class Startmenue extends Activity implements View.OnClickListener {
         optionen = (Button) findViewById(R.id.cmd_optionen);
         optionen.setOnClickListener(this);
 
+        SharedPreferences settings = this.getPreferences(this.MODE_PRIVATE);
+        SpielerName = settings.getString("nickname", "Nickname");
 
     }
 

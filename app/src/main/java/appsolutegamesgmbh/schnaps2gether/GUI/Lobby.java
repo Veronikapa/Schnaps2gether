@@ -3,25 +3,17 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.ads.mediation.customevent.CustomEventAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -32,12 +24,8 @@ import com.google.android.gms.nearby.connection.AppMetadata;
 import com.google.android.gms.nearby.connection.Connections;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 public class Lobby extends Activity implements
@@ -52,6 +40,7 @@ public class Lobby extends Activity implements
     private ListView spieleListView;
     private ArrayList<ArrayList<String>> spieleArrayList;
     private ArrayAdapter<ArrayList<String>> adapterSpieleListView;
+    private String spielerName = "";
 
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
@@ -90,13 +79,15 @@ public class Lobby extends Activity implements
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Verbinden der 2 Geräte
-                connectTo(spieleArrayList.get(0).get(1), spieleArrayList.get(0).get(2));
+                connectTo(spieleArrayList.get(0).get(1), spielerName);
 
                 //Starten der nächsten Activity
                 startActivity(new Intent(Lobby.this, Spielfeld2.class));
                 finish();
             }
         });
+
+        spielerName = Startmenue.SpielerName;
     }
 
     @Override
@@ -127,13 +118,16 @@ public class Lobby extends Activity implements
         //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
         if (m_GoogleApiClient.isConnected()) {
 
+            //TODO VP: DELETE THIS
+            //Neues Spiel zu Liste hinzufügen
+            int i = spieleArrayList.size();
+            spieleArrayList.add(i,new ArrayList<String>(3));
+            spieleArrayList.get(i).add(0, "2er Schnapsen von" + spielerName);
+            spieleArrayList.get(i).add(1,spielerName);
+            adapterSpieleListView.notifyDataSetChanged();
+
             //Starten der nächsten Activity
             //startActivity(new Intent(Lobby.this, NeuesSpiel.class));
-            String spielerName = "Spieler1"; //ChangeNickname.editNickname.getText().toString();
-            spieleArrayList.add(0,new ArrayList<String>(3));
-            spieleArrayList.get(0).add(0, "Spiel2 von" + spielerName);
-            spieleArrayList.get(0).add(1,spielerName);
-            adapterSpieleListView.notifyDataSetChanged();
             startAdvertising();
         }
     }
@@ -141,7 +135,6 @@ public class Lobby extends Activity implements
     /*
     * In dieser Methode wird nach vorhanden Spielen gesucht. Wenn ein Spiel verfügbar ist,
     * verbinden sich die Geräte.
-    * TODO VP: Ermöglichen der Spielauwahl und Einschränken der Spieler
      */
     public void beitreten(View v) {
         if (m_GoogleApiClient.isConnected()) {
@@ -166,8 +159,10 @@ public class Lobby extends Activity implements
     * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
      */
     public void onEndpointFound(String s, String s2, String s3, String s4) {
-
-
+        spieleArrayList.add(0,new ArrayList<String>(3));
+        spieleArrayList.get(0).add(0, "2er Schnapsen von" + s);
+        spieleArrayList.get(0).add(1,s);
+        adapterSpieleListView.notifyDataSetChanged();
     }
 
     @Override
@@ -235,7 +230,7 @@ public class Lobby extends Activity implements
         }
 
         // Gerät das Service anbietet ist der Host des Spiels.
-        m_IsHost = true;
+         m_IsHost = true;
 
         //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
         // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
@@ -248,15 +243,19 @@ public class Lobby extends Activity implements
         //via stopAdvertising();
         long NO_TIMEOUT = 0L;
 
-        String name = null; //TODO VP: SHOW correct name
-
         //Anbieten eines Services für andere Geräte.
-        Nearby.Connections.startAdvertising(m_GoogleApiClient, name, appMetadata, NO_TIMEOUT,
+        Nearby.Connections.startAdvertising(m_GoogleApiClient, spielerName, appMetadata, NO_TIMEOUT,
                 this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
             @Override
             public void onResult(Connections.StartAdvertisingResult result) {
                 if (result.getStatus().isSuccess()) {
-                    // Device is advertising
+
+                    //Neues Spiel zu Liste hinzufügen
+                    int i = spieleArrayList.size();
+                    spieleArrayList.add(i,new ArrayList<String>(3));
+                    spieleArrayList.get(i).add(0, "2er Schnapsen von" + spielerName);
+                    spieleArrayList.get(i).add(1,spielerName);
+                    adapterSpieleListView.notifyDataSetChanged();
                 } else {
                     int statusCode = result.getStatus().getStatusCode();
                     // Advertising failed - see statusCode for more details
@@ -291,7 +290,7 @@ public class Lobby extends Activity implements
                             String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
                             String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
                             //Aufruf der Methode zur Handhabung des gefundenen Geräts
-                            onEndpointFound(endPointId, deviceId, serviceId, "Discoverer");
+                            onEndpointFound(endPointId, deviceId, serviceId, spielerName);
 
                         }
 
@@ -307,9 +306,8 @@ public class Lobby extends Activity implements
     //Senden einer Verbindungsanfrage zu Host und Verbindung wenn möglich.
     private void connectTo(String endpointId, final String endpointName) {
 
-        String myName = null; //TODO VP: Nickname verwenden
         byte[] myPayload = null;
-        Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, myName, endpointId, myPayload,
+        Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, spielerName, endpointId, myPayload,
                 new Connections.ConnectionResponseCallback() {
                     @Override
                     public void onConnectionResponse(String remoteEndpointId, Status status,
@@ -332,8 +330,7 @@ public class Lobby extends Activity implements
         if (m_IsHost) {
             byte[] myPayload = null;
 
-            //Automatisches Akzeptieren aller Anfragen.
-            //TODO VP: Einschränken auf max. 4 Spieler
+            //TODO VP: Einschränken auf Spielgröße, vorerst nur eine Verbindung pro Spiel erlaubt
             Nearby.Connections.acceptConnectionRequest(m_GoogleApiClient, remoteEndpointId,
                     myPayload, this).setResultCallback(new ResultCallback<Status>() {
                 @Override
