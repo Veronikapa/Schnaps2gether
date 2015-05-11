@@ -2,6 +2,7 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,11 +48,14 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static final String HANDKARTEN = "9";
     private static final String TRUMPFKARTE = "10";
     private static final String ZUGENDE = "11";
+    private static final String DISCONNECT = "12";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> endpointIDs;
+
+    private Context appContext;
 
     private Button buttonKarte1;
     private Button buttonKarte2;
@@ -93,12 +98,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private int p2;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
@@ -111,13 +110,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
 
+        mGoogleApiClient = Lobby.m_GoogleApiClient;
+        endpointIDs = Lobby.endpointIds;
+        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Nearby.CONNECTIONS_API)
-                .build();
-        endpointIDs = new ArrayList<String>();
+        appContext = this.getApplicationContext();
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
@@ -428,8 +425,17 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                     }
                     eigenerZug();
                 }
+                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: zugedreht = true;
+                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT20ER: String farbe = message.substring(2);
+                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case TRUMPFGETAUSCHT: Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGENDE:
                 // Execute some code after 2 seconds have passed
@@ -440,6 +446,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
+                break;
+            case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
+                // Execute some code after 2 seconds have passed
+                Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 2000);
                 break;
             default: break;
         }

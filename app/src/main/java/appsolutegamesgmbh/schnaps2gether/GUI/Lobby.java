@@ -45,7 +45,11 @@ public class Lobby extends Activity implements
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
     //Api Client der pro Gerät verfügbar sein muss
-    private GoogleApiClient m_GoogleApiClient;
+    public static GoogleApiClient m_GoogleApiClient;
+
+    // Speichert die endpoint- und deviceIds von verbundenen Geräten
+    public static ArrayList<String> endpointIds;
+    public static ArrayList<String> deviceIds;
 
     //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
@@ -66,6 +70,9 @@ public class Lobby extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
 
+        endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
+        deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
+
         spieleListView = (ListView) this.findViewById(R.id.listView_Spieluebersicht);
         spieleArrayList = new ArrayList<ArrayList<String>>();
         adapterSpieleListView = new ArrayAdapter<ArrayList<String>>(this,R.layout.abc_activity_chooser_view_list_item, spieleArrayList);
@@ -81,8 +88,22 @@ public class Lobby extends Activity implements
                 //Verbinden der 2 Geräte
                 connectTo(spieleArrayList.get(0).get(1), spielerName);
 
+                if (m_IsHost) {
+                    String allIds = "";
+                    for (i=0; i<endpointIds.size(); i++) {
+                        allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
+                    }
+                    allIds = allIds.substring(0,allIds.length()-1);
+                    Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                }
+
                 //Starten der nächsten Activity
-                startActivity(new Intent(Lobby.this, Spielfeld2.class));
+                if (m_IsHost) {
+                    startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
+                } else {
+                    startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                }
+
                 finish();
             }
         });
@@ -172,8 +193,17 @@ public class Lobby extends Activity implements
     }
 
     @Override
-    public void onMessageReceived(String s, byte[] bytes, boolean b) {
-        //Hier ist Datenübertragung zu implementieren!!
+    public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
+        String message = new String(payload);
+        if (!m_IsHost) {
+            String[] aIds = message.split(" ");
+            for (String ids: aIds) {
+                String[] aId = ids.split(":");
+                endpointIds.add(aId[0]);
+                deviceIds.add(aId[1]);
+            }
+        }
+
     }
 
     @Override
@@ -195,7 +225,7 @@ public class Lobby extends Activity implements
         m_GoogleApiClient.connect();
     }
 
-    @Override
+    /*@Override
     public void onStop() {
         super.onStop();
         //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
@@ -203,7 +233,7 @@ public class Lobby extends Activity implements
         if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
             m_GoogleApiClient.disconnect();
         }
-    }
+    }*/
 
     /*
     * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.
@@ -325,7 +355,7 @@ public class Lobby extends Activity implements
 
     @Override
     //Empfangen einer Verbindungsanfrage von Client
-    public void onConnectionRequest(final String remoteEndpointId, String remoteDeviceId,
+    public void onConnectionRequest(final String remoteEndpointId, final String remoteDeviceId,
                                     final String remoteEndpointName, byte[] payload) {
         if (m_IsHost) {
             byte[] myPayload = null;
@@ -340,6 +370,9 @@ public class Lobby extends Activity implements
                                 Toast.LENGTH_SHORT).show();
                         //Beenden der Service anzeige nach Verbindung der Geräte
                         Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+
+                        endpointIds.add(remoteEndpointId);
+                        deviceIds.add(remoteDeviceId);
 
                     } else {
                         Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,

@@ -2,6 +2,7 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,11 +49,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String HANDKARTEN = "9";
     private static final String TRUMPFKARTE = "10";
     private static final String ZUGENDE = "11";
+    private static final String DISCONNECT = "12";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> endpointIDs;
+
+    private Context appContext;
 
     private Spiel2 spiel;
     private Button buttonKarte1;
@@ -89,12 +94,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private Bummerl2 bummerl;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
@@ -107,12 +106,11 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Nearby.CONNECTIONS_API)
-                .build();
-        endpointIDs = new ArrayList<String>();
+        mGoogleApiClient = Lobby.m_GoogleApiClient;
+        endpointIDs = Lobby.endpointIds;
+        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
+
+        appContext = this.getApplicationContext();
 
         bummerl = new Bummerl2();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
@@ -459,10 +457,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 if (message.substring(2,3).equals("1")) {
                     eigenerZug();
                 }
+                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: spiel.Zudrehen();
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setText("Zugedreht");
+                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
                 punkteAktualisieren();
@@ -470,6 +470,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     spielEnde();
                 }
                 gegnerischeHandAktualisieren();
+                Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT20ER: String farbe = message.substring(2);
                 spiel.Ansagen20er(farbe, gegner);
@@ -478,10 +479,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     spielEnde();
                 }
                 gegnerischeHandAktualisieren();
+                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
                 gegnerischeHandAktualisieren();
                 gegnerHat20er();
+                Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             default: break;
         }
@@ -490,7 +493,16 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDisconnected(String s) {
-
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, DISCONNECT.getBytes());
+        Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
+        // Execute some code after 2 seconds have passed
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
     }
 
     @Override
