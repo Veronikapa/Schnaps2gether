@@ -169,7 +169,11 @@ public class Lobby extends Activity implements
                 endpointIds.add(aId[0]);
                 //deviceIds.add(aId[1]);
             }
+            Spielfeld2Client.receiveFromLobby(endpointID,payload,isReliable);
         }
+
+        else
+            Spielfeld2Host.receiveFromLobby(endpointID,payload,isReliable);
 
     }
 

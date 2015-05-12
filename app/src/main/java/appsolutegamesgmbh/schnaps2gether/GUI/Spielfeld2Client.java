@@ -55,47 +55,47 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> endpointIDs;
 
-    private Context appContext;
+    private static Context appContext;
 
     private Button buttonKarte1;
     private Button buttonKarte2;
     private Button buttonKarte3;
     private Button buttonKarte4;
     private Button buttonKarte5;
-    private ArrayList<Button> handkartenButtons;
-    private Button buttonEigeneKarte;
-    private Button buttonGegnerischeKarte;
-    private Button buttonStapel;
-    private Button buttonTrumpfkarte;
-    private Button buttonZudrehen;
-    private Button button20er;
-    private Button button40er;
-    private Button buttonTrumpfTauschen;
+    private static ArrayList<Button> handkartenButtons;
+    private static Button buttonEigeneKarte;
+    private static Button buttonGegnerischeKarte;
+    private static Button buttonStapel;
+    private static Button buttonTrumpfkarte;
+    private static Button buttonZudrehen;
+    private static Button button20er;
+    private static Button button40er;
+    private static Button buttonTrumpfTauschen;
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
     private MenuItem kreuz20er;
-    private Spieler selbst;
+    private static Spieler selbst;
     private Karte karte1;
     private Karte karte2;
     private Karte karte3;
     private Karte karte4;
     private Karte karte5;
-    private ArrayList<Boolean> kartenSpielbar;
-    private Karte gegnerischeKarte;
-    private Karte trumpfkarte;
-    private TextView punkteGegner;
-    private TextView punkteSelbst;
+    private static ArrayList<Boolean> kartenSpielbar;
+    private static Karte gegnerischeKarte;
+    private static Karte trumpfkarte;
+    private static TextView punkteGegner;
+    private static TextView punkteSelbst;
     private TextView txtSelbst;
     private TextView txtGegner;
-    private Bummerl2 bummerl;
-    private boolean zugedreht;
-    private boolean hat20er;
-    private boolean hat40er;
-    private ArrayList<String> hab20er;
-    private int stapelKartenAnz;
-    private int p1;
-    private int p2;
+    private static Bummerl2 bummerl;
+    private static boolean zugedreht;
+    private static boolean hat20er;
+    private static boolean hat40er;
+    private static ArrayList<String> hab20er;
+    private static int stapelKartenAnz;
+    private static int p1;
+    private static int p2;
 
     @Override
     public void onStop() {
@@ -156,7 +156,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private void eigenerZug() {
+    private static void eigenerZug() {
         if (!zugedreht) {
             buttonZudrehen.setEnabled(true);
 
@@ -181,7 +181,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private void handAktualisieren() {
+    private static void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
@@ -195,7 +195,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private void punkteAktualisieren() {
+    private static void punkteAktualisieren() {
         buttonEigeneKarte.setText("");
         buttonGegnerischeKarte.setText("");
         punkteGegner.setText(Integer.toString(p2));
@@ -233,7 +233,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonTrumpfTauschen.setEnabled(false);
     }
 
-    private void handKartenKlickbar() {
+    private static void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
@@ -245,12 +245,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private void spielEnde(boolean win) {
+    private static void spielEnde(boolean win) {
         Bundle args = new Bundle();
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
         gameEndDialogFragment.setArguments(args);
-        gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
+        //gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
     }
 
     public void zudrehen(View view) {
@@ -386,6 +386,78 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public void onEndpointLost(String s) {
 
     }
+    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
+        String message = new String(payload);
+        switch ((message.substring(0,1))) {
+            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+                break;
+            case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                break;
+            case HANDKARTEN: String[] messageParts = message.split(":");
+                stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
+                String[] hand = messageParts[1].substring(2).split(" ");
+                String[] spielbar = messageParts[2].split(" ");
+                selbst.Hand = new ArrayList<Karte>();
+                kartenSpielbar = new ArrayList<Boolean>();
+                for (int i=0; i<hand.length; i++) {
+                    selbst.Hand.add(new Karte(hand[i]));
+                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
+                }
+                handAktualisieren();
+                buttonStapel.setText(Integer.toString(stapelKartenAnz));
+                break;
+            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
+                buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
+                break;
+            case WEITER: handKartenKlickbar();
+                if (message.substring(2,3).equals("1")) {
+                    hat20er = message.substring(4,5).equals("1") ? true : false;
+                    hat40er = message.substring(6,7).equals("1") ? true : false;
+                    hab20er = new ArrayList<String>();
+                    if (hat20er) {
+                        String[] meine20er = message.substring(8).split(" ");
+                        for (String farbe: meine20er) {
+                            hab20er.add(farbe);
+                        }
+                    }
+                    eigenerZug();
+                }
+                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                break;
+            case ZUGEDREHT: zugedreht = true;
+                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT20ER: String farbe = message.substring(2);
+                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case TRUMPFGETAUSCHT: Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
+                break;
+            case ZUGENDE:
+                // Execute some code after 2 seconds have passed
+                Handler handler = new Handler();
+                handler.postDelayed(new Zugende(), 2000);
+            case PUNKTE: p1 = Integer.getInteger(message.substring(2,3));
+                p2 = Integer.getInteger(message.substring(4,5));
+                break;
+            case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
+                spielEnde(win);
+                break;
+            case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
+                // Execute some code after 2 seconds have passed
+                Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       // finish();
+                    }
+                }, 2000);
+                break;
+            default: break;
+        }
+    }
 
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
@@ -471,7 +543,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
-    class Zugende implements Runnable {
+    static class Zugende implements Runnable {
 
         @Override
         public void run() {

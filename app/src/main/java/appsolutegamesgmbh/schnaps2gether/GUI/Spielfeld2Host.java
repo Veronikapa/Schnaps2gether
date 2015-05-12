@@ -53,45 +53,45 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     // Identify if the device is the host
     private boolean mIsHost = true;
-    private GoogleApiClient mGoogleApiClient;
-    private ArrayList<String> endpointIDs;
+    private static GoogleApiClient mGoogleApiClient;
+    private static ArrayList<String> endpointIDs;
 
-    private Context appContext;
+    private static Context appContext;
 
-    private Spiel2 spiel;
+    private static Spiel2 spiel;
     private Button buttonKarte1;
     private Button buttonKarte2;
     private Button buttonKarte3;
     private Button buttonKarte4;
     private Button buttonKarte5;
-    private ArrayList<Button> handkartenButtons;
-    private Button buttonEigeneKarte;
-    private Button buttonGegnerischeKarte;
-    private Button buttonStapel;
+    private static ArrayList<Button> handkartenButtons;
+    private static Button buttonEigeneKarte;
+    private static Button buttonGegnerischeKarte;
+    private static Button buttonStapel;
     private Button buttonTrumpfkarte;
-    private Button buttonZudrehen;
-    private Button button20er;
-    private Button button40er;
-    private Button buttonTrumpfTauschen;
+    private static Button buttonZudrehen;
+    private static Button button20er;
+    private static Button button40er;
+    private static Button buttonTrumpfTauschen;
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
     private MenuItem kreuz20er;
-    private Spieler selbst;
-    private Spieler gegner;
+    private static Spieler selbst;
+    private static Spieler gegner;
     private Karte karte1;
     private Karte karte2;
     private Karte karte3;
     private Karte karte4;
     private Karte karte5;
-    private Karte eigeneKarte;
-    private Karte gegnerischeKarte;
+    private static Karte eigeneKarte;
+    private static Karte gegnerischeKarte;
     private Karte trumpfkarte;
-    private TextView punkteGegner;
-    private TextView punkteSelbst;
+    private static TextView punkteGegner;
+    private static TextView punkteSelbst;
     private TextView txtSelbst;
     private TextView txtGegner;
-    private Bummerl2 bummerl;
+    private static Bummerl2 bummerl;
 
     @Override
     public void onStop() {
@@ -158,7 +158,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         }
     }
 
-    private void zugEnde() {
+    private static void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte);
         eigeneKarte = gegnerischeKarte = null;
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGENDE.getBytes());
@@ -167,7 +167,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handler.postDelayed(new Zugende(), 2000);
     }
 
-    private void eigenerZug() {
+    private static void eigenerZug() {
         if (!spiel.isZugedreht()) {
             buttonZudrehen.setEnabled(true);
 
@@ -192,7 +192,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         }
     }
 
-    private void handAktualisieren() {
+    private static void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
@@ -207,7 +207,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         }
     }
 
-    private void gegnerischeHandAktualisieren() {
+    private static void gegnerischeHandAktualisieren() {
         String gegnerischeHand = "";
         String gegKartenSpielBar = "";
         int gegnerischeHandkartenAnz = gegner.Hand.size();
@@ -219,7 +219,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
     }
 
-    private void punkteAktualisieren() {
+    private static void punkteAktualisieren() {
         buttonEigeneKarte.setText("");
         buttonGegnerischeKarte.setText("");
         int p1 = selbst.getPunkte();
@@ -233,19 +233,19 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenButtons.get(i).setVisibility(View.INVISIBLE);
     }
 
-    private boolean hat20er(Spieler s) {
+    private static boolean hat20er(Spieler s) {
         if ((spiel.hat20er(s).size()>0 && !hat40er(s)) || spiel.hat20er(s).size()>1)
             return true;
         return false;
     }
 
-    private boolean hat40er(Spieler s) {
+    private static boolean hat40er(Spieler s) {
         if(spiel.hat20er(s).contains(spiel.getTrumpf()))
             return true;
         return false;
     }
 
-    private void gegnerHat20er() {
+    private static void gegnerHat20er() {
         int hast20er = hat20er(gegner) ? 1 : 0;
         int hast40er = hat40er(gegner) ? 1 : 0;
         String hastDie20er = "";
@@ -290,7 +290,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonTrumpfTauschen.setEnabled(false);
     }
 
-    private void handKartenKlickbar() {
+    private static void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
@@ -302,7 +302,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         }
     }
 
-    private void spielEnde() {
+    private static void spielEnde() {
         boolean win = true;
         if (selbst.getPunkte()<66) {
             win = false;
@@ -312,7 +312,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
         gameEndDialogFragment.setArguments(args);
-        gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
+       // gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
     }
 
     public void zudrehen(View view) {
@@ -442,6 +442,53 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     }
 
+    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable)
+    {
+        String message = new String(payload);
+        switch ((message.substring(0,1))) {
+            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
+                spiel.Auspielen(gegnerischeKarte, gegner);
+                buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
+                if (eigeneKarte!=null) {
+                    zugEnde();
+                }
+                break;
+            case WEITER: handKartenKlickbar();
+                if (message.substring(2,3).equals("1")) {
+                    eigenerZug();
+                }
+                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                break;
+            case ZUGEDREHT: spiel.Zudrehen();
+                buttonZudrehen.setEnabled(false);
+                buttonZudrehen.setText("Zugedreht");
+                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT20ER: String farbe = message.substring(2);
+                spiel.Ansagen20er(farbe, gegner);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
+                gegnerischeHandAktualisieren();
+                gegnerHat20er();
+                Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
+                break;
+            default: break;
+        }
+    }
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
@@ -530,7 +577,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     }
 
-    class Zugende implements Runnable {
+    static class Zugende implements Runnable {
 
         @Override
         public void run() {
