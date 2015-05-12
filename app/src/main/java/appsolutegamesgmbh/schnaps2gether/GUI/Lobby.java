@@ -83,39 +83,10 @@ public class Lobby extends Activity implements
         public void onItemClick(AdapterView<?> parent, View view,
         int position, long id) {
 
-            // ListView Clicked item index
-            int itemPosition     = position;
+        }
 
-            // ListView Clicked item value
-            String  itemValue    = (String) spieleListView.getItemAtPosition(position);
-
-            // Show Alert
-            Toast.makeText(getApplicationContext(),
-                    "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                    .show();
-
-                //Verbinden der 2 Geräte
-             /*   connectTo(spieleArrayList.get(0).get(1), spielerName);
-
-                if (m_IsHost) {
-                    String allIds = "";
-                    for (i=0; i<endpointIds.size(); i++) {
-                        allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
-                    }
-                    allIds = allIds.substring(0,allIds.length()-1);
-                    Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
-                }
-
-                //Starten der nächsten Activity
-                if (m_IsHost) {
-                    startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
-                } else {
-                    startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-                }
-
-                finish();*/
-            }
         });
+
 
         spielerName = Startmenue.SpielerName;
     }
@@ -160,8 +131,6 @@ public class Lobby extends Activity implements
         if (m_GoogleApiClient.isConnected()) {
             Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
             startDiscovery();
-            endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
-            deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
         }
     }
 
@@ -181,26 +150,7 @@ public class Lobby extends Activity implements
     * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
      */
     public void onEndpointFound(String s, String s2, String s3, String s4) {
-        /*connectTo(s, spielerName);
-
-        if (m_IsHost) {
-            String allIds = "";
-            int i;
-            for (i=0; i<endpointIds.size(); i++) {
-                allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
-            }
-            allIds = allIds.substring(0,allIds.length()-1);
-            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
-        }
-
-        //Starten der nächsten Activity
-        if (m_IsHost) {
-            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
-        } else {
-            startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-        }*/
-
-        finish();
+        connectTo(s, spielerName);
     }
 
     @Override
@@ -297,7 +247,7 @@ public class Lobby extends Activity implements
             public void onResult(Connections.StartAdvertisingResult result) {
                 if (result.getStatus().isSuccess()) {
                     //Neues Spiel zu Liste hinzufügen
-                    spieleListe = new String[]{"2er Schnapsen von "+spielerName};
+                    spieleListe = new String[]{"2er Schnapsen von Veronika"};
 
                     adapterSpieleListView = new ArrayAdapter<String>(appContext,
                             android.R.layout.simple_list_item_1, spieleListe);
@@ -337,7 +287,7 @@ public class Lobby extends Activity implements
                         if (status.isSuccess()) {
 
                             //Neues Spiel zu Liste hinzufügen
-                            spieleListe = new String[]{"2er Schnapsen von "+spielerName};
+                            spieleListe = new String[]{"2er Schnapsen von Veronika"};
 
                             adapterSpieleListView = new ArrayAdapter<String>(appContext,
                                     android.R.layout.simple_list_item_1, spieleListe);
@@ -375,8 +325,19 @@ public class Lobby extends Activity implements
                             endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
                             deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
 
+                            int i;
+                            if (m_IsHost) {
+                                String allIds = "";
+                                for (i=0; i<endpointIds.size(); i++) {
+                                    allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
+                                }
+                                allIds = allIds.substring(0,allIds.length()-1);
+                                Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                            }
+
                             //Starten der nächsten Activity
-                            startActivity(new Intent(Lobby.this, NeuesSpiel.class));
+                            startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                            finish();
 
                         } else {
                             // Verbindung fehlgeschlagen
@@ -404,8 +365,21 @@ public class Lobby extends Activity implements
                         //Beenden der Service anzeige nach Verbindung der Geräte
                         Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
-                        endpointIds.add(remoteEndpointId);
-                        deviceIds.add(remoteDeviceId);
+                        endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
+                        deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
+
+                        int i;
+                        if (m_IsHost) {
+                            String allIds = "";
+                            for (i=0; i<endpointIds.size(); i++) {
+                                allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
+                            }
+                            allIds = allIds.substring(0,allIds.length()-1);
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                        }
+
+                        startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
+                        finish();
 
                     } else {
                         Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
