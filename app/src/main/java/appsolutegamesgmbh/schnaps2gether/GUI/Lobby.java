@@ -37,9 +37,9 @@ public class Lobby extends Activity implements
         Connections.EndpointDiscoveryListener {
 
     private Context appContext;
-    //private ListView spieleListView;
-    //private String[] spieleListe = new String[]{};
-    //private ArrayAdapter<String> adapterSpieleListView;
+    private ListView spieleListView;
+    private String[] spieleListe = new String[]{};
+    private ArrayAdapter<String> adapterSpieleListView;
     private String spielerName = "";
 
     // Legt fest ob das Gerät der Host ist
@@ -61,10 +61,10 @@ public class Lobby extends Activity implements
         setContentView(R.layout.activity_lobby);
 
         // Get ListView object from xml
-        //spieleListView = (ListView) findViewById(R.id.list);
+        spieleListView = (ListView) findViewById(R.id.list);
 
         // Defined Array values to show in ListView
-        //spieleListe= new String[] {};
+        spieleListe= new String[] {};
         appContext = this.getApplicationContext();
 
         //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
@@ -75,17 +75,10 @@ public class Lobby extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
 
-
-      //adapterSpieleListView = new ArrayAdapter<String>(this,
-        //android.R.layout.simple_list_item_1, android.R.id.text1, spieleListe);
-
-        // Assign adapter to ListView
-        //spieleListView.setAdapter(adapterSpieleListView);
-
         //Anzeigen der bereits zum Spiel verbundenen Spieler
         //Verbinden des Spielers zu Spiel
         //Wenn Spiel genügend Spieler hat wird Spiel begonnen
-        /*spieleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spieleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view,
         int position, long id) {
@@ -120,9 +113,9 @@ public class Lobby extends Activity implements
                     startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                 }
 
-                finish();
+                finish();*/
             }
-        });*/
+        });
 
         spielerName = Startmenue.SpielerName;
     }
@@ -188,7 +181,7 @@ public class Lobby extends Activity implements
     * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
      */
     public void onEndpointFound(String s, String s2, String s3, String s4) {
-        connectTo(s, spielerName);
+        /*connectTo(s, spielerName);
 
         if (m_IsHost) {
             String allIds = "";
@@ -205,7 +198,7 @@ public class Lobby extends Activity implements
             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
         } else {
             startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-        }
+        }*/
 
         finish();
     }
@@ -303,16 +296,21 @@ public class Lobby extends Activity implements
             @Override
             public void onResult(Connections.StartAdvertisingResult result) {
                 if (result.getStatus().isSuccess()) {
+                    //Neues Spiel zu Liste hinzufügen
+                    spieleListe = new String[]{"2er Schnapsen von "+spielerName};
+
+                    adapterSpieleListView = new ArrayAdapter<String>(appContext,
+                            android.R.layout.simple_list_item_1, spieleListe);
+
+                    // Assign adapter to ListView
+                    spieleListView.setAdapter(adapterSpieleListView);
+
                 } else {
                     int statusCode = result.getStatus().getStatusCode();
                     // Advertising failed - see statusCode for more details
                 }
             }
         });
-
-        //Neues Spiel zu Liste hinzufügen
-        //spieleListe[0] = "2er Schnapsen von "+spielerName;
-        //adapterSpieleListView.notifyDataSetChanged();
     }
 
     private void startDiscovery() {
@@ -337,6 +335,15 @@ public class Lobby extends Activity implements
 
                         //Service wurde gefunden
                         if (status.isSuccess()) {
+
+                            //Neues Spiel zu Liste hinzufügen
+                            spieleListe = new String[]{"2er Schnapsen von "+spielerName};
+
+                            adapterSpieleListView = new ArrayAdapter<String>(appContext,
+                                    android.R.layout.simple_list_item_1, spieleListe);
+
+                            // Assign adapter to ListView
+                            spieleListView.setAdapter(adapterSpieleListView);
 
                             String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
                             String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
