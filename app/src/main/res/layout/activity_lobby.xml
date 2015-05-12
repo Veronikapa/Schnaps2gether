@@ -7,6 +7,7 @@
     tools:context=".GUI.Lobby"
     android:orientation="vertical">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:text="Lobby - Warteraum"
@@ -16,31 +17,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:id="@+id/listView_Spieluebersicht"
-        android:visibility="visible"
-        style="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
-        android:choiceMode="singleChoice"
-        android:clickable="true"
-        android:fastScrollEnabled="true"
-        android:fastScrollAlwaysVisible="true"
-        android:focusable="false"
-        android:layout_above="@+id/cmd_neu"
-        android:layout_alignRight="@+id/cmd_abbrechen"
-        android:layout_alignEnd="@+id/cmd_abbrechen"
-        android:minHeight="170dp"
-        android:layout_weight="1.97" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:orientation ="horizontal"
-        android:minHeight="50dp"
-        android:layout_weight="1">
-
-        <Button
+    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/neu"
@@ -69,7 +46,7 @@
             android:id="@+id/cmd_abbrechen"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        </LinearLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
