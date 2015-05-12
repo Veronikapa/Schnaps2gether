@@ -113,7 +113,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         appContext = this.getApplicationContext();
 
         bummerl = new Bummerl2();
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+       Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);

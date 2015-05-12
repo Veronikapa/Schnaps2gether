@@ -167,7 +167,7 @@ public class Lobby extends Activity implements
             for (String ids: aIds) {
                 String[] aId = ids.split(":");
                 endpointIds.add(aId[0]);
-                deviceIds.add(aId[1]);
+                //deviceIds.add(aId[1]);
             }
         }
 
@@ -360,13 +360,13 @@ public class Lobby extends Activity implements
                 @Override
                 public void onResult(Status status) {
                     if (status.isSuccess()) {
-                        Toast.makeText(appContext, "Vebindung hergestellt zu" + remoteEndpointName,
+                        Toast.makeText(appContext, "Vebindung hergestellt zu " + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
                         //Beenden der Service anzeige nach Verbindung der Geräte
                         Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
-                        endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
-                        deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
+                        endpointIds.add(remoteEndpointId);
+                        deviceIds.add(remoteDeviceId);
 
                         int i;
                         if (m_IsHost) {
