@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,34 +57,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private static Context appContext;
 
-    private ImageButton imagebuttonKarte1;
-    private ImageButton imagebuttonKarte2;
-    private ImageButton imagebuttonKarte3;
-    private ImageButton imagebuttonKarte4;
-    private ImageButton imagebuttonKarte5;
-
-    private static ImageButton imagebuttonEigeneKarte;
-    private static ImageButton imagebuttonGegnerischeKarte;
-    private static ImageButton imagebuttonTrumpfkarte;
-
-    private static  ArrayList<ImageButton> handkartenImageButtons;
-
-
-    /*private Button buttonKarte1;
+    private Button buttonKarte1;
     private Button buttonKarte2;
     private Button buttonKarte3;
     private Button buttonKarte4;
-    private Button buttonKarte5;*/
-    //private static ArrayList<Button> handkartenButtons;
-//    private static Button buttonEigeneKarte;
-//    private static Button buttonGegnerischeKarte;
-//    private static Button buttonTrumpfkarte;
-
+    private Button buttonKarte5;
+    private static ArrayList<Button> handkartenButtons;
+    private static Button buttonEigeneKarte;
+    private static Button buttonGegnerischeKarte;
     private static Button buttonStapel;
-
-
-
-
+    private static Button buttonTrumpfkarte;
     private static Button buttonZudrehen;
     private static Button button20er;
     private static Button button40er;
@@ -135,18 +116,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         appContext = this.getApplicationContext();
 
-
-
-        imagebuttonKarte1 = (ImageButton) findViewById(R.id.main_imageButton1);
-        imagebuttonKarte2 = (ImageButton) findViewById(R.id.main_imageButton2);
-        imagebuttonKarte3 = (ImageButton) findViewById(R.id.main_imageButton3);
-        imagebuttonKarte4 = (ImageButton) findViewById(R.id.main_imageButton4);
-        imagebuttonKarte5 = (ImageButton) findViewById(R.id.main_imageButton5);
-        /*buttonKarte1 = (Button) findViewById(R.id.main_button1);
+        buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
         buttonKarte3 = (Button) findViewById(R.id.main_button3);
         buttonKarte4 = (Button) findViewById(R.id.main_button4);
-        buttonKarte5 = (Button) findViewById(R.id.main_button5);*/
+        buttonKarte5 = (Button) findViewById(R.id.main_button5);
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
@@ -156,33 +130,17 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         punkteSelbst = (TextView) findViewById(R.id.pointsText2);
         txtSelbst = (TextView) findViewById(R.id.I);
         txtGegner = (TextView) findViewById(R.id.Enemy);
-
-
-     /*   buttonEigeneKarte = (Button) findViewById(R.id.main_buttonI);
+        buttonEigeneKarte = (Button) findViewById(R.id.main_buttonI);
         buttonGegnerischeKarte = (Button) findViewById(R.id.main_buttonE);
-        buttonTrumpfkarte = (Button) findViewById(R.id.main_buttonT);*/
-        imagebuttonEigeneKarte =(ImageButton)findViewById(R.id.main_imageButtonI);
-        imagebuttonTrumpfkarte =(ImageButton)findViewById(R.id.main_imageButtonT);
-        imagebuttonGegnerischeKarte =(ImageButton)findViewById(R.id.main_imageButtonE);
-
-
+        buttonTrumpfkarte = (Button) findViewById(R.id.main_buttonT);
         buttonStapel = (Button) findViewById(R.id.main_buttonD);
 
-        handkartenImageButtons = new ArrayList<ImageButton>();
-        handkartenImageButtons.add(0,imagebuttonKarte1);
-        handkartenImageButtons.add(1,imagebuttonKarte2);
-        handkartenImageButtons.add(2,imagebuttonKarte3);
-        handkartenImageButtons.add(3,imagebuttonKarte4);
-        handkartenImageButtons.add(4,imagebuttonKarte5);
-
-
-
-//        handkartenButtons = new ArrayList<Button>();
-//        handkartenButtons.add(0, buttonKarte1);
-//        handkartenButtons.add(1, buttonKarte2);
-//        handkartenButtons.add(2, buttonKarte3);
-//        handkartenButtons.add(3, buttonKarte4);
-//        handkartenButtons.add(4, buttonKarte5);
+        handkartenButtons = new ArrayList<Button>();
+        handkartenButtons.add(0, buttonKarte1);
+        handkartenButtons.add(1, buttonKarte2);
+        handkartenButtons.add(2, buttonKarte3);
+        handkartenButtons.add(3, buttonKarte4);
+        handkartenButtons.add(4, buttonKarte5);
 
         spielStart();
     }
@@ -192,9 +150,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonsNichtKlickbar();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
-
-        imagebuttonEigeneKarte.setImageResource(k.getImageResourceId());
-       // buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
+        buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
         }
@@ -228,31 +184,26 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
-            ImageButton imagebuttonK= handkartenImageButtons.get(i);
-            //Button buttonK = handkartenButtons.get(i);
+            Button buttonK = handkartenButtons.get(i);
             if (i<handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
-                imagebuttonK.setImageResource(k.getImageResourceId());
-                imagebuttonK.setVisibility(View.VISIBLE);
-               /* buttonK.setText(k.getFarbe() + k.getWertigkeit());
-                buttonK.setVisibility(View.VISIBLE);*/
+                buttonK.setText(k.getFarbe() + k.getWertigkeit());
+                buttonK.setVisibility(View.VISIBLE);
             } else {
-               // buttonK.setVisibility(View.INVISIBLE);
-                imagebuttonK.setVisibility(View.VISIBLE);
+                buttonK.setVisibility(View.INVISIBLE);
             }
         }
     }
 
     private static void punkteAktualisieren() {
-        /*buttonEigeneKarte.setText("");
-        buttonGegnerischeKarte.setText("");*/
+        buttonEigeneKarte.setText("");
+        buttonGegnerischeKarte.setText("");
         punkteGegner.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
     }
 
     private void gespielteKarteEntfernen(int i) {
-        handkartenImageButtons.get(i).setVisibility(View.INVISIBLE);
-        //handkartenButtons.get(i).setVisibility(View.INVISIBLE);
+        handkartenButtons.get(i).setVisibility(View.INVISIBLE);
     }
 
     private void spielStart() {
@@ -262,8 +213,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonStapel.setText("20");
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setText(R.string.buttonZ);
-       /* buttonEigeneKarte.setText("");
-        buttonGegnerischeKarte.setText("");*/
+        buttonEigeneKarte.setText("");
+        buttonGegnerischeKarte.setText("");
         punkteSelbst.setText("0");
         punkteGegner.setText("0");
         gegnerischeKarte = null;
@@ -271,19 +222,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void buttonsNichtKlickbar() {
-
-        imagebuttonKarte1.setEnabled(false);
-        imagebuttonKarte2.setEnabled(false);
-        imagebuttonKarte3.setEnabled(false);
-        imagebuttonKarte4.setEnabled(false);
-        imagebuttonKarte5.setEnabled(false);
-
-
-       /* buttonKarte1.setEnabled(false);
+        buttonKarte1.setEnabled(false);
         buttonKarte2.setEnabled(false);
         buttonKarte3.setEnabled(false);
         buttonKarte4.setEnabled(false);
-        buttonKarte5.setEnabled(false);*/
+        buttonKarte5.setEnabled(false);
         button20er.setEnabled(false);
         button40er.setEnabled(false);
         buttonZudrehen.setEnabled(false);
@@ -293,15 +236,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
-
-            ImageButton imagebuttonK= handkartenImageButtons.get(i);
-            //Button buttonK = handkartenButtons.get(i);
+            Button buttonK = handkartenButtons.get(i);
             if (i<handkartenAnz && kartenSpielbar.get(i)) {
-                imagebuttonK.setEnabled(true);
-                //buttonK.setEnabled(true);
+                buttonK.setEnabled(true);
             } else {
-                imagebuttonK.setEnabled(true);
-                //buttonK.setEnabled(false);
+                buttonK.setEnabled(false);
             }
         }
     }
@@ -364,8 +303,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public void trumpfkarteTauschen(View view) {
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
         trumpfkarte = new Karte(trumpfkarte.getFarbe(), "bube", 2);
-        imagebuttonTrumpfkarte.setImageResource(trumpfkarte.getImageResourceId());
-       // buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         buttonTrumpfTauschen.setEnabled(false);
         eigenerZug();
     }
@@ -454,9 +392,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
-                imagebuttonTrumpfkarte.setImageResource(trumpfkarte.getImageResourceId());
-
-                //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
@@ -472,9 +408,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
-                imagebuttonGegnerischeKarte.setImageResource(gegnerischeKarte.getImageResourceId());
-
-                //buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
+                buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 break;
             case WEITER: handKartenKlickbar();
                 if (message.substring(2,3).equals("1")) {
@@ -532,8 +466,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
-                imagebuttonTrumpfkarte.setImageResource(trumpfkarte.getImageResourceId());
-               // buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
@@ -549,10 +482,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
-
-
-                imagebuttonGegnerischeKarte.setImageResource(gegnerischeKarte.getImageResourceId());
-                //buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
+                buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 break;
             case WEITER: handKartenKlickbar();
                 if (message.substring(2,3).equals("1")) {
