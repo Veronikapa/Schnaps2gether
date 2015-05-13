@@ -1,6 +1,9 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import appsolutegamesgmbh.schnaps2gether.R;
 
 
 public class Karte {
@@ -66,13 +69,36 @@ public class Karte {
 
     public int getPunkte(String wertigkeit) {
         switch (wertigkeit) {
-            case "Bube": return 2;
-            case "Dame": return 3;
-            case "König": return 4;
+            case "bube": return 2;
+            case "dame": return 3;
+            case "koenig": return 4;
             case "10er": return 10;
-            case "Ass": return 11;
+            case "ass": return 11;
             default: return 0;
         }
+    }
+    public String getPngName() {
+        return new String(Farbe+"_"+Wertigkeit);
+    }
+
+
+    public int getImageResourceId(){
+        Field f;
+        int id = -1;
+        try {
+            f = R.drawable.class.getDeclaredField(getPngName());
+            id = f.getInt(null);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 
     @Override
@@ -84,29 +110,29 @@ public class Karte {
     {
         ArrayList<Karte> Kartendeck = new ArrayList<Karte>(20);
 
-        Kartendeck.add(new Karte("Herz","Bube",2));
-        Kartendeck.add(new Karte("Herz","Dame",3));
-        Kartendeck.add(new Karte("Herz","König",4));
-        Kartendeck.add(new Karte("Herz","10er",10));
-        Kartendeck.add(new Karte("Herz","Ass",11));
+        Kartendeck.add(new Karte("herz","bube",2));
+        Kartendeck.add(new Karte("herz","dame",3));
+        Kartendeck.add(new Karte("herz","koenig",4));
+        Kartendeck.add(new Karte("herz","10er",10));
+        Kartendeck.add(new Karte("herz","ass",11));
 
-        Kartendeck.add(new Karte("Karo","Bube",2));
-        Kartendeck.add(new Karte("Karo","Dame",3));
-        Kartendeck.add(new Karte("Karo","König",4));
-        Kartendeck.add(new Karte("Karo","10er",10));
-        Kartendeck.add(new Karte("Karo","Ass",11));
+        Kartendeck.add(new Karte("karo","bube",2));
+        Kartendeck.add(new Karte("karo","dame",3));
+        Kartendeck.add(new Karte("karo","koenig",4));
+        Kartendeck.add(new Karte("karo","10er",10));
+        Kartendeck.add(new Karte("karo","ass",11));
 
-        Kartendeck.add(new Karte("Pik","Bube",2));
-        Kartendeck.add(new Karte("Pik","Dame",3));
-        Kartendeck.add(new Karte("Pik","König",4));
-        Kartendeck.add(new Karte("Pik","10er",10));
-        Kartendeck.add(new Karte("Pik","Ass",11));
+        Kartendeck.add(new Karte("pik","bube",2));
+        Kartendeck.add(new Karte("pik","dame",3));
+        Kartendeck.add(new Karte("pik","koenig",4));
+        Kartendeck.add(new Karte("pik","10er",10));
+        Kartendeck.add(new Karte("pik","ass",11));
 
-        Kartendeck.add(new Karte("Kreuz","Bube",2));
-        Kartendeck.add(new Karte("Kreuz","Dame",3));
-        Kartendeck.add(new Karte("Kreuz","König",4));
-        Kartendeck.add(new Karte("Kreuz","10er",10));
-        Kartendeck.add(new Karte("Kreuz","Ass",11));
+        Kartendeck.add(new Karte("kreuz","bube",2));
+        Kartendeck.add(new Karte("kreuz","dame",3));
+        Kartendeck.add(new Karte("kreuz","koenig",4));
+        Kartendeck.add(new Karte("kreuz","10er",10));
+        Kartendeck.add(new Karte("kreuz","ass",11));
 
         return Kartendeck;
     }

@@ -171,7 +171,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         if (!spiel.isZugedreht()) {
             buttonZudrehen.setEnabled(true);
 
-            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
+            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(),"bube",2))) {
                 buttonTrumpfTauschen.setEnabled(true);
             }
             else {
@@ -336,16 +336,16 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         ArrayList<String> a = spiel.hat20er(selbst);
         for (int i = 0; i < a.size(); i++) {
             switch (a.get(i)) {
-                case "Herz":
+                case "herz":
                     herz20er.setVisible(true);
                     break;
-                case "Karo":
+                case "karo":
                     karo20er.setVisible(true);
                     break;
-                case "Pik":
+                case "pik":
                     pik20er.setVisible(true);
                     break;
-                case "Kreuz":
+                case "kreuz":
                     kreuz20er.setVisible(true);
                     break;
                 default:
@@ -367,7 +367,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void trumpfkarteTauschen(View view) {
-        spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
+        spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"bube",2), selbst);
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         handAktualisieren();
@@ -411,20 +411,20 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                spiel.Ansagen20er("Herz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Herz").getBytes());
+                spiel.Ansagen20er("herz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"herz").getBytes());
                 break;
             case R.id.karo_20er:
-                spiel.Ansagen20er("Karo", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Karo").getBytes());
+                spiel.Ansagen20er("karo", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"karo").getBytes());
                 break;
             case R.id.pik_20er:
-                spiel.Ansagen20er("Pik", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Pik").getBytes());
+                spiel.Ansagen20er("pik", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                spiel.Ansagen20er("Kreuz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Kreuz").getBytes());
+                spiel.Ansagen20er("kreuz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"kreuz").getBytes());
                 break;
             default:
                 return false;
@@ -481,7 +481,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 gegnerischeHandAktualisieren();
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
+            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"bube",2), gegner);
                 gegnerischeHandAktualisieren();
                 gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
@@ -528,7 +528,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 gegnerischeHandAktualisieren();
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
+            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"bube",2), gegner);
                 gegnerischeHandAktualisieren();
                 gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();

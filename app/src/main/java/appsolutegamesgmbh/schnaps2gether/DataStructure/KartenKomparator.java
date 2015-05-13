@@ -15,15 +15,15 @@ public class KartenKomparator implements Comparator<Karte> {
         }
         else
         {
-            if(lhs.getFarbe() == "Kreuz")
+            if(lhs.getFarbe() == "kreuz")
                 return -1;
-            else if(lhs.getFarbe() == "Herz")
+            else if(lhs.getFarbe() == "herz")
                 return 1;
-            else if(rhs.getFarbe() == "Kreuz")
+            else if(rhs.getFarbe() == "kreuz")
                 return 1;
-            else if(rhs.getFarbe() == "Herz")
+            else if(rhs.getFarbe() == "herz")
                 return -1;
-            else if(lhs.getFarbe() == "Pik" && rhs.getFarbe() == "Karo")
+            else if(lhs.getFarbe() == "pik" && rhs.getFarbe() == "karo")
                 return -1;
             else
                 return 1;

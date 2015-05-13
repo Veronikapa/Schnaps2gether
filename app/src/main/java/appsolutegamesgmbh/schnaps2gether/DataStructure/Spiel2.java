@@ -236,10 +236,10 @@ public class Spiel2 {
         Karte hoechsteKartePik = null;
         Karte hoechsteKarte = null;
 
-        hoechsteKarteHerz = spieleHoechsteAusstehendeKarteEinerFarbe("Herz");
-        hoechsteKarteKaro = spieleHoechsteAusstehendeKarteEinerFarbe("Karo");
-        hoechsteKarteKreuz = spieleHoechsteAusstehendeKarteEinerFarbe("Kreuz");
-        hoechsteKartePik = spieleHoechsteAusstehendeKarteEinerFarbe("Pik");
+        hoechsteKarteHerz = spieleHoechsteAusstehendeKarteEinerFarbe("herz");
+        hoechsteKarteKaro = spieleHoechsteAusstehendeKarteEinerFarbe("karo");
+        hoechsteKarteKreuz = spieleHoechsteAusstehendeKarteEinerFarbe("kreuz");
+        hoechsteKartePik = spieleHoechsteAusstehendeKarteEinerFarbe("pik");
 
         /*if(hoechsteKarteHerz.getPunkte() >= hoechsteKarteKaro.getPunkte())
             hoechsteKarte = hoechsteKarteHerz;
@@ -290,19 +290,19 @@ public class Spiel2 {
         for (int i = 0; i < s2.Gestochen.size(); i++) {
 
             if (s2.Gestochen.get(i).getFarbe() == farbe) {
-                if (!farbeAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "Ass")
+                if (!farbeAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "ass")
                     farbeAssGestochen = true;
 
                 else if (!farbe10erGestochen && s2.Gestochen.get(i).getWertigkeit() == "10er")
                     farbe10erGestochen = true;
 
-                else if (!farbeKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "König")
+                else if (!farbeKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "koenig")
                     farbeKoenigGestochen = true;
 
-                else if (!farbeDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
+                else if (!farbeDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "dame")
                     farbeDameGestochen = true;
 
-                else if (!farbeBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                else if (!farbeBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "bube")
                     farbeBubGestochen = true;
             }
         }
@@ -398,19 +398,19 @@ public class Spiel2 {
         for (int i = 0; i < s2.Gestochen.size(); i++) {
 
             if (s2.Gestochen.get(i).getFarbe() == aufgedeckterTrumpf.getFarbe()) {
-                if (!trumpfAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "Ass")
+                if (!trumpfAssGestochen && s2.Gestochen.get(i).getWertigkeit() == "ass")
                     trumpfAssGestochen = true;
 
                 else if (!trumpf10erGestochen && s2.Gestochen.get(i).getWertigkeit() == "10er")
                     trumpf10erGestochen = true;
 
-                else if (!trumpfKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "König")
+                else if (!trumpfKoenigGestochen && s2.Gestochen.get(i).getWertigkeit() == "koenig")
                     trumpfKoenigGestochen = true;
 
-                else if (!trumpfDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
+                else if (!trumpfDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "dame")
                     trumpfDameGestochen = true;
 
-                else if (!trumpfBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                else if (!trumpfBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "bube")
                     trumpfBubGestochen = true;
             }
         }
@@ -418,19 +418,19 @@ public class Spiel2 {
         for (int i = 0; i < s2.Hand.size(); i++) {
 
             if (s2.Hand.get(i).getFarbe() == aufgedeckterTrumpf.getFarbe()) {
-                if (!trumpfAssGestochen && s2.Hand.get(i).getWertigkeit() == "Ass")
+                if (!trumpfAssGestochen && s2.Hand.get(i).getWertigkeit() == "ass")
                     habeTrumpfAss = true;
 
                 else if (!trumpf10erGestochen && s2.Hand.get(i).getWertigkeit() == "10er")
                     habeTrumpf10er = true;
 
-                else if (!trumpfKoenigGestochen && s2.Hand.get(i).getWertigkeit() == "König")
+                else if (!trumpfKoenigGestochen && s2.Hand.get(i).getWertigkeit() == "koenig")
                     habeTrumpfKoenig= true;
 
-                else if (!trumpfDameGestochen && s2.Hand.get(i).getWertigkeit() == "Dame")
+                else if (!trumpfDameGestochen && s2.Hand.get(i).getWertigkeit() == "dame")
                     habeTrumpfDame= true;
 
-                else if (!trumpfBubGestochen && s2.Hand.get(i).getWertigkeit() == "Bub")
+                else if (!trumpfBubGestochen && s2.Hand.get(i).getWertigkeit() == "bube")
                     habeTrumpfBub = true;
             }
         }
@@ -880,7 +880,7 @@ public class Spiel2 {
 
     public Karte TrumpfkarteAustauschen(Karte karte, Spieler s)
     {
-        if(karte.getFarbe() == trumpf && karte.getWertigkeit() == "Bube")
+        if(karte.getFarbe() == trumpf && karte.getWertigkeit() == "bube")
         {
             Karte Rueckgabekarte = aufgedeckterTrumpf;
             aufgedeckterTrumpf = karte;
@@ -898,14 +898,14 @@ public class Spiel2 {
     public ArrayList<String> hat20er(Spieler s)
     {
         ArrayList<String> h20er = new ArrayList<String>(4);
-        if(s.Hand.contains(new Karte("Herz","Dame", 3))&&s.Hand.contains(new Karte("Herz","König", 4)))
-            h20er.add("Herz");
-        if(s.Hand.contains(new Karte("Pik","Dame", 3))&&s.Hand.contains(new Karte("Pik","König", 4)))
-            h20er.add("Pik");
-        if(s.Hand.contains(new Karte("Karo","Dame", 3))&&s.Hand.contains(new Karte("Karo","König", 4)))
-            h20er.add("Karo");
-        if(s.Hand.contains(new Karte("Kreuz","Dame", 3))&&s.Hand.contains(new Karte("Kreuz","König", 4)))
-            h20er.add("Kreuz");
+        if(s.Hand.contains(new Karte("herz","dame", 3))&&s.Hand.contains(new Karte("herz","koenig", 4)))
+            h20er.add("herz");
+        if(s.Hand.contains(new Karte("pik","dame", 3))&&s.Hand.contains(new Karte("pik","koenig", 4)))
+            h20er.add("pik");
+        if(s.Hand.contains(new Karte("karo","dame", 3))&&s.Hand.contains(new Karte("karo","koenig", 4)))
+            h20er.add("karo");
+        if(s.Hand.contains(new Karte("kreuz","dame", 3))&&s.Hand.contains(new Karte("kreuz","koenig", 4)))
+            h20er.add("kreuz");
 
         return h20er;
     }
@@ -937,7 +937,7 @@ public class Spiel2 {
     {
         if (angesagteFarbe != null) {
             if (karte.getFarbe().equals(angesagteFarbe) &&
-                    (karte.getWertigkeit().equals("König") || karte.getWertigkeit().equals("Dame"))) {
+                    (karte.getWertigkeit().equals("koenig") || karte.getWertigkeit().equals("dame"))) {
                 return true;
             }
             else {
@@ -955,20 +955,20 @@ public class Spiel2 {
                     return true;
                 else
                 {
-                    if(karteamTisch.getPunkte() == 3 &&  (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
-                            s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                    if(karteamTisch.getPunkte() == 3 &&  (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"koenig",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
+                            s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"ass",11))))
                         return false;
-                    else if(karteamTisch.getPunkte() == 4 && (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                    else if(karteamTisch.getPunkte() == 4 && (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"ass",11))))
                         return false;
-                    else if(karteamTisch.getPunkte() == 10 && s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
+                    else if(karteamTisch.getPunkte() == 10 && s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"ass",11)))
                         return false;
                     else
                         return true;
                 }
             }
-            else if(s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Bube",2)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Dame",3)) ||
-                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
-                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
+            else if(s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"bube",2)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"dame",3)) ||
+                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"koenig",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
+                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"ass",11)))
             {
                 return false;
             }
@@ -976,9 +976,9 @@ public class Spiel2 {
             {
                 return true;
             }
-            else if(s1.Hand.contains(new Karte(trumpf,"Bube",2)) || s1.Hand.contains(new Karte(trumpf,"Dame",3)) ||
-                    s1.Hand.contains(new Karte(trumpf,"König",4)) || s1.Hand.contains(new Karte(trumpf,"10er",10)) ||
-                    s1.Hand.contains(new Karte(trumpf,"Ass",11)))
+            else if(s1.Hand.contains(new Karte(trumpf,"bube",2)) || s1.Hand.contains(new Karte(trumpf,"dame",3)) ||
+                    s1.Hand.contains(new Karte(trumpf,"koenig",4)) || s1.Hand.contains(new Karte(trumpf,"10er",10)) ||
+                    s1.Hand.contains(new Karte(trumpf,"ass",11)))
             {
                 return false;
             }

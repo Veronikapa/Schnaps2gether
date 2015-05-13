@@ -160,7 +160,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         if (!zugedreht) {
             buttonZudrehen.setEnabled(true);
 
-            if (selbst.Hand.contains(new Karte(trumpfkarte.getFarbe(),"Bube",2))) {
+            if (selbst.Hand.contains(new Karte(trumpfkarte.getFarbe(),"bube",2))) {
                 buttonTrumpfTauschen.setEnabled(true);
             }
             else {
@@ -274,16 +274,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         ArrayList<String> a = hab20er;
         for (int i = 0; i < a.size(); i++) {
             switch (a.get(i)) {
-                case "Herz":
+                case "herz":
                     herz20er.setVisible(true);
                     break;
-                case "Karo":
+                case "karo":
                     karo20er.setVisible(true);
                     break;
-                case "Pik":
+                case "pik":
                     pik20er.setVisible(true);
                     break;
-                case "Kreuz":
+                case "kreuz":
                     kreuz20er.setVisible(true);
                     break;
                 default:
@@ -302,7 +302,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     public void trumpfkarteTauschen(View view) {
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
-        trumpfkarte = new Karte(trumpfkarte.getFarbe(), "Bube", 2);
+        trumpfkarte = new Karte(trumpfkarte.getFarbe(), "bube", 2);
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         buttonTrumpfTauschen.setEnabled(false);
         eigenerZug();
@@ -343,16 +343,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"herz").getBytes());
                 break;
             case R.id.karo_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"karo").getBytes());
                 break;
             case R.id.pik_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"kreuz").getBytes());
                 break;
             default:
                 return false;
