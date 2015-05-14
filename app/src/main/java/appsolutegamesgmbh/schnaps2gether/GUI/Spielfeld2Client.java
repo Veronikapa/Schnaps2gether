@@ -97,13 +97,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int p1;
     private static int p2;
 
-    /*@Override
+    @Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
-    }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

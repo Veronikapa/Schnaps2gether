@@ -168,12 +168,13 @@ public class Lobby extends Activity implements
         String message = new String(payload);
         if (!m_IsHost) {
             if (!endpointIdsReceived) {
-                String[] aIds = message.split(" ");
+    /*            String[] aIds = message.split(" ");
                 for (String ids : aIds) {
                     String[] aId = ids.split(":");
                     endpointIds.add(aId[0]);
-                    //deviceIds.add(aId[1]);
-                }
+                    //deviceIds.add(aId[1]);}
+     */
+                endpointIds.add(message);
                 endpointIdsReceived = true;
             } else {
                 Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
@@ -340,10 +341,11 @@ public class Lobby extends Activity implements
                             int i;
                             if (m_IsHost) {
                                 String allIds = "";
-                                for (i=0; i<endpointIds.size(); i++) {
+                                allIds = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
+                    /*            for (i=0; i<endpointIds.size(); i++) {
                                     allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
                                 }
-                                allIds = allIds.substring(0,allIds.length()-1);
+                                allIds = allIds.substring(0,allIds.length()-1);*/
                                 Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
                             }
 
