@@ -404,11 +404,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
-                    selbst.Hand.add(new Karte(hand[i]));
-                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
+                    Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
+                    /*selbst.Hand.add(new Karte(hand[i]));
+                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);*/
                 }
-                handAktualisieren();
-                buttonStapel.setText(Integer.toString(stapelKartenAnz));
+                /*handAktualisieren();
+                buttonStapel.setText(Integer.toString(stapelKartenAnz));*/
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
