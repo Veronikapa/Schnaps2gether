@@ -161,7 +161,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte);
         eigeneKarte = gegnerischeKarte = null;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGENDE.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
@@ -319,7 +319,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.Zudrehen();
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGEDREHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -358,7 +358,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void ansagen40er(View view) {
         spiel.Ansagen20er(spiel.getTrumpf(), selbst);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ANGESAGT40ER.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER+":").getBytes());
         if (spiel.istSpielzuEnde(bummerl)) spielEnde();
         punkteAktualisieren();
         button40er.setEnabled(false);
@@ -372,7 +372,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         handAktualisieren();
         buttonTrumpfTauschen.setEnabled(false);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT+":").getBytes());
         eigenerZug();
     }
 
@@ -540,7 +540,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDisconnected(String s) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, DISCONNECT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (DISCONNECT+":").getBytes());
         Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
         // Execute some code after 2 seconds have passed
         Handler handler2 = new Handler();

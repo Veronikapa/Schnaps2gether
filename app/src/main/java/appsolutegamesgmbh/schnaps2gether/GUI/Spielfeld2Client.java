@@ -97,13 +97,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int p1;
     private static int p2;
 
-    @Override
+    /*@Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +112,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         mGoogleApiClient = Lobby.m_GoogleApiClient;
         endpointIDs = Lobby.endpointIds;
-        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         appContext = this.getApplicationContext();
+        Toast.makeText(appContext,Boolean.toString(mGoogleApiClient.isConnected()),Toast.LENGTH_SHORT);
+        //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
@@ -257,7 +258,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         zugedreht = true;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGEDREHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -295,13 +296,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void ansagen40er(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ANGESAGT40ER.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER+":").getBytes());
         button40er.setEnabled(false);
         button20er.setEnabled(false);
     }
 
     public void trumpfkarteTauschen(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT+":").getBytes());
         trumpfkarte = new Karte(trumpfkarte.getFarbe(), "Bube", 2);
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         buttonTrumpfTauschen.setEnabled(false);
@@ -388,7 +389,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
     public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
-        switch ((message.substring(0,1))) {
+        switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
