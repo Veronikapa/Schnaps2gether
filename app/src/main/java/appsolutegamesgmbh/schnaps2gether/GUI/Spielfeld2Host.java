@@ -257,25 +257,31 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void spielStart() {
-        spiel = new Spiel2(bummerl.getAnzahlSpiele());
-        selbst = spiel.getS1();
-        gegner = spiel.getS2();
+        Handler handler0 = new Handler();
+        handler0.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                spiel = new Spiel2(bummerl.getAnzahlSpiele());
+                selbst = spiel.getS1();
+                gegner = spiel.getS2();
 
-        buttonStapel.setText("20");
-        trumpfkarte = spiel.getAufgedeckterTrumpf();
-        buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+                buttonStapel.setText("20");
+                trumpfkarte = spiel.getAufgedeckterTrumpf();
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
-        handKartenKlickbar();
-        buttonZudrehen.setEnabled(true);
-        buttonZudrehen.setText(R.string.buttonZ);
-        buttonEigeneKarte.setText("");
-        buttonGegnerischeKarte.setText("");
-        punkteSelbst.setText("0");
-        punkteGegner.setText("0");
-        gegnerischeKarte = null;
-        handAktualisieren();
-        eigenerZug();
+                handKartenKlickbar();
+                buttonZudrehen.setEnabled(true);
+                buttonZudrehen.setText(R.string.buttonZ);
+                buttonEigeneKarte.setText("");
+                buttonGegnerischeKarte.setText("");
+                punkteSelbst.setText("0");
+                punkteGegner.setText("0");
+                gegnerischeKarte = null;
+                handAktualisieren();
+                eigenerZug();
+            }
+        }, 2000);
     }
 
     private void buttonsNichtKlickbar() {
