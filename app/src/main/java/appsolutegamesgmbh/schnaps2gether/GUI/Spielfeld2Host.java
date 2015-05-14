@@ -266,13 +266,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 gegner = spiel.getS2();
 
                 Toast.makeText(appContext, "OwnEndpointID: "+Nearby.Connections.getLocalEndpointId(mGoogleApiClient), Toast.LENGTH_LONG).show();
-                Handler handler3  =  new Handler();
+                /*Handler handler3  =  new Handler();
                 handler3.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(appContext, "ClientEndpointID: " + endpointIDs.get(0), Toast.LENGTH_LONG).show();
                     }
-                }, 2000);
+                }, 2000);*/
 
                 buttonStapel.setText("20");
                 trumpfkarte = spiel.getAufgedeckterTrumpf();
