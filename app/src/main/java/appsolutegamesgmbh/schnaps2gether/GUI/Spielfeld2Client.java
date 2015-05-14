@@ -210,8 +210,14 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
-        Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT);
-        Toast.makeText(appContext, "HostEndpointID: "+endpointIDs.get(0), Toast.LENGTH_SHORT);
+        Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT).show();
+        Handler handler3  =  new Handler();
+        handler3.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(appContext, "HostEndpointID: " + endpointIDs.get(0), Toast.LENGTH_SHORT);
+            }
+        }, 2000);
 
         buttonStapel.setText("20");
         buttonZudrehen.setEnabled(true);

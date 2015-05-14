@@ -265,7 +265,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 selbst = spiel.getS1();
                 gegner = spiel.getS2();
 
-                Toast.makeText(appContext, "ClientEndpointID: "+endpointIDs.get(0), Toast.LENGTH_SHORT);
+                Toast.makeText(appContext, "ClientEndpointID: "+endpointIDs.get(0), Toast.LENGTH_SHORT).show();
 
                 buttonStapel.setText("20");
                 trumpfkarte = spiel.getAufgedeckterTrumpf();
