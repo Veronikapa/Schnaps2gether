@@ -390,14 +390,14 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         switch ((message.split(":")[0])) {
-            case BUMMERL: //bummerl = new Bummerl2(message.substring(2));
-                Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
+            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+                //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
-                stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
+                stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
                 String[] hand = messageParts[1].substring(2).split(" ");
                 String[] spielbar = messageParts[2].split(" ");
                 selbst.Hand = new ArrayList<Karte>();

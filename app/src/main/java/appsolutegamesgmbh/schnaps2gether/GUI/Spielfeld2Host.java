@@ -274,7 +274,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         punkteSelbst.setText("0");
         punkteGegner.setText("0");
         gegnerischeKarte = null;
-        //handAktualisieren();
+        handAktualisieren();
         eigenerZug();
     }
 
