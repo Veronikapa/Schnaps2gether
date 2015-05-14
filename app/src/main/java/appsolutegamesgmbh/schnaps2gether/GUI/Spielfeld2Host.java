@@ -264,7 +264,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonStapel.setText("20");
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
         handKartenKlickbar();
         buttonZudrehen.setEnabled(true);
