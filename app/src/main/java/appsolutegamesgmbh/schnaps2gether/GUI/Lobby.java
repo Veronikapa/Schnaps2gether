@@ -51,6 +51,8 @@ public class Lobby extends Activity implements
     public static ArrayList<String> endpointIds = new ArrayList<String>();
     public static ArrayList<String> deviceIds = new ArrayList<String>();
 
+    public static  boolean endpointIdsReceived;
+
     //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
             ConnectivityManager.TYPE_ETHERNET};
@@ -74,6 +76,8 @@ public class Lobby extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
+
+        endpointIdsReceived = false;
 
         //Anzeigen der bereits zum Spiel verbundenen Spieler
         //Verbinden des Spielers zu Spiel
@@ -163,13 +167,17 @@ public class Lobby extends Activity implements
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         if (!m_IsHost) {
-            String[] aIds = message.split(" ");
-            for (String ids: aIds) {
-                String[] aId = ids.split(":");
-                endpointIds.add(aId[0]);
-                //deviceIds.add(aId[1]);
+            if (!endpointIdsReceived) {
+                String[] aIds = message.split(" ");
+                for (String ids : aIds) {
+                    String[] aId = ids.split(":");
+                    endpointIds.add(aId[0]);
+                    //deviceIds.add(aId[1]);
+                }
+                endpointIdsReceived = true;
+            } else {
+                Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
             }
-            Spielfeld2Client.receiveFromLobby(endpointID,payload,isReliable);
         }
 
         else

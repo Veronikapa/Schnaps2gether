@@ -39,9 +39,9 @@ public class Bummerl2 {
 
     public Bummerl2(String punkteUndAnzSpiele) {
         String[] punkteAnzSpiele = punkteUndAnzSpiele.split(" ");
-        punkteS1 = Integer.getInteger(punkteAnzSpiele[0]);
-        punkteS2 = Integer.getInteger(punkteAnzSpiele[1]);
-        AnzahlSpiele = Integer.getInteger(punkteAnzSpiele[2]);
+        punkteS1 = Integer.decode(punkteAnzSpiele[0]);
+        punkteS2 = Integer.decode(punkteAnzSpiele[1]);
+        AnzahlSpiele = Integer.decode(punkteAnzSpiele[2]);
     }
 
     public boolean istBummerlzuEnde()

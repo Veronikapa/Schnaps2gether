@@ -97,13 +97,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int p1;
     private static int p2;
 
-    @Override
+    /*@Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +112,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         mGoogleApiClient = Lobby.m_GoogleApiClient;
         endpointIDs = Lobby.endpointIds;
-        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         appContext = this.getApplicationContext();
+        //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
         buttonKarte2 = (Button) findViewById(R.id.main_button2);
@@ -210,6 +210,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
+        //Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_LONG).show();
+        /*Handler handler3  =  new Handler();
+        handler3.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(appContext, "HostEndpointID: " + endpointIDs.get(0), Toast.LENGTH_LONG).show();
+            }
+        }, 2000);*/
+        Toast.makeText(appContext, "HostEndpointID: " + endpointIDs.get(0), Toast.LENGTH_LONG).show();
+
         buttonStapel.setText("20");
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setText(R.string.buttonZ);
@@ -229,7 +239,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonKarte5.setEnabled(false);
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        buttonZudrehen.setEnabled(false);
+        //buttonZudrehen.setEnabled(false);
         buttonTrumpfTauschen.setEnabled(false);
     }
 
@@ -257,7 +267,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         zugedreht = true;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ZUGEDREHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -295,13 +305,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void ansagen40er(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, ANGESAGT40ER.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER+":").getBytes());
         button40er.setEnabled(false);
         button20er.setEnabled(false);
     }
 
     public void trumpfkarteTauschen(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, TRUMPFGETAUSCHT.getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT+":").getBytes());
         trumpfkarte = new Karte(trumpfkarte.getFarbe(), "Bube", 2);
         buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         buttonTrumpfTauschen.setEnabled(false);
@@ -388,21 +398,25 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
     public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
-        switch ((message.substring(0,1))) {
+        switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+                //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
-            case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
+            case TRUMPFKARTE: trumpfkarte = new Karte(message.split(":")[1]);
+                //Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
-                stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
-                String[] hand = messageParts[1].substring(2).split(" ");
-                String[] spielbar = messageParts[2].split(" ");
+                stapelKartenAnz = Integer.decode(messageParts[1]);
+                String[] hand = messageParts[2].substring(1).split(",");
+                String[] spielbar = messageParts[3].substring(1).split(" ");
+                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
+                    //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
                     selbst.Hand.add(new Karte(hand[i]));
-                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
+                    kartenSpielbar.add(spielbar[i].equals("1") ? true : false);
                 }
                 handAktualisieren();
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
@@ -427,6 +441,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case ZUGEDREHT: zugedreht = true;
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
+                zugedreht = true;
+                buttonZudrehen.setEnabled(false);
+                buttonZudrehen.setText("Zugedreht");
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -439,8 +456,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 // Execute some code after 2 seconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
-            case PUNKTE: p1 = Integer.getInteger(message.substring(2,3));
-                p2 = Integer.getInteger(message.substring(4,5));
+            case PUNKTE:
+                p1 = Integer.decode(message.substring(2,3));
+                p2 = Integer.decode(message.substring(4,5));
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
@@ -469,7 +487,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
-                stapelKartenAnz = Integer.getInteger(messageParts[1].substring(0, 1));
+                stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
                 String[] hand = messageParts[1].substring(2).split(" ");
                 String[] spielbar = messageParts[2].split(" ");
                 selbst.Hand = new ArrayList<Karte>();
@@ -513,8 +531,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 // Execute some code after 2 seconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
-            case PUNKTE: p1 = Integer.getInteger(message.substring(2,3));
-                p2 = Integer.getInteger(message.substring(4,5));
+            case PUNKTE:
+                p1 = Integer.decode(message.substring(2,3));
+                p2 = Integer.decode(message.substring(4,5));
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
