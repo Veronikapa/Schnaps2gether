@@ -114,7 +114,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         endpointIDs = Lobby.endpointIds;
 
         appContext = this.getApplicationContext();
-        Toast.makeText(appContext,Boolean.toString(mGoogleApiClient.isConnected()),Toast.LENGTH_SHORT);
+        Toast.makeText(appContext, Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT);
         //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
@@ -390,7 +390,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         switch ((message.split(":")[0])) {
-            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
+            case BUMMERL: //bummerl = new Bummerl2(message.substring(2));
+                Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
