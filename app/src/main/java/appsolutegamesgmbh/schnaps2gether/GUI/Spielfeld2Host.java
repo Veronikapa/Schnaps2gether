@@ -212,7 +212,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String gegKartenSpielBar = "";
         int gegnerischeHandkartenAnz = gegner.Hand.size();
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
-            gegnerischeHand += " "+gegner.Hand.get(i).toString();
+            gegnerischeHand += ","+gegner.Hand.get(i).toString();
             gegKartenSpielBar += spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0;
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;

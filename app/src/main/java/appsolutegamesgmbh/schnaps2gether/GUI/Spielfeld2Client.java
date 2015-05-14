@@ -399,7 +399,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
-                String[] hand = messageParts[1].substring(2).split(" ");
+                String[] hand = messageParts[1].substring(2).split(",");
                 String[] spielbar = messageParts[2].split(" ");
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
