@@ -230,7 +230,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonKarte5.setEnabled(false);
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        buttonZudrehen.setEnabled(false);
+        //buttonZudrehen.setEnabled(false);
         buttonTrumpfTauschen.setEnabled(false);
     }
 
@@ -394,8 +394,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
-                Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
-                //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                //Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.decode(messageParts[1]);
