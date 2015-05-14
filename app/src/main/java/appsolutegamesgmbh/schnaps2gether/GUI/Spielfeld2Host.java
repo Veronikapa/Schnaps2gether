@@ -216,7 +216,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             gegKartenSpielBar += spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0;
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+":"+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
     }
 
     private static void punkteAktualisieren() {

@@ -398,18 +398,18 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
-                stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
-                String[] hand = messageParts[1].substring(2).split(",");
-                String[] spielbar = messageParts[2].split(" ");
+                stapelKartenAnz = Integer.decode(messageParts[1]);
+                String[] hand = messageParts[2].substring(1).split(",");
+                String[] spielbar = messageParts[3].split(" ");
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
-                    Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
-                    /*selbst.Hand.add(new Karte(hand[i]));
-                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);*/
+                    //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
+                    selbst.Hand.add(new Karte(hand[i]));
+                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
                 }
-                /*handAktualisieren();
-                buttonStapel.setText(Integer.toString(stapelKartenAnz));*/
+                handAktualisieren();
+                buttonStapel.setText(Integer.toString(stapelKartenAnz));
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
