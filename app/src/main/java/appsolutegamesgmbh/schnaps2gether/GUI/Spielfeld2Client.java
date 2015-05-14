@@ -400,16 +400,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.decode(messageParts[1]);
                 String[] hand = messageParts[2].substring(1).split(",");
-                String[] spielbar = messageParts[3].split(" ");
-                Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
+                String[] spielbar = messageParts[3].substring(1).split(" ");
+                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
                     //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
                     selbst.Hand.add(new Karte(hand[i]));
-                    //kartenSpielbar.add(spielbar[i] == "1" ? true : false);
+                    kartenSpielbar.add(spielbar[i].equals("1") ? true : false);
                 }
-                //handAktualisieren();
+                handAktualisieren();
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
