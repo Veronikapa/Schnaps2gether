@@ -114,7 +114,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         endpointIDs = Lobby.endpointIds;
 
         appContext = this.getApplicationContext();
-        Toast.makeText(appContext, Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT);
+        Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT);
         //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         buttonKarte1 = (Button) findViewById(R.id.main_button1);
@@ -432,6 +432,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case ZUGEDREHT: zugedreht = true;
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
+                zugedreht = true;
+                buttonZudrehen.setEnabled(false);
+                buttonZudrehen.setText("Zugedreht");
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;

@@ -451,7 +451,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable)
     {
         String message = new String(payload);
-        switch ((message.substring(0,1))) {
+        switch (((message.split(":")[0]))) {
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
                 spiel.Auspielen(gegnerischeKarte, gegner);
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
