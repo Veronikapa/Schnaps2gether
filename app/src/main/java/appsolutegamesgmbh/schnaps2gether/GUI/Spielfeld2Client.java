@@ -210,12 +210,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
-        Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(appContext, "apiclientconnected: "+Boolean.toString(mGoogleApiClient.isConnected()), Toast.LENGTH_LONG).show();
         Handler handler3  =  new Handler();
         handler3.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(appContext, "HostEndpointID: " + endpointIDs.get(0), Toast.LENGTH_SHORT);
+                Toast.makeText(appContext, "HostEndpointID: " + endpointIDs.get(0), Toast.LENGTH_LONG).show();
             }
         }, 2000);
 
@@ -401,7 +401,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
-            case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
+            case TRUMPFKARTE: trumpfkarte = new Karte(message.split(":")[1]);
                 //Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
