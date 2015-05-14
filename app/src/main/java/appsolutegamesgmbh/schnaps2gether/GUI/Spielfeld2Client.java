@@ -394,7 +394,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
-                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
+                Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
+                //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
@@ -441,7 +442,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 // Execute some code after 2 seconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
-            case PUNKTE: p1 = Integer.decode(message.substring(2,3));
+            case PUNKTE:
+                p1 = Integer.decode(message.substring(2,3));
                 p2 = Integer.decode(message.substring(4,5));
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
@@ -515,7 +517,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 // Execute some code after 2 seconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
-            case PUNKTE: p1 = Integer.decode(message.substring(2,3));
+            case PUNKTE:
+                p1 = Integer.decode(message.substring(2,3));
                 p2 = Integer.decode(message.substring(4,5));
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
