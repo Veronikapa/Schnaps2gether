@@ -58,6 +58,7 @@ public class Spieler {
         Punkte = 0;
         Gestochen = new ArrayList<Karte>(20);
         istdran = false;
+        mitspieler = null;
     }
 
 }

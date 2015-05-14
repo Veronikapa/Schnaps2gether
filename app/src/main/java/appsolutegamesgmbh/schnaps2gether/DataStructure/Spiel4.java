@@ -389,33 +389,34 @@ public class Spiel4 {
         }
 
 
-        //s.isIstdran()=true --> Spieler hat den Stich gemacht, falls er einen 20er vor seinen ersten Stich angesagt hat werden diese Punkte nachträglich hinzugezählt
-        if(s2.isIstdran() && s2.isAngesagt20er())
+        //s.isIstdran()=true --> Spieler hat den Stich gemacht, falls er oder sein Mitspieler einen 20er vor seinen ersten Stich angesagt hat
+        // werden diese Punkte nachträglich hinzugezählt (auch wenn Mitspieler noch keinen Stich hat, werden Punkte trotzdem beim Mitspieler hinzugefügt)
+        if((s2.isIstdran() || s4.isIstdran()) && (s2.isAngesagt20er() || s4.isAngesagt20er()) )
         {
-            s2.setPunkte(s2.getPunkte() + s2.getMerkePunkte());
-            s2.setMerkePunkte(0);
-            s2.setAngesagt20er(false);
+            if(s2.isAngesagt20er()) {
+                s2.setPunkte(s2.getPunkte() + s2.getMerkePunkte());
+                s2.setMerkePunkte(0);
+                s2.setAngesagt20er(false);
+            }
+            else{
+                s4.setPunkte(s4.getPunkte()+s4.getMerkePunkte());
+                s4.setMerkePunkte(0);
+                s4.setAngesagt20er(false);
+            }
         }
-        else if(s1.isIstdran() && s1.isAngesagt20er())
+        else if((s1.isIstdran() || s3.isIstdran())&& (s1.isAngesagt20er() || s3.isAngesagt20er()))
         {
-            s1.setPunkte(s1.getPunkte() + s1.getMerkePunkte());
-            s1.setMerkePunkte(0);
-            s1.setAngesagt20er(false);
+            if(s1.isAngesagt20er()) {
+                s1.setPunkte(s1.getPunkte() + s1.getMerkePunkte());
+                s1.setMerkePunkte(0);
+                s1.setAngesagt20er(false);
+            }
+            else{
+                s3.setPunkte(s3.getPunkte() + s3.getMerkePunkte());
+                s3.setMerkePunkte(0);
+                s3.setAngesagt20er(false);
+            }
         }
-        else if(s3.isIstdran() && s3.isAngesagt20er())
-        {
-            s3.setPunkte(s3.getPunkte() + s3.getMerkePunkte());
-            s3.setMerkePunkte(0);
-            s3.setAngesagt20er(false);
-        }
-        else if(s4.isIstdran() && s4.isAngesagt20er())
-        {
-            s4.setPunkte(s4.getPunkte()+s4.getMerkePunkte());
-            s4.setMerkePunkte(0);
-            s4.setAngesagt20er(false);
-        }
-
-
     }
 
     //muss auch vor dem Ausspielen der ersten Karte überprüft werden, da bei einem Herren- oder Farbenjodler das Spiel sofort beendet ist
@@ -433,201 +434,153 @@ public class Spiel4 {
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
                     bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
                 }
+
+                bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                 return true;
             }
 
             return false;
         }
-
-        if(spiel.getSpiel() == "normal") {
+        else {
+            if (spiel.getSpiel() == "normal") {
                 if (s1.getPunkte() + s3.getPunkte() >= 66) {
                     if (s2.getPunkte() + s4.getPunkte() >= 33) {
-                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 1*flecken);
-                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 1*flecken);
-                    }
-                    else if (s2.getPunkte() + s4.getPunkte() > 0) {
-                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 2*flecken);
-                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 2*flecken);
-                    }
-                    else {
-                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
-                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 1 * flecken);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 1 * flecken);
+                    } else if (s2.getPunkte() + s4.getPunkte() > 0) {
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 2 * flecken);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 2 * flecken);
+                    } else {
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + 3 * flecken);
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + 3 * flecken);
                     }
                     return true;
                 } else if (s2.getPunkte() + s4.getPunkte() >= 66) {
                     if (s1.getPunkte() + s3.getPunkte() >= 33) {
-                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 1*flecken);
-                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 1*flecken);
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 1 * flecken);
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 1 * flecken);
                     } else if (s1.getPunkte() + s3.getPunkte() > 0) {
-                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 2*flecken);
-                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 2*flecken);
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 2 * flecken);
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 2 * flecken);
                     } else {
-                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
-                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 3*flecken);
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + 3 * flecken);
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + 3 * flecken);
                     }
 
+                    bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
 
                 } else if (s1.Hand.isEmpty()) {
                     if (s1.isIstdran() || s3.isIstdran()) {
                         if (s2.getPunkte() + s4.getPunkte() >= 33) {
-                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 1*flecken);
-                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 1*flecken);
+                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 1 * flecken);
+                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 1 * flecken);
+                        } else if (s2.getPunkte() + s4.getPunkte() > 0) {
+                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 2 * flecken);
+                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 2 * flecken);
+                        } else {
+                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 3 * flecken);
+                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 3 * flecken);
                         }
-                        else if (s2.getPunkte() + s4.getPunkte() > 0) {
-                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 2*flecken);
-                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 2*flecken);
-                        }
-                        else {
-                            bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
-                            bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
-                        }
+
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                         return true;
                     } else if (s2.isIstdran() || s4.isIstdran()) {
                         if (s1.getPunkte() + s3.getPunkte() >= 33) {
-                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 1*flecken);
-                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 1*flecken);
+                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 1 * flecken);
+                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 1 * flecken);
                         } else if (s1.getPunkte() + s3.getPunkte() > 0) {
-                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 2*flecken);
-                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 2*flecken);
+                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 2 * flecken);
+                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 2 * flecken);
                         } else {
-                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
-                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 3*flecken);
+                            bummerl.setPunkteS2(bummerl.getPunkteS2() + 3 * flecken);
+                            bummerl.setPunkteS4(bummerl.getPunkteS4() + 3 * flecken);
                         }
-
-                    return  true;
-                }
-                return false;
-            }
-
-        }
-
-        //TODO: 
-        else if(spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Kontraschnapser"){
-            if(s1 == spieler || s3 == spieler)
-            {
-                if(s2.isIstdran() || s3.isIstdran())
-                {
-                    bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                    bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.size() == 3)
-                {
-                    if(s1.getPunkte() >= 66)
-                    {
-                        bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
                     }
-                    else
-                    {
+                    return false;
+                }
+
+            } else if (spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Kontraschnapser") {
+                if (s1 == spieler || s3 == spieler) {
+                    if (s2.isIstdran() || s4.isIstdran() || spieler.getMitspieler().isIstdran()) {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                        bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    }
-                    return true;
-                }
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
 
-                return false;
-            }
-            else if(s2 == spieler)
-            {
-                if(s1.isIstdran() || s3.isIstdran())
-                {
-                    bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
-                    bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.size() == 3)
-                {
-                    if(s2.getPunkte() >= 66)
-                    {
-                        bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
+                    } else if (s1.Hand.size() == 3) {
+                        if (s1.getPunkte() + s3.getPunkte() >= 66) {
+                            bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+                            bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
+                        } else {
+                            bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
+                            bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
+                        }
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
                     }
-                    else
-                    {
+
+                    return false;
+                } else if (s2 == spieler || s4 == spieler) {
+                    if (s1.isIstdran() || s3.isIstdran() || spieler.getMitspieler().isIstdran()) {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    }
-                    return true;
-                }
 
-                return false;
-            }
-            else
-            {
-                if(s1.isIstdran() || s2.isIstdran())
-                {
-                    bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
-                    bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.size() == 3)
-                {
-                    if(s3.getPunkte() >= 66)
-                    {
-                        bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
+                    } else if (s1.Hand.size() == 3) {
+                        if (s2.getPunkte() + s4.getPunkte() >= 66) {
+                            bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
+                            bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
+                        } else {
+                            bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+                            bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
+                        }
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
                     }
-                    else
-                    {
-                        bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+
+                    return false;
+                }
+            } else if (spiel.getSpiel() == "Bauernschnapser" || spiel.getSpiel() == "Kontrabauernschnapser" || spiel.getSpiel() == "Land") {
+                if (s1 == spieler || s3 == spieler) {
+                    if (s2.isIstdran() || s4.isIstdran() || spieler.getMitspieler().isIstdran()) {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
+
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
+                    } else if (s1.Hand.isEmpty()) {
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
+
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
                     }
-                    return true;
-                }
 
-                return false;
+                    return false;
+                } else if (s2 == spieler || s4 == spieler) {
+                    if (s1.isIstdran() || s3.isIstdran() || spieler.getMitspieler().isIstdran()) {
+                        bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
+                        bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
+
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
+                    } else if (s1.Hand.isEmpty()) {
+                        bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
+                        bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
+
+                        bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                        return true;
+                    }
+
+                    return false;
+                }
             }
+            return false;
         }
-        else if(spiel.getSpiel() == "Bauernschnapser" || spiel.getSpiel() == "Kontrabauernschnapser" || spiel.getSpiel() == "Land"){
-            if(s1 == spieler)
-            {
-                if(s2.isIstdran() || s3.isIstdran())
-                {
-                    bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                    bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.isEmpty())
-                {
-                    bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
-                    return true;
-                }
-
-                return false;
-            }
-            else if(s2 == spieler)
-            {
-                if(s1.isIstdran() || s3.isIstdran())
-                {
-                    bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
-                    bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.isEmpty())
-                {
-                    bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                    return true;
-                }
-
-                return false;
-            }
-            else
-            {
-                if(s1.isIstdran() || s2.isIstdran())
-                {
-                    bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
-                    bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
-                    return true;
-                }
-                else if(s1.Hand.isEmpty())
-                {
-                    bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
-                    return true;
-                }
-
-                return false;
-            }
-        }
-        return false;
 
     }
 
@@ -642,7 +595,7 @@ public class Spiel4 {
         }
         else if(Spiel.getSpiel() == "Land" || Spiel.getSpiel() == "Kontraschnapser" || Spiel.getSpiel() == "Kontrabauernschnapser")
         {
-            if(Spiel.getPunkte() > spiel.getPunkte())
+            if(Spiel.getPunkte() > spiel.getPunkte() && !(s==spieler))
                 return true;
             else
                 return false;
@@ -706,14 +659,17 @@ public class Spiel4 {
     public ArrayList<String> hat20er(Spieler s)
     {
         ArrayList<String> h20er = new ArrayList<String>(4);
-        if(s.Hand.contains(new Karte("Herz","Dame", 3))&&s.Hand.contains(new Karte("Herz","König", 4)))
-            h20er.add("Herz");
-        if(s.Hand.contains(new Karte("Pik","Dame", 3))&&s.Hand.contains(new Karte("Pik","König", 4)))
-            h20er.add("Pik");
-        if(s.Hand.contains(new Karte("Karo","Dame", 3))&&s.Hand.contains(new Karte("Karo","König", 4)))
-            h20er.add("Karo");
-        if(s.Hand.contains(new Karte("Kreuz","Dame", 3))&&s.Hand.contains(new Karte("Kreuz","König", 4)))
-            h20er.add("Kreuz");
+
+        if(spiel.getSpiel() == "normal" || spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Bauernschnapser") {
+            if (s.Hand.contains(new Karte("Herz", "Dame", 3)) && s.Hand.contains(new Karte("Herz", "König", 4)))
+                h20er.add("Herz");
+            if (s.Hand.contains(new Karte("Pik", "Dame", 3)) && s.Hand.contains(new Karte("Pik", "König", 4)))
+                h20er.add("Pik");
+            if (s.Hand.contains(new Karte("Karo", "Dame", 3)) && s.Hand.contains(new Karte("Karo", "König", 4)))
+                h20er.add("Karo");
+            if (s.Hand.contains(new Karte("Kreuz", "Dame", 3)) && s.Hand.contains(new Karte("Kreuz", "König", 4)))
+                h20er.add("Kreuz");
+        }
 
         return h20er;
     }
