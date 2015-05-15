@@ -472,9 +472,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String message = new String(payload);
         switch (((message.split(":")[0]))) {
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.split(":")[1]);
-                Toast.makeText(appContext,"gegnerischeHand.contains("+gegnerischeKarte.toString()+") "+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(appContext,"gegnerischeHand.contains("+gegnerischeKarte.toString()+") "+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
                 spiel.Auspielen(gegnerischeKarte, gegner);
-                Toast.makeText(appContext,gegnerischeKarte.toString()+" entfernt"+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(appContext,gegnerischeKarte.toString()+" entfernt"+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 if (eigeneKarte!=null) {
                     zugEnde();

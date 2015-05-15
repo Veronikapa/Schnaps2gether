@@ -1,5 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -576,7 +578,8 @@ public class Spiel2 {
     {
         //Spieler mit höherer Karte istdran = true; Karten werden in Gestochen von Gewinner gelegt; Punkte werden bei Gewinner dazugezählt;
 
-
+        Log.d("host Karte", karteS1.toString());
+        Log.d("client Karte", karteS2.toString());
         angesagteFarbe = null;
 
 
