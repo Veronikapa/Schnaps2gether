@@ -248,7 +248,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonKarte5.setEnabled(false);
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        //buttonZudrehen.setEnabled(false);
+        buttonZudrehen.setEnabled(false);
         buttonTrumpfTauschen.setEnabled(false);
     }
 
@@ -424,8 +424,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
                     //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
-                    selbst.Hand.add(new Karte(hand[i]));
-                    kartenSpielbar.add(spielbar[i].equals("1") ? true : false);
+                    selbst.Hand.add(i,new Karte(hand[i]));
+                    kartenSpielbar.add(i,spielbar[i].equals("1") ? true : false);
                 }
                 handAktualisieren();
                 buttonStapel.setText(Integer.toString(stapelKartenAnz));
