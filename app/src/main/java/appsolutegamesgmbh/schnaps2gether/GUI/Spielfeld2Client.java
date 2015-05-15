@@ -277,7 +277,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         zugedreht = true;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setText("Zugedreht");
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -315,9 +315,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void ansagen40er(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER+":").getBytes());
-        /*button40er.setEnabled(false);
-        button20er.setEnabled(false);*/
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER + ":").getBytes());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handKartenKlickbar();
+            }
+        }, 1000);
+        button40er.setEnabled(false);
+        button20er.setEnabled(false);
     }
 
     public void trumpfkarteTauschen(View view) {
@@ -377,8 +384,15 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             default:
                 return false;
         }
-        /*button20er.setEnabled(false);
-        button40er.setEnabled(false);*/
+        button20er.setEnabled(false);
+        button40er.setEnabled(false);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handKartenKlickbar();
+            }
+        }, 1000);
         return true;
     }
 
