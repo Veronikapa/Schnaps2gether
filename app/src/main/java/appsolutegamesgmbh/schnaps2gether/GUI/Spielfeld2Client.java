@@ -229,6 +229,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         //Toast.makeText(appContext, "HostEndpointID==ownEndpointID " + Boolean.toString(Nearby.Connections.getLocalEndpointId(mGoogleApiClient).equals(endpointIDs.get(0))), Toast.LENGTH_LONG).show();
         //Toast.makeText(appContext, "endpointIDs.size: " + endpointIDs.size(), Toast.LENGTH_LONG).show();
 
+        zugedreht = false;
         buttonStapel.setText("20");
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setText(R.string.buttonZ);
