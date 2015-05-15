@@ -883,13 +883,13 @@ public class Spiel2 {
 
     public Karte TrumpfkarteAustauschen(Karte karte, Spieler s)
     {
-        if(karte.getFarbe() == trumpf && karte.getWertigkeit() == "Bube")
+        if(karte.getFarbe().equals(trumpf) && karte.getWertigkeit().equals("Bube"))
         {
             Karte Rueckgabekarte = aufgedeckterTrumpf;
             aufgedeckterTrumpf = karte;
-            s1.Hand.remove(karte);
-            s1.Hand.add(Rueckgabekarte);
-            Collections.sort(s1.Hand,new KartenKomparator());
+            s.Hand.remove(karte);
+            s.Hand.add(Rueckgabekarte);
+            Collections.sort(s.Hand,new KartenKomparator());
             return Rueckgabekarte;
         }
         else
