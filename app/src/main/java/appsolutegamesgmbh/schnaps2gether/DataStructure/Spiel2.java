@@ -146,10 +146,10 @@ public class Spiel2 {
         }
     }
 
-    public void Auspielen(Karte karteS1, Spieler s)
+    public void Auspielen(Karte karte, Spieler s)
     {
-        //Ausgespielte Karte wird aus Hand von S1 entfernt
-        s.Hand.remove(karteS1);
+        //Ausgespielte Karte wird aus Hand von s entfernt
+        s.Hand.remove(karte);
         s.setIstdran(false);
     }
 
@@ -585,8 +585,10 @@ public class Spiel2 {
 
         if(s1.isIstdran())
         {
+            Log.d("spieler","s1");
             if (karteS1.getFarbe().equals(trumpf) && karteS2.getFarbe().equals(trumpf))
             {
+                Log.d("fall","trumpf-trumpf");
                 if(karteS1.getPunkte()>karteS2.getPunkte())
                 {
                     s1.Gestochen.add(karteS1);
@@ -612,6 +614,7 @@ public class Spiel2 {
             }
             else if(!karteS1.getFarbe().equals(trumpf) && !karteS2.getFarbe().equals(trumpf))
             {
+                Log.d("fall","!trumpf-!trumpf");
                 if(karteS1.getFarbe().equals(karteS2.getFarbe())) {
                     if (karteS1.getPunkte() > karteS2.getPunkte()) {
                         s1.Gestochen.add(karteS1);
@@ -648,6 +651,7 @@ public class Spiel2 {
             {
                 if(karteS1.getFarbe().equals(trumpf))
                 {
+                    Log.d("fall","trumpf-!trumpf");
                     s1.Gestochen.add(karteS1);
                     s1.Gestochen.add(karteS2);
 
@@ -659,6 +663,7 @@ public class Spiel2 {
                 }
                 else
                 {
+                    Log.d("fall","!trumpf-trumpf");
                     s2.Gestochen.add(karteS1);
                     s2.Gestochen.add(karteS2);
 
@@ -672,6 +677,8 @@ public class Spiel2 {
         }
         else
         {
+
+            Log.d("spieler","s2");
             if (karteS1.getFarbe().equals(trumpf) && karteS2.getFarbe().equals(trumpf))
             {
                 if(karteS1.getPunkte()>karteS2.getPunkte())
@@ -771,6 +778,7 @@ public class Spiel2 {
             s1.setMerkePunkte(0);
             s1.setAngesagt20er(false);
         }
+        Log.d("trumpf", trumpf);
         Log.d("dran", s1.isIstdran() ? "Host" : "Client");
 
     }
