@@ -161,7 +161,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
             gegnerischeHandAktualisieren();
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+                }
+            }, 1000);
         } else {
             zugEnde();
         }
@@ -509,7 +515,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 gegnerischeHandAktualisieren();
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
+            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(), "Bube", 2), gegner);
                 gegnerischeHandAktualisieren();
                 trumpfkarte = spiel.getAufgedeckterTrumpf();
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
