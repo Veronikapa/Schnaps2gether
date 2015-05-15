@@ -219,9 +219,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String gegnerischeHand = "";
         String gegKartenSpielBar = "";
         int gegnerischeHandkartenAnz = gegner.Hand.size();
-        Toast.makeText(appContext,"gegnerischeHandkartenAnz: "+gegnerischeHandkartenAnz,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(appContext,"gegnerischeHandkartenAnz: "+gegnerischeHandkartenAnz,Toast.LENGTH_SHORT).show();
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
-            Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
+           // Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
             gegnerischeHand += ","+gegner.Hand.get(i).toString();
             gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0);
         }
@@ -472,7 +472,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String message = new String(payload);
         switch (((message.split(":")[0]))) {
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.split(":")[1]);
+                Toast.makeText(appContext,"gegnerischeHand.contains("+gegnerischeKarte.toString()+") "+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
                 spiel.Auspielen(gegnerischeKarte, gegner);
+                Toast.makeText(appContext,gegnerischeKarte.toString()+" entfernt"+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 if (eigeneKarte!=null) {
                     zugEnde();
