@@ -465,6 +465,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 // Execute some code after 2 seconds have passed
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
+                break;
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 p2 = Integer.decode(message.split(":")[1].split(" ")[1]);
