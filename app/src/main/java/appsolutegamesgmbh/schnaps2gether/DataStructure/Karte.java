@@ -42,9 +42,9 @@ public class Karte {
         if (getClass() != o.getClass())
             return false;
         Karte other = (Karte) o;
-        if (Farbe != other.Farbe)
+        if (!Farbe.equals(other.Farbe))
             return false;
-        if (Wertigkeit != other.Wertigkeit)
+        if (!Wertigkeit.equals(other.Wertigkeit))
             return false;
         if (Punkte != other.Punkte)
             return false;
