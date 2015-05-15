@@ -78,6 +78,7 @@ public class Lobby extends Activity implements
                 .build();
 
         endpointIdsReceived = false;
+        endpointIds = new ArrayList<>();
 
         //Anzeigen der bereits zum Spiel verbundenen Spieler
         //Verbinden des Spielers zu Spiel
@@ -335,10 +336,10 @@ public class Lobby extends Activity implements
                                                      byte[] bytes) {
                         if (status.isSuccess()) {
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
-                            endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
-                            deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));
+                            /*endpointIds.add(Nearby.Connections.getLocalEndpointId(m_GoogleApiClient));
+                            deviceIds.add(Nearby.Connections.getLocalDeviceId(m_GoogleApiClient));*/
 
-                            int i;
+                            /*int i;
                             if (m_IsHost) {
                                 String allIds = "";
                                 allIds = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
@@ -346,8 +347,8 @@ public class Lobby extends Activity implements
                                     allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
                                 }
                                 allIds = allIds.substring(0,allIds.length()-1);*/
-                                Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
-                            }
+                                /*Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                            }*/
 
                             //Starten der nächsten Activity
                             startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
@@ -383,14 +384,15 @@ public class Lobby extends Activity implements
                         deviceIds.add(remoteDeviceId);
 
                         int i;
-                        if (m_IsHost) {
-                            String allIds = "";
-                            for (i=0; i<endpointIds.size(); i++) {
-                                allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
-                            }
-                            allIds = allIds.substring(0,allIds.length()-1);
-                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                        /*String allIds = "";
+                        for (i=0; i<endpointIds.size(); i++) {
+                            allIds += endpointIds.get(i)+":"+deviceIds.get(i)+" ";
                         }
+                        allIds = allIds.substring(0,allIds.length()-1);
+                        Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());*/
+                        String allIds = "";
+                        allIds = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
+                        Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
 
                         startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                         finish();
