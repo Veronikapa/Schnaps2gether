@@ -583,9 +583,9 @@ public class Spiel2 {
         angesagteFarbe = null;
 
 
-        if(s1.isIstdran() == true)
+        if(s1.isIstdran())
         {
-            if (karteS1.getFarbe() == trumpf && karteS2.getFarbe() == trumpf)
+            if (karteS1.getFarbe().equals(trumpf) && karteS2.getFarbe().equals(trumpf))
             {
                 if(karteS1.getPunkte()>karteS2.getPunkte())
                 {
@@ -610,7 +610,7 @@ public class Spiel2 {
 
                 }
             }
-            else if(karteS1.getFarbe() != trumpf && karteS2.getFarbe() != trumpf)
+            else if(!karteS1.getFarbe().equals(trumpf) && !karteS2.getFarbe().equals(trumpf))
             {
                 if(karteS1.getFarbe().equals(karteS2.getFarbe())) {
                     if (karteS1.getPunkte() > karteS2.getPunkte()) {
@@ -646,7 +646,7 @@ public class Spiel2 {
             }
             else
             {
-                if(karteS1.getFarbe() == trumpf)
+                if(karteS1.getFarbe().equals(trumpf))
                 {
                     s1.Gestochen.add(karteS1);
                     s1.Gestochen.add(karteS2);
@@ -672,7 +672,7 @@ public class Spiel2 {
         }
         else
         {
-            if (karteS1.getFarbe() == trumpf && karteS2.getFarbe() == trumpf)
+            if (karteS1.getFarbe().equals(trumpf) && karteS2.getFarbe().equals(trumpf))
             {
                 if(karteS1.getPunkte()>karteS2.getPunkte())
                 {
@@ -697,7 +697,7 @@ public class Spiel2 {
 
                 }
             }
-            else if(karteS1.getFarbe() != trumpf && karteS2.getFarbe() != trumpf)
+            else if(!karteS1.getFarbe().equals(trumpf) && !karteS2.getFarbe().equals(trumpf))
             {
                 if(karteS1.getFarbe().equals(karteS2.getFarbe())) {
                     if (karteS1.getPunkte() > karteS2.getPunkte()) {
@@ -733,7 +733,7 @@ public class Spiel2 {
             }
             else
             {
-                if(karteS1.getFarbe() == trumpf)
+                if(karteS1.getFarbe().equals(trumpf))
                 {
                     s1.Gestochen.add(karteS1);
                     s1.Gestochen.add(karteS2);
