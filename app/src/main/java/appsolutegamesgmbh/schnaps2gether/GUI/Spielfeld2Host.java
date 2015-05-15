@@ -219,7 +219,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String gegnerischeHand = "";
         String gegKartenSpielBar = "";
         int gegnerischeHandkartenAnz = gegner.Hand.size();
+        Toast.makeText(appContext,"gegnerischeHandkartenAnz: "+gegnerischeHandkartenAnz,Toast.LENGTH_SHORT).show();
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
+            Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
             gegnerischeHand += ","+gegner.Hand.get(i).toString();
             gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0);
         }
@@ -273,7 +275,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 selbst = spiel.getS1();
                 gegner = spiel.getS2();
 
-                Toast.makeText(appContext, "OwnEndpointID: "+Nearby.Connections.getLocalEndpointId(mGoogleApiClient), Toast.LENGTH_LONG).show();
+                //Toast.makeText(appContext, "OwnEndpointID: "+Nearby.Connections.getLocalEndpointId(mGoogleApiClient), Toast.LENGTH_LONG).show();
                 /*Handler handler3  =  new Handler();
                 handler3.postDelayed(new Runnable() {
                     @Override
