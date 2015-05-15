@@ -151,6 +151,7 @@ public class Spiel2 {
         //Ausgespielte Karte wird aus Hand von s entfernt
         s.Hand.remove(karte);
         s.setIstdran(false);
+        angesagteFarbe = null;
     }
 
     /*
@@ -580,7 +581,6 @@ public class Spiel2 {
 
         Log.d("host Karte", karteS1.toString());
         Log.d("client Karte", karteS2.toString());
-        angesagteFarbe = null;
 
 
         if(s1.isIstdran())
@@ -945,7 +945,7 @@ public class Spiel2 {
     }
 
 
-    public boolean DarfKarteAuswaehlen(Karte karteamTisch, Karte karte)
+    public boolean DarfKarteAuswaehlen(Karte karteamTisch, Karte karte, Spieler s)
     {
         if (angesagteFarbe != null) {
             if (karte.getFarbe().equals(angesagteFarbe) &&
@@ -967,20 +967,20 @@ public class Spiel2 {
                     return true;
                 else
                 {
-                    if(karteamTisch.getPunkte() == 3 &&  (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
-                            s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                    if(karteamTisch.getPunkte() == 3 &&  (s.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
+                            s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
                         return false;
-                    else if(karteamTisch.getPunkte() == 4 && (s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
+                    else if(karteamTisch.getPunkte() == 4 && (s.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) || s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11))))
                         return false;
-                    else if(karteamTisch.getPunkte() == 10 && s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
+                    else if(karteamTisch.getPunkte() == 10 && s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
                         return false;
                     else
                         return true;
                 }
             }
-            else if(s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Bube",2)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Dame",3)) ||
-                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
-                s1.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
+            else if(s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Bube",2)) || s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Dame",3)) ||
+                s.Hand.contains(new Karte(karteamTisch.getFarbe(),"König",4)) || s.Hand.contains(new Karte(karteamTisch.getFarbe(),"10er",10)) ||
+                s.Hand.contains(new Karte(karteamTisch.getFarbe(),"Ass",11)))
             {
                 return false;
             }
@@ -988,9 +988,9 @@ public class Spiel2 {
             {
                 return true;
             }
-            else if(s1.Hand.contains(new Karte(trumpf,"Bube",2)) || s1.Hand.contains(new Karte(trumpf,"Dame",3)) ||
-                    s1.Hand.contains(new Karte(trumpf,"König",4)) || s1.Hand.contains(new Karte(trumpf,"10er",10)) ||
-                    s1.Hand.contains(new Karte(trumpf,"Ass",11)))
+            else if(s.Hand.contains(new Karte(trumpf,"Bube",2)) || s.Hand.contains(new Karte(trumpf,"Dame",3)) ||
+                    s.Hand.contains(new Karte(trumpf,"König",4)) || s.Hand.contains(new Karte(trumpf,"10er",10)) ||
+                    s.Hand.contains(new Karte(trumpf,"Ass",11)))
             {
                 return false;
             }

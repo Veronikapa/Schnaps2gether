@@ -230,7 +230,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         for (int i=0;i<gegnerischeHandkartenAnz;i++) {
             //Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
             gegnerischeHand += ","+gegner.Hand.get(i).toString();
-            gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i)) ? 1 : 0);
+            gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i), gegner) ? 1 : 0);
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+":"+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
@@ -326,7 +326,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
-            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i))) {
+            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i), selbst)) {
                 buttonK.setEnabled(true);
             } else {
                 buttonK.setEnabled(false);

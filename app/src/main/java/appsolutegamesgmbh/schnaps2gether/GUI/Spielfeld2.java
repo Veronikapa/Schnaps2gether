@@ -235,7 +235,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             Button buttonK = handkartenButtons.get(i);
-            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i))) {
+            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i), selbst)) {
                 buttonK.setEnabled(true);
             } else {
                 buttonK.setEnabled(false);
