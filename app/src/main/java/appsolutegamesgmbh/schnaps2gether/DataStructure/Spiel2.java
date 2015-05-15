@@ -771,6 +771,7 @@ public class Spiel2 {
             s1.setMerkePunkte(0);
             s1.setAngesagt20er(false);
         }
+        Log.d("dran", s1.isIstdran() ? "Host" : "Client");
 
     }
 

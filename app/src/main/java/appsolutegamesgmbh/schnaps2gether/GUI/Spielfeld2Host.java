@@ -68,7 +68,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static Button buttonEigeneKarte;
     private static Button buttonGegnerischeKarte;
     private static Button buttonStapel;
-    private Button buttonTrumpfkarte;
+    private static Button buttonTrumpfkarte;
     private static Button buttonZudrehen;
     private static Button button20er;
     private static Button button40er;
@@ -86,7 +86,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private Karte karte5;
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte;
-    private Karte trumpfkarte;
+    private static Karte trumpfkarte;
     private static TextView punkteGegner;
     private static TextView punkteSelbst;
     private TextView txtSelbst;
@@ -510,6 +510,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
                 gegnerischeHandAktualisieren();
+                trumpfkarte = spiel.getAufgedeckterTrumpf();
+                buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
