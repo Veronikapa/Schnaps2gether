@@ -205,7 +205,7 @@ public class Lobby extends Activity implements
         m_GoogleApiClient.connect();
     }
 
-    /*@Override
+    @Override
     public void onStop() {
         super.onStop();
         //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
@@ -213,7 +213,7 @@ public class Lobby extends Activity implements
         if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
             m_GoogleApiClient.disconnect();
         }
-    }*/
+    }
 
     /*
     * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.

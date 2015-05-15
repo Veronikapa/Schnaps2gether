@@ -94,6 +94,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static Bummerl2 bummerl;
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
+        m_GoogleApiClient.connect();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
