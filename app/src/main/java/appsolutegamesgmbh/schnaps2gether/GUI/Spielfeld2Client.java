@@ -420,7 +420,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 stapelKartenAnz = Integer.decode(messageParts[1]);
                 String[] hand = messageParts[2].substring(1).split(",");
                 String[] spielbar = messageParts[3].substring(1).split(" ");
-                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
+                Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
