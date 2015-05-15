@@ -92,6 +92,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private TextView txtSelbst;
     private TextView txtGegner;
     private static Bummerl2 bummerl;
+    private static Boolean angesagt;
 
     /*@Override
     public void onStart() {
@@ -119,6 +120,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         appContext = this.getApplicationContext();
+
+        angesagt = false;
 
         bummerl = new Bummerl2();
        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
@@ -243,7 +246,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         int p2 = gegner.getPunkte();
         punkteGegner.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE+":"+Integer.toString(p1)+" "+Integer.toString(p2)).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2)).getBytes());
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -268,7 +271,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         String hastDie20er = "";
         ArrayList<String> geg20er = spiel.hat20er(gegner);
         for(String farbe: geg20er) {
-            hastDie20er += " "+farbe;
+            hastDie20er += " " + farbe;
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
     }
@@ -504,6 +507,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     spielEnde();
                 }
                 gegnerischeHandAktualisieren();
+                angesagt = true;
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT20ER: String farbe = message.substring(2);
@@ -513,13 +517,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     spielEnde();
                 }
                 gegnerischeHandAktualisieren();
+                angesagt = true;
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(), "Bube", 2), gegner);
                 gegnerischeHandAktualisieren();
                 trumpfkarte = spiel.getAufgedeckterTrumpf();
                 buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
-                gegnerHat20er();
+                if (!angesagt) gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             default: break;
@@ -540,6 +545,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 if (message.substring(2,3).equals("1")) {
                     eigenerZug();
                 }
+                angesagt = false;
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: spiel.Zudrehen();
