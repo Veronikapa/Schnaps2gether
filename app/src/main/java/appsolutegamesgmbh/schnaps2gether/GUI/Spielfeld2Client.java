@@ -466,8 +466,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 Handler handler = new Handler();
                 handler.postDelayed(new Zugende(), 2000);
             case PUNKTE:
-                p1 = Integer.decode(message.substring(2,3));
-                p2 = Integer.decode(message.substring(4,5));
+                p1 = Integer.decode(message.split(":")[1].split(" ")[0]);
+                p2 = Integer.decode(message.split(":")[1].split(" ")[1]);
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);

@@ -469,7 +469,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     {
         String message = new String(payload);
         switch (((message.split(":")[0]))) {
-            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
+            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.split(":")[1]);
                 spiel.Auspielen(gegnerischeKarte, gegner);
                 buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
                 if (eigeneKarte!=null) {

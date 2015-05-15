@@ -51,7 +51,7 @@ public class Lobby extends Activity implements
     public static ArrayList<String> endpointIds = new ArrayList<String>();
     public static ArrayList<String> deviceIds = new ArrayList<String>();
 
-    public static  boolean endpointIdsReceived;
+    //public static  boolean endpointIdsReceived;
 
     //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
@@ -77,7 +77,7 @@ public class Lobby extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
 
-        endpointIdsReceived = false;
+        //endpointIdsReceived = false;
         endpointIds = new ArrayList<>();
 
         //Anzeigen der bereits zum Spiel verbundenen Spieler
@@ -168,18 +168,18 @@ public class Lobby extends Activity implements
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         if (!m_IsHost) {
-            if (!endpointIdsReceived) {
-    /*            String[] aIds = message.split(" ");
+            /*if (!endpointIdsReceived) {
+                String[] aIds = message.split(" ");
                 for (String ids : aIds) {
                     String[] aId = ids.split(":");
                     endpointIds.add(aId[0]);
                     //deviceIds.add(aId[1]);}
-     */
+
                 endpointIds.add(message);
                 endpointIdsReceived = true;
-            } else {
+            } else {*/
                 Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
-            }
+            //}
         }
 
         else
@@ -326,7 +326,7 @@ public class Lobby extends Activity implements
     }
 
     //Senden einer Verbindungsanfrage zu Host und Verbindung wenn möglich.
-    private void connectTo(String endpointId, final String endpointName) {
+    private void connectTo(final String endpointId, final String endpointName) {
 
         byte[] myPayload = null;
         Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, spielerName, endpointId, myPayload,
@@ -349,6 +349,7 @@ public class Lobby extends Activity implements
                                 allIds = allIds.substring(0,allIds.length()-1);*/
                                 /*Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
                             }*/
+                            endpointIds.add(endpointId);
 
                             //Starten der nächsten Activity
                             startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
@@ -390,9 +391,9 @@ public class Lobby extends Activity implements
                         }
                         allIds = allIds.substring(0,allIds.length()-1);
                         Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());*/
-                        String allIds = "";
+                        /*String allIds = "";
                         allIds = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
-                        Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());
+                        Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, allIds.getBytes());*/
 
                         startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                         finish();
