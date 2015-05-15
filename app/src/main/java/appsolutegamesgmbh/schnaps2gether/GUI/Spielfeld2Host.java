@@ -160,6 +160,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         gespielteKarteEntfernen(i);
         buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         if (gegnerischeKarte == null) {
+            gegnerischeHandAktualisieren();
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
         } else {
             zugEnde();
