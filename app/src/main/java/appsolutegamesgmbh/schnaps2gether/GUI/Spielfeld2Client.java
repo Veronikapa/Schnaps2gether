@@ -97,13 +97,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int p1;
     private static int p2;
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
 
         //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
         mGoogleApiClient.connect();
-    }
+    }*/
 
     @Override
     public void onStop() {
