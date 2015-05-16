@@ -1,6 +1,9 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import appsolutegamesgmbh.schnaps2gether.R;
 
 
 public class Karte {
@@ -80,8 +83,14 @@ public class Karte {
 
 
     public String changeToLowerCase(String value){
-        return value.toLowerCase();
-    }
+            String temp;
+            if(value.equals("König")) {
+                temp = "koenig";
+            }else {
+                temp = value.toLowerCase();
+            }
+            return temp;
+        }
 
     public String getPngName() {
         return new String(changeToLowerCase(Farbe)+"_"+ changeToLowerCase(Wertigkeit));
@@ -120,5 +129,43 @@ public class Karte {
         Kartendeck.add(new Karte("Kreuz","Ass",11));
 
         return Kartendeck;
+    }
+    public int getIconResourceId(){
+        Field f;
+        int id = -1;
+        try {
+            f = R.drawable.class.getDeclaredField(getFarbeIcon());
+            id = f.getInt(null);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+
+    public int getImageResourceId(){
+        Field f;
+        int id = -1;
+        try {
+            f = R.drawable.class.getDeclaredField(getPngName());
+            id = f.getInt(null);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 }
