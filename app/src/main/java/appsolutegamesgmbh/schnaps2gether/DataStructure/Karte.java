@@ -74,7 +74,18 @@ public class Karte {
             default: return 0;
         }
     }
+    public String getFarbeIcon() {
+        return new String(changeToLowerCase(Farbe)+"_icon");
+    }
 
+
+    public String changeToLowerCase(String value){
+        return value.toLowerCase();
+    }
+
+    public String getPngName() {
+        return new String(changeToLowerCase(Farbe)+"_"+ changeToLowerCase(Wertigkeit));
+    }
     @Override
     public String toString() {
         return this.getFarbe()+" "+this.getWertigkeit();

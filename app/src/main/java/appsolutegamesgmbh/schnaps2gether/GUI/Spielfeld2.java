@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -29,10 +30,26 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private Button buttonKarte4;
     private Button buttonKarte5;
     private ArrayList<Button> handkartenButtons;
+
     private Button buttonEigeneKarte;
     private Button buttonGegnerischeKarte;
     private Button buttonStapel;
     private Button buttonTrumpfkarte;
+
+    private ImageView imageView_karte1;
+    private ImageView imageView_karte2;
+    private ImageView imageView_karte3;
+    private ImageView imageView_karte4;
+    private ImageView imageView_karte5;
+
+    private ArrayList<ImageView> handkartenImages;
+
+    private ImageView imageView_trumpf;
+    private ImageView imageView_deck;
+    private ImageView imageView_eigeneKarte;
+    private ImageView imageView_karteGegner;
+    private ImageView imageView_trumpfIcon;
+
     private Button buttonZudrehen;
     private Button button20er;
     private Button button40er;

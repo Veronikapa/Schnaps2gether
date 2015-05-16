@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,20 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private Button buttonKarte3;
     private Button buttonKarte4;
     private Button buttonKarte5;
+
+    private static ImageView imageView_karte1;
+    private static ImageView imageView_karte2;
+    private static ImageView imageView_karte3;
+    private static ImageView imageView_karte4;
+    private static ImageView imageView_karte5;
+
+    private ArrayList<ImageView> handkartenImages;
+    private static ImageView imageView_trumpf;
+    private static ImageView imageView_deck;
+    private static ImageView imageView_eigeneKarte;
+    private static ImageView imageView_karteGegner;
+    private static ImageView imageView_trumpfIcon;
+
     private static ArrayList<Button> handkartenButtons;
     private static Button buttonEigeneKarte;
     private static Button buttonGegnerischeKarte;
