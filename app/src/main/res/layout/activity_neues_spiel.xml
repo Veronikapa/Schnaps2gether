@@ -26,7 +26,7 @@
         android:layout_below="@+id/lbl_anzahlSpieler"
         android:layout_toLeftOf="@+id/lbl_anzahlSpieler"
         android:layout_toStartOf="@+id/lbl_anzahlSpieler"
-        android:onClick="neu" />
+        android:onClick="zweierSchnapsen" />
 
     <Button
         android:layout_width="wrap_content"
@@ -35,6 +35,7 @@
         android:id="@+id/cmd_drei"
         android:layout_alignTop="@+id/cmd_zwei"
         android:layout_centerHorizontal="true"
+        android:onClick="dreierSchnapsen"
          />
 
     <Button
@@ -46,7 +47,8 @@
         android:layout_toRightOf="@+id/lbl_anzahlSpieler"
         android:layout_toEndOf="@+id/lbl_anzahlSpieler"
         android:layout_marginLeft="37dp"
-        android:layout_marginStart="37dp" />
+        android:layout_marginStart="37dp"
+        android:onClick="viererSchnapsen"/>
 
     <Button
         android:layout_width="wrap_content"

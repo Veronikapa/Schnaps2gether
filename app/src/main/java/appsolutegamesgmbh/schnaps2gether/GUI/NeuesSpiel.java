@@ -42,8 +42,24 @@ public class NeuesSpiel extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void neu(View v){
-        startActivity(new Intent(this, Lobby.class));
+    public void zweierSchnapsen(View v){
+        Intent i = new Intent(this, Lobby.class);
+        i.putExtra("Spieltyp",2);
+        setResult(Activity.RESULT_OK,i);
+        finish();
+    }
+
+    public void dreierSchnapsen(View v){
+        Intent i = new Intent(this, Lobby.class);
+        i.putExtra("Spieltyp",3);
+        setResult(Activity.RESULT_OK,i);
+        finish();
+    }
+
+    public void viererSchnapsen(View v){
+        Intent i = new Intent(this, Lobby.class);
+        i.putExtra("Spieltyp",4);
+        setResult(Activity.RESULT_OK,i);
         finish();
     }
 }
