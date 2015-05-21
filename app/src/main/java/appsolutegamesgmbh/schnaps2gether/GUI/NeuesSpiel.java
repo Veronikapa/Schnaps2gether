@@ -62,4 +62,11 @@ public class NeuesSpiel extends Activity {
         setResult(Activity.RESULT_OK,i);
         finish();
     }
+
+
+    public void abbrechen(View v){
+        Intent i = new Intent(this, Lobby.class);
+        setResult(Activity.RESULT_CANCELED,i);
+        finish();
+    }
 }

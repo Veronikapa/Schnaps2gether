@@ -38,7 +38,8 @@ public class Lobby extends Activity implements
 
     private Context appContext;
     private ListView spieleListView;
-    private String[] spieleListe = new String[]{};
+    public static ArrayList<String> spieleListe = new ArrayList<String>();
+    public static ArrayList<String> spieleIdListe = new ArrayList<String>();
     private ArrayAdapter<String> adapterSpieleListView;
     private String spielerName = "";
     private int spielTyp= 0; //2 = 2er, 3 = 3er, 4 = 4er
@@ -66,8 +67,6 @@ public class Lobby extends Activity implements
         // Get ListView object from xml
         spieleListView = (ListView) findViewById(R.id.list);
 
-        // Defined Array values to show in ListView
-        spieleListe= new String[] {};
         appContext = this.getApplicationContext();
 
         //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
@@ -88,7 +87,7 @@ public class Lobby extends Activity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view,
         int position, long id) {
-
+            connectTo(spieleIdListe.get(position),null);
         }
 
         });
@@ -153,8 +152,21 @@ public class Lobby extends Activity implements
     /*
     * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
      */
-    public void onEndpointFound(String s, String s2, String s3, String s4) {
-        connectTo(s,spielerName);
+    public void onEndpointFound(final String endpointId, String deviceId, String serviceId,
+                                final String endpointName) {
+
+        spielTyp = Integer.parseInt(endpointName.substring(0,1));
+        String spielerName = endpointName.substring(1);
+
+        //Neues Spiel zu Liste hinzufügen
+        spieleListe.add(spielTyp+"er Schnapsen von "+spielerName);
+        spieleIdListe.add(endpointId);
+
+        adapterSpieleListView = new ArrayAdapter<String>(appContext,
+                android.R.layout.simple_list_item_1, spieleListe);
+
+        // Assign adapter to ListView
+        spieleListView.setAdapter(adapterSpieleListView);
     }
 
     @Override
@@ -261,13 +273,13 @@ public class Lobby extends Activity implements
         long NO_TIMEOUT = 0L;
 
         //Anbieten eines Services für andere Geräte.
-        Nearby.Connections.startAdvertising(m_GoogleApiClient, spielerName, appMetadata, NO_TIMEOUT,
+        Nearby.Connections.startAdvertising(m_GoogleApiClient, spielTyp+spielerName, appMetadata, NO_TIMEOUT,
                 this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
             @Override
             public void onResult(Connections.StartAdvertisingResult result) {
                 if (result.getStatus().isSuccess()) {
                     //Neues Spiel zu Liste hinzufügen
-                    spieleListe = new String[]{spielTyp+"er Schnapsen von "+result.getLocalEndpointName()};
+                    spieleListe.add(spielTyp+"er Schnapsen von "+spielerName);
 
                     adapterSpieleListView = new ArrayAdapter<String>(appContext,
                             android.R.layout.simple_list_item_1, spieleListe);
@@ -305,15 +317,11 @@ public class Lobby extends Activity implements
 
                         //Service wurde gefunden
                         if (status.isSuccess()) {
-                            String endPointId = Nearby.Connections.getLocalEndpointId(m_GoogleApiClient);
-                            String deviceId = Nearby.Connections.getLocalDeviceId(m_GoogleApiClient);
-
-                        //Aufruf der Methode zur Handhabung des gefundenen Geräts
-                        onEndpointFound(endPointId, deviceId, serviceId, spielerName);}
+                            Toast.makeText(appContext,"Offene Spiele gefunden",Toast.LENGTH_SHORT).show();
+                        }
 
                         //Es konnte kein Service in der Nähe gefunden werden.
                         else {
-
                             Toast.makeText(appContext, "Es konnten leider keine offenen Spiele gefunden werden.:(", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -332,18 +340,18 @@ public class Lobby extends Activity implements
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
 
-                            if(spielTyp == 2 && endpointIds.size()==2) {
+                            if(spielTyp == 2 && endpointIds.size()==1) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             }
 
-                            else if(spielTyp == 3 && endpointIds.size()==3) {
+                            else if(spielTyp == 3 && endpointIds.size()==2) {
                                 //TODO:Bitte hier Spielfeld3Client statt Spielfeld2Client verwenden.
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             }
                             //TODO:Bitte hier Spielfeld4Client statt Spielfeld2Client verwenden.
-                            else if(spielTyp == 4 && endpointIds.size()==4) {
+                            else if(spielTyp == 4 && endpointIds.size()==3) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             }
@@ -362,7 +370,6 @@ public class Lobby extends Activity implements
         if (m_IsHost) {
             byte[] myPayload = null;
 
-            //TODO VP: Einschränken auf Spielgröße, vorerst nur eine Verbindung pro Spiel erlaubt
             Nearby.Connections.acceptConnectionRequest(m_GoogleApiClient, remoteEndpointId,
                     myPayload, this).setResultCallback(new ResultCallback<Status>() {
                 @Override
@@ -376,18 +383,18 @@ public class Lobby extends Activity implements
                         endpointIds.add(remoteEndpointId);
                         deviceIds.add(remoteDeviceId);
 
-                        if(spielTyp == 2 && endpointIds.size()==2) {
+                        if(spielTyp == 2 && endpointIds.size()==1) {
                             startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                             finish();
                         }
 
-                        else if(spielTyp == 3 && endpointIds.size()==3) {
+                        else if(spielTyp == 3 && endpointIds.size()==2) {
                             //TODO:Bitte hier Spielfeld3Host statt Spielfeld2Host verwenden.
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         }
                         //TODO:Bitte hier Spielfeld4Host statt Spielfeld2Host verwenden.
-                        else if(spielTyp == 4 && endpointIds.size()==4) {
+                        else if(spielTyp == 4 && endpointIds.size()==3) {
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         }
@@ -426,5 +433,11 @@ public class Lobby extends Activity implements
 
     @Override
     public void onClick(View view) {
+    }
+
+    public void abbrechenLobby(View v){
+        Intent i = new Intent(this, Startmenue.class);
+        setResult(Activity.RESULT_OK,i);
+        finish();
     }
 }

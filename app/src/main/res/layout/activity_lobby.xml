@@ -60,7 +60,8 @@
             android:id="@+id/cmd_abbrechen"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/cmd_beitreten"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="abbrechenLobby"/>
 
     </LinearLayout>
 
