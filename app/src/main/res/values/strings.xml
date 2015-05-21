@@ -50,6 +50,9 @@
     <string name="TrumpAustauschen">Trumpf austauschen</string>
     <string name="no_game_available">no game available</string>
     <string name="service_id">appsolutegamesgmbh.schnaps2gether.service</string>
+    <string name="zweier">Zweier</string>
+    <string name="dreier">Dreier</string>
+    <string name="vierer">Vierer</string>
 
 
 </resources>

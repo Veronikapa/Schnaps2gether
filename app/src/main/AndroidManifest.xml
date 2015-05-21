@@ -49,7 +49,7 @@
             android:label="@string/title_activity_spielfeld3" >
         </activity>
         <activity
-            android:name=".GUI.Spielfeld4"
+            android:name=".GUI.Spielfeld4Host"
             android:label="@string/title_activity_spielfeld4" >
         </activity>
         <activity

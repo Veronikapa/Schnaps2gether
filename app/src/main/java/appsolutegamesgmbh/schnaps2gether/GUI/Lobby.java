@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,7 +35,8 @@ public class Lobby extends Activity implements
         View.OnClickListener,
         Connections.ConnectionRequestListener,
         Connections.MessageListener,
-        Connections.EndpointDiscoveryListener {
+        Connections.EndpointDiscoveryListener,
+        PopupMenu.OnMenuItemClickListener {
 
     private Context appContext;
     private ListView spieleListView;
@@ -122,8 +124,9 @@ public class Lobby extends Activity implements
     public void neu(View v) {
 
         //Öffnen der Spielauswahl Activity
-        Intent i = new Intent(this, NeuesSpiel.class);
-        startActivityForResult(i, 1);
+        /*Intent i = new Intent(this, NeuesSpiel.class);
+        startActivityForResult(i, 1);*/
+        popupNeuesSpiel(v);
     }
 
     /*
@@ -317,7 +320,7 @@ public class Lobby extends Activity implements
 
                         //Service wurde gefunden
                         if (status.isSuccess()) {
-                            Toast.makeText(appContext,"Offene Spiele gefunden",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(appContext, "Offene Spiele gefunden", Toast.LENGTH_SHORT).show();
                         }
 
                         //Es konnte kein Service in der Nähe gefunden werden.
@@ -340,18 +343,16 @@ public class Lobby extends Activity implements
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
 
-                            if(spielTyp == 2 && endpointIds.size()==1) {
+                            if (spielTyp == 2 && endpointIds.size() == 1) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
-                            }
-
-                            else if(spielTyp == 3 && endpointIds.size()==2) {
+                            } else if (spielTyp == 3 && endpointIds.size() == 2) {
                                 //TODO:Bitte hier Spielfeld3Client statt Spielfeld2Client verwenden.
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             }
                             //TODO:Bitte hier Spielfeld4Client statt Spielfeld2Client verwenden.
-                            else if(spielTyp == 4 && endpointIds.size()==3) {
+                            else if (spielTyp == 4 && endpointIds.size() == 3) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             }
@@ -439,5 +440,27 @@ public class Lobby extends Activity implements
         Intent i = new Intent(this, Startmenue.class);
         setResult(Activity.RESULT_OK,i);
         finish();
+    }
+
+    public void popupNeuesSpiel(View view) {
+        PopupMenu popup = new PopupMenu(Lobby.this, view);
+        popup.inflate(R.menu.popup_menu_neues_spiel);
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getTitle().toString()) {
+            case "Zweier": spielTyp = 2;
+                break;
+            case "Dreier": spielTyp = 3;
+                break;
+            case "Vierer": spielTyp = 4;
+                break;
+            default: break;
+        }
+        Toast.makeText(appContext,Integer.toString(spielTyp),Toast.LENGTH_SHORT).show();
+        return false;
     }
 }
