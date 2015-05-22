@@ -53,4 +53,9 @@ public class Bummerl3 {
             return false;
     }
 
+    @Override
+    public String toString() {
+        return getPunkteS1()+" "+getPunkteS2()+" "+getPunkteS3()+" "+getAnzahlSpiele();
+    }
+
 }

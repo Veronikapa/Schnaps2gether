@@ -55,8 +55,6 @@ public class Lobby extends Activity implements
     public static ArrayList<String> endpointIds = new ArrayList<String>();
     public static ArrayList<String> deviceIds = new ArrayList<String>();
 
-    //public static  boolean endpointIdsReceived;
-
     //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
             ConnectivityManager.TYPE_ETHERNET};
@@ -79,7 +77,6 @@ public class Lobby extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
 
-        //endpointIdsReceived = false;
         endpointIds = new ArrayList<>();
 
         //Anzeigen der bereits zum Spiel verbundenen Spieler
@@ -394,9 +391,8 @@ public class Lobby extends Activity implements
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         }
-                        //TODO:Bitte hier Spielfeld4Host statt Spielfeld2Host verwenden.
                         else if(spielTyp == 4 && endpointIds.size()==3) {
-                            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
+                            startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
                             finish();
                         }
 
@@ -460,7 +456,6 @@ public class Lobby extends Activity implements
                 break;
             default: break;
         }
-        Toast.makeText(appContext,Integer.toString(spielTyp),Toast.LENGTH_SHORT).show();
         return false;
     }
 }

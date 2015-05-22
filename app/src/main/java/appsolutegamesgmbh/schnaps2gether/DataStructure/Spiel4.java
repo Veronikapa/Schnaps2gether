@@ -710,4 +710,23 @@ public class Spiel4 {
         flecken = flecken * 2;
     }
 
+    public Spieler getS1() {
+        return s1;
+    }
+
+    public Spieler getS2() {
+        return s2;
+    }
+
+    public Spieler getS3() {
+        return s3;
+    }
+
+    public Spieler getS4() {
+        return s4;
+    }
+
+    public String getAngesagteFarbe() {
+        return angesagteFarbe;
+    }
 }
