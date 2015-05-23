@@ -182,11 +182,10 @@ public class Lobby extends Activity implements
                 if (spielTyp == 2)
                     Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld3Client einfügen
                 else if (spielTyp == 3)
-                    Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld3Client.receiveFromLobby(endpointID, payload, isReliable);
 
-                //Spielfeld4Client einfügen
+                //TODO: Spielfeld4Client einfügen
                 else if (spielTyp == 4)
                     Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
             }
@@ -195,13 +194,11 @@ public class Lobby extends Activity implements
                 if (spielTyp == 2)
                     Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld3Host einfügen
                 else if (spielTyp == 3)
-                    Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld3Host.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld4Host einfügen
                 else if (spielTyp == 4)
-                    Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld4Host.receiveFromLobby(endpointID, payload, isReliable);
             }
     }
 

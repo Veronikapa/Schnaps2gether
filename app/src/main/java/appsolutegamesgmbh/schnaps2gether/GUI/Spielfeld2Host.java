@@ -75,9 +75,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_karteGegner;
     private static ImageView imageView_trumpfIcon;
 
-
-
-
     private static Button buttonZudrehen;
     private static Button button20er;
     private static Button button40er;
@@ -707,7 +704,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 handAktualisieren();
                 if(spiel.AnzahlKartenStapel()==0)
                     //buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
-                imageView_deck.setAlpha((float)0);
+                    imageView_deck.setAlpha((float)0);
 //                else
 //                    buttonStapel.setText("0");
                 if (selbst.isIstdran()) {
