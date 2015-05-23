@@ -276,8 +276,9 @@
             android:text="@string/spieler2" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="#aa00aa"
+            android:textColor="@android:color/white"
             android:layout_centerHorizontal="true"
+
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/pointsText" />
 
@@ -286,16 +287,17 @@
             android:text="@string/punktestand2" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#aa00aa"
+            android:textColor="@android:color/white"
             android:layout_alignTop="@+id/linearLayout2"
             android:layout_toRightOf="@+id/gegnerNameLayout"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false" />
+            android:layout_alignParentEnd="false"
+            android:layout_marginLeft="5dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
@@ -303,7 +305,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/buttons_leiste"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_alignRight="@+id/eigeneKartenLayout"
+        android:layout_alignEnd="@+id/eigeneKartenLayout">
 
         <Button
             android:id="@+id/main_buttonTtauschen"
@@ -312,26 +316,31 @@
             android:text="TrumpfTausch"
             android:onClick="trumpfkarteTauschen"
             android:layout_marginLeft="0dp"
-            android:singleLine="false" />
+            android:singleLine="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/beiger_button"
+            android:layout_weight="0.05"
+            android:layout_marginRight="5dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="5dp">
             <TextView
                 android:id="@+id/I"
                 android:text="@string/spieler1" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#aa00aa" />
+                android:textColor="@android:color/white" />
             <TextView
                 android:id="@+id/pointsText2"
                 android:text="@string/punktestand2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#aa00aa" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
         <Button
             android:id="@+id/main_button20er"
@@ -339,15 +348,22 @@
             android:layout_height="wrap_content"
             android:text="@string/button20er"
             android:onClick="popup20er"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:background="@drawable/beiger_button"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
+            android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
-            android:layout_gravity="center" />
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:background="@drawable/beiger_button"
+            android:layout_marginRight="5dp" />
 
         <Button
             android:id="@+id/main_buttonZ"
@@ -355,35 +371,38 @@
             android:layout_height="wrap_content"
             android:text="@string/buttonZ"
             android:onClick="zudrehen"
+            android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_weight="0.01"
-            android:layout_gravity="center" />
-        <Button
-            android:id="@+id/cmd_1K_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button1"
-            android:onClick="popup20er"
-            android:visibility="visible" />
+            android:layout_gravity="center"
+            android:background="@drawable/beiger_button"
+            android:layout_marginLeft="5dp" />
+        <!--        <Button
+                    android:id="@+id/cmd_1K_I"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:text="@string/button1"
+                    android:onClick="popup20er"
+                    android:visibility="visible" />
 
-        <Button
-            android:id="@+id/cmd_2K_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button2"
-            android:onClick="ansagen40er"
-            android:visibility="visible" />
+                <Button
+                    android:id="@+id/cmd_2K_I"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:text="@string/button2"
+                    android:onClick="ansagen40er"
+                    android:visibility="visible" />
 
-        <Button
-            android:layout_width="54dp"
-            android:layout_height="34dp"
-            android:text="New Button"
-            android:id="@+id/cmd_gestochen_I"
-            android:visibility="invisible" />
+                <Button
+                    android:layout_width="54dp"
+                    android:layout_height="34dp"
+                    android:text="New Button"
+                    android:id="@+id/cmd_gestochen_I"
+                    android:visibility="invisible" />-->
     </LinearLayout>
 
     <FrameLayout
@@ -400,12 +419,12 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="55dp"
+            android:layout_width="60dp"
             android:layout_height="90dp"
             android:layout_gravity="bottom|center|right">
 
             <ImageView
-                android:layout_width="55dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView_eigeneKarte"
                 android:scaleType="fitXY"
@@ -420,12 +439,12 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="55dp"
+            android:layout_width="60dp"
             android:layout_height="90dp"
             android:layout_gravity="top|left|center">
 
             <ImageView
-                android:layout_width="55dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView_karteGegner"
                 android:scaleType="fitXY"
@@ -440,28 +459,24 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_toStartOf="@+id/frameGegnerEigene"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
         android:paddingLeft="30dp"
         android:layout_marginLeft="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginRight="5dp"
         android:layout_above="@+id/buttons_leiste"
         android:id="@+id/eigeneKartenLayout"
-        android:paddingRight="30dp">
+        android:paddingRight="30dp"
+        android:layout_marginBottom="5dp">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="70dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
                 android:id="@+id/imageView_karte1"
                 android:clickable="true"
                 android:onClick="karte1OnClick"
@@ -470,19 +485,19 @@
                 android:visibility="visible"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
-                android:layout_gravity="bottom|center" />
+                android:layout_gravity="left|bottom|center" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="35dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
                 android:id="@+id/imageView_karte2"
                 android:clickable="true"
                 android:onClick="karte2OnClick"
@@ -494,14 +509,14 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="0dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
                 android:id="@+id/imageView_karte3"
                 android:clickable="true"
                 android:onClick="karte3OnClick"
@@ -513,14 +528,14 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="35dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
                 android:id="@+id/imageView_karte4"
                 android:scaleType="fitXY"
                 android:padding="0dp"
@@ -534,15 +549,15 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="0dp"
             android:layout_gravity="center"
             android:layout_marginLeft="70dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
                 android:id="@+id/imageView_karte5"
                 android:scaleType="fitXY"
                 android:clickable="true"
@@ -589,7 +604,7 @@
             android:layout_marginLeft="15dp">
 
             <ImageView
-                android:layout_width="55dp"
+                android:layout_width="60dp"
                 android:layout_height="90dp"
                 android:id="@+id/imageView_trumpf"
                 android:longClickable="true"
@@ -609,7 +624,7 @@
             android:layout_gravity="left|center_vertical">
 
             <ImageView
-                android:layout_width="55dp"
+                android:layout_width="60dp"
                 android:layout_height="90dp"
                 android:id="@+id/imageView_deck"
                 android:background="@drawable/deck"
@@ -619,48 +634,115 @@
 
     </FrameLayout>
 
-    <GridLayout
-        android:orientation="horizontal"
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:id="@+id/stichLayout"
-        android:layout_above="@+id/eigeneKartenLayout"
+    <FrameLayout
+        android:layout_width="143dp"
+        android:layout_height="119dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/frameGegnerEigene">
+        android:id="@+id/frameLayout"
+        android:layout_alignLeft="@+id/frameLayout2"
+        android:layout_alignStart="@+id/frameLayout2">
 
-        <Button
-            android:id="@+id/cmd_2K_G"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button2"
-            android:onClick="ansagen40er"
-            android:visibility="visible"
-            android:layout_row="1"
-            android:layout_column="5" />
+            android:layout_gravity="center_horizontal|bottom">
 
-        <Button
-            android:id="@+id/cmd_1K_G"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:rotation="45">
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichGegnerKarteI"
+            android:background="@android:color/transparent"
+            android:rotation="-30"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="25dp"
+            android:onClick="ansagen40er" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichEigeneKarteI"
+            android:cropToPadding="true"
+            android:background="@android:color/transparent"
+            android:rotation="90"
+            android:layout_gravity="center_horizontal|bottom"
+            android:onClick="popup20er" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichDeckI"
+            android:hapticFeedbackEnabled="false"
+            android:background="@drawable/deck"
+            android:layout_gravity="right|bottom"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="143dp"
+        android:layout_height="119dp"
+        android:layout_gravity="right|center_vertical"
+        android:id="@+id/frameLayout2"
+        android:layout_alignTop="@+id/gegnerNameLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichEigeneKarteG"
+            android:background="@android:color/transparent"
+            android:rotation="-30"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="25dp"
+            android:onClick="ansagen40er" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichGegnerKarteG"
+            android:cropToPadding="true"
+            android:background="@android:color/transparent"
+            android:rotation="90"
+            android:layout_gravity="center_horizontal|bottom" />
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button1"
-            android:onClick="popup20er"
-            android:visibility="visible"
-            android:layout_row="0"
-            android:layout_column="5" />
+            android:layout_gravity="center_horizontal|bottom" >
 
-        <Button
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/cmd_gestochen_G"
-            android:visibility="visible"
-            android:layout_row="2"
-            android:layout_column="5" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:rotation="45" />
+        </LinearLayout>
 
-
-    </GridLayout>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichDeckG"
+            android:hapticFeedbackEnabled="false"
+            android:background="@drawable/deck"
+            android:layout_gravity="right|bottom"
+            android:visibility="invisible" />
+    </FrameLayout>
 
 
 </RelativeLayout>
