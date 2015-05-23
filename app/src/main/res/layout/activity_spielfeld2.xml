@@ -269,16 +269,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/gegnerNameLayout"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/Enemy"
             android:text="@string/spieler2" android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:layout_centerHorizontal="true"
 
+            android:layout_height="wrap_content"
+            android:gravity="top|center"
+            android:layout_centerHorizontal="true"
+            style="@style/button_text"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/pointsText" />
 
@@ -286,13 +287,13 @@
             android:id="@+id/pointsText"
             android:text="@string/punktestand2" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@android:color/white"
+            android:layout_gravity="top"
+            style="@style/button_text"
             android:layout_alignTop="@+id/linearLayout2"
             android:layout_toRightOf="@+id/gegnerNameLayout"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="false"
-            android:layout_marginLeft="5dp" />
+            android:gravity="top|center" />
 
     </LinearLayout>
 
@@ -301,84 +302,89 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/buttons_leiste"
         android:weightSum="1"
         android:layout_alignRight="@+id/eigeneKartenLayout"
-        android:layout_alignEnd="@+id/eigeneKartenLayout">
+        android:layout_alignEnd="@+id/eigeneKartenLayout"
+        android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/main_buttonTtauschen"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TrumpfTausch"
+            android:layout_height="match_parent"
+            android:text="Trumpf Tausch"
+            style="@style/button_text"
             android:onClick="trumpfkarteTauschen"
             android:layout_marginLeft="0dp"
             android:singleLine="false"
             android:textColor="@android:color/white"
             android:background="@drawable/beiger_button"
-            android:layout_weight="0.05"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:orientation="vertical"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center">
             <TextView
                 android:id="@+id/I"
                 android:text="@string/spieler1" android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white" />
             <TextView
                 android:id="@+id/pointsText2"
                 android:text="@string/punktestand2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white" />
         </LinearLayout>
         <Button
             android:id="@+id/main_button20er"
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/button20er"
+            style="@style/button_text"
             android:onClick="popup20er"
             android:layout_gravity="center"
-            android:textColor="@android:color/white"
+
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
-            android:textColor="@android:color/white"
+            style="@style/button_text"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/main_buttonZ"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/buttonZ"
             android:onClick="zudrehen"
-            android:textColor="@android:color/white"
+            style="@style/button_text"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_weight="0.01"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:textAllCaps="false" />
         <!--        <Button
                     android:id="@+id/cmd_1K_I"
                     android:layout_width="wrap_content"
@@ -462,10 +468,9 @@
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
         android:layout_marginLeft="5dp"
-        android:layout_above="@+id/buttons_leiste"
         android:id="@+id/eigeneKartenLayout"
         android:paddingRight="30dp"
-        android:layout_marginBottom="5dp">
+        android:layout_above="@+id/buttons_leiste">
 
         <LinearLayout
             android:orientation="horizontal"

@@ -8,8 +8,8 @@
     android:background="@drawable/holz_hintergrund"
     android:showDividers="middle|beginning|end"
     android:paddingStart="10dp"
-    android:rowCount="11"
-    android:columnCount="6">
+    android:rowCount="18"
+    android:columnCount="3">
 
 
 
@@ -94,8 +94,8 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="585dp"
+            android:layout_height="309dp"
             android:id="@+id/logo"
             android:longClickable="true"
             android:background="@drawable/schnaps2gether_logo"
@@ -107,9 +107,66 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_row="8"
+        android:layout_column="0"
+        android:weightSum="1"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_weight="1"
+        android:layout_gravity="fill_horizontal|top|center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name ändern"
+            style="@style/button_text"
+            android:id="@+id/cmd_name"
+            android:background="@drawable/beiger_button"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="0.33" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Statistik"
+            style="@style/button_text"
+            android:id="@+id/cmd_statistik"
+            android:background="@drawable/beiger_button"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="top|center"
+            android:layout_weight="0.33" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Beenden"
+            style="@style/button_text"
+            android:id="@+id/cmd_Beenden"
+            android:background="@drawable/beiger_button"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="top|center"
+            android:layout_weight="0.33" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="174dp"
+        android:layout_row="17"
         android:layout_column="0"
         android:layout_marginLeft="40dp"
         android:layout_marginBottom="20dp"
@@ -154,67 +211,10 @@
             android:background="@drawable/beiger_button"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:layout_gravity="top|center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="50dp"
-            android:layout_weight="0.33"
+            android:layout_weight="0.20"
             android:layout_marginBottom="20dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_row="9"
-        android:layout_column="0"
-        android:weightSum="1"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="40dp"
-        android:layout_weight="1"
-        android:layout_gravity="fill_horizontal|top|center">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Name ändern"
-            style="@style/button_text"
-            android:id="@+id/cmd_name"
-            android:background="@drawable/beiger_button"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="0.33" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Statistik"
-            style="@style/button_text"
-            android:id="@+id/cmd_statistik"
-            android:background="@drawable/beiger_button"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="top|center"
-            android:layout_weight="0.33" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Beenden"
-            style="@style/button_text"
-            android:id="@+id/cmd_Beenden"
-            android:background="@drawable/beiger_button"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="top|center"
-            android:layout_weight="0.33" />
     </LinearLayout>
 
 </GridLayout>
