@@ -1,257 +1,3 @@
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld"
-    android:gravity="center_vertical"
-    android:background="@drawable/holz_hintergrund">
-
-    <TextView
-        android:id="@+id/pointsText"
-        android:text="@string/punktestand2" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="#aa00aa" />
-    <TextView
-        android:id="@+id/Enemy"
-        android:text="@string/spieler2" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="#aa00aa" />
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
-        <Button
-            android:id="@+id/main_buttonD"
-            android:text="@string/deck"
-            android:layout_width="105dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_gravity="start"
-            android:enabled="false" />
-        <TextView
-            android:id="@+id/Deck"
-            android:text="@string/deck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:textColor="#0066cc"
-            android:enabled="true"
-            android:textSize="@dimen/abc_text_size_medium_material" />
-        <Button
-        android:id="@+id/main_buttonE"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginLeft="85dp"
-        android:text="@string/buttonE"
-        android:layout_gravity="center"
-        android:enabled="false" />
-
-        <Button
-            android:id="@+id/cmd_1K_G"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="40dp"
-            android:text="@string/button1"
-            android:onClick="popup20er"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/cmd_2K_G"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button2"
-            android:onClick="ansagen40er"
-            android:visibility="invisible" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:text="New Button"
-            android:id="@+id/cmd_gestochen_G"
-            android:visibility="invisible" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/main_buttonT"
-            android:text="@string/trumpf"
-            android:layout_width="105dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_gravity="left"
-            android:enabled="false"  />
-        <TextView
-            android:id="@+id/Trumpf"
-            android:text="@string/trumpf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:textColor="#0066cc"
-            android:textSize="@dimen/abc_text_size_medium_material" />
-        <Button
-        android:id="@+id/main_buttonI"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginLeft="68dp"
-        android:text="@string/buttonI"
-        android:layout_gravity="center"
-        android:enabled="false" />
-        <Button
-            android:id="@+id/main_buttonZ"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="60dp"
-            android:text="@string/buttonZ"
-            android:layout_gravity="right"
-            android:onClick="zudrehen" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-        <Button
-            android:id="@+id/main_button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button1"
-            android:onClick="karte1OnClick"/>
-        <Button
-            android:id="@+id/main_button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button2"
-            android:onClick="karte2OnClick" />
-        <Button
-            android:id="@+id/main_button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button3"
-            android:onClick="karte3OnClick" />
-        <Button
-            android:id="@+id/main_button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button4"
-            android:onClick="karte4OnClick" />
-        <Button
-            android:id="@+id/main_button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button5"
-            android:onClick="karte5OnClick" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/main_buttonTtauschen"
-            android:layout_width="229dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="40dp"
-            android:text="@string/TrumpAustauschen"
-            android:onClick="trumpfkarteTauschen" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/I"
-                android:text="@string/spieler1" android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                android:textColor="#aa00aa" />
-            <TextView
-                android:id="@+id/pointsText2"
-                android:text="@string/punktestand2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#aa00aa" />
-        </LinearLayout>
-        <Button
-            android:id="@+id/main_button20er"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="40dp"
-            android:text="@string/button20er"
-            android:onClick="popup20er" />
-        <Button
-            android:id="@+id/main_button40er"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button40er"
-            android:onClick="ansagen40er" />
-
-        <Button
-            android:id="@+id/cmd_1K_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="40dp"
-            android:text="@string/button1"
-            android:onClick="popup20er"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/cmd_2K_I"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="0dp"
-            android:text="@string/button2"
-            android:onClick="ansagen40er"
-            android:visibility="invisible" />
-
-        <Button
-            android:layout_width="54dp"
-            android:layout_height="34dp"
-            android:text="New Button"
-            android:id="@+id/cmd_gestochen_I"
-            android:visibility="invisible" />
-    </LinearLayout>
-
-
-</LinearLayout>-->
-
-
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
@@ -270,7 +16,8 @@
         android:id="@+id/gegnerNameLayout"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@drawable/name_plakette">
 
         <TextView
             android:id="@+id/Enemy"
@@ -670,10 +417,10 @@
             android:layout_height="90dp"
             android:id="@+id/stichGegnerKarteI"
             android:background="@android:color/transparent"
-            android:rotation="-30"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="25dp"
+            android:rotation="-40"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
             android:onClick="ansagen40er" />
 
         <ImageView
@@ -682,9 +429,11 @@
             android:id="@+id/stichEigeneKarteI"
             android:cropToPadding="true"
             android:background="@android:color/transparent"
-            android:rotation="90"
-            android:layout_gravity="center_horizontal|bottom"
-            android:onClick="popup20er" />
+            android:rotation="40"
+            android:layout_gravity="center"
+            android:onClick="popup20er"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp" />
 
         <ImageView
             android:layout_width="60dp"
@@ -692,8 +441,10 @@
             android:id="@+id/stichDeckI"
             android:hapticFeedbackEnabled="false"
             android:background="@drawable/deck"
-            android:layout_gravity="right|bottom"
-            android:visibility="invisible" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:visibility="invisible"
+            android:rotation="90"
+            android:layout_marginTop="35dp" />
 
     </FrameLayout>
 
@@ -705,26 +456,6 @@
         android:layout_alignTop="@+id/gegnerNameLayout"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichEigeneKarteG"
-            android:background="@android:color/transparent"
-            android:rotation="-30"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="25dp"
-            android:onClick="ansagen40er" />
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichGegnerKarteG"
-            android:cropToPadding="true"
-            android:background="@android:color/transparent"
-            android:rotation="90"
-            android:layout_gravity="center_horizontal|bottom" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -742,13 +473,37 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="90dp"
+            android:id="@+id/stichEigeneKarteG"
+            android:background="@android:color/transparent"
+            android:rotation="-40"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginRight="0dp"
+            android:onClick="ansagen40er"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:id="@+id/stichGegnerKarteG"
+            android:cropToPadding="true"
+            android:background="@android:color/transparent"
+            android:rotation="40"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="90dp"
             android:id="@+id/stichDeckG"
             android:hapticFeedbackEnabled="false"
             android:background="@drawable/deck"
-            android:layout_gravity="right|bottom"
-            android:visibility="invisible" />
+            android:layout_gravity="center_horizontal|top"
+            android:visibility="invisible"
+            android:rotation="90"
+            android:layout_marginBottom="30dp" />
     </FrameLayout>
-
 
 </RelativeLayout>
 
