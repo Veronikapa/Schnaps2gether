@@ -182,11 +182,10 @@ public class Lobby extends Activity implements
                 if (spielTyp == 2)
                     Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld3Client einfügen
                 else if (spielTyp == 3)
-                    Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld3Client.receiveFromLobby(endpointID, payload, isReliable);
 
-                //Spielfeld4Client einfügen
+                //TODO: Spielfeld4Client einfügen
                 else if (spielTyp == 4)
                     Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
             }
@@ -195,13 +194,11 @@ public class Lobby extends Activity implements
                 if (spielTyp == 2)
                     Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld3Host einfügen
                 else if (spielTyp == 3)
-                    Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld3Host.receiveFromLobby(endpointID, payload, isReliable);
 
-                //TODO Spielfeld4Host einfügen
                 else if (spielTyp == 4)
-                    Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld4Host.receiveFromLobby(endpointID, payload, isReliable);
             }
     }
 
@@ -382,13 +379,12 @@ public class Lobby extends Activity implements
                         deviceIds.add(remoteDeviceId);
 
                         if(spielTyp == 2 && endpointIds.size()==1) {
-                            startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         }
 
                         else if(spielTyp == 3 && endpointIds.size()==2) {
-                            //TODO:Bitte hier Spielfeld3Host statt Spielfeld2Host verwenden.
-                            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
+                            startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
                             finish();
                         }
                         else if(spielTyp == 4 && endpointIds.size()==3) {
@@ -409,7 +405,7 @@ public class Lobby extends Activity implements
         }
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==1) {
             //Setze gewählten Spieltyp aus Neues Spiel Activity
@@ -421,7 +417,7 @@ public class Lobby extends Activity implements
                 startAdvertising();
             }
         }
-    }
+    }*/
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -455,6 +451,11 @@ public class Lobby extends Activity implements
             case "Vierer": spielTyp = 4;
                 break;
             default: break;
+        }
+
+        if (m_GoogleApiClient.isConnected()) {
+
+            startAdvertising();
         }
         return false;
     }
