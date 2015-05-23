@@ -44,19 +44,17 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String KARTEGESPIELT = "0";
     private static final String WEITER = "1";
     private static final String PUNKTE = "2";
-    //private static final String ZUGEDREHT = "3";
+    private static final String TRUMPFANSAGEN = "3";
     private static final String ANGESAGT20ER = "4";
     private static final String ANGESAGT40ER = "5";
     //private static final String TRUMPFGETAUSCHT = "6";
     private static final String SPIELENDE = "7";
     private static final String BUMMERL = "8";
     private static final String HANDKARTEN = "9";
-    //private static final String TRUMPFKARTE = "10";
+    private static final String TRUMPFFARBE = "10";
     private static final String ZUGENDE = "11";
     private static final String DISCONNECT = "12";
 
-    // Identify if the device is the host
-    private boolean mIsHost = true;
     private static GoogleApiClient mGoogleApiClient;
     private static ArrayList<String> endpointIDs;
 
@@ -79,12 +77,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static ImageView imageView_karte3;
     private static ImageView imageView_karte4;
     private static ImageView imageView_karte5;
-    private static ImageView imageView_karte6;
 
     private static ArrayList<ImageView> handkartenImages;
 
-    private static ImageView imageView_trumpf;
-    private static ImageView imageView_deck;
     private static ImageView imageView_eigeneKarte;
     private static ImageView imageView_karteGegner;
     private static ImageView imageView_trumpfIcon;
@@ -101,12 +96,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static Spieler selbst;
     private static Spieler gegner1;
     private static Spieler gegner2;
-    private static Spieler verbuendeter;
-    /*private Karte karte1;
-    private Karte karte2;
-    private Karte karte3;
-    private Karte karte4;
-    private Karte karte5;*/
+    private static Spieler mitspieler;
+    private static ArrayList<Spieler> andereSpieler;
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte1;
     private static Karte gegnerischeKarte2;
@@ -114,9 +105,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static TextView punkteGegner1;
     private static TextView punkteGegner2;
     private static TextView punkteSelbst;
-    private static TextView punkteVerbuendeter;
+    private static TextView punkteMitspieler;
     private TextView txtSelbst;
-    private TextView txtVerbuendeter;
+    private TextView txtMitspieler;
     private TextView txtGegner1;
     private TextView txtGegner2;
     private static Bummerl4 bummerl;
@@ -142,6 +133,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         appContext = this.getApplicationContext();
 
         angesagt = false;
+        andereSpieler = new ArrayList<Spieler>();
+        andereSpieler.add(gegner1);
+        andereSpieler.add(mitspieler);
+        andereSpieler.add(gegner2);
 
         bummerl = new Bummerl4();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
@@ -164,14 +159,12 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         punkteGegner1 = (TextView) findViewById(R.id.pointsText);
         punkteGegner2 = (TextView) findViewById(R.id.pointsText);
         punkteSelbst = (TextView) findViewById(R.id.pointsText2);
-        punkteVerbuendeter = (TextView) findViewById(R.id.pointsText2);
+        punkteMitspieler = (TextView) findViewById(R.id.pointsText2);
         txtSelbst = (TextView) findViewById(R.id.I);
-        txtVerbuendeter = (TextView) findViewById(R.id.I);
+        txtMitspieler = (TextView) findViewById(R.id.I);
         txtGegner1 = (TextView) findViewById(R.id.Enemy);
         txtGegner2 = (TextView) findViewById(R.id.Enemy);
 
-
-        imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
         // findViewById(R.id.imageView_eigeneKarte).setOnDragListener(new MyDragListener());
         imageView_karteGegner = (ImageView) findViewById(R.id.imageView_karteGegner);
@@ -200,7 +193,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
 
         if (gegnerischeKarte1 == null) {
-            gegnerischeHandAktualisieren();
+            for (Spieler s: andereSpieler) andereHandAktualisieren(s);
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -216,7 +209,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte1, verbuendeteKarte, gegnerischeKarte2);
         eigeneKarte = gegnerischeKarte1 = verbuendeteKarte = gegnerischeKarte2 = null;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE + ":").getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
@@ -251,20 +244,28 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
             } else {
                 imageViewK.setVisibility(View.INVISIBLE);
             }
-            gegnerischeHandAktualisieren();
+            for (Spieler s: andereSpieler) andereHandAktualisieren(s);
         }
     }
 
-    private static void gegnerischeHandAktualisieren() {
-        String gegnerischeHand = "";
+    private static void andereHandAktualisieren(Spieler andererSpieler) {
+        String andereHand = "";
         String gegKartenSpielBar = "";
-        int gegnerischeHandkartenAnz = gegner1.Hand.size();
-        for (int i=0;i<gegnerischeHandkartenAnz;i++) {
-            gegnerischeHand += ","+gegner1.Hand.get(i).toString();
-            gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
+        int andereHandkartenAnz = andererSpieler.Hand.size();
+        for (int i=0;i<andereHandkartenAnz;i++) {
+            andereHand += ","+andererSpieler.Hand.get(i).toString();
+            gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(andererSpieler.Hand.get(i), andererSpieler) ? 1 : 0);
+        }
+        String recipientID = "";
+        if (andererSpieler.equals(andereSpieler.get(0))) {
+            recipientID=endpointIDs.get(0);
+        } else if (andererSpieler.equals(andereSpieler.get(1))) {
+            recipientID=endpointIDs.get(1);
+        } else if (andererSpieler.equals(andereSpieler.get(2))) {
+            recipientID=endpointIDs.get(2);
         }
         //TODO Stapelkartenanzahl aus messagelistener entfernen
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN + ":" + gegnerischeHand + ":" + gegKartenSpielBar).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipientID, (HANDKARTEN + ":" + andereHand + ":" + gegKartenSpielBar).getBytes());
     }
 
     private static void punkteAktualisieren() {
@@ -279,7 +280,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         punkteGegner1.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
         /*punkteGegner2.setText(Integer.toString(p2));
-        punkteVerbuendeter.setText(Integer.toString(p1));*/
+        punkteMitspieler.setText(Integer.toString(p1));*/
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2)).getBytes());
     }
 
@@ -323,24 +324,33 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 }
                 selbst = spiel.getS1();
                 gegner1 = spiel.getS2();
-                verbuendeter = spiel.getS3();
+                mitspieler = spiel.getS3();
                 gegner2 = spiel.getS4();
 
-                //TODO trumpficon setzen und nur trumpffarbe als nachricht schicken
-                //imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
+                /*imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spiel.getAngesagteFarbe()));
 
-                //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE + ":" + spiel.getAngesagteFarbe()).getBytes());
 
-                handKartenKlickbar();
+                handKartenKlickbar();*/
                 imageView_karteGegner.setVisibility(View.INVISIBLE);
                 imageView_eigeneKarte.setVisibility(View.INVISIBLE);
                 punkteSelbst.setText("0");
                 punkteGegner1.setText("0");
-                punkteVerbuendeter.setText("0");
+                punkteMitspieler.setText("0");
                 punkteGegner2.setText("0");
                 gegnerischeKarte1 = eigeneKarte = gegnerischeKarte2 = verbuendeteKarte = null;
                 handAktualisieren();
-                eigenerZug();
+                if (selbst.isIstdran()) {
+                    handKartenKlickbar();
+                    //aufdrehenButton.setVisibility(View.VISIBLE);
+                } else if (gegner1.isIstdran()) {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs.get(0), (TRUMPFANSAGEN + ":").getBytes());
+                } else if (mitspieler.isIstdran()) {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs.get(1), (TRUMPFANSAGEN + ":").getBytes());
+                } else if (gegner2.isIstdran()) {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs.get(2), (TRUMPFANSAGEN + ":").getBytes());
+                }
+                //eigenerZug();
             }
         }, 2000);
     }
@@ -435,23 +445,37 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     }
 
     public void karte1OnClick(View view) {
-        zugAusführen(0);
+        if (spiel.getAngesagteFarbe()==null) {
+            spiel.Trumpfansagen(selbst.Hand.get(0).getFarbe(),bummerl.getAnzahlSpiele());
+            for (Spieler s: andereSpieler) andereHandAktualisieren(s);
+        }
+        else zugAusführen(0);
     }
 
     public void karte2OnClick(View view) {
-        zugAusführen(1);
+        if (spiel.getAngesagteFarbe()==null) spiel.Trumpfansagen(selbst.Hand.get(1).getFarbe(),bummerl.getAnzahlSpiele());
+        else zugAusführen(1);
     }
 
     public void karte3OnClick(View view) {
-        zugAusführen(2);
+        if (spiel.getAngesagteFarbe()==null) spiel.Trumpfansagen(selbst.Hand.get(2).getFarbe(),bummerl.getAnzahlSpiele());
+        else zugAusführen(2);
     }
 
     public void karte4OnClick(View view) {
-        zugAusführen(3);
+        if (spiel.getAngesagteFarbe()==null) spiel.Trumpfansagen(selbst.Hand.get(3).getFarbe(),bummerl.getAnzahlSpiele());
+        else zugAusführen(3);
     }
 
     public void karte5OnClick(View view) {
-        zugAusführen(4);
+        if (spiel.getAngesagteFarbe()==null) spiel.Trumpfansagen(selbst.Hand.get(4).getFarbe(),bummerl.getAnzahlSpiele());
+        else zugAusführen(4);
+    }
+
+    public void aufdrehenOnClick(View view) {
+        spiel.Trumpfansagen(spiel.Aufdrehen().getFarbe(),bummerl.getAnzahlSpiele());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":"+spiel.getAngesagteFarbe()).getBytes());
+        //aufdrehenButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -524,7 +548,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 if (spiel.istSpielzuEnde(bummerl)) {
                     //spielEnde();
                 }
-                gegnerischeHandAktualisieren();
+                //TODO: anderer Spieler durch Absender ersetzen
+                Spieler andererSpieler = new Spieler();
+                andereHandAktualisieren(andererSpieler);
                 angesagt = true;
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -534,7 +560,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 if (spiel.istSpielzuEnde(bummerl)) {
                     //spielEnde();
                 }
-                gegnerischeHandAktualisieren();
+                //TODO: anderer Spieler durch Absender ersetzen
+                /*Spieler andererSpieler = new Spieler();
+                andereHandAktualisieren(andererSpieler);*/
                 angesagt = true;
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -544,7 +572,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     @Override
     public void onMessageReceived(String s, byte[] bytes, boolean b) {
-        
+        receiveFromLobby(s, bytes, b);
     }
 
     @Override

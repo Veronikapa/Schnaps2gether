@@ -145,13 +145,13 @@ public class Spiel4 {
     }
 
     //nächste Karte am Stapel gibt die Trumpf an
-    private Karte Aufdrehen()
+    public Karte Aufdrehen()
     {
         return stapel.get(0);
     }
 
     //Ansagen der Trumpf und Austeilen der restlichen Karten
-    private void Trumpfansagen(String trumpf, int AnzahlSpiele)
+    public void Trumpfansagen(String trumpf, int AnzahlSpiele)
     {
         this.trumpf = trumpf;
 

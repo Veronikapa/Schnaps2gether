@@ -81,8 +81,12 @@ public class Karte {
         return new String(changeToLowerCase(Farbe)+"_icon");
     }
 
+    public static String getFarbeIcon(String farbe) {
+        return new String(changeToLowerCase(farbe)+"_icon");
+    }
 
-    public String changeToLowerCase(String value){
+
+    public static String changeToLowerCase(String value){
             String temp;
             if(value.equals("König")) {
                 temp = "koenig";
@@ -135,6 +139,25 @@ public class Karte {
         int id = -1;
         try {
             f = R.drawable.class.getDeclaredField(getFarbeIcon());
+            id = f.getInt(null);
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static int getIconResourceId(String farbe){
+        Field f;
+        int id = -1;
+        try {
+            f = R.drawable.class.getDeclaredField(getFarbeIcon(farbe));
             id = f.getInt(null);
 
         } catch (SecurityException e) {
