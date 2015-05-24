@@ -279,15 +279,15 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
 
         imageView_karte1.setEnabled(false);
-        imageView_karte1.setAlpha(0.4f);
+        imageView_karte1.setAlpha(0.6f);
         imageView_karte2.setEnabled(false);
-        imageView_karte2.setAlpha(0.4f);
+        imageView_karte2.setAlpha(0.6f);
         imageView_karte3.setEnabled(false);
-        imageView_karte3.setAlpha(0.4f);
+        imageView_karte3.setAlpha(0.6f);
         imageView_karte4.setEnabled(false);
-        imageView_karte4.setAlpha(0.4f);
+        imageView_karte4.setAlpha(0.6f);
         imageView_karte5.setEnabled(false);
-        imageView_karte5.setAlpha(0.4f);
+        imageView_karte5.setAlpha(0.6f);
 
 
         button20er.setEnabled(false);

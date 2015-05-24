@@ -119,13 +119,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
-
-
-
-        //buttonGKarte1I = (Button) findViewById(R.id.cmd_1K_I);
-        //buttonGKarte2I = (Button) findViewById(R.id.cmd_2K_I);
-        //buttonGestochenI = (Button) findViewById(R.id.cmd_gestochen_I);
-
         stichEigeneKarteI = (ImageView) findViewById(R.id.stichEigeneKarteI);
         stichGegnerKarteI = (ImageView) findViewById(R.id.stichGegnerKarteI);
         stichDeckI =(ImageView) findViewById(R.id.stichDeckI);
@@ -134,19 +127,12 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
-
-      /*  buttonGKarte1G = (Button) findViewById(R.id.cmd_1K_G);
-        buttonGKarte2G = (Button) findViewById(R.id.cmd_2K_G);
-        buttonGestochenG = (Button) findViewById(R.id.cmd_gestochen_G);*/
-
-
         handkartenImages = new ArrayList<ImageView>();
         handkartenImages.add(0, imageView_karte1);
         handkartenImages.add(1, imageView_karte2);
         handkartenImages.add(2, imageView_karte3);
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
-
 
         spielStart();
     }
@@ -202,9 +188,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
     private void gegnerischerZug(Karte karteS1) {
         gegnerischeKarte = spiel.AuspielenComputer(karteS1);
-
-
-
         imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
 
         if (spiel.isZugedreht()) {
@@ -219,7 +202,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
 
-            //Button buttonK = handkartenButtons.get(i);
 
             ImageView imageViewK = handkartenImages.get(i);
 
@@ -246,7 +228,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
     private void gespielteKarteEntfernen(int i) {
 
-
         handkartenImages.get(i).setVisibility(View.INVISIBLE);
     }
 
@@ -267,11 +248,11 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         selbst = spiel.getS1();
         gegner = spiel.getS2();
 
-
         trumpfkarte = spiel.getAufgedeckterTrumpf();
-
         imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
         imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
+        imageView_deck.setImageResource(R.drawable.deck_full);
+        imageView_deck.setVisibility(View.VISIBLE);
 
 
         pruefegestochenG = true;
@@ -281,6 +262,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
+
         punkteSelbst.setText("0");
         punkteGegner.setText("0");
         gegnerischeKarte = null;
@@ -291,15 +273,15 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private void buttonsNichtKlickbar() {
 
         imageView_karte1.setEnabled(false);
-        imageView_karte1.setAlpha(0.4f);
+        imageView_karte1.setAlpha(0.6f);
         imageView_karte2.setEnabled(false);
-        imageView_karte2.setAlpha(0.4f);
+        imageView_karte2.setAlpha(0.6f);
         imageView_karte3.setEnabled(false);
-        imageView_karte3.setAlpha(0.4f);
+        imageView_karte3.setAlpha(0.6f);
         imageView_karte4.setEnabled(false);
-        imageView_karte4.setAlpha(0.4f);
+        imageView_karte4.setAlpha(0.6f);
         imageView_karte5.setEnabled(false);
-        imageView_karte5.setAlpha(0.4f);
+        imageView_karte5.setAlpha(0.6f);
 
 
         button20er.setEnabled(false);
@@ -315,18 +297,15 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
-            // Button buttonK = handkartenButtons.get(i);
             ImageView imageViewK = handkartenImages.get(i);
 
-
             if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(gegnerischeKarte, selbst.Hand.get(i), selbst)) {
-                //buttonK.setEnabled(true);
                 imageViewK.setEnabled(true);
                 imageViewK.setAlpha(1f);
             } else {
                 imageViewK.setEnabled(false);
-                imageViewK.setAlpha(0.4f);
-                //buttonK.setEnabled(false);
+                imageViewK.setAlpha(0.6f);
+
             }
         }
     }
@@ -410,12 +389,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     public void trumpfkarteTauschen(View view) {
         spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
         trumpfkarte = spiel.getAufgedeckterTrumpf();
-        //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
         imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
+
         handAktualisieren();
         buttonTrumpfTauschen.setEnabled(false);
         buttonTrumpfTauschen.setAlpha(0.4f);
+
         eigenerZug();
     }
 
@@ -492,42 +472,88 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                 handAktualisieren();
                 if(pruefegestochenG)
                 {
-                    if(spiel.getS2().Gestochen.size()==2)
-                    {
+                    if (spiel.getS2().Gestochen.size() == 2) {
                         stichEigeneKarteG.setImageResource(spiel.getS2().Gestochen.get(0).getImageResourceId());
                         stichGegnerKarteG.setImageResource(spiel.getS2().Gestochen.get(1).getImageResourceId());
-                        /*buttonGKarte1G.setText(spiel.getS2().Gestochen.get(0).getFarbe() + spiel.getS2().Gestochen.get(0).getWertigkeit());
-                        buttonGKarte2G.setText(spiel.getS2().Gestochen.get(1).getFarbe() + spiel.getS2().Gestochen.get(1).getWertigkeit());
-*/
-                    }
-                    else if(spiel.getS2().Gestochen.size()>2)
-                    {
+                        /*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
+                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
+                    } else if ((spiel.getS2().Gestochen.size() > 2) && ((spiel.getS2().Gestochen.size() <= 3))) {
                         stichDeckG.setVisibility(View.VISIBLE);
+                        stichDeckG.setImageResource(R.drawable.deck);
+                        pruefegestochenG = false;
 
+                    } else if ((spiel.getS2().Gestochen.size() > 3) && ((spiel.getS2().Gestochen.size() <= 4))) {
+                        stichDeckG.setImageResource(R.drawable.deck_2);
+                        stichDeckG.setVisibility(View.VISIBLE);
+                        pruefegestochenG = false;
+
+                    } else if (((spiel.getS2().Gestochen.size() > 4) && ((spiel.getS2().Gestochen.size() <= 6)))) {
+                        stichDeckG.setImageResource(R.drawable.deck_3);
+                        stichDeckG.setVisibility(View.VISIBLE);
+                        pruefegestochenG = false;
+
+                    } else if (((spiel.getS2().Gestochen.size() > 6) && ((spiel.getS2().Gestochen.size() <= 8)))) {
+                        stichDeckG.setImageResource(R.drawable.deck_4);
+                        stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
                     }
+                    else if (((spiel.getS2().Gestochen.size() > 8))) {
+                        stichDeckG.setImageResource(R.drawable.deck_5);
+                        stichDeckG.setVisibility(View.VISIBLE);
+                        pruefegestochenG = false;
+                    }
+
                 }
-                if(pruefegestochenI)
-                {
-                    if(spiel.getS1().Gestochen.size()==2)
-                    {
+                if(pruefegestochenI) {
+                    if (spiel.getS1().Gestochen.size() == 2) {
                         stichEigeneKarteI.setImageResource(spiel.getS1().Gestochen.get(0).getImageResourceId());
                         stichGegnerKarteI.setImageResource(spiel.getS1().Gestochen.get(1).getImageResourceId());
                         /*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
                         buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
-                    }
-                    else if(spiel.getS1().Gestochen.size()>2)
-                    {
+                    } else if ((spiel.getS1().Gestochen.size() > 2) && ((spiel.getS1().Gestochen.size() <= 3))) {
+                        stichDeckI.setVisibility(View.VISIBLE);
+                        stichDeckI.setImageResource(R.drawable.deck);
+                        pruefegestochenI = false;
 
-                        // buttonGestochenI.setVisibility(View.VISIBLE);
+                    } else if ((spiel.getS1().Gestochen.size() > 3) && ((spiel.getS1().Gestochen.size() <= 4))) {
+                        stichDeckI.setImageResource(R.drawable.deck_2);
+                        stichDeckI.setVisibility(View.VISIBLE);
+                        pruefegestochenI = false;
+
+                    } else if (((spiel.getS1().Gestochen.size() > 4) && ((spiel.getS1().Gestochen.size() <= 6)))) {
+                        stichDeckI.setImageResource(R.drawable.deck_3);
+                        stichDeckI.setVisibility(View.VISIBLE);
+                        pruefegestochenI = false;
+
+                    } else if (((spiel.getS1().Gestochen.size() > 6) && ((spiel.getS1().Gestochen.size() <= 8)))) {
+                        stichDeckI.setImageResource(R.drawable.deck_4);
                         stichDeckI.setVisibility(View.VISIBLE);
                         pruefegestochenI = false;
                     }
+                    else if (((spiel.getS1().Gestochen.size() > 8))) {
+                        stichDeckI.setImageResource(R.drawable.deck_5);
+                        stichDeckI.setVisibility(View.VISIBLE);
+                        pruefegestochenI = false;
+                    }
+
                 }
-//                if(spiel.AnzahlKartenStapel()!=0)
-//                    buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
-//                else
-//                    buttonStapel.setText("0");
+                if(spiel.AnzahlKartenStapel()==0) {
+                    imageView_deck.setVisibility(View.INVISIBLE);
+
+                }else if ((spiel.AnzahlKartenStapel()<=2) && (spiel.AnzahlKartenStapel()>0))
+                    imageView_deck.setImageResource(R.drawable.deck);
+                else if((spiel.AnzahlKartenStapel()<=4) && (spiel.AnzahlKartenStapel()>2))
+                    imageView_deck.setImageResource(R.drawable.deck_2);
+                else if((spiel.AnzahlKartenStapel()<=6) && (spiel.AnzahlKartenStapel()>4))
+                    imageView_deck.setImageResource(R.drawable.deck_3);
+                else if((spiel.AnzahlKartenStapel()<=8) && (spiel.AnzahlKartenStapel()>6))
+                    imageView_deck.setImageResource(R.drawable.deck_4);
+                else if((spiel.AnzahlKartenStapel()<=10) && (spiel.AnzahlKartenStapel()>8))
+                    imageView_deck.setImageResource(R.drawable.deck_5);
+                else
+                    imageView_deck.setImageResource(R.drawable.deck_full);
+
+
                 if (selbst.isIstdran()) {
                     eigenerZug();
                 } else {
