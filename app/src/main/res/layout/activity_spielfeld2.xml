@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld"
     android:gravity="center_vertical"
     android:weightSum="1"
@@ -11,13 +11,13 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="110dp"
+        android:layout_height="25dp"
         android:id="@+id/gegnerNameLayout"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:background="@drawable/name_plakette">
+        android:background="@drawable/name_plakette"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:id="@+id/Enemy"
@@ -26,41 +26,57 @@
             android:layout_height="wrap_content"
             android:gravity="top|center"
             android:layout_centerHorizontal="true"
-            style="@style/button_text"
+            android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/pointsText" />
+            android:layout_alignBottom="@+id/pointsText"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/pointsText"
             android:text="@string/punktestand2" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            style="@style/button_text"
+            android:layout_gravity="top|center_horizontal"
             android:layout_alignTop="@+id/linearLayout2"
+            android:textColor="@android:color/white"
             android:layout_toRightOf="@+id/gegnerNameLayout"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="false"
-            android:gravity="top|center" />
+            android:gravity="top|center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/imageView"
+            android:background="@drawable/auge"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/buttons_leiste"
         android:weightSum="1"
-        android:layout_alignRight="@+id/eigeneKartenLayout"
-        android:layout_alignEnd="@+id/eigeneKartenLayout"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/eigeneKartenLayout"
+        android:layout_toLeftOf="@+id/stichAnzeige"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="left|center">
 
         <Button
             android:id="@+id/main_buttonTtauschen"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Trumpf Tausch"
             style="@style/button_text"
             android:onClick="trumpfkarteTauschen"
@@ -72,30 +88,43 @@
             android:textAllCaps="false" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:orientation="vertical"
             android:layout_marginRight="5dp"
-            android:layout_gravity="center">
-            <TextView
-                android:id="@+id/I"
-                android:text="@string/spieler1" android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:textColor="@android:color/white" />
-            <TextView
-                android:id="@+id/pointsText2"
-                android:text="@string/punktestand2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:textColor="@android:color/white" />
+            android:layout_gravity="center"
+            android:layout_weight="0.17">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/I"
+                    android:text="@string/spieler1" android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="0dp" />
+
+                <TextView
+                    android:id="@+id/pointsText2"
+                    android:text="@string/punktestand2"
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top|center_horizontal"
+                    android:textColor="@android:color/white"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp" />
+            </LinearLayout>
+
         </LinearLayout>
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:text="@string/button20er"
             style="@style/button_text"
             android:onClick="popup20er"
@@ -104,11 +133,12 @@
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_weight="0.21" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -116,12 +146,13 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_weight="0.22" />
 
         <Button
             android:id="@+id/main_buttonZ"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:text="@string/buttonZ"
             android:onClick="zudrehen"
             style="@style/button_text"
@@ -131,44 +162,40 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginLeft="5dp"
-            android:textAllCaps="false" />
-        <!--        <Button
-                    android:id="@+id/cmd_1K_I"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:text="@string/button1"
-                    android:onClick="popup20er"
-                    android:visibility="visible" />
+            android:textAllCaps="false"
+            android:elegantTextHeight="true"
+            android:layout_weight="0.35" />
 
-                <Button
-                    android:id="@+id/cmd_2K_I"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:text="@string/button2"
-                    android:onClick="ansagen40er"
-                    android:visibility="visible" />
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Abbrechen"
+            android:id="@+id/cmd_close"
+            style="@style/button_text"
+            android:background="@drawable/beiger_button"
+            android:elegantTextHeight="false"
+            android:capitalize="words"
+            android:textAllCaps="false"
+            android:layout_weight="0.07"
+            android:paddingRight="5dp"
+            android:layout_marginRight="5dp"
+            android:enabled="true"
+            android:clickable="true"
+            android:onClick="abbrechenSpiel" />
 
-                <Button
-                    android:layout_width="54dp"
-                    android:layout_height="34dp"
-                    android:text="New Button"
-                    android:id="@+id/cmd_gestochen_I"
-                    android:visibility="invisible" />-->
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="100dp"
-        android:layout_height="130dp"
+        android:layout_width="130dp"
+        android:layout_height="150dp"
         android:id="@+id/frameGegnerEigene"
         android:padding="10dp"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:touchscreenBlocksFocus="false"
-        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/deck_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp">
+        android:layout_marginBottom="15dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -214,17 +241,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
-        android:layout_marginLeft="5dp"
         android:id="@+id/eigeneKartenLayout"
         android:paddingRight="30dp"
-        android:layout_above="@+id/buttons_leiste">
+        android:layout_alignTop="@+id/stichAnzeige"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/buttons_leiste"
+        android:layout_alignEnd="@+id/buttons_leiste">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="80dp">
+            android:layout_marginRight="100dp">
 
             <ImageView
                 android:layout_width="60dp"
@@ -245,7 +275,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="40dp">
+            android:layout_marginRight="50dp">
 
             <ImageView
                 android:layout_width="60dp"
@@ -283,7 +313,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="40dp">
+            android:layout_marginLeft="50dp">
 
             <ImageView
                 android:layout_width="60dp"
@@ -305,7 +335,7 @@
             android:layout_height="wrap_content"
             android:padding="0dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="80dp">
+            android:layout_marginLeft="100dp">
 
             <ImageView
                 android:layout_width="60dp"
@@ -325,17 +355,17 @@
         android:layout_width="136dp"
         android:layout_height="100dp"
         android:id="@+id/deck_layout"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/eigeneKartenLayout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/eigeneKartenLayout">
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="top|right"
-            android:id="@+id/trumpfIconLayout">
+            android:id="@+id/trumpfIconLayout"
+            android:layout_marginRight="25dp">
 
         </LinearLayout>
 
@@ -368,8 +398,8 @@
             android:layout_gravity="left|center_vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="65dp"
+                android:layout_height="95dp"
                 android:id="@+id/imageView_deck"
                 android:background="@drawable/deck_full"
                 android:scaleType="fitXY"
@@ -383,80 +413,323 @@
             android:scaleType="fitXY"
             android:visibility="visible"
             android:background="@android:color/transparent"
-            android:layout_gravity="top|center" />
+            android:layout_gravity="top|right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="143dp"
+        android:layout_width="150dp"
         android:layout_height="119dp"
         android:layout_gravity="right|center_vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/frameLayout"
+        android:id="@+id/stichAnzeige"
+        android:background="@drawable/rounded_corner"
+        android:layout_toEndOf="@+id/frameGegnerEigene"
         android:layout_alignLeft="@+id/frameLayout2"
-        android:layout_alignStart="@+id/frameLayout2">
+        android:layout_alignStart="@+id/frameLayout2"
+        android:layout_marginRight="5dp">
+
+
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom">
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="105dp"
+            android:layout_marginBottom="10dp">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:rotation="45">
-
-            </LinearLayout>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK16"
+                android:background="@android:color/transparent" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichGegnerKarteI"
-            android:background="@android:color/transparent"
-            android:rotation="-40"
-            android:layout_gravity="center"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="90dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK15"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="75dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK14"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK13"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="45dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK12"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK11"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
-            android:onClick="ansagen40er" />
+            android:layout_marginBottom="10dp">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichEigeneKarteI"
-            android:cropToPadding="true"
-            android:background="@android:color/transparent"
-            android:rotation="40"
-            android:layout_gravity="center"
-            android:onClick="popup20er"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="5dp" />
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK10"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/stichDeckI"
-            android:hapticFeedbackEnabled="false"
-            android:background="@drawable/deck"
-            android:layout_gravity="center_horizontal|bottom"
-            android:visibility="invisible"
-            android:rotation="90"
-            android:layout_marginTop="35dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK9"
+                android:background="@android:color/transparent"
+                android:layout_marginBottom="10dp" />
+        </LinearLayout>
+
+
+        <!--beginn untere reihee  -->
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="105dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK8"
+                android:background="@android:color/transparent"
+                android:layout_gravity="left|bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="90dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK7"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="75dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK6"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="60dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK5"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="45dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK4"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK3"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="15dp">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK2"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|right">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="60dp"
+                android:id="@+id/stichK1"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+
+
+
+        <!--        <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/stichGegnerKarteI"
+                    android:background="@android:color/transparent"
+                    android:rotation="-40"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="5dp" />
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/stichEigeneKarteI"
+                    android:cropToPadding="true"
+                    android:background="@android:color/transparent"
+                    android:rotation="40"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginBottom="5dp" />
+
+                <ImageView
+                    android:layout_width="65dp"
+                    android:layout_height="95dp"
+                    android:id="@+id/stichDeckI"
+                    android:hapticFeedbackEnabled="false"
+                    android:background="@drawable/deck"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="invisible"
+                    android:rotation="90"
+                    android:layout_marginTop="35dp" />-->
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="143dp"
+        android:layout_width="155dp"
         android:layout_height="119dp"
         android:layout_gravity="right|center_vertical"
         android:id="@+id/frameLayout2"
         android:layout_alignTop="@+id/gegnerNameLayout"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/deck_layout">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -479,7 +752,6 @@
             android:rotation="-40"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginRight="0dp"
-            android:onClick="ansagen40er"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="5dp" />
 
@@ -504,22 +776,9 @@
             android:visibility="invisible"
             android:rotation="90"
             android:layout_marginBottom="30dp" />
+
     </FrameLayout>
 
-    <Button
-        style="@style/button_text"
-        android:id="@+id/cmd_close"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="@string/Beenden"
-        android:onClick="abbrechenSpiel"
-        android:singleLine="false"
-        android:textColor="@android:color/white"
-        android:background="@drawable/beiger_button"
-        android:textAllCaps="false"
-        android:layout_alignLeft="@+id/frameLayout2"
-        android:layout_alignStart="@+id/frameLayout2"
-        android:layout_alignBottom="@+id/gegnerNameLayout" />
 
 </RelativeLayout>
 

@@ -39,33 +39,27 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private ImageView imageView_eigeneKarte;
     private ImageView imageView_karteGegner;
     private ImageView imageView_trumpfIcon;
-
+/*
     private ImageView stichEigeneKarteI;
     private ImageView stichGegnerKarteI;
-    private ImageView stichDeckI;
+    private ImageView stichDeckI;*/
 
-    private ImageView stichEigeneKarteG;
+   private ImageView stichEigeneKarteG;
     private ImageView stichGegnerKarteG;
     private ImageView stichDeckG;
-
-
 
     private Button buttonZudrehen;
     private Button button20er;
     private Button button40er;
     private Button buttonTrumpfTauschen;
-    /* private Button buttonGKarte1I;
-     private Button buttonGKarte2I;
-     private Button buttonGestochenI;*/
-    /*private Button buttonGKarte1G;
-    private Button buttonGKarte2G;
-    private Button buttonGestochenG;*/
+
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
     private MenuItem kreuz20er;
     private Spieler selbst;
     private Spieler gegner;
+
     private Karte karte1;
     private Karte karte2;
     private Karte karte3;
@@ -79,7 +73,28 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private TextView txtGegner;
     private Bummerl2 bummerl;
     private boolean pruefegestochenG;
-    private boolean pruefegestochenI;
+   // private boolean pruefegestochenI;
+
+   private ArrayList<ImageView> stichImages;
+    private ImageView stichK1;
+    private ImageView stichK2;
+    private ImageView stichK3;
+    private ImageView stichK4;
+    private ImageView stichK5;
+    private ImageView stichK6;
+    private ImageView stichK7;
+    private ImageView stichK8;
+    private ImageView stichK9;
+    private ImageView stichK10;
+    private ImageView stichK11;
+    private ImageView stichK12;
+    private ImageView stichK13;
+    private ImageView stichK14;
+    private ImageView stichK15;
+    private ImageView stichK16;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +134,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
-        stichEigeneKarteI = (ImageView) findViewById(R.id.stichEigeneKarteI);
+/*        stichEigeneKarteI = (ImageView) findViewById(R.id.stichEigeneKarteI);
         stichGegnerKarteI = (ImageView) findViewById(R.id.stichGegnerKarteI);
-        stichDeckI =(ImageView) findViewById(R.id.stichDeckI);
+        stichDeckI =(ImageView) findViewById(R.id.stichDeckI);*/
 
         stichEigeneKarteG =(ImageView) findViewById(R.id.stichEigeneKarteG);
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
@@ -133,6 +148,41 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         handkartenImages.add(2, imageView_karte3);
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
+
+        stichK1= (ImageView) findViewById(R.id.stichK1);
+        stichK2= (ImageView) findViewById(R.id.stichK2);
+        stichK3= (ImageView) findViewById(R.id.stichK3);
+        stichK4= (ImageView) findViewById(R.id.stichK4);
+        stichK5= (ImageView) findViewById(R.id.stichK5);
+        stichK6= (ImageView) findViewById(R.id.stichK6);
+        stichK7= (ImageView) findViewById(R.id.stichK7);
+        stichK8= (ImageView) findViewById(R.id.stichK8);
+        stichK9= (ImageView) findViewById(R.id.stichK9);
+        stichK10= (ImageView) findViewById(R.id.stichK10);
+        stichK11= (ImageView) findViewById(R.id.stichK11);
+        stichK12= (ImageView) findViewById(R.id.stichK12);
+        stichK13= (ImageView) findViewById(R.id.stichK13);
+        stichK14= (ImageView) findViewById(R.id.stichK14);
+        stichK15= (ImageView) findViewById(R.id.stichK15);
+        stichK16= (ImageView) findViewById(R.id.stichK16);
+
+        stichImages= new ArrayList<ImageView>();
+        stichImages.add(0,stichK1);
+        stichImages.add(1,stichK2);
+        stichImages.add(2,stichK3);
+        stichImages.add(3,stichK4);
+        stichImages.add(4,stichK5);
+        stichImages.add(5,stichK6);
+        stichImages.add(6,stichK7);
+        stichImages.add(7,stichK8);
+        stichImages.add(8,stichK9);
+        stichImages.add(9,stichK10);
+        stichImages.add(10,stichK11);
+        stichImages.add(11,stichK12);
+        stichImages.add(12,stichK13);
+        stichImages.add(13,stichK14);
+        stichImages.add(14,stichK15);
+        stichImages.add(15,stichK16);
 
         spielStart();
     }
@@ -218,6 +268,30 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         }
     }
 
+    private void stichAktualisieren() {
+
+
+        int stichAnzahl = spiel.getS1().Gestochen.size();
+        for (int i=0;i<16;i++) {
+
+
+            ImageView imageViewK = stichImages.get(i);
+
+            if (i<stichAnzahl) {
+                // Karte k = selbst.Hand.get(i);
+                Karte j = spiel.getS1().Gestochen.get(i);
+
+                imageViewK.setImageResource(j.getImageResourceId());
+                imageViewK.setVisibility(View.VISIBLE);
+
+            } else {
+
+                imageViewK.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+
     private void punkteAktualisieren() {
 
         int p1 = selbst.getPunkte();
@@ -256,7 +330,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
 
         pruefegestochenG = true;
-        pruefegestochenI = true;
+      //  pruefegestochenI = true;
 
         handKartenKlickbar();
         buttonZudrehen.setEnabled(true);
@@ -267,6 +341,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         punkteGegner.setText("0");
         gegnerischeKarte = null;
         handAktualisieren();
+        stichAktualisieren();
         eigenerZug();
     }
 
@@ -319,14 +394,14 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_karteGegner.setImageDrawable(null);
         imageView_eigeneKarte.setImageDrawable(null);
 
-        stichGegnerKarteI.setImageDrawable(null);
-        stichEigeneKarteI.setImageDrawable(null);
+        /*stichGegnerKarteI.setImageDrawable(null);
+        stichEigeneKarteI.setImageDrawable(null);*/
 
         stichEigeneKarteG.setImageDrawable(null);
         stichGegnerKarteG.setImageDrawable(null);
 
 
-        stichDeckI.setVisibility(View.INVISIBLE);
+        //stichDeckI.setVisibility(View.INVISIBLE);
         stichDeckG.setVisibility(View.INVISIBLE);
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
@@ -463,6 +538,8 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         @Override
         public void run() {
             punkteAktualisieren();
+            stichAktualisieren();
+
             gegnerischeKarte = null;
             imageView_eigeneKarte.setImageDrawable(null);
             imageView_karteGegner.setImageDrawable(null);
@@ -477,39 +554,37 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                         stichGegnerKarteG.setImageResource(spiel.getS2().Gestochen.get(1).getImageResourceId());
                         /*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
                         buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
-                    } else if ((spiel.getS2().Gestochen.size() > 2) && ((spiel.getS2().Gestochen.size() <= 3))) {
+                    } else if ((spiel.getS2().Gestochen.size() > 2) && (spiel.getS2().Gestochen.size() <= 4)) {
                         stichDeckG.setVisibility(View.VISIBLE);
                         stichDeckG.setImageResource(R.drawable.deck);
                         pruefegestochenG = false;
 
-                    } else if ((spiel.getS2().Gestochen.size() > 3) && ((spiel.getS2().Gestochen.size() <= 4))) {
+                    } else if ((spiel.getS2().Gestochen.size() >= 4) && (spiel.getS2().Gestochen.size() <= 6)) {
                         stichDeckG.setImageResource(R.drawable.deck_2);
                         stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
 
-                    } else if (((spiel.getS2().Gestochen.size() > 4) && ((spiel.getS2().Gestochen.size() <= 6)))) {
+                    } else if ((spiel.getS2().Gestochen.size() >6) && (spiel.getS2().Gestochen.size() <= 8)) {
                         stichDeckG.setImageResource(R.drawable.deck_3);
                         stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
 
-                    } else if (((spiel.getS2().Gestochen.size() > 6) && ((spiel.getS2().Gestochen.size() <= 8)))) {
+                    } else if ((spiel.getS2().Gestochen.size() > 8) && (spiel.getS2().Gestochen.size() <=10)) {
                         stichDeckG.setImageResource(R.drawable.deck_4);
-                        stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
                     }
-                    else if (((spiel.getS2().Gestochen.size() > 8))) {
+                    else if (spiel.getS2().Gestochen.size() > 10) {
                         stichDeckG.setImageResource(R.drawable.deck_5);
-                        stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
                     }
 
                 }
-                if(pruefegestochenI) {
+               /* if(pruefegestochenI) {
                     if (spiel.getS1().Gestochen.size() == 2) {
                         stichEigeneKarteI.setImageResource(spiel.getS1().Gestochen.get(0).getImageResourceId());
                         stichGegnerKarteI.setImageResource(spiel.getS1().Gestochen.get(1).getImageResourceId());
-                        /*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
-                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
+                        *//*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
+                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*//*
                     } else if ((spiel.getS1().Gestochen.size() > 2) && ((spiel.getS1().Gestochen.size() <= 3))) {
                         stichDeckI.setVisibility(View.VISIBLE);
                         stichDeckI.setImageResource(R.drawable.deck);
@@ -536,7 +611,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                         pruefegestochenI = false;
                     }
 
-                }
+                }*/
                 if(spiel.AnzahlKartenStapel()==0) {
                     imageView_deck.setVisibility(View.INVISIBLE);
 
