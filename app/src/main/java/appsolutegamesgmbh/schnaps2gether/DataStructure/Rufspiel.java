@@ -15,7 +15,7 @@ public class Rufspiel {
         return punkte;
     }
 
-    Rufspiel(String spiel) throws WrongGameException
+    public Rufspiel(String spiel) throws WrongGameException
     {
         this.spiel = spiel;
         if(spiel == "normal")

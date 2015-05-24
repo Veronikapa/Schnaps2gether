@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/weiter"
+        android:title="@string/weiter"/>
+    <item android:id="@+id/schnapser"
+        android:title="@string/schnapser"/>
+    <item android:id="@+id/land"
+        android:title="@string/land"/>
+    <item android:id="@+id/kontraschnapser"
+        android:title="@string/kontraschnapser"/>
+    <item android:id="@+id/bauernschnapser"
+        android:title="@string/bauernschnapser"/>
+    <item android:id="@+id/kontrabauernschnapser"
+        android:title="@string/kontrabauernschnapser"/>
+    <item android:id="@+id/farbenjodler"
+        android:title="@string/farbenjodler"/>
+    <item android:id="@+id/herrenjodler"
+        android:title="@string/herrenjodler"/>
+</menu>
