@@ -391,7 +391,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static void spielEnde() {
         boolean win = true;
-        if (selbst.getPunkte()<66) {
+        if (selbst.getPunkte()<66 && gegner.isIstdran()) {
             win = false;
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
@@ -406,6 +406,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.Zudrehen();
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
+        imageView_deck.setAlpha((float)0);
+        imageView_trumpf.setAlpha((float)0);
+
         buttonZudrehen.setText("Zugedreht");
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
     }
@@ -565,6 +568,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
                 buttonZudrehen.setText("Zugedreht");
+                imageView_trumpf.setAlpha((float)0);
+                imageView_deck.setAlpha((float)0);
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
@@ -691,6 +696,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void abbrechenSpiel(View v){
+        //mGoogleApiClient.disconnect();
         Intent i = new Intent(this, Startmenue.class);
         startActivity(i);
         finish();
@@ -708,11 +714,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 spielEnde();
             } else {
                 handAktualisieren();
-                if(spiel.AnzahlKartenStapel()==0)
+                if(spiel.AnzahlKartenStapel()==0) {
                     //buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
-                    imageView_deck.setAlpha((float)0);
+                    imageView_deck.setAlpha((float) 0);
+                    imageView_trumpf.setAlpha((float)0);
 //                else
 //                    buttonStapel.setText("0");
+                }
                 if (selbst.isIstdran()) {
                     eigenerZug();
                     handKartenKlickbar();

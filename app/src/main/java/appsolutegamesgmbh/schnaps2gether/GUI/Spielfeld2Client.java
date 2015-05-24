@@ -238,7 +238,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private static void punkteAktualisieren() {
 
-        punkteGegner.setText(Integer.toString(p2));
+        //punkteGegner.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
     }
 
@@ -324,10 +324,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 
+        //spielStart();
+        /* erst am Ende des Bummerl
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
         gameEndDialogFragment.setArguments(args);
-        //gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
+        //gameEndDialogFragment.show(getFragmentManager(), "GameEnd"); */
     }
 
     public void zudrehen(View view) {
@@ -335,6 +337,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
         buttonZudrehen.setText("Zugedreht");
+        imageView_deck.setAlpha((float)0);
+        imageView_trumpf.setAlpha((float)0);
+
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
 
@@ -555,7 +560,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1].split(" ")[1]);
-                p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
+                //p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
@@ -575,6 +580,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void abbrechenSpiel(View v){
+        //mGoogleApiClient.disconnect();
         Intent i = new Intent(this, Startmenue.class);
         startActivity(i);
         finish();
@@ -623,6 +629,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: zugedreht = true;
+                imageView_deck.setAlpha((float)0);
+                imageView_trumpf.setAlpha((float)0);
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
@@ -638,7 +646,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 handler.postDelayed(new Zugende(), 2000);
             case PUNKTE:
                 p1 = Integer.decode(message.substring(2,3));
-                p2 = Integer.decode(message.substring(4,5));
+                //p2 = Integer.decode(message.substring(4,5));
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);

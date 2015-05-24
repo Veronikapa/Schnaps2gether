@@ -179,8 +179,9 @@ public class Lobby extends Activity implements
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         if (!m_IsHost) {
-                if (spielTyp == 2)
+                if (spielTyp == 2) {
                     Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
+                }
 
                 else if (spielTyp == 3)
                     Spielfeld3Client.receiveFromLobby(endpointID, payload, isReliable);
