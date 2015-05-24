@@ -574,6 +574,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
+    public void abbrechenSpiel(View v){
+        Intent i = new Intent(this, Startmenue.class);
+        startActivity(i);
+        finish();
+    }
+
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);

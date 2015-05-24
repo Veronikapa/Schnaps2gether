@@ -430,7 +430,8 @@ public class Lobby extends Activity implements
 
     public void abbrechenLobby(View v){
         Intent i = new Intent(this, Startmenue.class);
-        setResult(Activity.RESULT_OK,i);
+        //setResult(Activity.RESULT_OK,i);
+        startActivity(i);
         finish();
     }
 

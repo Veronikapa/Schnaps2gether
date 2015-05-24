@@ -305,7 +305,7 @@ public class Spiel2 {
                 else if (!farbeDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
                     farbeDameGestochen = true;
 
-                else if (!farbeBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                else if (!farbeBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bube")
                     farbeBubGestochen = true;
             }
         }
@@ -413,7 +413,7 @@ public class Spiel2 {
                 else if (!trumpfDameGestochen && s2.Gestochen.get(i).getWertigkeit() == "Dame")
                     trumpfDameGestochen = true;
 
-                else if (!trumpfBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bub")
+                else if (!trumpfBubGestochen && s2.Gestochen.get(i).getWertigkeit() == "Bube")
                     trumpfBubGestochen = true;
             }
         }
@@ -433,7 +433,7 @@ public class Spiel2 {
                 else if (!trumpfDameGestochen && s2.Hand.get(i).getWertigkeit() == "Dame")
                     habeTrumpfDame= true;
 
-                else if (!trumpfBubGestochen && s2.Hand.get(i).getWertigkeit() == "Bub")
+                else if (!trumpfBubGestochen && s2.Hand.get(i).getWertigkeit() == "Bube")
                     habeTrumpfBub = true;
             }
         }

@@ -506,6 +506,21 @@
             android:layout_marginBottom="30dp" />
     </FrameLayout>
 
+    <Button
+        style="@style/button_text"
+        android:id="@+id/cmd_close"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/Beenden"
+        android:onClick="abbrechenSpiel"
+        android:singleLine="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/beiger_button"
+        android:textAllCaps="false"
+        android:layout_alignLeft="@+id/frameLayout2"
+        android:layout_alignStart="@+id/frameLayout2"
+        android:layout_alignBottom="@+id/gegnerNameLayout" />
+
 </RelativeLayout>
 
 

@@ -690,6 +690,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     }
 
+    public void abbrechenSpiel(View v){
+        Intent i = new Intent(this, Startmenue.class);
+        startActivity(i);
+        finish();
+    }
+
     static class Zugende implements Runnable {
 
         @Override
