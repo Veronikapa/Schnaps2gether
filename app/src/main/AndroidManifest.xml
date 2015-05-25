@@ -57,7 +57,19 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
+            android:name=".GUI.Spielfeld3Client"
+            android:label="@string/title_activity_spielfeld3"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
             android:name=".GUI.Spielfeld4Host"
+            android:label="@string/title_activity_spielfeld4"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".GUI.Spielfeld4Client"
             android:label="@string/title_activity_spielfeld4"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >

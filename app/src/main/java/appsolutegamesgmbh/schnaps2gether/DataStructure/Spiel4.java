@@ -435,7 +435,7 @@ public class Spiel4 {
                     bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
                 }
 
-                bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+                bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele() + 1);
                 return true;
             }
 
@@ -691,7 +691,7 @@ public class Spiel4 {
             if(farbe.equals(trumpf))
                 s.setPunkte(s.getPunkte()+40);
             else
-                s.setPunkte(s.getPunkte()+20);
+                s.setPunkte(s.getPunkte() + 20);
         }
 
     }
@@ -728,5 +728,13 @@ public class Spiel4 {
 
     public String getAngesagteFarbe() {
         return angesagteFarbe;
+    }
+
+    public boolean isGefleckt() {
+        return flecken == 2;
+    }
+
+    public Rufspiel getSpiel() {
+        return spiel;
     }
 }
