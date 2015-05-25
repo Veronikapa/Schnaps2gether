@@ -38,6 +38,9 @@ public class Lobby extends Activity implements
         Connections.EndpointDiscoveryListener,
         PopupMenu.OnMenuItemClickListener {
 
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    private static final String SPIELSTART = "16";
+
     private Context appContext;
     private ListView spieleListView;
     public static ArrayList<String> spieleListe = new ArrayList<String>();
@@ -182,7 +185,15 @@ public class Lobby extends Activity implements
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         if (!m_IsHost) {
+            if (message.equals(SPIELSTART)) {
                 if (spielTyp == 2) {
+                    startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                } else if (spielTyp == 3) {
+                    startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
+                } else if (spielTyp == 4) {
+                    startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
+                }
+            } else if (spielTyp == 2) {
                     c2.receiveFromLobby(endpointID, payload, isReliable);
                 }
 
@@ -342,7 +353,7 @@ public class Lobby extends Activity implements
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
 
-                            if (spielTyp == 2 && endpointIds.size() == 1) {
+                            /*if (spielTyp == 2 && endpointIds.size() == 1) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             } else if (spielTyp == 3 && endpointIds.size() == 2) {
@@ -352,7 +363,7 @@ public class Lobby extends Activity implements
                             else if (spielTyp == 4 && endpointIds.size() == 3) {
                                 startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
                                 finish();
-                            }
+                            }*/
                         } else {
                             // Verbindung fehlgeschlagen
                             Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
@@ -382,15 +393,18 @@ public class Lobby extends Activity implements
                         deviceIds.add(remoteDeviceId);
 
                         if(spielTyp == 2 && endpointIds.size()==1) {
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         }
 
                         else if(spielTyp == 3 && endpointIds.size()==2) {
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
                             finish();
                         }
                         else if(spielTyp == 4 && endpointIds.size()==3) {
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
                             finish();
                         }

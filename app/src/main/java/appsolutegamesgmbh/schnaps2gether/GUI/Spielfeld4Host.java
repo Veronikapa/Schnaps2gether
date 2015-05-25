@@ -194,7 +194,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
         spielStart();
     }
-    private void zugAusführen(int i) {
+    private void zugAusfuehren(int i) {
         final Karte k = selbst.Hand.get(i);
         eigeneKarte = k;
         buttonsNichtKlickbar();
@@ -647,27 +647,27 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     public void karte1OnClick(View view) {
         if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(0).getFarbe());
-        else zugAusführen(0);
+        else zugAusfuehren(0);
     }
 
     public void karte2OnClick(View view) {
         if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(1).getFarbe());
-        else zugAusführen(1);
+        else zugAusfuehren(1);
     }
 
     public void karte3OnClick(View view) {
         if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(2).getFarbe());
-        else zugAusführen(2);
+        else zugAusfuehren(2);
     }
 
     public void karte4OnClick(View view) {
         if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(3).getFarbe());
-        else zugAusführen(3);
+        else zugAusfuehren(3);
     }
 
     public void karte5OnClick(View view) {
         if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(4).getFarbe());
-        else zugAusführen(4);
+        else zugAusfuehren(4);
     }
 
     public void aufdrehenOnClick(View view) {
