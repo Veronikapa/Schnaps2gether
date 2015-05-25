@@ -193,7 +193,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+                    gegnerHat20er();
                 }
             }, 1000);
         } else {
@@ -366,7 +366,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
-        handKartenKlickbar();
+
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
@@ -377,8 +377,16 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         punkteGegner.setText("0");
         gegnerischeKarte = null;
         handAktualisieren();
-        //if(selbst.isIstdran())
+        if(selbst.isIstdran()) {
+            handKartenKlickbar();
             eigenerZug();
+        }
+        else{
+            buttonsNichtKlickbar();
+            //Gegener ist dran - zuerst wird ueberprueft, ob Gegner 20/40er hat, danach wird Signal an Gegner gesendet
+            gegnerHat20er();
+        }
+
 
     }
 
@@ -426,7 +434,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         boolean win = true;
         if (selbst.getPunkte()<66 && gegner.isIstdran()) {
             win = false;
+            Toast.makeText(appContext, "Verloren! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
         }
+        else
+        {
+            Toast.makeText(appContext, "Gewonnen! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
+        }
+
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
         internSpielStart();
         /*Bundle args = new Bundle();
@@ -641,53 +655,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
-        String message = new String(payload);
-        switch ((message.substring(0,1))) {
-            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
-                spiel.Auspielen(gegnerischeKarte, gegner);
-                imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
-                if (eigeneKarte!=null) {
-                    zugEnde();
-                }
-                break;
-            case WEITER: handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    eigenerZug();
-                }
-                angesagt = false;
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
-                break;
-            case ZUGEDREHT: spiel.Zudrehen();
-                buttonZudrehen.setEnabled(false);
-                buttonZudrehen.setAlpha(0.4f);
-                buttonZudrehen.setText("Zugedreht");
-                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
-                break;
-            case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
-                punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    spielEnde();
-                }
-                gegnerischeHandAktualisieren();
-                Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
-                break;
-            case ANGESAGT20ER: String farbe = message.substring(2);
-                spiel.Ansagen20er(farbe, gegner);
-                punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    spielEnde();
-                }
-                gegnerischeHandAktualisieren();
-                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
-                break;
-            case TRUMPFGETAUSCHT: spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), gegner);
-                gegnerischeHandAktualisieren();
-                gegnerHat20er();
-                Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
-                break;
-            default: break;
-        }
-
+        receiveFromLobby(endpointID, payload, isReliable);
     }
 
     @Override

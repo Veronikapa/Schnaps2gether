@@ -795,6 +795,7 @@ public class Spiel2 {
            else
                bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
 
+            bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
             return true;
         }
         else if(s2.getPunkte() >= 66)
@@ -806,6 +807,7 @@ public class Spiel2 {
             else
                 bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
 
+            bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
             return true;
 
         }
@@ -828,6 +830,7 @@ public class Spiel2 {
                 else
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
             }
+            bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
             return true;
         }
         else if (angesagteFarbe != null) {

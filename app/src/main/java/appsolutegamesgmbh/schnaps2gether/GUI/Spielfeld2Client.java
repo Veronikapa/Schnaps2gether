@@ -338,6 +338,13 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private void spielEnde(boolean win) {
         //Bundle args = new Bundle();
+
+        if (win) {
+            Toast.makeText(appContext, "Gewonnen! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(appContext, "Verloren! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
+        }
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 
@@ -527,7 +534,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 stapelKartenAnz = Integer.decode(messageParts[1]);
                 String[] hand = messageParts[2].substring(1).split(",");
                 String[] spielbar = messageParts[3].substring(1).split(" ");
-                Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
+                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
@@ -552,6 +559,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                             hab20er.add(farbe);
                         }
                     }
+
                     eigenerZug();
                 }
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
@@ -582,7 +590,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1].split(" ")[1]);
                 punkteAktualisieren();
-                //p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
+                p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
@@ -613,81 +621,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
-        String message = new String(payload);
-        switch ((message.substring(0,1))) {
-            case BUMMERL: bummerl = new Bummerl2(message.substring(2));
-                break;
-            case TRUMPFKARTE: trumpfkarte = new Karte(message.substring(2));
-                imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
-                imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
-                break;
-            case HANDKARTEN: String[] messageParts = message.split(":");
-                stapelKartenAnz = Integer.decode(messageParts[1].substring(0, 1));
-                String[] hand = messageParts[1].substring(2).split(" ");
-                String[] spielbar = messageParts[2].split(" ");
-                selbst.Hand = new ArrayList<Karte>();
-                kartenSpielbar = new ArrayList<Boolean>();
-                for (int i=0; i<hand.length; i++) {
-                    selbst.Hand.add(new Karte(hand[i]));
-                    kartenSpielbar.add(spielbar[i] == "1" ? true : false);
-                }
-                handAktualisieren();
-
-                break;
-            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2));
-                imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
-
-                break;
-            case WEITER: handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    hat20er = message.substring(4,5).equals("1") ? true : false;
-                    hat40er = message.substring(6,7).equals("1") ? true : false;
-                    hab20er = new ArrayList<String>();
-                    if (hat20er) {
-                        String[] meine20er = message.substring(8).split(" ");
-                        for (String farbe: meine20er) {
-                            hab20er.add(farbe);
-                        }
-                    }
-                    eigenerZug();
-                }
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
-                break;
-            case ZUGEDREHT: zugedreht = true;
-                imageView_deck.setAlpha((float)0);
-                imageView_trumpf.setAlpha((float)0);
-                Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
-                break;
-            case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
-                break;
-            case ANGESAGT20ER: String farbe = message.substring(2);
-                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
-                break;
-            case TRUMPFGETAUSCHT: Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
-                break;
-            case ZUGENDE:
-                // Execute some code after 2 seconds have passed
-                Handler handler = new Handler();
-                handler.postDelayed(new Zugende(), 2000);
-            case PUNKTE:
-                p1 = Integer.decode(message.substring(2,3));
-                //p2 = Integer.decode(message.substring(4,5));
-                break;
-            case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
-                spielEnde(win);
-                break;
-            case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
-                // Execute some code after 2 seconds have passed
-                Handler handler2 = new Handler();
-                handler2.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 2000);
-                break;
-            default: break;
-        }
+        receiveFromLobby(endpointID, payload, isReliable);
     }
 
     @Override
