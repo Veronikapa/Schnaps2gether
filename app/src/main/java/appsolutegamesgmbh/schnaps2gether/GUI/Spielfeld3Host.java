@@ -66,7 +66,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static ImageView imageView_trumpf;
     private static ImageView imageView_eigeneKarte;
-    private static ImageView imageView_karteGegner;
+    private static ImageView imageView_karteGegner1;
+    private static ImageView imageView_karteGegner2;
     private static ImageView imageView_trumpfIcon;
 
     private static Button button20er;
@@ -87,6 +88,14 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte1;
     private static Karte gegnerischeKarte2;
+
+    private static ImageView imageView_talonkarte1;
+    private static ImageView imageView_talonkarte2;
+
+    private static ImageView imageView_Stich1;
+    private static ImageView imageView_Stich2;
+    private static ImageView imageView_Stich3;
+
     private static TextView punkteGegner1;
     private static TextView punkteGegner2;
     private static TextView punkteSelbst;
@@ -94,6 +103,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private TextView txtGegner1;
     private TextView txtGegner2;
     private static Bummerl3 bummerl;
+    private static Boolean angesagt;
+
 
     @Override
     public void onStop() {
@@ -107,6 +118,50 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld3);
+
+        mGoogleApiClient = Lobby.m_GoogleApiClient;
+        endpointIDs = Lobby.endpointIds;
+        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
+
+        appContext = this.getApplicationContext();
+
+        angesagt = false;
+
+        bummerl = new Bummerl3();
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+
+
+        imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
+        imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
+        imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
+        imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
+        imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
+
+        button20er = (Button) findViewById(R.id.main_button20er);
+        button40er = (Button) findViewById(R.id.main_button40er);
+        buttonTalonTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
+
+        imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
+        imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner1);
+        imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner2);
+        imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
+        imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
+
+        //imageView_Stich1 = (ImageView) findViewById(R.id.imageView_Stich1);
+        //imageView_Stich2 = (ImageView) findViewById(R.id.imageView_Stich2);
+        //imageView_Stich3 = (ImageView) findViewById(R.id.imageView_Stich3);
+
+
+        handkartenImages = new ArrayList<ImageView>();
+        handkartenImages.add(0, imageView_karte1);
+        handkartenImages.add(1, imageView_karte2);
+        handkartenImages.add(2, imageView_karte3);
+        handkartenImages.add(3, imageView_karte4);
+        handkartenImages.add(4, imageView_karte5);
+
+
+        //spielStart();
+
     }
 
     @Override

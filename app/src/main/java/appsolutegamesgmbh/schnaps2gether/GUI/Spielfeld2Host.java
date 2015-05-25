@@ -76,6 +76,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_karteGegner;
     private static ImageView imageView_trumpfIcon;
 
+
     private static Button buttonZudrehen;
     private static Button button20er;
     private static Button button40er;

@@ -83,11 +83,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private MenuItem pik20er;
     private MenuItem kreuz20er;
     private static Spieler selbst;
-    private Karte karte1;
-    private Karte karte2;
-    private Karte karte3;
-    private Karte karte4;
-    private Karte karte5;
+
     private static ArrayList<Boolean> kartenSpielbar;
     private static Karte gegnerischeKarte;
     private static Karte trumpfkarte;
