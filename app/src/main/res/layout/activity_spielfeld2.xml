@@ -4,7 +4,8 @@
     android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
     android:paddingTop="0dp"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".Spielfeld"
     android:gravity="center_vertical"
     android:weightSum="1"
     android:background="@drawable/holz_hintergrund">
@@ -13,14 +14,14 @@
         android:orientation="horizontal"
         android:layout_width="110dp"
         android:layout_height="25dp"
-        android:id="@+id/gegnerNameLayout"
+        android:id="@+id/l_NameGegner2"
         android:gravity="center"
         android:background="@drawable/name_plakette"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/Enemy"
+            android:id="@+id/txt_NameGegner2"
             android:text="@string/spieler2" android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
@@ -28,23 +29,10 @@
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/pointsText"
+            android:layout_alignBottom="@+id/txt_PunkteGegner2"
             android:paddingLeft="5dp"
             android:paddingBottom="5dp"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/pointsText"
-            android:text="@string/punktestand2" android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_alignTop="@+id/linearLayout2"
-            android:textColor="@android:color/white"
-            android:layout_toRightOf="@+id/gegnerNameLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
-            android:gravity="top|center"
-            android:paddingLeft="5dp"
+            android:layout_gravity="center_horizontal"
             android:paddingRight="5dp" />
 
         <ImageView
@@ -60,71 +48,39 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
-        android:id="@+id/buttons_leiste"
+        android:id="@+id/l_ButtonLeiste"
         android:weightSum="1"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/eigeneKartenLayout"
-        android:layout_toLeftOf="@+id/stichAnzeige"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="left|center">
-
-        <Button
-            android:id="@+id/main_buttonTtauschen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trumpf Tausch"
-            style="@style/button_text"
-            android:onClick="trumpfkarteTauschen"
-            android:layout_marginLeft="0dp"
-            android:singleLine="false"
-            android:textColor="@android:color/white"
-            android:background="@drawable/beiger_button"
-            android:layout_marginRight="5dp"
-            android:textAllCaps="false" />
+        android:layout_toLeftOf="@+id/l_StichAnzeige"
+        android:layout_below="@+id/l_eigeneKarten"
+        android:layout_toRightOf="@+id/l_Deck"
+        android:layout_toEndOf="@+id/l_Deck">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
             android:orientation="vertical"
             android:layout_marginRight="5dp"
             android:layout_gravity="center"
-            android:layout_weight="0.17">
+            android:layout_weight="0.06">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/I"
-                    android:text="@string/spieler1" android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="0dp" />
-
-                <TextView
-                    android:id="@+id/pointsText2"
-                    android:text="@string/punktestand2"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="top|center_horizontal"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp" />
             </LinearLayout>
 
         </LinearLayout>
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
             android:text="@string/button20er"
             style="@style/button_text"
             android:onClick="popup20er"
@@ -133,12 +89,11 @@
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:textAllCaps="false"
-            android:layout_weight="0.21" />
+            android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -146,28 +101,10 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:textAllCaps="false"
-            android:layout_weight="0.22" />
+            android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/main_buttonZ"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonZ"
-            android:onClick="zudrehen"
-            style="@style/button_text"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center"
-            android:background="@drawable/beiger_button"
-            android:layout_marginLeft="5dp"
-            android:textAllCaps="false"
-            android:elegantTextHeight="true"
-            android:layout_weight="0.35" />
-
-        <Button
-            android:layout_width="70dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:text="Abbrechen"
             android:id="@+id/cmd_close"
@@ -176,24 +113,19 @@
             android:elegantTextHeight="false"
             android:capitalize="words"
             android:textAllCaps="false"
-            android:layout_weight="0.07"
-            android:paddingRight="5dp"
-            android:layout_marginRight="5dp"
-            android:enabled="true"
-            android:clickable="true"
-            android:onClick="abbrechenSpiel" />
+            android:layout_weight="0.23" />
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="130dp"
         android:layout_height="150dp"
-        android:id="@+id/frameGegnerEigene"
+        android:id="@+id/l_abgelegteKarten"
         android:padding="10dp"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:touchscreenBlocksFocus="false"
-        android:layout_alignBottom="@+id/deck_layout"
+        android:layout_alignBottom="@+id/l_Deck"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp">
 
@@ -210,8 +142,8 @@
                 android:scaleType="fitXY"
                 android:clickable="false"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/Enemy"
-                android:layout_toStartOf="@+id/Enemy"
+                android:layout_toLeftOf="@+id/txt_NameGegner2"
+                android:layout_toStartOf="@+id/txt_NameGegner2"
                 android:layout_gravity="bottom|right"
                 android:background="@android:color/transparent"
                 android:cropToPadding="true" />
@@ -230,8 +162,8 @@
                 android:scaleType="fitXY"
                 android:layout_gravity="top|left"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/Enemy"
-                android:layout_toEndOf="@+id/Enemy"
+                android:layout_toRightOf="@+id/txt_NameGegner2"
+                android:layout_toEndOf="@+id/txt_NameGegner2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
@@ -241,13 +173,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
-        android:id="@+id/eigeneKartenLayout"
+        android:id="@+id/l_eigeneKarten"
         android:paddingRight="30dp"
-        android:layout_alignTop="@+id/stichAnzeige"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/buttons_leiste"
-        android:layout_alignEnd="@+id/buttons_leiste">
+        android:layout_alignTop="@+id/l_StichAnzeige"
+        android:layout_alignRight="@+id/l_ButtonLeiste"
+        android:layout_alignEnd="@+id/l_ButtonLeiste"
+        android:layout_toEndOf="@+id/l_Punkteanzeige"
+        android:layout_toRightOf="@+id/l_Punkteanzeige">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -354,27 +286,18 @@
     <FrameLayout
         android:layout_width="136dp"
         android:layout_height="100dp"
-        android:id="@+id/deck_layout"
-        android:layout_above="@+id/eigeneKartenLayout"
+        android:id="@+id/l_Deck"
+        android:layout_above="@+id/l_eigeneKarten"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="top|right"
-            android:id="@+id/trumpfIconLayout"
-            android:layout_marginRight="25dp">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="105dp"
             android:layout_height="105dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp">
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="20dp"
+            android:weightSum="1">
 
             <ImageView
                 android:layout_width="60dp"
@@ -386,7 +309,9 @@
                 android:layout_gravity="bottom"
                 android:rotation="90"
                 android:scaleType="fitXY"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="20dp"
+                android:layout_weight="0.20"
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -404,18 +329,74 @@
                 android:background="@drawable/deck_full"
                 android:scaleType="fitXY"
                 android:layout_gravity="left|center_vertical" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top|right"
+                android:id="@+id/trumpfIconLayout"
+                android:layout_above="@+id/l_Deck"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageView_trumpfIcon"
+                    android:scaleType="fitXY"
+                    android:visibility="visible"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="top|right" />
+            </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/imageView_trumpfIcon"
-            android:scaleType="fitXY"
-            android:visibility="visible"
-            android:background="@android:color/transparent"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/main_buttonZ"
+                android:layout_width="63dp"
+                android:layout_height="27dp"
+                android:text="@string/buttonZ"
+                android:onClick="zudrehen"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/beiger_button"
+                android:textAllCaps="false"
+                android:elegantTextHeight="true"
+                android:layout_gravity="left"
+                style="@style/button_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="15dp"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/main_buttonTtauschen"
+                android:layout_width="64dp"
+                android:layout_height="27dp"
+                android:text="Tauschen"
+                style="@style/button_text"
+                android:onClick="trumpfkarteTauschen"
+                android:singleLine="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/beiger_button"
+                android:textAllCaps="false" />
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -426,12 +407,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/stichAnzeige"
+        android:id="@+id/l_StichAnzeige"
         android:background="@drawable/rounded_corner"
-        android:layout_toEndOf="@+id/frameGegnerEigene"
-        android:layout_alignLeft="@+id/frameLayout2"
-        android:layout_alignStart="@+id/frameLayout2"
-        android:layout_marginRight="5dp">
+        android:layout_toEndOf="@+id/l_abgelegteKarten"
+        android:layout_alignLeft="@+id/l_StichGegner1"
+        android:layout_alignStart="@+id/l_StichGegner1">
 
 
 
@@ -722,14 +702,14 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="155dp"
+        android:layout_width="160dp"
         android:layout_height="119dp"
         android:layout_gravity="right|center_vertical"
-        android:id="@+id/frameLayout2"
-        android:layout_alignTop="@+id/gegnerNameLayout"
+        android:id="@+id/l_StichGegner1"
+        android:layout_alignTop="@+id/l_NameGegner2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/deck_layout">
+        android:layout_above="@+id/l_Deck">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -778,6 +758,104 @@
             android:layout_marginBottom="30dp" />
 
     </FrameLayout>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner"
+        android:id="@+id/l_Punkteanzeige"
+        android:layout_alignBottom="@+id/l_StichAnzeige"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bummerln:"
+                android:id="@+id/f"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler2"
+                android:id="@+id/txt_BummerlNameG1"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_BummerlZahlG1"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler1"
+                android:id="@+id/txt_BummerlNameI"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_PunkteZahl"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Punkte"
+                android:id="@+id/txt_PunkteName"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/punktestand2"
+                android:id="@+id/txt_BummerZahl"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+    </TableLayout>
 
 
 </RelativeLayout>
