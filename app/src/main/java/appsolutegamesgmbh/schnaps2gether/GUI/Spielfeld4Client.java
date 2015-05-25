@@ -31,7 +31,7 @@ import appsolutegamesgmbh.schnaps2gether.R;
 public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
         Connections.MessageListener {
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
     private static final String WEITER = "1";
     private static final String PUNKTE = "2";
@@ -272,7 +272,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 imageViewK.setAlpha(1f); // Karte die klickbar ist, ist auch sichtbar
             } else {
                 imageViewK.setEnabled(false);
-                imageViewK.setAlpha(0.4f); // Karte die nicht klickbar ist ist transparent (alpha =0 wäre durchsichtig)
+                imageViewK.setAlpha(0.4f); // Karte die nicht klickbar ist ist transparent (alpha =0 waere durchsichtig)
 
             }
         }
@@ -280,7 +280,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     private static void spielEnde(boolean win) {
         Bundle args = new Bundle();
-        imageView_karteGegner1.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
+        imageView_karteGegner1.setImageDrawable(null); // Ansicht der Karten wird fuer naechstes Spiel geloescht
         imageView_eigeneKarte.setImageDrawable(null);
         imageView_karteMitspieler.setImageDrawable(null);
         imageView_karteGegner2.setImageDrawable(null);
