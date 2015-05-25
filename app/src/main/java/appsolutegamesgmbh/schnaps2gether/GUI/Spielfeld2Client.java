@@ -50,6 +50,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static final String TRUMPFKARTE = "10";
     private static final String ZUGENDE = "11";
     private static final String DISCONNECT = "12";
+    private static final String STAPELLEER = "13";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -60,11 +61,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
 
 
-    private ImageView imageView_karte1;
-    private ImageView imageView_karte2;
-    private ImageView imageView_karte3;
-    private ImageView imageView_karte4;
-    private ImageView imageView_karte5;
+    private static ImageView imageView_karte1;
+    private static ImageView imageView_karte2;
+    private static ImageView imageView_karte3;
+    private static ImageView imageView_karte4;
+    private static ImageView imageView_karte5;
 
     private static ArrayList<ImageView> handkartenImages;
     private static ImageView imageView_trumpf;
@@ -277,12 +278,14 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private void internspielStart() {
         zugedreht = false;
-        // buttonStapel.setText("20");
+
+
+        imageView_deck.setAlpha((float)1);
+        imageView_trumpf.setAlpha((float)1);
+
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
-//        buttonEigeneKarte.setText("");
-//        buttonGegnerischeKarte.setText("");
         punkteSelbst.setText("0");
         //punkteGegner.setText("0");
         gegnerischeKarte = null;
@@ -334,7 +337,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void spielEnde(boolean win) {
-        Bundle args = new Bundle();
+        //Bundle args = new Bundle();
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 
@@ -412,7 +415,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
         //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
         imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
-        imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Trumpficon
+        //imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Trumpficon
 
         buttonTrumpfTauschen.setEnabled(false);
         buttonTrumpfTauschen.setAlpha(0.4f);
@@ -568,6 +571,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFGETAUSCHT: Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
+                trumpfkarte = new Karte(trumpfkarte.getFarbe(), "Bube", 2);
+                imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 break;
             case ZUGENDE:
                 // Execute some code after 2 seconds have passed
@@ -592,6 +597,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                     }
                 }, 2000);
                 break;
+            case STAPELLEER:
+                imageView_deck.setAlpha((float) 0);
+                imageView_trumpf.setAlpha((float)0);
             default: break;
         }
     }

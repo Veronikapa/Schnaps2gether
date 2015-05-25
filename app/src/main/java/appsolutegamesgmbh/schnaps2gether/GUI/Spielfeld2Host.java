@@ -51,6 +51,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String TRUMPFKARTE = "10";
     private static final String ZUGENDE = "11";
     private static final String DISCONNECT = "12";
+    private static final String STAPELLEER = "13";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -355,8 +356,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         selbst = spiel.getS1();
         gegner = spiel.getS2();
 
+        imageView_deck.setAlpha((float)1);
+        imageView_trumpf.setAlpha((float)1);
+
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
+        //imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
@@ -366,11 +371,15 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
 
+
+
         punkteSelbst.setText("0");
         punkteGegner.setText("0");
         gegnerischeKarte = null;
         handAktualisieren();
-        eigenerZug();
+        //if(selbst.isIstdran())
+            eigenerZug();
+
     }
 
     private void buttonsNichtKlickbar() {
@@ -743,8 +752,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     //buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
                     imageView_deck.setAlpha((float) 0);
                     imageView_trumpf.setAlpha((float)0);
-//                else
-//                    buttonStapel.setText("0");
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (STAPELLEER + ":" + 0).getBytes());
                 }
                 if (selbst.isIstdran()) {
                     eigenerZug();
