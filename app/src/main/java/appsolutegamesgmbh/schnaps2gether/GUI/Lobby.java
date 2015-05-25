@@ -59,6 +59,9 @@ public class Lobby extends Activity implements
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
             ConnectivityManager.TYPE_ETHERNET};
 
+    Spielfeld2Client c2 = new Spielfeld2Client();
+    Spielfeld2Host h2 = new Spielfeld2Host();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,20 +183,21 @@ public class Lobby extends Activity implements
         String message = new String(payload);
         if (!m_IsHost) {
                 if (spielTyp == 2) {
-                    Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
+                    c2.receiveFromLobby(endpointID, payload, isReliable);
                 }
 
-                else if (spielTyp == 3)
+                else if (spielTyp == 3) {
                     Spielfeld3Client.receiveFromLobby(endpointID, payload, isReliable);
+                }
 
-                //TODO: Spielfeld4Client einfügen
                 else if (spielTyp == 4)
-                    Spielfeld2Client.receiveFromLobby(endpointID, payload, isReliable);
+                    Spielfeld4Client.receiveFromLobby(endpointID, payload, isReliable);
             }
         else
             {
-                if (spielTyp == 2)
-                    Spielfeld2Host.receiveFromLobby(endpointID, payload, isReliable);
+                if (spielTyp == 2) {
+                    h2.receiveFromLobby(endpointID, payload, isReliable);
+                }
 
                 else if (spielTyp == 3)
                     Spielfeld3Host.receiveFromLobby(endpointID, payload, isReliable);
@@ -342,13 +346,11 @@ public class Lobby extends Activity implements
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
                             } else if (spielTyp == 3 && endpointIds.size() == 2) {
-                                //TODO:Bitte hier Spielfeld3Client statt Spielfeld2Client verwenden.
-                                startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                                startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
                                 finish();
                             }
-                            //TODO:Bitte hier Spielfeld4Client statt Spielfeld2Client verwenden.
                             else if (spielTyp == 4 && endpointIds.size() == 3) {
-                                startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                                startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
                                 finish();
                             }
                         } else {

@@ -60,11 +60,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
 
 
-    private  ImageView imageView_karte1;
-    private  ImageView imageView_karte2;
-    private  ImageView imageView_karte3;
-    private  ImageView imageView_karte4;
-    private  ImageView imageView_karte5;
+    private ImageView imageView_karte1;
+    private ImageView imageView_karte2;
+    private ImageView imageView_karte3;
+    private ImageView imageView_karte4;
+    private ImageView imageView_karte5;
 
     private static ArrayList<ImageView> handkartenImages;
     private static ImageView imageView_trumpf;
@@ -187,7 +187,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private static void eigenerZug() {
+    private void eigenerZug() {
         if (!zugedreht) {
             buttonZudrehen.setEnabled(true);
             buttonZudrehen.setAlpha(1f);
@@ -219,7 +219,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private static void handAktualisieren() {
+    private void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
 
@@ -236,7 +236,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private static void punkteAktualisieren() {
+    private void punkteAktualisieren() {
 
         //punkteGegner.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
@@ -263,14 +263,28 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         //Toast.makeText(appContext, "endpointIDs.size: " + endpointIDs.size(), Toast.LENGTH_LONG).show();
 
         zugedreht = false;
-       // buttonStapel.setText("20");
+        // buttonStapel.setText("20");
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
 //        buttonEigeneKarte.setText("");
 //        buttonGegnerischeKarte.setText("");
         punkteSelbst.setText("0");
-        punkteGegner.setText("0");
+        //punkteGegner.setText("0");
+        gegnerischeKarte = null;
+        buttonsNichtKlickbar();
+    }
+
+    private void internspielStart() {
+        zugedreht = false;
+        // buttonStapel.setText("20");
+        buttonZudrehen.setEnabled(true);
+        buttonZudrehen.setAlpha(1f);
+        buttonZudrehen.setText(R.string.buttonZ);
+//        buttonEigeneKarte.setText("");
+//        buttonGegnerischeKarte.setText("");
+        punkteSelbst.setText("0");
+        //punkteGegner.setText("0");
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
     }
@@ -300,7 +314,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonTrumpfTauschen.setAlpha(0.4f);
     }
 
-    private static void handKartenKlickbar() {
+    private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
 
@@ -319,12 +333,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
-    private static void spielEnde(boolean win) {
+    private void spielEnde(boolean win) {
         Bundle args = new Bundle();
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 
-        //spielStart();
+       internspielStart();
         /* erst am Ende des Bummerl
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
@@ -492,7 +506,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     public void onEndpointLost(String s) {
 
     }
-    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
+    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
@@ -544,6 +558,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 zugedreht = true;
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
+                imageView_deck.setAlpha((float)0);
+                imageView_trumpf.setAlpha((float)0);
                 buttonZudrehen.setText("Zugedreht");
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
@@ -560,6 +576,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1].split(" ")[1]);
+                punkteAktualisieren();
                 //p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
@@ -675,7 +692,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
-    static class Zugende implements Runnable {
+    class Zugende implements Runnable {
 
         @Override
         public void run() {

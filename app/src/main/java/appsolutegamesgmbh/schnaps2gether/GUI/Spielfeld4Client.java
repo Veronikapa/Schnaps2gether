@@ -33,7 +33,7 @@ import appsolutegamesgmbh.schnaps2gether.R;
 public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
         Connections.MessageListener {
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    //Konstanten fï¿½r das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
     private static final String WEITER = "1";
     private static final String PUNKTE = "2";
@@ -173,7 +173,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         spielStart();
     }
 
-    private void zugAusführen(int i) {
+    private void zugAusfuehren(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
@@ -311,7 +311,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 //buttonK.setEnabled(true);
             } else {
                 imageViewK.setEnabled(false);
-                imageViewK.setAlpha(0.4f); // Karte die nicht klickbar ist ist transparent (alpha =0 wäre durchsichtig)
+                imageViewK.setAlpha(0.4f); // Karte die nicht klickbar ist ist transparent (alpha =0 wï¿½re durchsichtig)
                 // buttonK.setEnabled(false);
 
             }
@@ -320,7 +320,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     private static void spielEnde(boolean win) {
         Bundle args = new Bundle();
-        imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
+        imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird fï¿½r nï¿½chstes Spiel gelï¿½scht
         imageView_eigeneKarte.setImageDrawable(null);
 
         args.putBoolean("win", win);
@@ -450,27 +450,27 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     public void karte1OnClick(View view) {
         if (angesagteFarbe==null) trumpfansagen(0);
-        else zugAusführen(0);
+        else zugAusfuehren(0);
     }
 
     public void karte2OnClick(View view) {
         if (angesagteFarbe==null) trumpfansagen(1);
-        else zugAusführen(1);
+        else zugAusfuehren(1);
     }
 
     public void karte3OnClick(View view) {
         if (angesagteFarbe==null) trumpfansagen(2);
-        else zugAusführen(2);
+        else zugAusfuehren(2);
     }
 
     public void karte4OnClick(View view) {
         if (angesagteFarbe==null) trumpfansagen(3);
-        else zugAusführen(3);
+        else zugAusfuehren(3);
     }
 
     public void karte5OnClick(View view) {
         if (angesagteFarbe==null) trumpfansagen(4);
-        else zugAusführen(4);
+        else zugAusfuehren(4);
     }
 
     public void aufdrehenOnClick(View view) {
@@ -622,7 +622,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
         @Override
         public void run() {
-            //TODO: zusätzlich views hinzufügen
+            //TODO: zusï¿½tzlich views hinzufï¿½gen
             imageView_eigeneKarte.setImageDrawable(null);
             imageView_karteGegner.setImageDrawable(null);
             punkteAktualisieren();
