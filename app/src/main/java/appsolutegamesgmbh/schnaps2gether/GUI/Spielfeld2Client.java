@@ -87,11 +87,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static ArrayList<Boolean> kartenSpielbar;
     private static Karte gegnerischeKarte;
     private static Karte trumpfkarte;
-    private static TextView punkteGegner;
     private static TextView punkteSelbst;
-    private TextView txtSelbst;
-    private TextView txtGegner;
-    private static Bummerl2 bummerl;
+    private static TextView BpunkteSelbst;
+    private static TextView BpunkteGegner;
+    private static TextView GegnerName;
+    private static TextView Name;
+
     private static boolean zugedreht;
     private static boolean hat20er;
     private static boolean hat40er;
@@ -99,6 +100,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int stapelKartenAnz;
     private static int p1;
     private static int p2;
+
+    private static Bummerl2 bummerl;
 
     /*@Override
     public void onStart() {
@@ -140,20 +143,18 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
 
 
-
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
         buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
-        punkteGegner = (TextView) findViewById(R.id.pointsText);
-        punkteSelbst = (TextView) findViewById(R.id.pointsText2);
-        txtSelbst = (TextView) findViewById(R.id.I);
-        txtGegner = (TextView) findViewById(R.id.Enemy);
+
+        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
-        // findViewById(R.id.imageView_eigeneKarte).setOnDragListener(new MyDragListener());
         imageView_karteGegner = (ImageView) findViewById(R.id.imageView_karteGegner);
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
@@ -240,7 +241,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void gespielteKarteEntfernen(int i) {
-        //handkartenButtons.get(i).setVisibility(View.INVISIBLE);
         handkartenImages.get(i).setVisibility(View.INVISIBLE);
     }
 
@@ -260,19 +260,19 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         //Toast.makeText(appContext, "endpointIDs.size: " + endpointIDs.size(), Toast.LENGTH_LONG).show();
 
         zugedreht = false;
-        // buttonStapel.setText("20");
-        buttonZudrehen.setEnabled(true);
+        buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
-//        buttonEigeneKarte.setText("");
-//        buttonGegnerischeKarte.setText("");
+        BpunkteSelbst.setText("0");
+        BpunkteGegner.setText("0");
         punkteSelbst.setText("0");
-        //punkteGegner.setText("0");
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
     }
 
     private void internspielStart() {
+        selbst = new Spieler();
+
         zugedreht = false;
 
 
@@ -341,6 +341,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         else {
             Toast.makeText(appContext, "Verloren! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
         }
+
+        BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS2()));
+        BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS1()));
+
+
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 

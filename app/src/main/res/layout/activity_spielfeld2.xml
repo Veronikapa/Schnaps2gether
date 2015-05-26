@@ -113,7 +113,8 @@
             android:elegantTextHeight="false"
             android:capitalize="words"
             android:textAllCaps="false"
-            android:layout_weight="0.23" />
+            android:layout_weight="0.23"
+            android:onClick="abbrechenSpiel" />
 
     </LinearLayout>
 

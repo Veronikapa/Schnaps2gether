@@ -9,6 +9,7 @@ public class Spieler {
     public ArrayList<Karte> Gestochen;
     private boolean istdran;
     private boolean angesagt20er;
+    private boolean zugedreht;
     private int merkePunkte;
     private Spieler mitspieler;
 
@@ -52,6 +53,14 @@ public class Spieler {
         this.mitspieler = mitspieler;
     }
 
+    public boolean isZugedreht() {
+        return zugedreht;
+    }
+
+    public void setZugedreht(boolean zugedreht) {
+        this.zugedreht = zugedreht;
+    }
+
     public Spieler()
     {
         Hand = new ArrayList<Karte>(5);
@@ -59,6 +68,7 @@ public class Spieler {
         Gestochen = new ArrayList<Karte>(20);
         istdran = false;
         mitspieler = null;
+        zugedreht = false;
     }
 
 }

@@ -95,10 +95,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte;
     private static Karte trumpfkarte;
-    private static TextView punkteGegner;
+
     private static TextView punkteSelbst;
-    private TextView txtSelbst;
-    private TextView txtGegner;
+    private static TextView BpunkteSelbst;
+    private static TextView BpunkteGegner;
+    private static TextView GegnerName;
+    private static TextView Name;
+
     private static Bummerl2 bummerl;
     private static Boolean angesagt;
 
@@ -132,7 +135,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         angesagt = false;
 
         bummerl = new Bummerl2();
-       Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
@@ -153,16 +156,17 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         button40er = (Button) findViewById(R.id.main_button40er);
         buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
-        punkteGegner = (TextView) findViewById(R.id.pointsText);
-        punkteSelbst = (TextView) findViewById(R.id.pointsText2);
-        txtSelbst = (TextView) findViewById(R.id.I);
-        txtGegner = (TextView) findViewById(R.id.Enemy);
+
+        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
+
 
 
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
-        // findViewById(R.id.imageView_eigeneKarte).setOnDragListener(new MyDragListener());
         imageView_karteGegner = (ImageView) findViewById(R.id.imageView_karteGegner);
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
@@ -249,7 +253,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
             ImageView imageViewK = handkartenImages.get(i);
 
-
             if (i<handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
                 imageViewK.setImageResource(k.getImageResourceId());
@@ -258,8 +261,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
                 imageViewK.setVisibility(View.INVISIBLE);
             }
-            gegnerischeHandAktualisieren();
         }
+
+        gegnerischeHandAktualisieren();
     }
 
     private void gegnerischeHandAktualisieren() {
@@ -279,7 +283,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private void punkteAktualisieren() {
         int p1 = selbst.getPunkte();
         int p2 = gegner.getPunkte();
-        //punkteGegner.setText(Integer.toString(p2));
         punkteSelbst.setText(Integer.toString(p1));
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2)).getBytes());
     }
@@ -338,12 +341,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
                 handKartenKlickbar();
-                buttonZudrehen.setEnabled(true);
+                buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(1f);
                 buttonZudrehen.setText(R.string.buttonZ);
 
                 punkteSelbst.setText("0");
-                punkteGegner.setText("0");
+                BpunkteSelbst.setText("0");
+                BpunkteGegner.setText("0");
                 gegnerischeKarte = null;
                 handAktualisieren();
                 eigenerZug();
@@ -375,7 +379,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
 
         punkteSelbst.setText("0");
-        punkteGegner.setText("0");
+
+
         gegnerischeKarte = null;
         handAktualisieren();
         if(selbst.isIstdran()) {
@@ -433,7 +438,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private void spielEnde() {
         boolean win = true;
-        if (selbst.getPunkte()<66 && gegner.isIstdran()) {
+        if ((selbst.getPunkte()<66 && gegner.isZugedreht()) || (selbst.getPunkte()<66 && gegner.isIstdran())) {
             win = false;
             Toast.makeText(appContext, "Verloren! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
         }
@@ -441,6 +446,10 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         {
             Toast.makeText(appContext, "Gewonnen! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
         }
+
+        BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS1()));
+        BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS2()));
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
         internSpielStart();
@@ -453,6 +462,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void zudrehen(View view) {
         spiel.Zudrehen();
+        selbst.setZugedreht(true);
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
         imageView_deck.setAlpha((float)0);
@@ -614,6 +624,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: spiel.Zudrehen();
+                gegner.setZugedreht(true);
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
                 buttonZudrehen.setText("Zugedreht");
@@ -648,7 +659,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
 
 
-                if (!angesagt) gegnerHat20er();
+                if (!angesagt)
+                    gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             default: break;
