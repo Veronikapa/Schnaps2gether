@@ -12,6 +12,15 @@ public class Spieler {
     private boolean zugedreht;
     private int merkePunkte;
     private Spieler mitspieler;
+    private int punktevorzugedreht;
+
+    public int getPunktevorzugedreht() {
+        return punktevorzugedreht;
+    }
+
+    public void setPunktevorzugedreht(int punktevorzugedreht) {
+        this.punktevorzugedreht = punktevorzugedreht;
+    }
 
     public int getPunkte() {
         return Punkte;

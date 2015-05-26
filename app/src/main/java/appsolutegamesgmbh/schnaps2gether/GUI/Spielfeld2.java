@@ -418,7 +418,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     public void zudrehen(View view) {
-        spiel.Zudrehen();
+        spiel.Zudrehen(selbst);
         buttonZudrehen.setVisibility(View.INVISIBLE);
         buttonZudrehen.setEnabled(false);
        /* buttonZudrehen.setAlpha(0.4f);

@@ -208,7 +208,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte);
-        eigeneKarte = gegnerischeKarte = null;
+        eigeneKarte = null;
+        gegnerischeKarte = null;
+
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
@@ -438,7 +440,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private void spielEnde() {
         boolean win = true;
-        if ((selbst.getPunkte()<66 && gegner.isZugedreht()) || (selbst.getPunkte()<66 && gegner.isIstdran())) {
+        if (spiel.getGewinner() == gegner) {
             win = false;
             Toast.makeText(appContext, "Verloren! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
         }
@@ -452,6 +454,25 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
+
+        if(bummerl.istBummerlzuEnde()) {
+            if(bummerl.getPunkteS1() >= 7)
+                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + " gewonnen!" , Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + " verloren!" , Toast.LENGTH_LONG).show();
+
+
+            BpunkteSelbst.setText("0");
+            BpunkteGegner.setText("0");
+            bummerl = new Bummerl2();
+
+            /*Bundle args = new Bundle();
+            args.putBoolean("win", win);
+            DialogFragment gameEndDialogFragment = new GameEnd();
+            gameEndDialogFragment.setArguments(args);
+            //gameEndDialogFragment.show(getFragmentManager(), "GameEnd"); */
+        }
+
         internSpielStart();
         /*Bundle args = new Bundle();
         args.putBoolean("win", win);
@@ -461,8 +482,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void zudrehen(View view) {
-        spiel.Zudrehen();
-        selbst.setZugedreht(true);
+        spiel.Zudrehen(selbst);
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
         imageView_deck.setAlpha((float)0);
@@ -556,7 +576,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        spielStart();
+        BpunkteSelbst.setText("0");
+        BpunkteGegner.setText("0");
+        bummerl = new Bummerl2();
     }
 
     @Override
@@ -623,8 +645,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 }
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
-            case ZUGEDREHT: spiel.Zudrehen();
-                gegner.setZugedreht(true);
+            case ZUGEDREHT: spiel.Zudrehen(gegner);
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
                 buttonZudrehen.setText("Zugedreht");
@@ -722,7 +743,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         @Override
         public void run() {
             punkteAktualisieren();
-            gegnerischeKarte = eigeneKarte = null;
+            gegnerischeKarte = null;
+            eigeneKarte = null;
             imageView_eigeneKarte.setImageDrawable(null);
             imageView_karteGegner.setImageDrawable(null);
             if (spiel.istSpielzuEnde(bummerl)) {

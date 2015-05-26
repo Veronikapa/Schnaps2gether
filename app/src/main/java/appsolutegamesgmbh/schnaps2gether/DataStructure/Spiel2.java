@@ -15,6 +15,7 @@ public class Spiel2 {
     private Karte aufgedeckterTrumpf;
     private boolean zugedreht;
     private String angesagteFarbe;
+    private Spieler gewinner;
 
     public Spieler getS1() {
         return s1;
@@ -22,6 +23,10 @@ public class Spiel2 {
 
     public Spieler getS2() {
         return s2;
+    }
+
+    public Spieler getGewinner() {
+        return gewinner;
     }
 
     public boolean isZugedreht() {
@@ -42,6 +47,7 @@ public class Spiel2 {
         s1 = new Spieler();
         zugedreht = false;
         s2 = new Spieler();
+        gewinner = null;
         angesagteFarbe = null;
         if(AnzahlSpiele%2 == 0)
             s1.setIstdran(true);
@@ -159,6 +165,7 @@ public class Spiel2 {
     / Wenn s1 bereits ausgespielt hat, entscheide basierend auf dieser Karte
     / @return: Liefert Karte die der Computer ausspielt
      */
+
     public Karte AuspielenComputer(Karte karteAndererSpieler) {
 
         Karte zuspielen = null;
@@ -185,7 +192,7 @@ public class Spiel2 {
         else {
 
             if(!zugedreht && sollComputerZudrehen())
-                Zudrehen();
+                Zudrehen(getS2());
 
             if(zugedreht)
             {
@@ -788,31 +795,71 @@ public class Spiel2 {
     {
         if(s1.getPunkte() >= 66)
         {
-           if(s2.getPunkte()>= 33)
-               bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
-           else if(s2.getPunkte() > 0)
-               bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
-           else
-               bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
-
+            if(s1.isZugedreht()) {
+                if (s2.getPunktevorzugedreht() >= 33)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
+                else if (s2.getPunktevorzugedreht() > 0)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
+                else
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+            }
+            else {
+                if (s2.getPunkte() >= 33)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
+                else if (s2.getPunkte() > 0)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
+                else
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+            }
             bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+            gewinner = s1;
             return true;
         }
         else if(s2.getPunkte() >= 66)
         {
-            if(s1.getPunkte()>= 33)
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
-            else if(s1.getPunkte() > 0)
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
-            else
-                bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+            if (s2.isZugedreht()) {
+                if (s1.getPunktevorzugedreht() >= 33)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
+                else if (s1.getPunktevorzugedreht() > 0)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
+                else
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+            }
+            else {
+                if (s1.getPunkte() >= 33)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 1);
+                else if (s1.getPunkte() > 0)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
+                else
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+            }
 
             bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
+            gewinner = s2;
             return true;
 
         }
         else if (s1.Hand.isEmpty() && zugedreht) {
-            if(s1.isIstdran())
+            if(s1.isZugedreht())
+            {
+                if (s1.getPunktevorzugedreht() == 0)
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+                else
+                    bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
+
+                gewinner = s2;
+
+            }
+            else if(s2.isZugedreht())
+            {
+                if (s2.getPunktevorzugedreht() == 0)
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+                else
+                    bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
+
+                gewinner = s1;
+            }
+            else if(s1.isIstdran())
             {
                 if(s2.getPunkte()>= 33)
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + 1);
@@ -820,6 +867,8 @@ public class Spiel2 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + 2);
                 else
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + 3);
+
+                gewinner = s1;
             }
             else
             {
@@ -829,6 +878,8 @@ public class Spiel2 {
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + 2);
                 else
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + 3);
+
+                gewinner = s2;
             }
             bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
             return true;
@@ -888,8 +939,15 @@ public class Spiel2 {
     }
 
 
-    public void Zudrehen()
+    public void Zudrehen(Spieler s)
     {
+        s.setZugedreht(true);
+        s.setPunktevorzugedreht(s.getPunkte());
+        if(s1 == s)
+            s2.setPunktevorzugedreht(s2.getPunkte());
+        else
+            s1.setPunktevorzugedreht(s1.getPunkte());
+
         zugedreht = true;
     }
 

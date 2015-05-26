@@ -187,6 +187,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private void eigenerZug() {
         if (!zugedreht) {
+
             buttonZudrehen.setEnabled(true);
             buttonZudrehen.setAlpha(1f);
 
@@ -333,7 +334,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void spielEnde(boolean win) {
-        //Bundle args = new Bundle();
+
 
         if (win) {
             Toast.makeText(appContext, "Gewonnen! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
@@ -349,12 +350,26 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karteGegner.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
         imageView_eigeneKarte.setImageDrawable(null);
 
+        if(bummerl.istBummerlzuEnde()) {
+            if(bummerl.getPunkteS2() >= 7)
+                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS1() + " gewonnen!" , Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS1() + " verloren!" , Toast.LENGTH_LONG).show();
+
+
+            BpunkteSelbst.setText("0");
+            BpunkteGegner.setText("0");
+            bummerl = new Bummerl2();
+
+            /*Bundle args = new Bundle();
+            args.putBoolean("win", win);
+            DialogFragment gameEndDialogFragment = new GameEnd();
+            gameEndDialogFragment.setArguments(args);
+            //gameEndDialogFragment.show(getFragmentManager(), "GameEnd"); */
+        }
+
        internspielStart();
-        /* erst am Ende des Bummerl
-        args.putBoolean("win", win);
-        DialogFragment gameEndDialogFragment = new GameEnd();
-        gameEndDialogFragment.setArguments(args);
-        //gameEndDialogFragment.show(getFragmentManager(), "GameEnd"); */
+
     }
 
     public void zudrehen(View view) {
@@ -452,7 +467,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        spielStart();
+        BpunkteSelbst.setText("0");
+        BpunkteGegner.setText("0");
+        bummerl = new Bummerl2();
     }
 
     @Override
