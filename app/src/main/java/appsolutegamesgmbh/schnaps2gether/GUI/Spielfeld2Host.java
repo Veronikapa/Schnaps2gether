@@ -70,12 +70,36 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static ArrayList<ImageView> handkartenImages;
 
+    private static ImageView stichEigeneKarteG;
+    private static ImageView stichGegnerKarteG;
+    private static ImageView stichDeckG;
+
     private static ImageView imageView_trumpf;
     private static ImageView imageView_deck;
     private static ImageView imageView_eigeneKarte;
     private static ImageView imageView_karteGegner;
     private static ImageView imageView_trumpfIcon;
 
+    private static ImageView stichK1;
+    private static ImageView stichK2;
+    private static ImageView stichK3;
+    private static ImageView stichK4;
+    private static ImageView stichK5;
+    private static ImageView stichK6;
+    private static ImageView stichK7;
+    private static ImageView stichK8;
+    private static ImageView stichK9;
+    private static ImageView stichK10;
+    private static ImageView stichK11;
+    private static ImageView stichK12;
+    private static ImageView stichK13;
+    private static ImageView stichK14;
+    private static ImageView stichK15;
+    private static ImageView stichK16;
+
+    private static int GestochenS1;
+    private static int GestochenS2;
+    private static int istdran;
 
     private static Button buttonZudrehen;
     private static Button button20er;
@@ -87,11 +111,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private MenuItem kreuz20er;
     private static Spieler selbst;
     private static Spieler gegner;
-    private Karte karte1;
-    private Karte karte2;
-    private Karte karte3;
-    private Karte karte4;
-    private Karte karte5;
+
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte;
     private static Karte trumpfkarte;
@@ -137,33 +157,42 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         bummerl = new Bummerl2();
         //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
+        stichK1= (ImageView) findViewById(R.id.stichK1);
+        stichK2= (ImageView) findViewById(R.id.stichK2);
+        stichK3= (ImageView) findViewById(R.id.stichK3);
+        stichK4= (ImageView) findViewById(R.id.stichK4);
+        stichK5= (ImageView) findViewById(R.id.stichK5);
+        stichK6= (ImageView) findViewById(R.id.stichK6);
+        stichK7= (ImageView) findViewById(R.id.stichK7);
+        stichK8= (ImageView) findViewById(R.id.stichK8);
+        stichK9= (ImageView) findViewById(R.id.stichK9);
+        stichK10= (ImageView) findViewById(R.id.stichK10);
+        stichK11= (ImageView) findViewById(R.id.stichK11);
+        stichK12= (ImageView) findViewById(R.id.stichK12);
+        stichK13= (ImageView) findViewById(R.id.stichK13);
+        stichK14= (ImageView) findViewById(R.id.stichK14);
+        stichK15= (ImageView) findViewById(R.id.stichK15);
+        stichK16= (ImageView) findViewById(R.id.stichK16);
+
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
-        //  findViewById(R.id.imageView_karte1).setOnTouchListener(new MyTouchListener());
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
-        //findViewById(R.id.imageView_karte2).setOnTouchListener(new MyTouchListener());
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
-        //findViewById(R.id.imageView_karte3).setOnTouchListener(new MyTouchListener());
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
-        //findViewById(R.id.imageView_karte4).setOnTouchListener(new MyTouchListener());
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
-        // findViewById(R.id.imageView_karte5).setOnTouchListener(new MyTouchListener());
-
-
 
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
         buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
+        stichEigeneKarteG =(ImageView) findViewById(R.id.stichEigeneKarteG);
+        stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
+        stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
         punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
         BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
-
-
-
-
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
@@ -211,42 +240,128 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         eigeneKarte = null;
         gegnerischeKarte = null;
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
+        GestochenS2 = spiel.getS2().Gestochen.size();
+        GestochenS1 = spiel.getS1().Gestochen.size();
+
+
+
+        if (GestochenS2 == 2) {
+            stichEigeneKarteG.setImageResource(spiel.getS2().Gestochen.get(0).getImageResourceId());
+            stichGegnerKarteG.setImageResource(spiel.getS2().Gestochen.get(1).getImageResourceId());
+            stichEigeneKarteG.setVisibility(View.VISIBLE);
+            stichGegnerKarteG.setVisibility(View.VISIBLE);
+        }
+        else if (GestochenS2 > 10) {
+            stichDeckG.setImageResource(R.drawable.deck_5);
+        }
+        else if (GestochenS2 > 8) {
+            stichDeckG.setImageResource(R.drawable.deck_4);
+        }
+        else if (GestochenS2 > 6) {
+            stichDeckG.setImageResource(R.drawable.deck_3);
+            stichDeckG.setVisibility(View.VISIBLE);
+        }
+        else if (GestochenS2 > 4) {
+            stichDeckG.setImageResource(R.drawable.deck_2);
+            stichDeckG.setVisibility(View.VISIBLE);
+        }
+        else if (GestochenS2 > 2) {
+            stichDeckG.setVisibility(View.VISIBLE);
+            stichDeckG.setImageResource(R.drawable.deck);
+        }
+
+
+        if(GestochenS1 > 14) {
+            stichK16.setImageResource(spiel.getS1().Gestochen.get(15).getImageResourceId());
+            stichK16.setVisibility(View.VISIBLE);
+            stichK15.setImageResource(spiel.getS1().Gestochen.get(14).getImageResourceId());
+            stichK15.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 12) {
+            stichK14.setImageResource(spiel.getS1().Gestochen.get(13).getImageResourceId());
+            stichK14.setVisibility(View.VISIBLE);
+            stichK13.setImageResource(spiel.getS1().Gestochen.get(12).getImageResourceId());
+            stichK13.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 10) {
+            stichK12.setImageResource(spiel.getS1().Gestochen.get(11).getImageResourceId());
+            stichK12.setVisibility(View.VISIBLE);
+            stichK11.setImageResource(spiel.getS1().Gestochen.get(10).getImageResourceId());
+            stichK11.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 8) {
+            stichK10.setImageResource(spiel.getS1().Gestochen.get(9).getImageResourceId());
+            stichK10.setVisibility(View.VISIBLE);
+            stichK9.setImageResource(spiel.getS1().Gestochen.get(8).getImageResourceId());
+            stichK9.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 6) {
+            stichK8.setImageResource(spiel.getS1().Gestochen.get(7).getImageResourceId());
+            stichK8.setVisibility(View.VISIBLE);
+            stichK7.setImageResource(spiel.getS1().Gestochen.get(6).getImageResourceId());
+            stichK7.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 4) {
+            stichK6.setImageResource(spiel.getS1().Gestochen.get(5).getImageResourceId());
+            stichK6.setVisibility(View.VISIBLE);
+            stichK5.setImageResource(spiel.getS1().Gestochen.get(4).getImageResourceId());
+            stichK5.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 2) {
+            stichK4.setImageResource(spiel.getS1().Gestochen.get(3).getImageResourceId());
+            stichK4.setVisibility(View.VISIBLE);
+            stichK3.setImageResource(spiel.getS1().Gestochen.get(2).getImageResourceId());
+            stichK3.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 0) {
+            stichK2.setImageResource(spiel.getS1().Gestochen.get(1).getImageResourceId());
+            stichK2.setVisibility(View.VISIBLE);
+            stichK1.setImageResource(spiel.getS1().Gestochen.get(0).getImageResourceId());
+            stichK1.setVisibility(View.VISIBLE);
+        }
+
+        if(gegner.isIstdran())
+            istdran = 1;
+        else
+            istdran = 0;
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE + ":" + GestochenS2 + " " + GestochenS1 + " " + istdran).getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
     }
 
     private void eigenerZug() {
-        if (!spiel.isZugedreht()) {
-            buttonZudrehen.setEnabled(true);
-            buttonZudrehen.setAlpha(1f);
 
-            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(),"Bube",2))) {
+        if(gegnerischeKarte == null) {
+            if (!spiel.isZugedreht()) {
+                buttonZudrehen.setEnabled(true);
+                buttonZudrehen.setAlpha(1f);
+            }
+
+            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(), "Bube", 2))) {
                 buttonTrumpfTauschen.setEnabled(true);
                 buttonTrumpfTauschen.setAlpha(1f);
-            }
-            else {
+            } else {
                 buttonTrumpfTauschen.setEnabled(false);
                 buttonTrumpfTauschen.setAlpha(0.4f);
             }
-            if(hat20er(selbst)) {
+            if (hat20er(selbst)) {
                 button20er.setEnabled(true);
                 button20er.setAlpha(1f);
-            }
-            else {
+            } else {
                 button20er.setEnabled(false);
                 button20er.setAlpha(0.4f);
             }
-            if(hat40er(selbst)) {
+            if (hat40er(selbst)) {
                 button40er.setEnabled(true);
                 button40er.setAlpha(1f);
-            }
-            else {
+            } else {
                 button40er.setEnabled(false);
                 button40er.setAlpha(0.4f);
             }
         }
+
     }
 
     private void handAktualisieren() {
@@ -279,7 +394,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i), gegner) ? 1 : 0);
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+stapelKartenAnz+":"+gegnerischeHand+":"+gegKartenSpielBar).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN + ":" + stapelKartenAnz + ":" + gegnerischeHand + ":" + gegKartenSpielBar).getBytes());
     }
 
     private void punkteAktualisieren() {
@@ -307,17 +422,25 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void gegnerHat20er() {
-        int hast20er = hat20er(gegner) ? 1 : 0;
-        int hast40er = hat40er(gegner) ? 1 : 0;
-        String hastDie20er = "";
-        ArrayList<String> geg20er = spiel.hat20er(gegner);
-        for(String farbe: geg20er) {
-            hastDie20er += " " + farbe;
+        if(eigeneKarte == null) {
+            int hast20er = hat20er(gegner) ? 1 : 0;
+            int hast40er = hat40er(gegner) ? 1 : 0;
+            String hastDie20er = "";
+            ArrayList<String> geg20er = spiel.hat20er(gegner);
+            for (String farbe : geg20er) {
+                hastDie20er += " " + farbe;
+            }
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
+        else
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+
+
     }
 
     private void spielStart() {
+
+
         Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
             @Override
@@ -340,7 +463,29 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
 
+                stichDeckG.setVisibility(View.INVISIBLE);
+                stichEigeneKarteG.setVisibility(View.INVISIBLE);
+                stichGegnerKarteG.setVisibility(View.INVISIBLE);
+
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+
+                stichK16.setVisibility(View.INVISIBLE);
+                stichK15.setVisibility(View.INVISIBLE);
+                stichK14.setVisibility(View.INVISIBLE);
+                stichK13.setVisibility(View.INVISIBLE);
+                stichK12.setVisibility(View.INVISIBLE);
+                stichK11.setVisibility(View.INVISIBLE);
+                stichK10.setVisibility(View.INVISIBLE);
+                stichK9.setVisibility(View.INVISIBLE);
+                stichK8.setVisibility(View.INVISIBLE);
+                stichK7.setVisibility(View.INVISIBLE);
+                stichK6.setVisibility(View.INVISIBLE);
+                stichK5.setVisibility(View.INVISIBLE);
+                stichK4.setVisibility(View.INVISIBLE);
+                stichK3.setVisibility(View.INVISIBLE);
+                stichK2.setVisibility(View.INVISIBLE);
+                stichK1.setVisibility(View.INVISIBLE);
+
 
                 handKartenKlickbar();
                 buttonZudrehen.setEnabled(false);
@@ -363,8 +508,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         selbst = spiel.getS1();
         gegner = spiel.getS2();
 
+
         imageView_deck.setAlpha((float)1);
-        imageView_trumpf.setAlpha((float)1);
+        imageView_trumpf.setAlpha((float) 1);
+
+        stichDeckG.setVisibility(View.INVISIBLE);
+        stichEigeneKarteG.setVisibility(View.INVISIBLE);
+        stichGegnerKarteG.setVisibility(View.INVISIBLE);
 
         trumpfkarte = spiel.getAufgedeckterTrumpf();
         imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
@@ -373,6 +523,22 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
+        stichK16.setVisibility(View.INVISIBLE);
+        stichK15.setVisibility(View.INVISIBLE);
+        stichK14.setVisibility(View.INVISIBLE);
+        stichK13.setVisibility(View.INVISIBLE);
+        stichK12.setVisibility(View.INVISIBLE);
+        stichK11.setVisibility(View.INVISIBLE);
+        stichK10.setVisibility(View.INVISIBLE);
+        stichK9.setVisibility(View.INVISIBLE);
+        stichK8.setVisibility(View.INVISIBLE);
+        stichK7.setVisibility(View.INVISIBLE);
+        stichK6.setVisibility(View.INVISIBLE);
+        stichK5.setVisibility(View.INVISIBLE);
+        stichK4.setVisibility(View.INVISIBLE);
+        stichK3.setVisibility(View.INVISIBLE);
+        stichK2.setVisibility(View.INVISIBLE);
+        stichK1.setVisibility(View.INVISIBLE);
 
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
@@ -451,9 +617,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS1()));
         BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS2()));
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE + ":" + (win ? 0 : 1)).getBytes());
 
         if(bummerl.istBummerlzuEnde()) {
             if(bummerl.getPunkteS1() >= 7)
@@ -485,11 +651,11 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.Zudrehen(selbst);
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
-        imageView_deck.setAlpha((float)0);
-        imageView_trumpf.setAlpha((float)0);
+        imageView_deck.setAlpha((float) 0);
+        imageView_trumpf.setAlpha((float) 0);
 
         buttonZudrehen.setText("Zugedreht");
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT+":").getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -539,7 +705,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void trumpfkarteTauschen(View view) {
-        spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(),"Bube",2), selbst);
+        spiel.TrumpfkarteAustauschen(new Karte(spiel.getTrumpf(), "Bube", 2), selbst);
         trumpfkarte = spiel.getAufgedeckterTrumpf();
 
        // buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
@@ -550,7 +716,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handAktualisieren();
         buttonTrumpfTauschen.setEnabled(false);
         buttonTrumpfTauschen.setAlpha(0.4f);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT+":").getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT + ":").getBytes());
         eigenerZug();
     }
 
@@ -735,6 +901,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         //mGoogleApiClient.disconnect();
         Intent i = new Intent(this, Startmenue.class);
         startActivity(i);
+        onStop();
         finish();
     }
 
