@@ -796,6 +796,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 try {
                     if (!angesagtesSpiel.equals("0")) {
                         spiel.SpielAnsagen(new Rufspiel(angesagtesSpiel), sender);
+                        if (spiel.istSpielzuEnde(bummerl)) {
+                            //spielEnde();
+                        }
                         rufer = sender;
                     }
                 } catch (Exception e) {
