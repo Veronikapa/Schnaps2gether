@@ -147,6 +147,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
+
+        imageView_talonkarte1 =(ImageView)findViewById(R.id.imageView_talonkarte1);
+        imageView_talonkarte2 =(ImageView)findViewById(R.id.imageView_talonkarte2);
+
         //imageView_Stich1 = (ImageView) findViewById(R.id.imageView_Stich1);
         //imageView_Stich2 = (ImageView) findViewById(R.id.imageView_Stich2);
         //imageView_Stich3 = (ImageView) findViewById(R.id.imageView_Stich3);
