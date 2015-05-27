@@ -409,7 +409,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/l_StichAnzeige"
-        android:background="@drawable/rounded_corner"
         android:layout_toEndOf="@+id/l_abgelegteKarten"
         android:layout_alignLeft="@+id/l_StichGegner1"
         android:layout_alignStart="@+id/l_StichGegner1">

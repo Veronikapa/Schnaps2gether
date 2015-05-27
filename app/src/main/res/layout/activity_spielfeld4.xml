@@ -1,10 +1,13 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:orientation="vertical"
     android:paddingTop="0dp"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Spielfeld4"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".Spielfeld4"
     android:gravity="center_vertical"
     android:weightSum="1"
     android:background="@drawable/holz_hintergrund">
@@ -20,7 +23,7 @@
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/Enemy"
+            android:id="@+id/txt_NameG2"
             android:text="@string/spieler2" android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
@@ -31,27 +34,13 @@
             android:layout_alignBottom="@+id/pointsText"
             android:paddingLeft="5dp"
             android:paddingBottom="5dp"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:id="@+id/pointsText"
-            android:text="@string/punktestand2" android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_alignTop="@+id/linearLayout2"
-            android:textColor="@android:color/white"
-            android:layout_toRightOf="@+id/gegnerNameLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
-            android:gravity="top|center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:visibility="invisible"/>
+            android:layout_gravity="center_horizontal"
+            android:paddingRight="5dp" />
 
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:id="@+id/imageView"
+            android:id="@+id/i_AugeG2"
             android:background="@drawable/auge"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -69,10 +58,10 @@
         android:weightSum="1"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/eigeneKartenLayout"
+        android:layout_gravity="left|center"
         android:layout_toLeftOf="@+id/stichAnzeige"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="left|center">
+        android:layout_toRightOf="@+id/l_Punkteanzeige"
+        android:layout_toEndOf="@+id/l_Punkteanzeige">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -120,56 +109,23 @@
                 android:textAllCaps="false"
                 android:visibility="invisible" />
             <Button
-            android:id="@+id/main_buttonAufdrehen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/aufdrehen"
-            style="@style/button_text"
-            android:onClick="aufdrehenOnClick"
-            android:layout_marginLeft="0dp"
-            android:singleLine="false"
-            android:textColor="@android:color/white"
-            android:background="@drawable/beiger_button"
-            android:layout_marginRight="5dp"
-            android:textAllCaps="false"
-            android:visibility="invisible" />
+                android:id="@+id/main_buttonAufdrehen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aufdrehen"
+                style="@style/button_text"
+                android:onClick="aufdrehenOnClick"
+                android:layout_marginLeft="0dp"
+                android:singleLine="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/beiger_button"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="false"
+                android:visibility="invisible"
+                android:layout_gravity="left" />
         </FrameLayout>
 
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:orientation="vertical"
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center"
-            android:layout_weight="0.17">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/I"
-                    android:text="@string/spieler1" android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="0dp" />
-
-                <TextView
-                    android:id="@+id/pointsText2"
-                    android:text="@string/punktestand2"
-                    android:layout_width="18dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="top|center_horizontal"
-                    android:textColor="@android:color/white"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp" />
-            </LinearLayout>
-
-        </LinearLayout>
         <Button
             android:id="@+id/main_button20er"
             android:layout_width="0dp"
@@ -183,7 +139,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:textAllCaps="false"
-            android:layout_weight="0.21" />
+            android:layout_weight="0.25" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="0dp"
@@ -196,7 +152,7 @@
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
             android:textAllCaps="false"
-            android:layout_weight="0.22" />
+            android:layout_weight="0.25" />
 
         <Button
             android:id="@+id/main_buttonWeiter"
@@ -213,11 +169,11 @@
             android:layout_marginLeft="5dp"
             android:textAllCaps="false"
             android:elegantTextHeight="true"
-            android:layout_weight="0.35"
+            android:layout_weight="0.34"
             android:enabled="false"/>
 
         <Button
-            android:layout_width="70dp"
+            android:layout_width="63dp"
             android:layout_height="wrap_content"
             android:text="Abbrechen"
             android:id="@+id/cmd_close"
@@ -226,12 +182,12 @@
             android:elegantTextHeight="false"
             android:capitalize="words"
             android:textAllCaps="false"
-            android:layout_weight="0.07"
             android:paddingRight="5dp"
             android:layout_marginRight="5dp"
             android:enabled="true"
             android:clickable="true"
-            android:onClick="abbrechenSpiel" />
+            android:onClick="abbrechenSpiel"
+            android:layout_weight="0.07" />
 
     </LinearLayout>
 
@@ -260,8 +216,8 @@
                 android:scaleType="fitXY"
                 android:clickable="false"
                 android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/Enemy"
-                android:layout_toStartOf="@+id/Enemy"
+                android:layout_toLeftOf="@+id/txt_NameG2"
+                android:layout_toStartOf="@+id/txt_NameG2"
                 android:layout_gravity="bottom|right"
                 android:background="@android:color/transparent"
                 android:cropToPadding="true" />
@@ -280,8 +236,8 @@
                 android:scaleType="fitXY"
                 android:layout_gravity="top|left"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/Enemy"
-                android:layout_toEndOf="@+id/Enemy"
+                android:layout_toRightOf="@+id/txt_NameG2"
+                android:layout_toEndOf="@+id/txt_NameG2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
@@ -298,8 +254,8 @@
                 android:scaleType="fitXY"
                 android:layout_gravity="top|left"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/Enemy"
-                android:layout_toEndOf="@+id/Enemy"
+                android:layout_toRightOf="@+id/txt_NameG2"
+                android:layout_toEndOf="@+id/txt_NameG2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
@@ -316,8 +272,8 @@
                 android:scaleType="fitXY"
                 android:layout_gravity="top|left"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/Enemy"
-                android:layout_toEndOf="@+id/Enemy"
+                android:layout_toRightOf="@+id/txt_NameG2"
+                android:layout_toEndOf="@+id/txt_NameG2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
@@ -330,10 +286,10 @@
         android:id="@+id/eigeneKartenLayout"
         android:paddingRight="30dp"
         android:layout_alignTop="@+id/stichAnzeige"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/buttons_leiste"
-        android:layout_alignEnd="@+id/buttons_leiste">
+        android:layout_alignEnd="@+id/buttons_leiste"
+        android:layout_alignLeft="@+id/buttons_leiste"
+        android:layout_alignStart="@+id/buttons_leiste">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -442,8 +398,8 @@
         android:layout_height="100dp"
         android:id="@+id/deck_layout"
         android:layout_above="@+id/eigeneKartenLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_toRightOf="@+id/i_StichG3"
+        android:layout_toEndOf="@+id/i_StichG3">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -453,13 +409,46 @@
             android:id="@+id/trumpfIconLayout"
             android:layout_marginRight="25dp">
 
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/imageView_trumpfIcon"
+                android:scaleType="fitXY"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="20dp"
+            android:weightSum="1" >
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:id="@+id/imageView_trumpf"
+                android:longClickable="true"
+                android:padding="0dp"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom"
+                android:rotation="90"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="0.20"
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/deckLayout"
+            android:id="@+id/LinearLayout"
             android:layout_gravity="left|center_vertical">
 
             <ImageView
@@ -467,20 +456,8 @@
                 android:layout_height="95dp"
                 android:id="@+id/imageView_deck"
                 android:background="@drawable/deck_full"
-                android:scaleType="fitXY"
-                android:layout_gravity="left|center_vertical" />
+                android:scaleType="fitXY" />
         </LinearLayout>
-
-        <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/imageView_trumpfIcon"
-            android:scaleType="fitXY"
-            android:visibility="visible"
-            android:background="@android:color/transparent"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp" />
 
     </FrameLayout>
 
@@ -492,11 +469,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/stichAnzeige"
-        android:background="@drawable/rounded_corner"
-        android:layout_toEndOf="@+id/frameGegnerEigene"
-        android:layout_alignLeft="@+id/frameLayout2"
-        android:layout_alignStart="@+id/frameLayout2"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="5dp">
 
 
 
@@ -787,61 +761,328 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="155dp"
-        android:layout_height="119dp"
+        android:layout_width="60dp"
+        android:layout_height="90dp"
         android:layout_gravity="right|center_vertical"
-        android:id="@+id/frameLayout2"
-        android:layout_alignTop="@+id/gegnerNameLayout"
+        android:id="@+id/l_stichG1"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/l_AnzeigeG1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:layout_gravity="right|top" >
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:id="@+id/i_StichG1"
+                android:background="@android:color/transparent"
+                android:layout_gravity="right|top" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner"
+        android:id="@+id/l_Punkteanzeige"
+        android:gravity="left"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="5dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bummerln:"
+                android:id="@+id/bummerl"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gegner3"
+                android:id="@+id/txt_BummerlNameG3"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4"
+                android:id="@+id/txt_BummerZahlG3"
+                android:layout_column="2"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gegner2"
+                android:id="@+id/txt_BummerlNameG2"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:id="@+id/txt_BummerlZahlG2"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler2"
+                android:id="@+id/txt_BummerlNameG1"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_BummerZahlG1"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler1"
+                android:id="@+id/txt_BummerNameI"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_BummerlZahlI"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Punkte"
+                android:id="@+id/textView7"
+                android:layout_column="0"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/punktestand2"
+                android:id="@+id/textView8"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:paddingRight="5dp"
+                android:layout_marginLeft="5dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="25dp"
+        android:layout_height="110dp"
+        android:background="@drawable/name_plakette_v"
+        android:id="@+id/l_AnzeigeG1"
+        android:layout_alignWithParentIfMissing="false"
+        android:weightSum="1"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/deck_layout">
+        android:layout_alignBottom="@+id/frameGegnerEigene">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="80dp"
+                android:id="@+id/txt_NameG1"
+                android:rotation="270"
+                android:text="Gegner1"
+                android:textColor="@android:color/white"
+                android:autoText="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/i_augeG1"
+                android:background="@drawable/auge"
+                android:adjustViewBounds="true"
+                android:layout_gravity="bottom|center_horizontal" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="90dp"
+        android:layout_height="60dp"
+        android:id="@+id/l_StichG2"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/i_StichG3"
+        android:layout_toEndOf="@+id/i_StichG3"
+        android:layout_marginLeft="90dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:layout_gravity="top"
+            android:id="@+id/f"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/stichAnzeige"
+            android:layout_toStartOf="@+id/stichAnzeige">
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="60dp"
+                android:id="@+id/imageView_StichG2"
+                android:layout_alignEnd="@+id/eigeneKartenLayout"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom" >
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp">
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:rotation="45" />
+                android:layout_height="wrap_content"
+                android:id="@+id/AnzahlStichG2"
+                android:textColor="#ff000000"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="25dp"
+        android:layout_height="110dp"
+        android:id="@+id/l_AngzeigeG3"
+        android:layout_alignBottom="@+id/deck_layout">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="110dp"
+                android:id="@+id/i_AnzeigeG3"
+                android:background="@drawable/name_plakette_v1"
+                android:layout_alignBottom="@+id/frameGegnerEigene"
+                android:layout_alignLeft="@+id/deck_layout"
+                android:layout_alignStart="@+id/deck_layout" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichEigeneKarteG"
-            android:background="@android:color/transparent"
-            android:rotation="-40"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginRight="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="5dp" />
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="90dp"
-            android:id="@+id/stichGegnerKarteG"
-            android:cropToPadding="true"
-            android:background="@android:color/transparent"
-            android:rotation="40"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp" />
-
-        <ImageView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/stichDeckG"
-            android:hapticFeedbackEnabled="false"
-            android:background="@drawable/deck"
-            android:layout_gravity="center_horizontal|top"
-            android:visibility="invisible"
-            android:rotation="90"
-            android:layout_marginBottom="30dp" />
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="Gegner3"
+                android:id="@+id/txt_NameG3"
+                android:textColor="@android:color/white"
+                android:rotation="270" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="3dp">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/i_AugeG3"
+                android:background="@drawable/auge"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="10dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="60dp"
+        android:layout_height="90dp"
+        android:layout_gravity="right|center_vertical"
+        android:id="@+id/i_StichG3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="60dp"
+            android:layout_height="90dp"
+            android:layout_gravity="right|top" >
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:id="@+id/i_DeckG3"
+                android:background="@android:color/transparent"
+                android:layout_gravity="right|top" />
+        </LinearLayout>
     </FrameLayout>
 
 
