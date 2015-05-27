@@ -803,25 +803,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 }
             }
 
-            if(stapelKartenAnz==0) {
-                imageView_deck.setVisibility(View.INVISIBLE);
-
-            }else if ((stapelKartenAnz<=2) && (stapelKartenAnz>0))
-                imageView_deck.setImageResource(R.drawable.deck);
-            else if((stapelKartenAnz<=4) && (stapelKartenAnz>2))
-                imageView_deck.setImageResource(R.drawable.deck_2);
-            else if((stapelKartenAnz<=6) && (stapelKartenAnz>4))
-                imageView_deck.setImageResource(R.drawable.deck_3);
-            else if((stapelKartenAnz<=8) && (stapelKartenAnz>6))
-                imageView_deck.setImageResource(R.drawable.deck_4);
-            else if((stapelKartenAnz<=10) && (stapelKartenAnz>8))
-                imageView_deck.setImageResource(R.drawable.deck_5);
-            else
-                imageView_deck.setImageResource(R.drawable.deck_full);
-
-
-
-
             punkteAktualisieren();
             gegnerischeKarte = null;
 
