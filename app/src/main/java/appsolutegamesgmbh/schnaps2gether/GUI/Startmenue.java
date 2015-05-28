@@ -20,7 +20,7 @@ public class Startmenue extends Activity implements View.OnClickListener {
     private Button spielregeln;
     private Button beenden;
     private Button name;
-    private Button optionen;
+    private Button schnellesSpiel;
     public static String SpielerName;
 
     @Override
@@ -43,8 +43,8 @@ public class Startmenue extends Activity implements View.OnClickListener {
         name = (Button) findViewById(R.id.cmd_name);
         name.setOnClickListener(this);
 
-        optionen = (Button) findViewById(R.id.cmd_optionen);
-        optionen.setOnClickListener(this);
+        schnellesSpiel = (Button) findViewById(R.id.cmd_schnellesSpiel);
+        schnellesSpiel.setOnClickListener(this);
 
         SharedPreferences settings = this.getPreferences(this.MODE_PRIVATE);
         SpielerName = settings.getString("nickname", "Nickname");
@@ -86,6 +86,10 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 break;
             case R.id.cmd_spielen:
                 startActivity(new Intent(Startmenue.this, Lobby.class));
+                finish();
+                break;
+            case R.id.cmd_schnellesSpiel:
+                startActivity(new Intent(Startmenue.this,Spielfeld2.class));
                 finish();
                 break;
             default:;

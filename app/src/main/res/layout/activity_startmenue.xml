@@ -133,9 +133,9 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Optionen"
+            android:text="@string/schnellesSpiel"
             style="@style/button_text"
-            android:id="@+id/cmd_optionen"
+            android:id="@+id/cmd_schnellesSpiel"
             android:background="@drawable/beiger_button"
             android:textColor="@android:color/white"
             android:textStyle="bold"

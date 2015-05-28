@@ -170,12 +170,12 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
         punkteGegner1 = (TextView) findViewById(R.id.pointsText);
         punkteGegner2 = (TextView) findViewById(R.id.pointsText);
-        punkteSelbst = (TextView) findViewById(R.id.pointsText2);
-        punkteMitspieler = (TextView) findViewById(R.id.pointsText2);
-        txtSelbst = (TextView) findViewById(R.id.I);
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
+        //punkteMitspieler = (TextView) findViewById(R.id.pointsText2);
+  /*      txtSelbst = (TextView) findViewById(R.id.I);
         txtMitspieler = (TextView) findViewById(R.id.I);
         txtGegner1 = (TextView) findViewById(R.id.Enemy);
-        txtGegner2 = (TextView) findViewById(R.id.Enemy);
+        txtGegner2 = (TextView) findViewById(R.id.Enemy);*/
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
         // findViewById(R.id.imageView_eigeneKarte).setOnDragListener(new MyDragListener());

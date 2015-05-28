@@ -149,10 +149,10 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
 
-        punkteGegner = (TextView) findViewById(R.id.pointsText);
+    /*    punkteGegner = (TextView) findViewById(R.id.pointsText);
         punkteSelbst = (TextView) findViewById(R.id.pointsText2);
         txtSelbst = (TextView) findViewById(R.id.I);
-        txtGegner = (TextView) findViewById(R.id.Enemy);
+        txtGegner = (TextView) findViewById(R.id.Enemy);*/
 
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);

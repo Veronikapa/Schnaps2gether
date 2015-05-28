@@ -3,4 +3,16 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
         <dimen name="txt">30dp</dimen>
+
+    <dimen name="karte_normal_hoehe">90dp</dimen>
+    <dimen name="karte_normal_breite">60dp</dimen>
+
+    <dimen name="karte_small_hoehe">68dp</dimen>
+    <dimen name="karte_small_breite">45dp</dimen>
+
+    <dimen name="karte_large_hoehe">135dp</dimen>
+    <dimen name="karte_large_breite">90dp</dimen>
+
+    <dimen name="karte_xlarge_hoehe">180dp</dimen>
+    <dimen name="karte_xlarge_breite">120dp</dimen>
 </resources>
