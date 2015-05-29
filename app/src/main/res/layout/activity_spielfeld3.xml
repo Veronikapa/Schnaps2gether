@@ -341,75 +341,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/l_Deckkarten"
-            android:layout_gravity="left|center_vertical">
-
-            <ImageView
-                android:layout_width="65dp"
-                android:layout_height="95dp"
-                android:id="@+id/imageView_deck"
-                android:background="@drawable/deck_full"
-                android:scaleType="fitXY"
-                android:layout_gravity="left|center_vertical" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:id="@+id/l_Zudrehen"
-            android:weightSum="1">
-
-            <Button
-                style="@style/button_text"
-                android:id="@+id/main_buttonZ"
-                android:layout_width="52dp"
-                android:layout_height="34dp"
-                android:text="@string/buttonZ"
-                android:onClick="zudrehen"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:background="@drawable/beiger_button"
-                android:layout_marginLeft="5dp"
-                android:textAllCaps="false"
-                android:elegantTextHeight="true"
-                android:layout_weight="0.78"
-                android:visibility="invisible" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:id="@+id/l_Tauschen"
-            android:weightSum="1">
-
-            <Button
-                android:id="@+id/main_buttonTtauschen"
-                android:layout_width="61dp"
-                android:layout_height="20dp"
-                android:text="tauschen"
-                style="@style/button_text"
-                android:onClick="trumpfkarteTauschen"
-                android:layout_marginLeft="0dp"
-                android:singleLine="false"
-                android:textColor="@android:color/white"
-                android:background="@drawable/beiger_button"
-                android:layout_marginRight="5dp"
-                android:textAllCaps="false"
-                android:visibility="invisible" />
-        </LinearLayout>
-
     </FrameLayout>
 
     <FrameLayout
@@ -754,12 +685,10 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/l_abgelegteKarten"
-        android:layout_toLeftOf="@+id/l_NameGegner1"
         android:id="@+id/l_Talon"
-        android:layout_toEndOf="@+id/l_abgelegteKarten"
-        android:layout_toRightOf="@+id/l_abgelegteKarten"
-        android:layout_alignTop="@+id/l_abgelegteKarten">
+        android:layout_above="@+id/l_eigeneKarten"
+        android:layout_toLeftOf="@+id/l_abgelegteKarten"
+        android:layout_toStartOf="@+id/l_abgelegteKarten">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -789,6 +718,31 @@
                 android:layout_height="90dp"
                 android:id="@+id/imageView_talonkarte1"
                 android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/l_Tauschen"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/main_buttonTtauschen"
+                android:layout_width="61dp"
+                android:layout_height="20dp"
+                android:text="tauschen"
+                style="@style/button_text"
+                android:onClick="trumpfkarteTauschen"
+                android:layout_marginLeft="0dp"
+                android:singleLine="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/beiger_button"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="false"
+                android:visibility="invisible" />
         </LinearLayout>
 
     </FrameLayout>

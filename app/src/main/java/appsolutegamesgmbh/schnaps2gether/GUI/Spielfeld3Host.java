@@ -106,6 +106,24 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Boolean angesagt;
 
 
+    private static ImageView stichK1;
+    private static ImageView stichK2;
+    private static ImageView stichK3;
+    private static ImageView stichK4;
+    private static ImageView stichK5;
+    private static ImageView stichK6;
+    private static ImageView stichK7;
+    private static ImageView stichK8;
+    private static ImageView stichK9;
+    private static ImageView stichK10;
+    private static ImageView stichK11;
+    private static ImageView stichK12;
+    private static ImageView stichK13;
+    private static ImageView stichK14;
+    private static ImageView stichK15;
+    private static ImageView stichK16;
+
+
     @Override
     public void onStop() {
         super.onStop();
@@ -151,9 +169,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_talonkarte1 =(ImageView)findViewById(R.id.imageView_talonkarte1);
         imageView_talonkarte2 =(ImageView)findViewById(R.id.imageView_talonkarte2);
 
-        //imageView_Stich1 = (ImageView) findViewById(R.id.imageView_Stich1);
-        //imageView_Stich2 = (ImageView) findViewById(R.id.imageView_Stich2);
-        //imageView_Stich3 = (ImageView) findViewById(R.id.imageView_Stich3);
+        imageView_Stich1 = (ImageView) findViewById(R.id.imageView_eigeneKarte);
+        imageView_Stich2 = (ImageView) findViewById(R.id.imageView_karteGegner1);
+        imageView_Stich3 = (ImageView) findViewById(R.id.imageView_karteGegner2);
 
 
         handkartenImages = new ArrayList<ImageView>();
@@ -163,8 +181,70 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
 
+        stichK1= (ImageView) findViewById(R.id.stichK1);
+        stichK2= (ImageView) findViewById(R.id.stichK2);
+        stichK3= (ImageView) findViewById(R.id.stichK3);
+        stichK4= (ImageView) findViewById(R.id.stichK4);
+        stichK5= (ImageView) findViewById(R.id.stichK5);
+        stichK6= (ImageView) findViewById(R.id.stichK6);
+        stichK7= (ImageView) findViewById(R.id.stichK7);
+        stichK8= (ImageView) findViewById(R.id.stichK8);
+        stichK9= (ImageView) findViewById(R.id.stichK9);
+        stichK10= (ImageView) findViewById(R.id.stichK10);
+        stichK11= (ImageView) findViewById(R.id.stichK11);
+        stichK12= (ImageView) findViewById(R.id.stichK12);
+        stichK13= (ImageView) findViewById(R.id.stichK13);
+        stichK14= (ImageView) findViewById(R.id.stichK14);
+        stichK15= (ImageView) findViewById(R.id.stichK15);
+        stichK16= (ImageView) findViewById(R.id.stichK16);
+
 
         //spielStart();
+
+    }
+
+    private void spielStart() {
+
+        try {
+            spiel = new Spiel3(bummerl.getAnzahlSpiele());
+        }
+        catch(Exception e){
+
+        }
+        selbst = spiel.getS1();
+        gegner1 = spiel.getS2();
+        gegner2 = spiel.getS3();
+
+
+        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+
+        stichK16.setVisibility(View.INVISIBLE);
+        stichK15.setVisibility(View.INVISIBLE);
+        stichK14.setVisibility(View.INVISIBLE);
+        stichK13.setVisibility(View.INVISIBLE);
+        stichK12.setVisibility(View.INVISIBLE);
+        stichK11.setVisibility(View.INVISIBLE);
+        stichK10.setVisibility(View.INVISIBLE);
+        stichK9.setVisibility(View.INVISIBLE);
+        stichK8.setVisibility(View.INVISIBLE);
+        stichK7.setVisibility(View.INVISIBLE);
+        stichK6.setVisibility(View.INVISIBLE);
+        stichK5.setVisibility(View.INVISIBLE);
+        stichK4.setVisibility(View.INVISIBLE);
+        stichK3.setVisibility(View.INVISIBLE);
+        stichK2.setVisibility(View.INVISIBLE);
+        stichK1.setVisibility(View.INVISIBLE);
+
+
+        handKartenKlickbar();
+
+        punkteSelbst.setText("0");
+        punkteGegner1.setText("0");
+        punkteGegner2.setText("0");
+        gegnerischeKarte1 = null;
+        gegnerischeKarte2 = null;
+        handAktualisieren();
+        eigenerZug();
 
     }
 
@@ -275,7 +355,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
 
 
-        if (gegnerischeKarte1 == null) {
+        if (gegnerischeKarte1 == null || gegnerischeKarte2 == null) {
             gegnerischeHandAktualisieren();
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -295,7 +375,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
-        // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
     }
@@ -325,15 +404,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
             if (i<handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
-
-
-              /*  buttonK.setText(k.getFarbe() + k.getWertigkeit());
-                buttonK.setVisibility(View.VISIBLE);*/
-
                 imageViewK.setImageResource(k.getImageResourceId());
                 imageViewK.setVisibility(View.VISIBLE);
             } else {
-                //buttonK.setVisibility(View.INVISIBLE);
                 imageViewK.setVisibility(View.INVISIBLE);
             }
             gegnerischeHandAktualisieren();
@@ -347,15 +420,12 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         String gegKartenSpielBar2 = "";
         int gegnerischeHandkartenAnz1 = gegner1.Hand.size();
         int gegnerischeHandkartenAnz2 = gegner2.Hand.size();
-        //Toast.makeText(appContext,"gegnerischeHandkartenAnz: "+gegnerischeHandkartenAnz,Toast.LENGTH_SHORT).show();
         
         for (int i=0;i<gegnerischeHandkartenAnz1;i++) {
-            //Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
             gegnerischeHand1 += ","+gegner1.Hand.get(i).toString();
             gegKartenSpielBar1 += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
         }
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
-            //Toast.makeText(appContext,"gegnerischeHandkarte "+i+": "+gegner.Hand.get(i).toString(),Toast.LENGTH_SHORT).show();
             gegnerischeHand2 += ","+gegner2.Hand.get(i).toString();
             gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner1) ? 1 : 0);
         }

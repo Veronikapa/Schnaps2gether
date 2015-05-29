@@ -65,6 +65,9 @@ public class Lobby extends Activity implements
     Spielfeld2Client c2 = new Spielfeld2Client();
     Spielfeld2Host h2 = new Spielfeld2Host();
 
+    Spielfeld3Client c3 = new Spielfeld3Client();
+    Spielfeld3Host h3 = new Spielfeld3Host();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
