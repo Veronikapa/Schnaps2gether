@@ -2,8 +2,12 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -11,7 +15,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -548,6 +554,60 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         punkteAktualisieren();
         handKartenKlickbar();
         return true;
+    }
+
+    public void kartenSchauen(View view)
+    {
+        //3 Sekunden Wartezeit damit Gegner abwähren kann --> Bei Computer Zufallszahl 0 oder 1
+        // 0... Schummeln erlaubt, sonst Schummeln nicht erlaubt.
+         double schummelnAbgewehrt = Math.round(Math.random() * 2); // *2, da sonst immer auf 0 gerundet wird!
+
+        //Schummeln wurde per Zufall abgewehrt, Spieler darf nicht in die Karten des Gegners schauen
+        if(schummelnAbgewehrt >= 1.0)
+            Toast.makeText(this.getApplicationContext(),"Schummelversuch wurde abgewehrt.",Toast.LENGTH_SHORT).show();
+
+        //Schummeln wurde per Zufall nicht abgewehrt, in die Karten des Gegners schauen erlaubt
+        else{
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+            int handkartenAnz = spiel.getS2().Hand.size();
+
+            for (int i=0;i<5;i++) {
+                    if (i<handkartenAnz) {
+                        Karte k = spiel.getS2().Hand.get(i);
+
+                        ImageView imageViewK = new ImageView(this);
+                        imageViewK.setImageResource(k.getImageResourceId());
+                        layout.addView(imageViewK);
+                    }
+            }
+            builder.setView(layout);
+            builder.setInverseBackgroundForced(true);
+            final AlertDialog alert=builder.create();
+            alert.show();
+
+            // Hide after some seconds
+            final Handler handler  = new Handler();
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (alert.isShowing()) {
+                        alert.dismiss();
+                    }
+                }
+            };
+
+            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    handler.removeCallbacks(runnable);
+                }
+            });
+
+            handler.postDelayed(runnable, 3000);
+        }
     }
 
     class Zugende implements Runnable {
