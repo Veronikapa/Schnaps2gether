@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -99,6 +100,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
+
+        //Screen Lock deaktivieren
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         bummerl = new Bummerl2();
 
@@ -511,6 +515,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         startActivity(new Intent(Spielfeld2.this, Startmenue.class));
         finish();
     }

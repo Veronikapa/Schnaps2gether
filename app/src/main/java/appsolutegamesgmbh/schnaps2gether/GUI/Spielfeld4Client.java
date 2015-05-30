@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -121,6 +122,9 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
+
+        //Screen Lock deaktivieren
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mGoogleApiClient = Lobby.m_GoogleApiClient;
         endpointIDs = Lobby.endpointIds;
@@ -598,6 +602,9 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     public void abbrechenSpiel(View v){
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         Intent i = new Intent(this, Startmenue.class);
         startActivity(i);
         finish();

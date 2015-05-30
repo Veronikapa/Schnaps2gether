@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -136,6 +137,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld3);
+
+        //Screen Lock deaktivieren
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mGoogleApiClient = Lobby.m_GoogleApiClient;
         endpointIDs = Lobby.endpointIds;
@@ -280,6 +284,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         startActivity(new Intent(Spielfeld3Host.this, Startmenue.class));
         finish();
     }

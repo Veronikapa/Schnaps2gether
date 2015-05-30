@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -150,6 +151,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld2);
 
+        //Screen lock deaktivieren
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         mGoogleApiClient = Lobby.m_GoogleApiClient;
         endpointIDs = Lobby.endpointIds;
 
@@ -166,8 +170,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         //findViewById(R.id.imageView_karte4).setOnTouchListener(new MyTouchListener());
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
         // findViewById(R.id.imageView_karte5).setOnTouchListener(new MyTouchListener());
-
-
 
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
@@ -707,7 +709,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void abbrechenSpiel(View v){
-        //mGoogleApiClient.disconnect();
+
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         Intent i = new Intent(this, Startmenue.class);
         startActivity(i);
         onStop();
@@ -726,7 +731,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     class Zugende implements Runnable {
@@ -805,7 +809,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
             punkteAktualisieren();
             gegnerischeKarte = null;
-
         }
     }
 }
