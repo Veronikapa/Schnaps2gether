@@ -133,6 +133,8 @@ public class Lobby extends Activity implements
         /*Intent i = new Intent(this, NeuesSpiel.class);
         startActivityForResult(i, 1);*/
         popupNeuesSpiel(v);
+        spieleIdListe.clear();
+        spieleListe.clear();
     }
 
     /*
@@ -142,6 +144,8 @@ public class Lobby extends Activity implements
     public void beitreten(View v) {
         if (m_GoogleApiClient.isConnected()) {
             Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
+            spieleIdListe.clear();
+            spieleListe.clear();
             startDiscovery();
         }
     }
@@ -223,8 +227,7 @@ public class Lobby extends Activity implements
 
     @Override
     public void onDisconnected(String s) {
-        //Zurzeit keine Implementierung. Hier ist anzugeben was passieren soll, wenn
-        //Verbindung beendet wird.
+
     }
 
     @Override
@@ -450,7 +453,6 @@ public class Lobby extends Activity implements
 
     public void abbrechenLobby(View v){
         Intent i = new Intent(this, Startmenue.class);
-        //setResult(Activity.RESULT_OK,i);
         startActivity(i);
         finish();
     }
