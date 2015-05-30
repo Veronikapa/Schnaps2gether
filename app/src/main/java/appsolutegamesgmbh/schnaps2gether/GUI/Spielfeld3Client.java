@@ -237,18 +237,18 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     }
 
 
-    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
+    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
 
     }
 
-    private static void punkteAktualisieren() {
+    private void punkteAktualisieren() {
         punkteGegner1.setText(Integer.toString(p2));
         punkteGegner2.setText(Integer.toString(p3));
         punkteSelbst.setText(Integer.toString(p1));
     }
 
 
-    static class Zugende implements Runnable {
+    class Zugende implements Runnable {
 
         @Override
         public void run() {

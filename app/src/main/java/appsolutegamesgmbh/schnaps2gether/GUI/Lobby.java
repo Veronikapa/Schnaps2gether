@@ -65,7 +65,8 @@ public class Lobby extends Activity implements
     Spielfeld2Client c2 = new Spielfeld2Client();
     Spielfeld2Host h2 = new Spielfeld2Host();
 
-    Spielfeld3Client c3 = new Spielfeld3Client();
+    Spielfeld3Client c31 = new Spielfeld3Client();
+    Spielfeld3Client c32 = new Spielfeld3Client();
     Spielfeld3Host h3 = new Spielfeld3Host();
 
     @Override
@@ -205,7 +206,7 @@ public class Lobby extends Activity implements
                 }
 
                 else if (spielTyp == 3) {
-                    Spielfeld3Client.receiveFromLobby(endpointID, payload, isReliable);
+                    c31.receiveFromLobby(endpointID, payload, isReliable);
                 }
 
                 else if (spielTyp == 4)
@@ -218,7 +219,7 @@ public class Lobby extends Activity implements
                 }
 
                 else if (spielTyp == 3)
-                    Spielfeld3Host.receiveFromLobby(endpointID, payload, isReliable);
+                    h3.receiveFromLobby(endpointID, payload, isReliable);
 
                 else if (spielTyp == 4)
                     Spielfeld4Host.receiveFromLobby(endpointID, payload, isReliable);

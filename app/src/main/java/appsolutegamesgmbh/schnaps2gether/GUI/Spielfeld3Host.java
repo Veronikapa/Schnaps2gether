@@ -81,11 +81,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Spieler selbst;
     private static Spieler gegner1;
     private static Spieler gegner2;
-    private Karte karte1;
-    private Karte karte2;
-    private Karte karte3;
-    private Karte karte4;
-    private Karte karte5;
+
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte1;
     private static Karte gegnerischeKarte2;
@@ -100,9 +96,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static TextView punkteGegner1;
     private static TextView punkteGegner2;
     private static TextView punkteSelbst;
-    private TextView txtSelbst;
-    private TextView txtGegner1;
-    private TextView txtGegner2;
+    private static TextView txtSelbst;
+    private static TextView txtGegner1;
+    private static TextView txtGegner2;
     private static Bummerl3 bummerl;
     private static Boolean angesagt;
 
@@ -203,7 +199,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         stichK16= (ImageView) findViewById(R.id.stichK16);
 
 
-        //spielStart();
+        spielStart();
 
     }
 
@@ -326,7 +322,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         return super.onOptionsItemSelected(item);
     }
 
-    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
+    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
 
     }
 

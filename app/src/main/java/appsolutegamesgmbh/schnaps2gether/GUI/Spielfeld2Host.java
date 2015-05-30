@@ -144,9 +144,76 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_spielfeld2);
 
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        mGoogleApiClient = Lobby.m_GoogleApiClient;
+        endpointIDs = Lobby.endpointIds;
+        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
+
+        appContext = this.getApplicationContext();
+
+        angesagt = false;
+
+        bummerl = new Bummerl2();
+        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+
+        stichK1= (ImageView) findViewById(R.id.stichK1);
+        stichK2= (ImageView) findViewById(R.id.stichK2);
+        stichK3= (ImageView) findViewById(R.id.stichK3);
+        stichK4= (ImageView) findViewById(R.id.stichK4);
+        stichK5= (ImageView) findViewById(R.id.stichK5);
+        stichK6= (ImageView) findViewById(R.id.stichK6);
+        stichK7= (ImageView) findViewById(R.id.stichK7);
+        stichK8= (ImageView) findViewById(R.id.stichK8);
+        stichK9= (ImageView) findViewById(R.id.stichK9);
+        stichK10= (ImageView) findViewById(R.id.stichK10);
+        stichK11= (ImageView) findViewById(R.id.stichK11);
+        stichK12= (ImageView) findViewById(R.id.stichK12);
+        stichK13= (ImageView) findViewById(R.id.stichK13);
+        stichK14= (ImageView) findViewById(R.id.stichK14);
+        stichK15= (ImageView) findViewById(R.id.stichK15);
+        stichK16= (ImageView) findViewById(R.id.stichK16);
+
+
+        imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
+        imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
+        imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
+        imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
+        imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
+
+        buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
+        button20er = (Button) findViewById(R.id.main_button20er);
+        button40er = (Button) findViewById(R.id.main_button40er);
+        buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
+
+        stichEigeneKarteG =(ImageView) findViewById(R.id.stichEigeneKarteG);
+        stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
+        stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
+
+        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
+        imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
+        imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
+        imageView_karteGegner = (ImageView) findViewById(R.id.imageView_karteGegner);
+        imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
+        imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
+
+        handkartenImages = new ArrayList<ImageView>();
+        handkartenImages.add(0, imageView_karte1);
+        handkartenImages.add(1, imageView_karte2);
+        handkartenImages.add(2, imageView_karte3);
+        handkartenImages.add(3, imageView_karte4);
+        handkartenImages.add(4, imageView_karte5);
+
+
+        spielStart();
+
     }
 
     private void zugAusführen(int i) {

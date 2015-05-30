@@ -161,15 +161,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
-        //  findViewById(R.id.imageView_karte1).setOnTouchListener(new MyTouchListener());
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
-        //findViewById(R.id.imageView_karte2).setOnTouchListener(new MyTouchListener());
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
-        //findViewById(R.id.imageView_karte3).setOnTouchListener(new MyTouchListener());
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
-        //findViewById(R.id.imageView_karte4).setOnTouchListener(new MyTouchListener());
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
-        // findViewById(R.id.imageView_karte5).setOnTouchListener(new MyTouchListener());
 
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
