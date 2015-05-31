@@ -99,6 +99,8 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private ImageView stichK15;
     private ImageView stichK16;
 
+    private int istdran;
+
 
 
 
@@ -207,7 +209,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         if (gegnerischeKarte == null) {
             gegnerischerZug(karte1);
         }
-        spiel.ZugAuswerten(k, gegnerischeKarte);
+        spiel.ZugAuswerten(k, gegnerischeKarte, istdran);
+
+        if(selbst.isIstdran())
+            istdran = 0;
+        else
+            istdran = 1;
+
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
@@ -343,7 +351,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_deck.setImageResource(R.drawable.deck_full);
         imageView_deck.setVisibility(View.VISIBLE);
 
-
+        istdran = 0;
         pruefegestochenG = true;
       //  pruefegestochenI = true;
 

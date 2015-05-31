@@ -93,8 +93,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_Stich2;
     private static ImageView imageView_Stich3;
 
-    private static TextView punkteGegner1;
-    private static TextView punkteGegner2;
+    private static TextView BpunkteGegner1;
+    private static TextView BpunkteGegner2;
+    private static TextView BpunkteSelbst;
     private static TextView punkteSelbst;
     private static TextView txtSelbst;
     private static TextView txtGegner1;
@@ -146,7 +147,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         angesagt = false;
 
         bummerl = new Bummerl3();
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
@@ -198,6 +199,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         stichK15= (ImageView) findViewById(R.id.stichK15);
         stichK16= (ImageView) findViewById(R.id.stichK16);
 
+        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        BpunkteGegner1 = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner2 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
 
         spielStart();
 
@@ -239,8 +245,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         handKartenKlickbar();
 
         punkteSelbst.setText("0");
-        punkteGegner1.setText("0");
-        punkteGegner2.setText("0");
+        BpunkteSelbst.setText("0");
+        BpunkteGegner1.setText("0");
+        BpunkteGegner2.setText("0");
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
         handAktualisieren();
@@ -515,8 +522,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         int p1 = selbst.getPunkte();
         int p2 = gegner1.getPunkte();
         int p3 = gegner2.getPunkte();
-        punkteGegner1.setText(Integer.toString(p2));
-        punkteGegner2.setText(Integer.toString(p3));
         punkteSelbst.setText(Integer.toString(p1));
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2) + " " + Integer.toString(p3)).getBytes());
     }

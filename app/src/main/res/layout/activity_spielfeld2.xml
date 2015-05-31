@@ -376,7 +376,7 @@
 
             <Button
                 android:id="@+id/main_buttonZ"
-                android:layout_width="63dp"
+                android:layout_width="78dp"
                 android:layout_height="27dp"
                 android:text="@string/buttonZ"
                 android:onClick="zudrehen"

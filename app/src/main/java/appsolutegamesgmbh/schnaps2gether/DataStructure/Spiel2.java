@@ -582,7 +582,7 @@ public class Spiel2 {
         return karteZumFaerbeln;
     }
 
-    public void ZugAuswerten(Karte karteS1, Karte karteS2)
+    public void ZugAuswerten(Karte karteS1, Karte karteS2, int ists2dran)
     {
         //Spieler mit höherer Karte istdran = true; Karten werden in Gestochen von Gewinner gelegt; Punkte werden bei Gewinner dazugezählt;
 
@@ -590,7 +590,7 @@ public class Spiel2 {
         Log.d("client Karte", karteS2.toString());
 
 
-        if(s1.isIstdran())
+        if(ists2dran == 0)
         {
             Log.d("spieler","s1");
             if (karteS1.getFarbe().equals(trumpf) && karteS2.getFarbe().equals(trumpf))

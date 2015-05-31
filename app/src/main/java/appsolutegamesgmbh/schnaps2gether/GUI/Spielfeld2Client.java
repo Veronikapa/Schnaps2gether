@@ -236,14 +236,15 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
                 buttonZudrehen.setEnabled(true);
                 buttonZudrehen.setAlpha(1f);
-            }
 
-            if (selbst.Hand.contains(new Karte(trumpfkarte.getFarbe(), "Bube", 2))) {
-                buttonTrumpfTauschen.setEnabled(true);
-                buttonTrumpfTauschen.setAlpha(1f);
-            } else {
-                buttonTrumpfTauschen.setEnabled(false);
-                buttonTrumpfTauschen.setAlpha(0.4f);
+
+                if (selbst.Hand.contains(new Karte(trumpfkarte.getFarbe(), "Bube", 2))) {
+                    buttonTrumpfTauschen.setEnabled(true);
+                    buttonTrumpfTauschen.setAlpha(1f);
+                } else {
+                    buttonTrumpfTauschen.setEnabled(false);
+                    buttonTrumpfTauschen.setAlpha(0.4f);
+                }
             }
             if (hat20er) {
                 button20er.setEnabled(true);
@@ -380,10 +381,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
-        buttonZudrehen.setEnabled(false);
-        buttonZudrehen.setAlpha(0.4f);
-        buttonTrumpfTauschen.setEnabled(false);
-        buttonTrumpfTauschen.setAlpha(0.4f);
+        if(!zugedreht) {
+            buttonZudrehen.setEnabled(false);
+            buttonZudrehen.setAlpha(0.4f);
+            buttonTrumpfTauschen.setEnabled(false);
+            buttonTrumpfTauschen.setAlpha(0.4f);
+        }
     }
 
     private void handKartenKlickbar() {
@@ -443,8 +446,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
         buttonZudrehen.setText("Zugedreht");
+        buttonTrumpfTauschen.setEnabled(false);
+        buttonTrumpfTauschen.setAlpha(0f);
         imageView_deck.setAlpha((float) 0);
-        imageView_trumpf.setAlpha((float)0);
+        imageView_trumpf.setAlpha((float) 0);
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
@@ -655,8 +660,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 zugedreht = true;
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
-                imageView_deck.setAlpha((float)0);
-                imageView_trumpf.setAlpha((float)0);
+                buttonZudrehen.setText("Zugedreht");
+                buttonTrumpfTauschen.setEnabled(false);
+                buttonTrumpfTauschen.setAlpha(0f);
+                imageView_deck.setAlpha((float) 0);
+                imageView_trumpf.setAlpha((float) 0);
                 buttonZudrehen.setText("Zugedreht");
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();

@@ -242,7 +242,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void zugEnde() {
-        spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte);
+        spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte, istdran);
         eigeneKarte = null;
         gegnerischeKarte = null;
 
@@ -343,14 +343,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             if (!spiel.isZugedreht()) {
                 buttonZudrehen.setEnabled(true);
                 buttonZudrehen.setAlpha(1f);
-            }
 
-            if (selbst.Hand.contains(new Karte(spiel.getTrumpf(), "Bube", 2))) {
-                buttonTrumpfTauschen.setEnabled(true);
-                buttonTrumpfTauschen.setAlpha(1f);
-            } else {
-                buttonTrumpfTauschen.setEnabled(false);
-                buttonTrumpfTauschen.setAlpha(0.4f);
+                if (selbst.Hand.contains(new Karte(spiel.getTrumpf(), "Bube", 2))) {
+                    buttonTrumpfTauschen.setEnabled(true);
+                    buttonTrumpfTauschen.setAlpha(1f);
+                } else {
+                    buttonTrumpfTauschen.setEnabled(false);
+                    buttonTrumpfTauschen.setAlpha(0.4f);
+                }
             }
             if (hat20er(selbst)) {
                 button20er.setEnabled(true);
@@ -502,6 +502,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 BpunkteSelbst.setText("0");
                 BpunkteGegner.setText("0");
                 gegnerischeKarte = null;
+
+                istdran = 0;
                 handAktualisieren();
                 eigenerZug();
             }
@@ -560,11 +562,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         if(selbst.isIstdran()) {
             handKartenKlickbar();
             eigenerZug();
+            istdran = 0;
         }
         else{
             buttonsNichtKlickbar();
             //Gegener ist dran - zuerst wird ueberprueft, ob Gegner 20/40er hat, danach wird Signal an Gegner gesendet
             gegnerHat20er();
+            istdran = 1;
         }
 
 
@@ -589,10 +593,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
-        buttonZudrehen.setEnabled(false);
-        buttonZudrehen.setAlpha(0.4f);
-        buttonTrumpfTauschen.setEnabled(false);
-        buttonTrumpfTauschen.setAlpha(0.4f);
+        if(!spiel.isZugedreht()) {
+            buttonZudrehen.setEnabled(false);
+            buttonZudrehen.setAlpha(0.4f);
+            buttonTrumpfTauschen.setEnabled(false);
+            buttonTrumpfTauschen.setAlpha(0.4f);
+        }
     }
 
     private void handKartenKlickbar() {
@@ -657,10 +663,13 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.Zudrehen(selbst);
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
+        buttonZudrehen.setText("Zugedreht");
+        buttonTrumpfTauschen.setEnabled(false);
+        buttonTrumpfTauschen.setAlpha(0f);
         imageView_deck.setAlpha((float) 0);
         imageView_trumpf.setAlpha((float) 0);
 
-        buttonZudrehen.setText("Zugedreht");
+
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
 
@@ -821,8 +830,10 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 buttonZudrehen.setEnabled(false);
                 buttonZudrehen.setAlpha(0.4f);
                 buttonZudrehen.setText("Zugedreht");
-                imageView_trumpf.setAlpha((float)0);
-                imageView_deck.setAlpha((float)0);
+                buttonTrumpfTauschen.setEnabled(false);
+                buttonTrumpfTauschen.setAlpha(0f);
+                imageView_deck.setAlpha((float) 0);
+                imageView_trumpf.setAlpha((float) 0);
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner);
