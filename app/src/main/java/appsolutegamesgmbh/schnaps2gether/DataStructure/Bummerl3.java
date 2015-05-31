@@ -37,7 +37,13 @@ public class Bummerl3 {
     public void setAnzahlSpiele(int anzahlSpiele) {
         AnzahlSpiele = anzahlSpiele;
     }
-
+    public Bummerl3(String punkteUndAnzSpiele) {
+        String[] punkteAnzSpiele = punkteUndAnzSpiele.split(" ");
+        punkteS1 = Integer.decode(punkteAnzSpiele[0]);
+        punkteS2 = Integer.decode(punkteAnzSpiele[1]);
+        punkteS2 = Integer.decode(punkteAnzSpiele[2]);
+        AnzahlSpiele = Integer.decode(punkteAnzSpiele[3]);
+    }
     public Bummerl3() {
         punkteS1 = 0;
         punkteS2 = 0;

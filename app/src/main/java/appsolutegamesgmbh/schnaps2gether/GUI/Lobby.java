@@ -40,6 +40,9 @@ public class Lobby extends Activity implements
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
     private static final String SPIELSTART = "16";
+    private static final String CLIENT2 = "17";
+    private static final String CLIENT3 = "18";
+    private static final String CLIENT4 = "19";
 
     private Context appContext;
     private ListView spieleListView;
@@ -68,6 +71,10 @@ public class Lobby extends Activity implements
     Spielfeld3Client c31 = new Spielfeld3Client();
     Spielfeld3Client c32 = new Spielfeld3Client();
     Spielfeld3Host h3 = new Spielfeld3Host();
+    public static boolean isc1 = false;
+    public static boolean isc2 = false;
+    public static boolean isc3 = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +200,10 @@ public class Lobby extends Activity implements
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         if (!m_IsHost) {
+            if (message.equals(CLIENT2))
+                isc1 = true;
+            if (message.equals(CLIENT3) && !isc1)
+                isc2 = true;
             if (message.equals(SPIELSTART)) {
                 if (spielTyp == 2) {
                     startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
@@ -202,16 +213,15 @@ public class Lobby extends Activity implements
                     startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
                 }
             } else if (spielTyp == 2) {
-                    c2.receiveFromLobby(endpointID, payload, isReliable);
-                }
-
-                else if (spielTyp == 3) {
+                c2.receiveFromLobby(endpointID, payload, isReliable);
+            } else if (spielTyp == 3) {
+                if (isc1)
                     c31.receiveFromLobby(endpointID, payload, isReliable);
-                }
-
-                else if (spielTyp == 4)
-                    Spielfeld4Client.receiveFromLobby(endpointID, payload, isReliable);
-            }
+                else
+                    c32.receiveFromLobby(endpointID, payload, isReliable);
+            } else if (spielTyp == 4)
+                Spielfeld4Client.receiveFromLobby(endpointID, payload, isReliable);
+        }
         else
             {
                 if (spielTyp == 2) {
@@ -360,6 +370,12 @@ public class Lobby extends Activity implements
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
 
+//                            if(endpointIds.size() == 1)
+//                                isc1 = true;
+//                            else if(endpointIds.size() == 2)
+//                                isc2 = true;
+//                            else if(endpointIds.size() == 3)
+//                                isc3 = true;
                             /*if (spielTyp == 2 && endpointIds.size() == 1) {
                                 startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
                                 finish();
@@ -399,18 +415,22 @@ public class Lobby extends Activity implements
                         endpointIds.add(remoteEndpointId);
                         deviceIds.add(remoteDeviceId);
 
-                        if(spielTyp == 2 && endpointIds.size()==1) {
+                        if (endpointIds.size() == 1)
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT2.getBytes());
+                        else if (endpointIds.size() == 2)
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT3.getBytes());
+                        else if (endpointIds.size() == 3)
+                            Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT4.getBytes());
+
+                        if (spielTyp == 2 && endpointIds.size() == 1) {
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
-                        }
-
-                        else if(spielTyp == 3 && endpointIds.size()==2) {
+                        } else if (spielTyp == 3 && endpointIds.size() == 2) {
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
                             finish();
-                        }
-                        else if(spielTyp == 4 && endpointIds.size()==3) {
+                        } else if (spielTyp == 4 && endpointIds.size() == 3) {
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
                             finish();

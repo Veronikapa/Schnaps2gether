@@ -95,7 +95,8 @@
             android:background="@drawable/beiger_button"
             android:elegantTextHeight="false"
             android:capitalize="words"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:onClick="abbrechenSpiel" />
 
     </LinearLayout>
 

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -296,7 +297,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onMessageReceived(String s, byte[] bytes, boolean b) {
-
+        receiveFromLobby(s,bytes,b);
     }
 
     @Override
@@ -330,7 +331,41 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
-
+        String message = new String(payload);
+        switch (((message.split(":")[0]))) {
+            case KARTEGESPIELT:
+                //TODO:
+                break;
+            case WEITER: handKartenKlickbar();
+                if (message.substring(2,3).equals("1")) {
+                    eigenerZug();
+                }
+                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                angesagt = true;
+                Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case ANGESAGT20ER: String farbe = message.substring(2);
+                spiel.Ansagen20er(farbe, gegner1);
+                punkteAktualisieren();
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                }
+                gegnerischeHandAktualisieren();
+                angesagt = true;
+                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case TALONGETAUSCHT:
+                Toast.makeText(appContext, "Talon ausgetauscht", Toast.LENGTH_SHORT).show();
+                break;
+            default: break;
+        }
     }
 
     public void karte1OnClick(View view) {
@@ -524,6 +559,17 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         int p3 = gegner2.getPunkte();
         punkteSelbst.setText(Integer.toString(p1));
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2) + " " + Integer.toString(p3)).getBytes());
+    }
+
+    public void abbrechenSpiel(View v){
+
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        Intent i = new Intent(this, Startmenue.class);
+        startActivity(i);
+        onStop();
+        finish();
     }
 
 
