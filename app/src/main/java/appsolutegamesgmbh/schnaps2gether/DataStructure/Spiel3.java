@@ -41,6 +41,47 @@ public class Spiel3 {
         return trumpf;
     }
 
+
+    public Rufspiel getSpiel() {
+        return spiel;
+    }
+
+    public void setSpiel(Rufspiel spiel) {
+        this.spiel = spiel;
+    }
+
+    public Spieler getSpieler() {
+        return spieler;
+    }
+
+    public void setSpieler(Spieler spieler) {
+        this.spieler = spieler;
+    }
+
+    public Spieler getBesitzer() {
+        return besitzer;
+    }
+
+    public void setBesitzer(Spieler besitzer) {
+        this.besitzer = besitzer;
+    }
+
+    public Karte getHoechstekarteamTisch() {
+        return hoechstekarteamTisch;
+    }
+
+    public void setHoechstekarteamTisch(Karte hoechstekarteamTisch) {
+        this.hoechstekarteamTisch = hoechstekarteamTisch;
+    }
+
+    public void setAngesagteFarbe(String angesagteFarbe) {
+        this.angesagteFarbe = angesagteFarbe;
+    }
+
+    public void setTrumpf(String trumpf) {
+        this.trumpf = trumpf;
+    }
+
     public String getAngesagteFarbe() {
         return angesagteFarbe;
     }

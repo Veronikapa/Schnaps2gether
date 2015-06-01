@@ -42,6 +42,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String KARTEGESPIELT = "0";
     private static final String WEITER = "1";
     private static final String PUNKTE = "2";
+    private static final String FLECKEN = "3";
     private static final String ANGESAGT20ER = "4";
     private static final String ANGESAGT40ER = "5";
     private static final String TALONGETAUSCHT = "6";
@@ -52,6 +53,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String ZUGENDE = "11";
     private static final String DISCONNECT = "12";
     private static final String TRUMPFFARBE = "13";
+    private static final String TRUMPFANSAGEN = "14";
+    private static final String SPIEL = "15";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
