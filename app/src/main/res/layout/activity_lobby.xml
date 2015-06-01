@@ -10,14 +10,14 @@
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:text="Lobby - Warteraum"
+        android:layout_width="215dp"
+        android:text="Lobby"
         android:id="@+id/textView"
         android:textSize="25dp"
         android:textAlignment="center"
-        android:layout_weight="0.01"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center" />
+        android:layout_gravity="bottom|center"
+        style="@style/header_Lobby" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/neu"
-            style="@style/text_buttonsLobby_normal"
+            style="@style/text_buttonsLobby"
 
             android:id="@+id/cmd_neu"
             android:layout_alignParentBottom="true"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/beitreten"
-            style="@style/text_buttonsLobby_normal"
+            style="@style/text_buttonsLobby"
             android:id="@+id/cmd_beitreten"
             android:layout_marginLeft="31dp"
             android:layout_marginStart="31dp"
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/abbrechen"
-            style="@style/text_buttonsLobby_normal"
+            style="@style/text_buttonsLobby"
             android:id="@+id/cmd_abbrechen"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/cmd_beitreten"

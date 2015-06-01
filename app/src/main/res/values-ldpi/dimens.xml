@@ -53,8 +53,8 @@
     <dimen name="anzeigeG_xlarge_hoehe">50dp</dimen>
     <dimen name="anzeigeG_xlarge_breite">220dp</dimen>
 
-    <dimen name="logo_hoehe">200dp</dimen>
-    <dimen name="logo_breite">400dp</dimen>
+    <dimen name="logo_hoehe">150dp</dimen>
+    <dimen name="logo_breite">300dp</dimen>
 
     <!--<dimen name="logo_small_hoehe">150dp</dimen>
     <dimen name="logo_small_breite">300dp</dimen>

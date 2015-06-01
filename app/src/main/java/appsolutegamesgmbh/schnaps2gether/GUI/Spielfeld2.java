@@ -6,8 +6,6 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -387,12 +385,12 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
-        buttonZudrehen.setVisibility(View.INVISIBLE);
+       // buttonZudrehen.setVisibility(View.INVISIBLE);
         buttonZudrehen.setEnabled(false);
-       // buttonZudrehen.setAlpha(0.4f);
-        buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
+        buttonZudrehen.setAlpha(0.4f);
+        //buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
         buttonTrumpfTauschen.setEnabled(false);
-       // buttonTrumpfTauschen.setAlpha(0.4f);
+       buttonTrumpfTauschen.setAlpha(0.4f);
     }
 
     private void handKartenKlickbar() {
@@ -437,10 +435,10 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
     public void zudrehen(View view) {
         spiel.Zudrehen(selbst);
-        buttonZudrehen.setVisibility(View.INVISIBLE);
+        //buttonZudrehen.setVisibility(View.INVISIBLE);
         buttonZudrehen.setEnabled(false);
-       /* buttonZudrehen.setAlpha(0.4f);
-        buttonZudrehen.setText("Zugedreht");*/
+       buttonZudrehen.setAlpha(0.4f);
+        buttonZudrehen.setText("Zugedreht");
     }
 
     public void popup20er(View view) {

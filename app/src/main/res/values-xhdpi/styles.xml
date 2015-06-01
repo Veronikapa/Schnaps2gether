@@ -36,7 +36,7 @@
 
     </style>
 
-    <style name="text_buttonsLobby" >
+    <style name="text_buttonsLobby">
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >wrap_content</item>
         <item name="android:textColor" >#ffffff</item>
@@ -54,7 +54,7 @@
 
     </style>
 
- <!--   <style name="text_buttonsLobby_small" >
+  <!--  <style name="text_buttonsLobby_small" >
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >wrap_content</item>
         <item name="android:textColor" >#ffffff</item>
@@ -101,11 +101,11 @@
         <item name="android:shadowColor" >#000000</item>
         <item name="android:shadowDx" >2</item>
         <item name="android:shadowDy" >2</item>
-        <item name="android:shadowRadius" >4</item>-->
+        <item name="android:shadowRadius" >4</item>
 
 
- <!--   </style>-->
-
+    </style>
+-->
     <style name="header_Lobby">
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >wrap_content</item>

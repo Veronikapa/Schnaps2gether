@@ -33,7 +33,7 @@
             android:paddingBottom="5dp"
             android:layout_gravity="center_horizontal"
             android:paddingRight="5dp"
-            style="@style/text_buttonsSpielfeld_normal" />
+            style="@style/text_buttonsSpielfeld" />
 
         <ImageView
             android:layout_width="15dp"
@@ -66,7 +66,7 @@
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:text="@string/button20er"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:onClick="popup20er"
             android:layout_gravity="center"
 
@@ -81,7 +81,7 @@
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
@@ -92,7 +92,7 @@
             android:layout_height="match_parent"
             android:text="Abbrechen"
             android:id="@+id/b_Abbrechen"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:background="@drawable/beiger_button"
             android:elegantTextHeight="false"
             android:capitalize="words"
@@ -667,7 +667,7 @@
             android:autoText="false"
             android:rotation="270"
             android:layout_gravity="left"
-            style="@style/text_buttonsSpielfeld_normal" />
+            style="@style/text_buttonsSpielfeld" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -677,8 +677,8 @@
             android:layout_marginRight="3dp">
 
             <ImageView
-                android:layout_width="@dimen/auge_normal"
-                android:layout_height="@dimen/auge_normal"
+                android:layout_width="@dimen/auge"
+                android:layout_height="@dimen/auge"
                 android:id="@+id/i_augeG1"
                 android:background="@drawable/auge"
                 android:adjustViewBounds="true" />
@@ -771,7 +771,7 @@
                 android:id="@+id/txt_Bummerln"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -785,7 +785,7 @@
                 android:id="@+id/txt_BummerlNameG2"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -795,7 +795,7 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:paddingLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -809,7 +809,7 @@
                 android:id="@+id/txt_BummerlNameG1"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -819,7 +819,7 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -833,7 +833,7 @@
                 android:id="@+id/txt_BummerlNameI"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -843,7 +843,7 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -857,7 +857,7 @@
                 android:id="@+id/txt_PunkteName"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -868,7 +868,7 @@
                 android:textColor="@android:color/white"
                 android:paddingRight="5dp"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
     </TableLayout>

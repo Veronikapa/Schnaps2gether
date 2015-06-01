@@ -12,8 +12,8 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="@dimen/anzeigeG_normal_breite"
-        android:layout_height="@dimen/anzeigeG_normal_hoehe"
+        android:layout_width="@dimen/anzeigeG_breite"
+        android:layout_height="@dimen/anzeigeG_hoehe"
         android:id="@+id/l_NameGegner2"
         android:gravity="center"
         android:background="@drawable/name_plakette"
@@ -33,11 +33,11 @@
             android:paddingBottom="5dp"
             android:layout_gravity="center_horizontal"
             android:paddingRight="5dp"
-            style="@style/text_buttonsSpielfeld_normal" />
+            style="@style/text_buttonsSpielfeld" />
 
         <ImageView
-            android:layout_width="@dimen/auge_normal"
-            android:layout_height="@dimen/auge_normal"
+            android:layout_width="@dimen/auge"
+            android:layout_height="@dimen/auge"
             android:id="@+id/i_augeG1"
             android:background="@drawable/auge"
             android:paddingLeft="5dp"
@@ -66,7 +66,7 @@
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:text="@string/button20er"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:onClick="popup20er"
             android:layout_gravity="center"
 
@@ -81,7 +81,7 @@
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="Abbrechen"
             android:id="@+id/cmd_close"
-            style="@style/text_buttonsSpielfeld_normal"
+            style="@style/text_buttonsSpielfeld"
             android:background="@drawable/beiger_button"
             android:elegantTextHeight="false"
             android:capitalize="words"
@@ -122,8 +122,8 @@
             android:layout_marginLeft="20dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_eigeneKarte"
                 android:scaleType="fitXY"
                 android:clickable="false"
@@ -142,8 +142,8 @@
             android:layout_marginBottom="20dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karteGegner"
                 android:scaleType="fitXY"
                 android:layout_alignParentBottom="true"
@@ -173,8 +173,8 @@
             android:layout_marginRight="100dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte1"
                 android:clickable="true"
                 android:onClick="karte1OnClick"
@@ -194,8 +194,8 @@
             android:layout_marginRight="50dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte2"
                 android:clickable="true"
                 android:onClick="karte2OnClick"
@@ -213,8 +213,8 @@
             android:layout_marginRight="0dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte3"
                 android:clickable="true"
                 android:onClick="karte3OnClick"
@@ -232,8 +232,8 @@
             android:layout_marginLeft="50dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte4"
                 android:scaleType="fitXY"
                 android:padding="0dp"
@@ -254,8 +254,8 @@
             android:layout_marginLeft="100dp">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte5"
                 android:scaleType="fitXY"
                 android:clickable="true"
@@ -284,8 +284,8 @@
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="@dimen/karte_normal_breite"
-                android:layout_height="@dimen/karte_normal_hoehe"
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_trumpf"
                 android:longClickable="true"
                 android:padding="0dp"
@@ -307,8 +307,8 @@
             android:layout_gravity="left|center_vertical">
 
             <ImageView
-                android:layout_width="@dimen/deck_normal_breite"
-                android:layout_height="@dimen/deck_normal_hoehe"
+                android:layout_width="@dimen/deck_breite"
+                android:layout_height="@dimen/deck_hoehe"
                 android:id="@+id/imageView_deck"
                 android:background="@drawable/deck_full"
                 android:scaleType="fitXY"
@@ -316,8 +316,8 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="@dimen/trumpfIcon_normal"
-                android:layout_height="@dimen/trumpfIcon_normal"
+                android:layout_width="@dimen/trumpfIcon"
+                android:layout_height="@dimen/trumpfIcon"
                 android:layout_gravity="top|right"
                 android:id="@+id/trumpfIconLayout"
                 android:layout_above="@+id/l_Deck"
@@ -357,7 +357,7 @@
                 android:textAllCaps="false"
                 android:elegantTextHeight="true"
                 android:layout_gravity="left"
-                style="@style/text_buttonsSpielfeld_normal" />
+                style="@style/text_buttonsSpielfeld" />
         </LinearLayout>
 
         <LinearLayout
@@ -374,7 +374,7 @@
                 android:layout_width="64dp"
                 android:layout_height="22dp"
                 android:text="Tauschen"
-                style="@style/text_buttonsSpielfeld_normal"
+                style="@style/text_buttonsSpielfeld"
                 android:onClick="trumpfkarteTauschen"
                 android:singleLine="false"
                 android:textColor="@android:color/white"
@@ -407,8 +407,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK16"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -422,8 +422,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK15"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -437,8 +437,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK14"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical|right" />
@@ -453,8 +453,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK13"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical|right" />
@@ -469,8 +469,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK12"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -486,8 +486,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK11"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center_vertical|right" />
@@ -502,8 +502,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK10"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -516,8 +516,8 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK9"
                 android:background="@android:color/transparent"
                 android:layout_marginBottom="10dp" />
@@ -535,8 +535,8 @@
             android:layout_marginRight="105dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK8"
                 android:background="@android:color/transparent"
                 android:layout_gravity="left|bottom" />
@@ -550,8 +550,8 @@
             android:layout_marginRight="90dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK7"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -565,8 +565,8 @@
             android:layout_marginRight="75dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK6"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -580,8 +580,8 @@
             android:layout_marginRight="60dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK5"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -595,8 +595,8 @@
             android:layout_marginRight="45dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK4"
                 android:background="@android:color/transparent"
                 android:layout_gravity="bottom" />
@@ -612,8 +612,8 @@
             android:layout_marginRight="30dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK3"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -627,8 +627,8 @@
             android:layout_marginRight="15dp">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -640,8 +640,8 @@
             android:layout_gravity="bottom|right">
 
             <ImageView
-                android:layout_width="@dimen/stich_normal_breite"
-                android:layout_height="@dimen/stich_normal_hoehe"
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK1"
                 android:background="@android:color/transparent" />
         </LinearLayout>
@@ -695,8 +695,8 @@
         android:layout_above="@+id/l_Deck">
 
         <ImageView
-            android:layout_width="@dimen/karte_normal_breite"
-            android:layout_height="@dimen/karte_normal_hoehe"
+            android:layout_width="@dimen/karte_breite"
+            android:layout_height="@dimen/karte_hoehe"
             android:id="@+id/stichEigeneKarteG"
             android:background="@android:color/transparent"
             android:rotation="-40"
@@ -706,8 +706,8 @@
             android:layout_marginBottom="5dp" />
 
         <ImageView
-            android:layout_width="@dimen/karte_normal_breite"
-            android:layout_height="@dimen/karte_normal_hoehe"
+            android:layout_width="@dimen/karte_breite"
+            android:layout_height="@dimen/karte_hoehe"
             android:id="@+id/stichGegnerKarteG"
             android:cropToPadding="true"
             android:background="@android:color/transparent"
@@ -717,8 +717,8 @@
             android:layout_marginBottom="5dp" />
 
         <ImageView
-            android:layout_width="@dimen/karte_normal_hoehe"
-            android:layout_height="@dimen/karte_normal_breite"
+            android:layout_width="@dimen/karte_hoehe"
+            android:layout_height="@dimen/karte_breite"
             android:id="@+id/stichDeckG"
             android:hapticFeedbackEnabled="false"
             android:background="@drawable/deck"
@@ -750,7 +750,7 @@
                 android:id="@+id/txt_Bummerl"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
         </TableRow>
 
@@ -765,7 +765,7 @@
                 android:id="@+id/txt_BummerlNameG1"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -775,7 +775,7 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -789,7 +789,7 @@
                 android:id="@+id/txt_BummerlNameI"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -799,7 +799,7 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -813,7 +813,7 @@
                 android:id="@+id/txt_PunkteName"
                 android:layout_column="0"
                 android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -824,7 +824,7 @@
                 android:textColor="@android:color/white"
                 android:paddingRight="5dp"
                 android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige_normal" />
+                style="@style/text_punkteanzeige" />
         </TableRow>
 
         <TableRow
@@ -835,7 +835,7 @@
     </TableLayout>
 
     <Button
-        style="@style/text_buttonsSpielfeld_normal"
+        style="@style/text_buttonsSpielfeld"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:text="Abbrechen"
@@ -852,7 +852,7 @@
         android:layout_toStartOf="@+id/l_abgelegteKarten" />
 
     <Button
-        style="@style/text_buttonsSpielfeld_normal"
+        style="@style/text_buttonsSpielfeld"
         android:id="@+id/b_schummelnG"
         android:layout_width="40dp"
         android:layout_height="30dp"

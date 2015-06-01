@@ -12,82 +12,10 @@
     android:columnCount="6">
 
 
-
-
-    <!--      <Button
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/statistik"
-              android:id="@+id/cmd_statistik"
-              android:layout_alignBottom="@+id/cmd_name"
-              android:layout_alignRight="@+id/cmd_spielregeln"
-              android:layout_alignEnd="@+id/cmd_spielregeln"
-              android:layout_alignLeft="@+id/cmd_spielregeln"
-              android:layout_alignStart="@+id/cmd_spielregeln" />
-
-          <Button
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/spielen"
-              android:id="@+id/cmd_spielen"
-              android:layout_alignParentTop="true"
-              android:layout_alignLeft="@+id/cmd_name"
-              android:layout_alignStart="@+id/cmd_name"
-              android:layout_marginTop="54dp"
-              android:layout_toStartOf="@+id/cmd_spielregeln"
-              android:layout_alignRight="@+id/cmd_name"
-              android:layout_alignEnd="@+id/cmd_name"
-              android:layout_alignParentStart="false" />
-
-          <Button
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/spielregeln"
-              android:id="@+id/cmd_spielregeln"
-              android:layout_alignBottom="@+id/cmd_spielen"
-              android:layout_centerHorizontal="true"/>
-
-
-
-
-              <Button
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/name"
-                  android:id="@+id/cmd_name"
-                  android:layout_alignParentBottom="true"
-                  android:layout_alignParentLeft="true"
-                  android:layout_alignParentStart="true"
-                  android:layout_marginLeft="66dp"
-                  android:layout_marginStart="66dp"
-                  android:layout_marginBottom="64dp"
-                  android:layout_gravity="center_vertical" />
-
-              <Button
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/optionen"
-                  android:id="@+id/cmd_optionen"
-                  android:layout_alignBottom="@+id/cmd_spielregeln"
-                  android:layout_alignLeft="@+id/cmd_Beenden"
-                  android:layout_alignStart="@+id/cmd_Beenden"
-                  android:layout_gravity="center_vertical" />
-
-              <Button
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/beenden"
-                  android:id="@+id/cmd_Beenden"
-                  android:layout_marginLeft="58dp"
-                  android:layout_marginStart="58dp"
-                  android:layout_alignTop="@+id/cmd_statistik"
-                  android:layout_toRightOf="@+id/cmd_statistik" />-->
-
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="@dimen/logo_large_breite"
-        android:layout_height="@dimen/logo_large_hoehe"
+        android:layout_width="@dimen/logo_breite"
+        android:layout_height="@dimen/logo_hoehe"
         android:layout_row="6"
         android:layout_column="0"
         android:weightSum="1"
@@ -142,7 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:text="@string/schnellesSpiel"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_schnellesSpiel"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
@@ -156,7 +84,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:text="Spielregeln"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielregeln"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
@@ -170,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:text="Name ändern"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_name"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
@@ -189,7 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:text="Beenden"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_Beenden"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
@@ -203,7 +131,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:text="Statistik"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_statistik"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
@@ -217,7 +145,7 @@
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:text="Spielen"
-                    style="@style/text_buttonsLobby_large"
+                    style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielen"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
