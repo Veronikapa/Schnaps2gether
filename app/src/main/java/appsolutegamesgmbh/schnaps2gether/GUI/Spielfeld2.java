@@ -644,7 +644,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                         stichDeckG.setImageResource(R.drawable.deck);
                         pruefegestochenG = false;
 
-                    } else if ((spiel.getS2().Gestochen.size() >= 4) && (spiel.getS2().Gestochen.size() <= 6)) {
+                    } else if ((spiel.getS2().Gestochen.size() > 4) && (spiel.getS2().Gestochen.size() <= 6)) {
                         stichDeckG.setImageResource(R.drawable.deck_2);
                         stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;

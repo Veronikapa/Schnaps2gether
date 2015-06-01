@@ -23,7 +23,7 @@
             android:id="@+id/txt_NameGegner2"
             android:text="@string/spieler2" android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:gravity="top|center"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/white"
@@ -32,7 +32,8 @@
             android:paddingLeft="5dp"
             android:paddingBottom="5dp"
             android:layout_gravity="center_horizontal"
-            android:paddingRight="5dp" />
+            android:paddingRight="5dp"
+            style="@style/text_buttonsSpielfeld_normal" />
 
         <ImageView
             android:layout_width="15dp"
@@ -65,7 +66,7 @@
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:text="@string/button20er"
-            style="@style/button_text"
+            style="@style/text_buttonsSpielfeld_normal"
             android:onClick="popup20er"
             android:layout_gravity="center"
 
@@ -80,7 +81,7 @@
             android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
-            style="@style/button_text"
+            style="@style/text_buttonsSpielfeld_normal"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
@@ -91,7 +92,7 @@
             android:layout_height="match_parent"
             android:text="Abbrechen"
             android:id="@+id/b_Abbrechen"
-            style="@style/button_text"
+            style="@style/text_buttonsSpielfeld_normal"
             android:background="@drawable/beiger_button"
             android:elegantTextHeight="false"
             android:capitalize="words"
@@ -658,14 +659,15 @@
         android:layout_alignParentRight="true">
 
         <TextView
-            android:layout_width="75dp"
+            android:layout_width="match_parent"
             android:layout_height="85dp"
             android:id="@+id/txt_NameGegner1"
             android:text="Gegner1"
             android:textColor="@android:color/white"
             android:autoText="false"
             android:rotation="270"
-            android:layout_gravity="left" />
+            android:layout_gravity="left"
+            style="@style/text_buttonsSpielfeld_normal" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -675,8 +677,8 @@
             android:layout_marginRight="3dp">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="@dimen/auge_normal"
+                android:layout_height="@dimen/auge_normal"
                 android:id="@+id/i_augeG1"
                 android:background="@drawable/auge"
                 android:adjustViewBounds="true" />
@@ -721,7 +723,7 @@
                 android:background="@android:color/transparent" />
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
@@ -729,13 +731,13 @@
             android:layout_marginLeft="30dp"
             android:id="@+id/l_Tauschen"
             android:weightSum="1">
-
-            <Button
+-->
+            <!--<Button
                 android:id="@+id/main_buttonTtauschen"
                 android:layout_width="61dp"
                 android:layout_height="20dp"
                 android:text="tauschen"
-                style="@style/button_text"
+                style="@style/text_buttonsSpielfeld_normal"
                 android:onClick="trumpfkarteTauschen"
                 android:layout_marginLeft="0dp"
                 android:singleLine="false"
@@ -744,7 +746,7 @@
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
                 android:visibility="invisible" />
-        </LinearLayout>
+        </LinearLayout>-->
 
     </FrameLayout>
 
@@ -768,7 +770,8 @@
                 android:text="Bummerl:"
                 android:id="@+id/txt_Bummerln"
                 android:layout_column="0"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige_normal" />
         </TableRow>
 
         <TableRow
@@ -781,7 +784,8 @@
                 android:text="Gegner2"
                 android:id="@+id/txt_BummerlNameG2"
                 android:layout_column="0"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige_normal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -790,7 +794,8 @@
                 android:id="@+id/BummerlZahlG2"
                 android:layout_column="2"
                 android:textColor="@android:color/white"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                style="@style/text_punkteanzeige_normal" />
         </TableRow>
 
         <TableRow
@@ -803,7 +808,8 @@
                 android:text="@string/spieler2"
                 android:id="@+id/txt_BummerlNameG1"
                 android:layout_column="0"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige_normal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -812,7 +818,8 @@
                 android:id="@+id/txt_BummerlZahlG1"
                 android:layout_column="2"
                 android:textColor="@android:color/white"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                style="@style/text_punkteanzeige_normal" />
         </TableRow>
 
         <TableRow
@@ -825,7 +832,8 @@
                 android:text="@string/spieler1"
                 android:id="@+id/txt_BummerlNameI"
                 android:layout_column="0"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige_normal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -834,7 +842,8 @@
                 android:id="@+id/txt_PunkteZahl"
                 android:layout_column="2"
                 android:textColor="@android:color/white"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                style="@style/text_punkteanzeige_normal" />
         </TableRow>
 
         <TableRow
@@ -847,7 +856,8 @@
                 android:text="Punkte"
                 android:id="@+id/txt_PunkteName"
                 android:layout_column="0"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige_normal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -857,7 +867,8 @@
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:paddingRight="5dp"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                style="@style/text_punkteanzeige_normal" />
         </TableRow>
 
     </TableLayout>
