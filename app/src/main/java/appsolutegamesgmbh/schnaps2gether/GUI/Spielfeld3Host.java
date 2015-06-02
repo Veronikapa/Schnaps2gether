@@ -808,9 +808,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
     private static void spielEnde() {
-        if(spiel.)
+       /* if(spiel.)
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+).getBytes());*/
         
     }
 
