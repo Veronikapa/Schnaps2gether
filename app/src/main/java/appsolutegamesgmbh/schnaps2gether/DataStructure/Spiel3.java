@@ -19,6 +19,7 @@ public class Spiel3 {
     private Rufspiel spiel;
     private Spieler spieler; //derjenige, der das Spiel macht (die anderen zwei Spieler spielen zusammen)
     private int flecken;
+    private ArrayList<Spieler> sieger;
 
 
     public ArrayList<Karte> getTalon() {
@@ -320,6 +321,7 @@ public class Spiel3 {
     {
         stapel = new ArrayList<Karte>(20);
         talon = new ArrayList<Karte>(2);
+        sieger = new ArrayList<Spieler>(2);
         int random = 0;
         for(int a = 20; a > 0; a--)
         {
@@ -492,6 +494,7 @@ public class Spiel3 {
                     else
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
 
+                    sieger.add(s1);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 } else if (s2.getPunkte() + s3.getPunkte() >= 66) {
@@ -506,6 +509,8 @@ public class Spiel3 {
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
                     }
 
+                    sieger.add(s2);
+                    sieger.add(s3);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
 
@@ -517,6 +522,9 @@ public class Spiel3 {
                             bummerl.setPunkteS1(bummerl.getPunkteS1() + 2*flecken);
                         else
                             bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
+
+
+                        sieger.add(s1);
                     }
                     else
                     {
@@ -530,6 +538,9 @@ public class Spiel3 {
                             bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
                             bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
                         }
+
+                        sieger.add(s2);
+                        sieger.add(s3);
                     }
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
@@ -545,6 +556,7 @@ public class Spiel3 {
                     else
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
 
+                    sieger.add(s2);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
 
@@ -560,6 +572,8 @@ public class Spiel3 {
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
                     }
 
+                    sieger.add(s3);
+                    sieger.add(s1);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
 
@@ -571,6 +585,9 @@ public class Spiel3 {
                             bummerl.setPunkteS2(bummerl.getPunkteS2() + 2*flecken);
                         else
                             bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
+
+
+                        sieger.add(s2);
                     }
                     else
                     {
@@ -584,6 +601,9 @@ public class Spiel3 {
                             bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
                             bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
                         }
+
+                        sieger.add(s1);
+                        sieger.add(s3);
                     }
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
@@ -601,6 +621,7 @@ public class Spiel3 {
                     else
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
 
+                    sieger.add(s3);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 } else if (s1.getPunkte() + s2.getPunkte() >= 66) {
@@ -615,7 +636,8 @@ public class Spiel3 {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
                     }
 
-
+                    sieger.add(s2);
+                    sieger.add(s1);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
 
@@ -627,6 +649,8 @@ public class Spiel3 {
                             bummerl.setPunkteS3(bummerl.getPunkteS3() + 2*flecken);
                         else
                             bummerl.setPunkteS3(bummerl.getPunkteS3() + 3*flecken);
+
+                        sieger.add(s3);
                     }
                     else
                     {
@@ -640,6 +664,9 @@ public class Spiel3 {
                             bummerl.setPunkteS1(bummerl.getPunkteS1() + 3*flecken);
                             bummerl.setPunkteS2(bummerl.getPunkteS2() + 3*flecken);
                         }
+
+                        sieger.add(s2);
+                        sieger.add(s1);
                     }
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
@@ -656,6 +683,9 @@ public class Spiel3 {
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
 
+
+                    sieger.add(s2);
+                    sieger.add(s3);
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
@@ -664,11 +694,15 @@ public class Spiel3 {
                     if(s1.getPunkte() >= 66)
                     {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
+                        sieger.add(s1);
                     }
                     else
                     {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
+
+                        sieger.add(s2);
+                        sieger.add(s3);
                     }
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
@@ -684,6 +718,9 @@ public class Spiel3 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
 
+                    sieger.add(s1);
+                    sieger.add(s3);
+
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
@@ -692,11 +729,16 @@ public class Spiel3 {
                     if(s2.getPunkte() >= 66)
                     {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
+
+                        sieger.add(s2);
                     }
                     else
                     {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
+
+                        sieger.add(s1);
+                        sieger.add(s3);
                     }
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
@@ -712,6 +754,9 @@ public class Spiel3 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
 
+                    sieger.add(s2);
+                    sieger.add(s1);
+
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
@@ -720,11 +765,16 @@ public class Spiel3 {
                     if(s3.getPunkte() >= 66)
                     {
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
+
+                        sieger.add(s3);
                     }
                     else
                     {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
+
+                        sieger.add(s2);
+                        sieger.add(s1);
                     }
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
@@ -742,12 +792,17 @@ public class Spiel3 {
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
 
+                    sieger.add(s2);
+                    sieger.add(s3);
+
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
                 else if(s1.Hand.isEmpty())
                 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
+
+                    sieger.add(s1);
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
@@ -762,12 +817,17 @@ public class Spiel3 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
 
+                    sieger.add(s1);
+                    sieger.add(s3);
+
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
                 else if(s1.Hand.isEmpty())
                 {
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
+
+                    sieger.add(s2);
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
@@ -782,12 +842,17 @@ public class Spiel3 {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte()*flecken);
                     bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte()*flecken);
 
+                    sieger.add(s2);
+                    sieger.add(s1);
+
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 }
                 else if(s1.Hand.isEmpty())
                 {
                     bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte()*flecken);
+
+                    sieger.add(s3);
 
                     bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;

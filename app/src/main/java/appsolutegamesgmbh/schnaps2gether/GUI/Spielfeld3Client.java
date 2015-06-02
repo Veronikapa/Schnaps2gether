@@ -131,9 +131,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private TextView txtGegner2;
     private static Bummerl3 bummerl;
 
+    private static int p0;
     private static int p1;
     private static int p2;
-    private static int p3;
+
 
 
     private static ImageView stichK1;
@@ -379,6 +380,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
         String message = new String(payload);
+        String[] messageParts = message.split(":");
         switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl3(message.substring(2));
                 break;
@@ -390,28 +392,40 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Ok wenn Icon hier auch geändert wird?
                 break;
-            case HANDKARTEN: String[] messageParts = message.split(":");
-                String[] hand = messageParts[2].substring(1).split(",");
-                String[] spielbar = messageParts[3].substring(1).split(" ");
-                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
-                selbst.Hand = new ArrayList<Karte>();
-                kartenSpielbar = new ArrayList<Boolean>();
-                for (int i=0; i<hand.length; i++) {
-                    //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
-                    selbst.Hand.add(i,new Karte(hand[i]));
-                    kartenSpielbar.add(i,spielbar[i].equals("1") ? true : false);
+            case HANDKARTEN:
+                if(messageParts[3] == SpielerID) {
+                    String[] hand = messageParts[1].substring(1).split(",");
+                    String[] spielbar = messageParts[2].substring(1).split(" ");
+                    selbst.Hand = new ArrayList<Karte>();
+                    kartenSpielbar = new ArrayList<Boolean>();
+                    for (int i = 0; i < hand.length; i++) {
+                        selbst.Hand.add(i, new Karte(hand[i]));
+                        kartenSpielbar.add(i, spielbar[i].equals("1") ? true : false);
+                    }
+                    handAktualisieren();
                 }
-                handAktualisieren();
-
                 break;
             case KARTEGESPIELT:
-
-                //TODO: if
-                gegnerischeKarte1 = new Karte(message.substring(2));
-                imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
-
-                gegnerischeKarte2 = new Karte(message.substring(2));
-                imageView_karteGegner2.setImageResource(gegnerischeKarte1.getImageResourceId());
+                if(SpielerID == "1") {
+                    if(messageParts[2] == "2") {
+                        gegnerischeKarte1 = new Karte(message.substring(2));
+                        imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
+                    }
+                    else if(messageParts[2] == "0") {
+                        gegnerischeKarte2 = new Karte(message.substring(2));
+                        imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
+                    }
+                }
+                else if(SpielerID == "2") {
+                    if(messageParts[2] == "0") {
+                        gegnerischeKarte1 = new Karte(message.substring(2));
+                        imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
+                    }
+                    else if(messageParts[2] == "1") {
+                        gegnerischeKarte2 = new Karte(message.substring(2));
+                        imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
+                    }
+                }
                 break;
             case TRUMPFFARBE: angesagteFarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
@@ -452,10 +466,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
                 break;
             case PUNKTE:
-                p3 = Integer.decode(message.split(":")[1].split(" ")[2]);
+                p2 = Integer.decode(message.split(":")[1].split(" ")[2]);
                 p1 = Integer.decode(message.split(":")[1].split(" ")[1]);
+                p0 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 punkteAktualisieren();
-                p2 = Integer.decode(message.split(":")[1].split(" ")[0]);
                 break;
             case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 spielEnde(win);
@@ -578,9 +592,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void punkteAktualisieren() {
-        punkteGegner1.setText(Integer.toString(p2));
-        punkteGegner2.setText(Integer.toString(p3));
-        punkteSelbst.setText(Integer.toString(p1));
+        if (SpielerID == "1")
+            punkteSelbst.setText(Integer.toString(p1));
+        else if (SpielerID == "2")
+            punkteSelbst.setText(Integer.toString(p2));
     }
 
     private void eigenerZug()

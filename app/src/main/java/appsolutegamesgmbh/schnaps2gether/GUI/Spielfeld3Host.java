@@ -116,6 +116,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Bummerl3 bummerl;
     private static Boolean angesagt;
     private static String trumpf;
+    private static int siegerID;
 
 
     private static ImageView stichK1;
@@ -622,7 +623,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         eigeneKarte = k;
         buttonsNichtKlickbar();
         spiel.Auspielen(k, selbst);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString() + ":0").getBytes());
         gespielteKarteEntfernen(i);
 
         //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
@@ -701,11 +702,13 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             gegnerischeHand1 += ","+gegner1.Hand.get(i).toString();
             gegKartenSpielBar1 += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
         }
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand1+":"+gegKartenSpielBar1+":1").getBytes());
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
             gegnerischeHand2 += ","+gegner2.Hand.get(i).toString();
             gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner1) ? 1 : 0);
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand1+":"+gegnerischeHand2+":"+gegKartenSpielBar1+":"+gegKartenSpielBar2).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand2+":"+gegKartenSpielBar2+":2").getBytes());
+
     }
     
 
@@ -805,16 +808,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
     private static void spielEnde() {
-        boolean win = true;
-        if (selbst.getPunkte()<66) {
-            win = false;
-        }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+(win ? 0 : 1)).getBytes());
-        Bundle args = new Bundle();
-        args.putBoolean("win", win);
-        DialogFragment gameEndDialogFragment = new GameEnd();
-        gameEndDialogFragment.setArguments(args);
-        // gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
+        if(spiel.)
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+).getBytes());
+        
     }
 
     private static void handKartenKlickbar() {
