@@ -1,10 +1,11 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin" android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="10dp" android:orientation="vertical"
     android:paddingTop="0dp"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingBottom="10dp"
     tools:context=".Spielfeld"
     android:gravity="center_vertical"
     android:weightSum="1"
@@ -58,13 +59,35 @@
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/l_StichAnzeige"
         android:layout_below="@+id/l_eigeneKarten"
-        android:layout_toRightOf="@+id/l_Deck"
-        android:layout_toEndOf="@+id/l_Deck">
+        android:layout_toEndOf="@+id/l_Punkteanzeige"
+        android:layout_toRightOf="@+id/l_Punkteanzeige">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P:"
+                android:id="@+id/textView2" />
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="66"
+                android:id="@+id/textView3" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/main_button20er"
             android:layout_width="45dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
             android:onClick="popup20er"
@@ -72,13 +95,11 @@
 
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="46dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_height="30dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
             style="@style/text_buttonsSpielfeld"
@@ -87,18 +108,23 @@
             android:layout_marginRight="5dp"
             android:textAllCaps="false" />
 
-        <Button
-            android:layout_width="20dp"
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:id="@+id/button_kartenSchaun"
+            android:background="@drawable/schummeln1"
+            android:layout_toEndOf="@+id/l_NameGegner2"
+            android:onClick="kartenSchauen"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center" />
+
+        <ImageButton
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="Abbrechen"
-            android:id="@+id/cmd_close"
-            style="@style/text_buttonsSpielfeld"
-            android:background="@drawable/beiger_button"
-            android:elegantTextHeight="false"
-            android:capitalize="words"
-            android:textAllCaps="false"
-            android:layout_weight="0.40"
-            android:onClick="abbrechenSpiel" />
+            android:id="@+id/btn_kartenTauschen"
+            android:background="@drawable/schummelnbutton2"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
@@ -111,7 +137,8 @@
         android:paddingStart="10dp"
         android:touchscreenBlocksFocus="false"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/l_eigeneKarten">
+        android:layout_above="@+id/l_eigeneKarten"
+        android:layout_below="@+id/l_NameGegner2">
 
         <LinearLayout
             android:orientation="vertical"
@@ -346,8 +373,8 @@
 
             <Button
                 android:id="@+id/main_buttonZ"
-                android:layout_width="78dp"
-                android:layout_height="27dp"
+                android:layout_width="62dp"
+                android:layout_height="30dp"
                 android:text="@string/buttonZ"
                 android:onClick="zudrehen"
                 android:layout_alignParentTop="true"
@@ -372,7 +399,7 @@
             <Button
                 android:id="@+id/main_buttonTtauschen"
                 android:layout_width="64dp"
-                android:layout_height="22dp"
+                android:layout_height="30dp"
                 android:text="Tauschen"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="trumpfkarteTauschen"
@@ -689,10 +716,10 @@
         android:layout_height="119dp"
         android:layout_gravity="right|center_vertical"
         android:id="@+id/l_StichGegner1"
-        android:layout_alignTop="@+id/l_NameGegner2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/l_Deck">
+        android:layout_above="@+id/l_eigeneKarten"
+        android:layout_alignRight="@+id/linearLayout2"
+        android:layout_alignEnd="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout2">
 
         <ImageView
             android:layout_width="@dimen/karte_breite"
@@ -806,65 +833,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Punkte"
-                android:id="@+id/txt_PunkteName"
-                android:layout_column="0"
-                android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/punktestand2"
-                android:id="@+id/txt_BummerZahl"
-                android:layout_column="2"
-                android:textColor="@android:color/white"
-                android:paddingRight="5dp"
-                android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
         </TableRow>
     </TableLayout>
 
-    <Button
-        style="@style/text_buttonsSpielfeld"
-        android:layout_width="20dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Abbrechen"
-        android:id="@+id/button"
-        android:background="@drawable/beiger_button"
-        android:elegantTextHeight="false"
-        android:capitalize="words"
-        android:textAllCaps="false"
-        android:layout_weight="0.23"
-        android:onClick="abbrechenSpiel"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/l_NameGegner2"
-        android:layout_toLeftOf="@+id/l_abgelegteKarten"
-        android:layout_toStartOf="@+id/l_abgelegteKarten" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:id="@+id/linearLayout2"
+        android:baselineAligned="false"
+        android:layout_alignParentTop="true">
 
-    <Button
-        style="@style/text_buttonsSpielfeld"
-        android:id="@+id/b_schummelnG"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:text="@string/kartenSchauen"
-        android:onClick="kartenSchauen"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/beiger_button"
-        android:textAllCaps="false"
-        android:hint="@string/kartenSehen"
-        android:layout_alignBottom="@+id/l_NameGegner2"
-        android:layout_toEndOf="@id/l_NameGegner2"
-        android:layout_toRightOf="@+id/l_NameGegner2" />
+        <Button
+            style="@style/text_buttonsSpielfeld"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:text="Abbrechen"
+            android:id="@+id/hauptmenue"
+            android:background="@drawable/beiger_button"
+            android:elegantTextHeight="false"
+            android:textAllCaps="false"
+            android:onClick="abbrechenSpiel"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/l_StichGegner1"
+            android:layout_alignBottom="@+id/button_kartenSchaun"
+            android:layout_gravity="top|right" />
+    </LinearLayout>
 
 
 </RelativeLayout>
