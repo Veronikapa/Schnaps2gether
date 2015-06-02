@@ -98,6 +98,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Karte eigeneKarte;
     private static Karte gegnerischeKarte1;
     private static Karte gegnerischeKarte2;
+    private static Karte aufgedrehteKarte;
+
 
     private static ImageView imageView_talonkarte1;
     private static ImageView imageView_talonkarte2;
@@ -222,10 +224,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         stichK15= (ImageView) findViewById(R.id.stichK15);
         stichK16= (ImageView) findViewById(R.id.stichK16);
 
-        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
-        BpunkteGegner1 = (TextView) findViewById(R.id.txt_PunkteZahl);
-        BpunkteGegner2 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+        punkteSelbst = (TextView) findViewById(R.id.txt_punkte);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner1 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+        BpunkteGegner2 = (TextView) findViewById(R.id.BummerlZahlG2);
 
 
         spielStart();
@@ -567,6 +569,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             case TALONGETAUSCHT:
                 Toast.makeText(appContext, "Talon ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
+            case AUFGEDECKT:
+
+                break;
             default: break;
         }
     }
@@ -621,7 +626,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         }
     }
 
-    private static void zugEnde() {
+    private void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte1, gegnerischeKarte2);
         eigeneKarte = null;
         gegnerischeKarte1 = null;
@@ -689,7 +694,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
     
 
-    static class Zugende implements Runnable {
+    class Zugende implements Runnable {
 
     @Override
     public void run() {
@@ -784,14 +789,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
 
-    private static void spielEnde() {
+    private void spielEnde() {
        /* if(spiel.)
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+).getBytes());*/
         
     }
+    private void aufdrehen(){
+        aufgedrehteKarte = spiel.Aufdrehen();
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE+":"+aufgedrehteKarte.toString()).getBytes());
+        spiel.Trumpfansagen(aufgedrehteKarte.getFarbe(),bummerl.getAnzahlSpiele());
+    }
 
-    private static void handKartenKlickbar() {
+    private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<6;i++) {
 

@@ -191,6 +191,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
         buttonTalonTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
+
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
         imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner1);
         imageView_karteGegner2 = (ImageView) findViewById(R.id.imageView_karteGegner2);
@@ -226,10 +227,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         stichK15= (ImageView) findViewById(R.id.stichK15);
         stichK16= (ImageView) findViewById(R.id.stichK16);
 
-        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
-        BpunkteGegner1 = (TextView) findViewById(R.id.txt_PunkteZahl);
-        BpunkteGegner2 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+        punkteSelbst = (TextView) findViewById(R.id.txt_punkte);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteGegner1 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+        BpunkteGegner2 = (TextView) findViewById(R.id.BummerlZahlG2);
 
         spielStart();
 
@@ -471,10 +472,6 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case ZUGENDE:
                 istdran = Integer.decode(message.split(":")[1].split(" ")[2]);
-
-                // Execute some code after 2 seconds have passed
-                Handler handler = new Handler();
-                handler.postDelayed(new Zugende(), 2000);
 
                 break;
             case PUNKTE:
