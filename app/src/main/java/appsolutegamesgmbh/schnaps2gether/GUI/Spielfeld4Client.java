@@ -87,7 +87,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static ArrayList<Boolean> kartenSpielbar;
     private static Karte gegnerischeKarte;
     private static TextView punkteGegner;
-    private static TextView punkteSelbst;
+    //private static TextView punkteSelbst;
     private static TextView txtSelbst;
     private static TextView txtGegner;
     private static Bummerl2 bummerl;
@@ -154,7 +154,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
 
        // punkteGegner = (TextView) findViewById(R.id.pointsText);
-        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
+        //punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
         //txtSelbst = (TextView) findViewById(R.id.I);
         //txtGegner = (TextView) findViewById(R.id.Enemy);
 
@@ -225,7 +225,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     private static void punkteAktualisieren() {
-        punkteSelbst.setText(Integer.toString(p1));
+        //punkteSelbst.setText(Integer.toString(p1));
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -240,7 +240,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         angesagteFarbe = null;
         spielAngesagt = false;
         spieleAnsagbar = new ArrayList<String>();
-        punkteSelbst.setText("0");
+        //punkteSelbst.setText("0");
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
     }
