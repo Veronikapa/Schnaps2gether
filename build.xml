@@ -20,9 +20,10 @@ target: compile
 
 </path>
 
-<javac includeantruntime="false">
-
-</javac>
+ <javac destdir="out" includeantruntime="true">
+  <src path="foo.java" />
+  <src path="bar.java" />
+ </javac>
 
 <copy todir="classes">
 
