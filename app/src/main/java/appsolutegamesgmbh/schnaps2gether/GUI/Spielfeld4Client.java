@@ -507,8 +507,8 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         String message = new String(payload);
         switch ((message.split(":")[0])) {
             case SPIELSTART: bummerl = new Bummerl2(message.substring(2).split(",")[1]);
-                Toast.makeText(appContext, message.substring(2), Toast.LENGTH_SHORT).show();
-                //spielerNummer = Integer.getInteger(message.substring(2,3));
+                //Toast.makeText(appContext, message.substring(2,3), Toast.LENGTH_SHORT).show();
+                spielerNummer = Integer.decode(message.substring(2,3));
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
@@ -526,7 +526,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
                 break;
             case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2).split(",")[1]);
-                switch (Math.abs(spielerNummer - Integer.getInteger(message.substring(2).split(",")[0]))) {
+                switch (Math.abs(spielerNummer - Integer.decode(message.substring(2).split(",")[0]))) {
                     case 1: imageView_karteGegner1.setImageResource(gegnerischeKarte.getImageResourceId());
                         break;
                     case 2: imageView_karteMitspieler.setImageResource(gegnerischeKarte.getImageResourceId());
