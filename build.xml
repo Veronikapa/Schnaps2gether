@@ -12,16 +12,13 @@ target: compile
 
 </delete>
 
-<mkdir dir="classes" />
+ <mkdir dir="${classes.dir}"/>
 
-<path id="lib.path.ref">
-
-<fileset dir="lib" includes="*.jar" />
-
-</path>
-
- <javac destdir="test" includeantruntime="true">
-  <src path="KartenKomperatorTest.java" />
+ <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+  <classpath>
+   <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
+   <path id="junit" location="${lib.dir}/junit-4.12.jar"/>
+  </classpath>
  </javac>
 
 <copy todir="classes">
