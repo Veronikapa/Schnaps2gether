@@ -52,7 +52,7 @@ target: compile
 
 <classpath refid="tests.classpath" />
 
-<test name="appsolutegamesgmbh.schnaps2gether" />
+<test name="appsolutegamesgmbh.schnaps2gether.AllTests" />
 
 </junit>
 
