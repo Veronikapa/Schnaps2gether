@@ -143,10 +143,6 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         appContext = this.getApplicationContext();
 
         angesagt = false;
-        andereSpieler = new ArrayList<Spieler>();
-        andereSpieler.add(gegner1);
-        andereSpieler.add(mitspieler);
-        andereSpieler.add(gegner2);
 
         bummerl = new Bummerl4();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, gegner1ID, (SPIELSTART +":"+"2,"+bummerl.toString()).getBytes());
@@ -347,6 +343,11 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 mitspieler = spiel.getS3();
                 gegner2 = spiel.getS4();
 
+                andereSpieler = new ArrayList<Spieler>();
+                andereSpieler.add(gegner1);
+                andereSpieler.add(mitspieler);
+                andereSpieler.add(gegner2);
+                
                 anzSpieleAngesagt = 0;
                 anzFleckZüge = 0;
 
