@@ -356,7 +356,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 imageView_karteMitspieler.setVisibility(View.INVISIBLE);
                 punkteSelbst.setText("0");
                 //punkteGegner1.setText("0");
-                punkteMitspieler.setText("0");
+                //punkteMitspieler.setText("0");
                 //punkteGegner2.setText("0");
                 gegnerischeKarte1 = eigeneKarte = gegnerischeKarte2 = mitspielerKarte = null;
                 handAktualisieren();
