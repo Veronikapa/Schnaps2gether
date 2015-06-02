@@ -20,9 +20,8 @@ target: compile
 
 </path>
 
- <javac destdir="out" includeantruntime="true">
-  <src path="foo.java" />
-  <src path="bar.java" />
+ <javac destdir="test" includeantruntime="true">
+  <src path="KartenKomperatorTest.java" />
  </javac>
 
 <copy todir="classes">
