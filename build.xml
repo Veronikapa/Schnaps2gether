@@ -2,7 +2,7 @@
 
 <!-- - - - - - - - - - - - - - - - - -
 
-target: compile                     
+target: compile
 
  - - - - - - - - - - - - - - - - - -->
 
@@ -52,7 +52,7 @@ target: compile
 
 <classpath refid="tests.classpath" />
 
-<test name="**/AllTests.java" />
+<test name="appsolutegamesgmbh.schnaps2gether" />
 
 </junit>
 
