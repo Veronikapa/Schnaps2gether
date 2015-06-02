@@ -361,6 +361,27 @@
                 android:layout_gravity="bottom|center" />
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+            android:id="@+id/I_Karte6" >
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:id="@+id/imageView_karte6"
+                android:scaleType="fitXY"
+                android:clickable="true"
+                android:onClick="karte6OnClick"
+                android:background="@android:color/transparent"
+                android:visibility="visible"
+                android:focusable="true" />
+        </LinearLayout>
+
     </FrameLayout>
 
     <FrameLayout

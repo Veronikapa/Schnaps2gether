@@ -55,6 +55,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String TRUMPFFARBE = "13";
     private static final String TRUMPFANSAGEN = "14";
     private static final String SPIEL = "15";
+    private static final String AUFGEDECKT = "16";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -71,6 +72,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static ImageView imageView_karte3;
     private static ImageView imageView_karte4;
     private static ImageView imageView_karte5;
+    private static ImageView imageView_karte6;
 
     private static ArrayList<ImageView> handkartenImages;
 
@@ -89,7 +91,13 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     private static Button button20er;
     private static Button button40er;
+
     private static Button buttonTalonTauschen;
+    private static Button buttonSpielAnsagen;
+    private static Button buttonTrumpfansagen;
+    private static Button buttonFlecken;
+    private static Button buttonGegenflecken;
+    private static Button buttonWeiter;
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
@@ -102,6 +110,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
 
     private static int istdran;
+    private static String SpielerID;
 
 
     //ausgespielte Karten
@@ -171,9 +180,15 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
+        imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte6);
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
+        buttonSpielAnsagen = (Button) findViewById(R.id.main_buttonSpielAnsagen);
+        buttonTrumpfansagen = (Button) findViewById(R.id.cmd_trumpfansagen);
+        buttonFlecken = (Button) findViewById(R.id.main_buttonFlecken);
+        buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
+        buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
         buttonTalonTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
@@ -192,6 +207,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         handkartenImages.add(2, imageView_karte3);
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
+        handkartenImages.add(4, imageView_karte6);
 
         stichK1= (ImageView) findViewById(R.id.stichK1);
         stichK2= (ImageView) findViewById(R.id.stichK2);
@@ -223,6 +239,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
+
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
         stichK14.setVisibility(View.INVISIBLE);
@@ -247,6 +264,14 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
         buttonsNichtKlickbar();
+
+
+        if(Lobby.isc1)
+            SpielerID = "1";
+        else if(Lobby.isc2)
+            SpielerID = "2";
+
+
     }
 
     @Override
@@ -357,13 +382,13 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl3(message.substring(2));
                 break;
+            case TRUMPFANSAGEN:
+                buttonWeiter.setText("Aufdecken");
+                buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.split(":")[1]);
-                //Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
-                //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Ok wenn Icon hier auch geändert wird?
-
-
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
                 String[] hand = messageParts[2].substring(1).split(",");
@@ -391,7 +416,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             case TRUMPFFARBE: angesagteFarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
                 break;
-            case WEITER: handKartenKlickbar();
+            case WEITER:
+                handKartenKlickbar();
                 if (message.substring(2,3).equals("1")) {
                     hat20er = message.substring(4,5).equals("1") ? true : false;
                     hat40er = message.substring(6,7).equals("1") ? true : false;
@@ -461,7 +487,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     private void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<6;i++) {
 
             ImageView imageViewK = handkartenImages.get(i);
             if (i<handkartenAnz) {
@@ -476,7 +502,80 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         }
     }
 
+    public void karte1OnClick(View view) {
+        zugAusführen(0);
+    }
 
+    public void karte2OnClick(View view) {
+        zugAusführen(1);
+    }
+
+    public void karte3OnClick(View view) {
+        zugAusführen(2);
+    }
+
+    public void karte4OnClick(View view) {
+        zugAusführen(3);
+    }
+
+    public void karte5OnClick(View view) {
+        zugAusführen(4);
+    }
+
+    public void karte6OnClick(View view) {
+        zugAusführen(5);
+    }
+
+    public void weiterOnClick(View view) {
+       /* if (anzSpieleAngesagt<4) {
+            anzSpieleAngesagt++;
+            if (anzSpieleAngesagt<4) {
+                andererSpielerKannSpielAnsagen(gegner1);
+                buttonWeiter.setVisibility(view.INVISIBLE);
+            }
+            else {
+                fleckRunde();
+            }
+            buttonSpielAnsagen.setVisibility(view.INVISIBLE);
+        } else {
+            anzFleckZüge++;
+            if (anzFleckZüge % 2 != 0)
+                andererSpielerAmFlecken(mitspieler, false);
+            else {
+                for (Spieler andererSpieler: andereSpieler) {
+                    if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
+                }
+                if (selbst.isIstdran()) {
+                    handKartenKlickbar();
+                    eigenerZug();
+                }
+                buttonWeiter.setVisibility(View.INVISIBLE);
+                buttonFlecken.setVisibility(View.INVISIBLE);
+            }
+        }*/
+
+        if (buttonWeiter.getText() == "Aufdecken"){
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
+        }
+    }
+
+    private void zugAusführen(int i) {
+        eigeneKarte = selbst.Hand.get(i);
+        buttonsNichtKlickbar();
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + eigeneKarte.toString() + ":" + SpielerID).getBytes());
+        gespielteKarteEntfernen(i);
+
+        imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
+
+        //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
+        /*if (gegnerischeKarte == null) {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
+        }*/
+    }
+
+    private void gespielteKarteEntfernen(int i) {
+        handkartenImages.get(i).setVisibility(View.INVISIBLE);
+    }
 
     private void punkteAktualisieren() {
         punkteGegner1.setText(Integer.toString(p2));

@@ -53,6 +53,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String TRUMPFFARBE = "13";
     private static final String TRUMPFANSAGEN = "14";
     private static final String SPIEL = "15";
+    private static final String AUFGEDECKT = "16";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -68,6 +69,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_karte3;
     private static ImageView imageView_karte4;
     private static ImageView imageView_karte5;
+    private static ImageView imageView_karte6;
 
     private static ArrayList<ImageView> handkartenImages;
 
@@ -167,6 +169,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
+        imageView_karte6 = (ImageView) findViewById(R.id.imageView_karte6);
+
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
@@ -198,6 +202,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenImages.add(2, imageView_karte3);
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
+        handkartenImages.add(5, imageView_karte6);
 
         stichK1= (ImageView) findViewById(R.id.stichK1);
         stichK2= (ImageView) findViewById(R.id.stichK2);
@@ -262,6 +267,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         //handKartenKlickbar();
 
+        handAktualisieren();
+
         if(bummerl.getAnzahlSpiele() == 0) {
             punkteSelbst.setText("0");
             BpunkteSelbst.setText("0");
@@ -289,7 +296,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             }
         }
 
-        //handAktualisieren();
+
         //eigenerZug();
 
     }
@@ -606,6 +613,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         zugAusführen(4);
     }
 
+    public void karte6OnClick(View view) {
+        zugAusführen(5);
+    }
+
     private void zugAusführen(int i) {
         final Karte k = selbst.Hand.get(i);
         eigeneKarte = k;
@@ -672,8 +683,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             } else {
                 imageViewK.setVisibility(View.INVISIBLE);
             }
-            gegnerischeHandAktualisieren();
+
         }
+
+        gegnerischeHandAktualisieren();
     }
 
     private static void gegnerischeHandAktualisieren() {
@@ -806,7 +819,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<6;i++) {
 
             ImageView imageViewK = handkartenImages.get(i);
 
