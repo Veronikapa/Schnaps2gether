@@ -152,8 +152,6 @@ public class Lobby extends Activity implements
     public void beitreten(View v) {
         if (m_GoogleApiClient.isConnected()) {
             Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
-            spieleIdListe.clear();
-            spieleListe.clear();
             startDiscovery();
         }
     }
