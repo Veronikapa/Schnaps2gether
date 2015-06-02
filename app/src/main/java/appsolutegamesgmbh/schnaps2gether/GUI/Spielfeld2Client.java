@@ -171,7 +171,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         button40er = (Button) findViewById(R.id.main_button40er);
         buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
-        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        //punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
         BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
