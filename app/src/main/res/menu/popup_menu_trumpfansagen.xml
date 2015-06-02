@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/herz_trumpf"
+        android:title="@string/herz"/>
+    <item android:id="@+id/karo_trumpf"
+        android:title="@string/karo"/>
+    <item android:id="@+id/pik_trumpf"
+        android:title="@string/pik"/>
+    <item android:id="@+id/kreuz_trumpf"
+        android:title="@string/kreuz"/>
+</menu>

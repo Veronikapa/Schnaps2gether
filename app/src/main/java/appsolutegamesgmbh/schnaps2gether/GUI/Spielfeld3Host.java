@@ -337,38 +337,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void popupTrumpfansagen(View view) {
-        //TODO
-        PopupMenu popup = new PopupMenu(Spielfeld3Host.this, button20er);
-        popup.inflate(R.menu.popup_menu_20er);
-        MenuItem herz20er = (MenuItem) popup.getMenu().getItem(0);
-        MenuItem karo20er = (MenuItem) popup.getMenu().getItem(1);
-        MenuItem pik20er = (MenuItem) popup.getMenu().getItem(2);
-        MenuItem kreuz20er = (MenuItem) popup.getMenu().getItem(3);
-        herz20er.setVisible(false);
-        karo20er.setVisible(false);
-        pik20er.setVisible(false);
-        kreuz20er.setVisible(false);
-        ArrayList<String> a = spiel.hat20er(selbst);
-        for (int i = 0; i < a.size(); i++) {
-            switch (a.get(i)) {
-                case "Herz":
-                    herz20er.setVisible(true);
-                    break;
-                case "Karo":
-                    karo20er.setVisible(true);
-                    break;
-                case "Pik":
-                    pik20er.setVisible(true);
-                    break;
-                case "Kreuz":
-                    kreuz20er.setVisible(true);
-                    break;
-                default:
-                    ;
-            }
-        }
-        popup.setOnMenuItemClickListener(this);
-        popup.show();
+
     }
 
     public void popupSpielAnsagen(final View view) {
