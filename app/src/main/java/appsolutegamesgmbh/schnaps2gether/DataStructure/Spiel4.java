@@ -61,7 +61,7 @@ public class Spiel4 {
     {
         KartenMischen();
 
-        if(AnzahlSpiele%3 == 0) {
+        if(AnzahlSpiele%4 == 0) {
             //Spieler 1 bekommt 3 Karten
             s1.Hand.add(stapel.get(0));
             stapel.remove(0);
@@ -86,8 +86,17 @@ public class Spiel4 {
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
 
+            //Spieler 4 bekommt 3 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+
         }
-        else if(AnzahlSpiele%3 == 1)
+        else if(AnzahlSpiele%4 == 1)
         {
             //Spieler 2 bekommt 3 Karten
             s2.Hand.add(stapel.get(0));
@@ -105,6 +114,14 @@ public class Spiel4 {
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
 
+            //Spieler 4 bekommt 3 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
             //Spieler 1 bekommt 3 Karten
             s1.Hand.add(stapel.get(0));
             stapel.remove(0);
@@ -114,7 +131,7 @@ public class Spiel4 {
             stapel.remove(0);
 
         }
-        else
+        else if(AnzahlSpiele%4 == 2)
         {
             //Spieler 3 bekommt 3 Karten
             s3.Hand.add(stapel.get(0));
@@ -122,6 +139,14 @@ public class Spiel4 {
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
             s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 4 bekommt 3 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
             stapel.remove(0);
 
             //Spieler 1 bekommt 3 Karten
@@ -140,6 +165,38 @@ public class Spiel4 {
             s2.Hand.add(stapel.get(0));
             stapel.remove(0);
 
+        } else {
+            //Spieler 4 bekommt 3 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 1 bekommt 3 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 3 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 3 bekommt 3 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
         }
 
     }
@@ -155,7 +212,7 @@ public class Spiel4 {
     {
         this.trumpf = trumpf;
 
-        if(AnzahlSpiele%3 == 0) {
+        if(AnzahlSpiele%4 == 0) {
             //Spieler 1 bekommt 2 Karten
             s1.Hand.add(stapel.get(0));
             stapel.remove(0);
@@ -174,8 +231,14 @@ public class Spiel4 {
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
 
+            //Spieler 4 bekommt 2 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
         }
-        else if(AnzahlSpiele%3 == 1)
+        else if(AnzahlSpiele%4 == 1)
         {
             //Spieler 2 bekommt 2 Karten
             s2.Hand.add(stapel.get(0));
@@ -189,18 +252,30 @@ public class Spiel4 {
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
 
+            //Spieler 4 bekommt 2 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
             //Spieler 1 bekommt 2 Karten
             s1.Hand.add(stapel.get(0));
             stapel.remove(0);
             s1.Hand.add(stapel.get(0));
             stapel.remove(0);
         }
-        else
+        else if (AnzahlSpiele % 4 == 2)
         {
             //Spieler 3 bekommt 2 Karten
             s3.Hand.add(stapel.get(0));
             stapel.remove(0);
             s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 4 bekommt 2 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
             stapel.remove(0);
 
             //Spieler 1 bekommt 2 Karten
@@ -213,6 +288,30 @@ public class Spiel4 {
             s2.Hand.add(stapel.get(0));
             stapel.remove(0);
             s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+        } else {
+            //Spieler 4 bekommt 2 Karten
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s4.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            
+            //Spieler 1 bekommt 2 Karten
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s1.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 2 bekommt 2 Karten
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s2.Hand.add(stapel.get(0));
+            stapel.remove(0);
+
+            //Spieler 3 bekommt 2 Karten
+            s3.Hand.add(stapel.get(0));
+            stapel.remove(0);
+            s3.Hand.add(stapel.get(0));
             stapel.remove(0);
         }
 
