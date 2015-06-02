@@ -507,7 +507,8 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         String message = new String(payload);
         switch ((message.split(":")[0])) {
             case SPIELSTART: bummerl = new Bummerl2(message.substring(2).split(",")[1]);
-                spielerNummer = Integer.getInteger(message.substring(2).split(",")[0]);
+                Toast.makeText(appContext, message.substring(2), Toast.LENGTH_SHORT).show();
+                spielerNummer = Integer.getInteger(message.substring(2,3));
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
