@@ -407,8 +407,6 @@ public class Lobby extends Activity implements
                     if (status.isSuccess()) {
                         Toast.makeText(appContext, "Vebindung hergestellt zu " + remoteEndpointName,
                                 Toast.LENGTH_SHORT).show();
-                        //Beenden der Service anzeige nach Verbindung der Geräte
-                        Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                         endpointIds.add(remoteEndpointId);
                         deviceIds.add(remoteDeviceId);
@@ -421,14 +419,23 @@ public class Lobby extends Activity implements
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT4.getBytes());
 
                         if (spielTyp == 2 && endpointIds.size() == 1) {
+                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
                             finish();
                         } else if (spielTyp == 3 && endpointIds.size() == 2) {
+                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
                             finish();
                         } else if (spielTyp == 4 && endpointIds.size() == 3) {
+                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
                             finish();
