@@ -59,11 +59,11 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
 
 
-    private ImageView imageView_karte1;
-    private  ImageView imageView_karte2;
-    private  ImageView imageView_karte3;
-    private  ImageView imageView_karte4;
-    private  ImageView imageView_karte5;
+    private static ImageView imageView_karte1;
+    private static ImageView imageView_karte2;
+    private static ImageView imageView_karte3;
+    private static ImageView imageView_karte4;
+    private static ImageView imageView_karte5;
 
     private static ArrayList<ImageView> handkartenImages;
     private static ImageView imageView_eigeneKarte;
@@ -88,8 +88,8 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static Karte gegnerischeKarte;
     private static TextView punkteGegner;
     private static TextView punkteSelbst;
-    private TextView txtSelbst;
-    private TextView txtGegner;
+    private static TextView txtSelbst;
+    private static TextView txtGegner;
     private static Bummerl2 bummerl;
     private static boolean zugedreht;
     private static boolean hat20er;

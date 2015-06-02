@@ -104,10 +104,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static TextView punkteGegner2;
     private static TextView punkteSelbst;
     private static TextView punkteMitspieler;
-    private TextView txtSelbst;
-    private TextView txtMitspieler;
-    private TextView txtGegner1;
-    private TextView txtGegner2;
+    private static TextView txtSelbst;
+    private static TextView txtMitspieler;
+    private static TextView txtGegner1;
+    private static TextView txtGegner2;
     private static Bummerl4 bummerl;
     private static Boolean angesagt;
     private static String  gegner1ID;
