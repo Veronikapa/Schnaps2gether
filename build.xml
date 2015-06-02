@@ -20,7 +20,7 @@ target: compile
 
 </path>
 
-<javac srcdir="src" destdir="classes" classpathref="lib.path.ref">
+<javac includeantruntime="false">
 
 </javac>
 
