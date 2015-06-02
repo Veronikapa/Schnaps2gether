@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl3;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
-import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel3;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
@@ -227,8 +226,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         stichK15= (ImageView) findViewById(R.id.stichK15);
         stichK16= (ImageView) findViewById(R.id.stichK16);
 
-        punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
         BpunkteGegner1 = (TextView) findViewById(R.id.txt_PunkteZahl);
         BpunkteGegner2 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
@@ -273,6 +272,19 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             SpielerID = "2";
 
 
+    }
+
+
+    public void popupTrumpfansagen(View view) {
+        PopupMenu popup = new PopupMenu(Spielfeld3Client.this, buttonTrumpfansagen);
+        popup.inflate(R.menu.popup_menu_trumpfansagen);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return false;
+            }
+        });
+        popup.show();
     }
 
     @Override
