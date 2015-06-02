@@ -100,8 +100,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static Karte gegnerischeKarte1;
     private static Karte gegnerischeKarte2;
     private static Karte mitspielerKarte;
-    private static TextView punkteGegner1;
-    private static TextView punkteGegner2;
+    private static TextView BpunkteGegner1;
+    private static TextView BpunkteGegner2;
+
     private static TextView punkteSelbst;
     private static TextView punkteMitspieler;
     private static TextView txtSelbst;
@@ -172,8 +173,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
 
-        punkteGegner1 = (TextView) findViewById(R.id.pointsText);
-        punkteGegner2 = (TextView) findViewById(R.id.pointsText);
+        //punkteGegner1 = (TextView) findViewById(R.id.pointsText);
+        //punkteGegner2 = (TextView) findViewById(R.id.pointsText);
         punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
         //punkteMitspieler = (TextView) findViewById(R.id.pointsText2);
   /*      txtSelbst = (TextView) findViewById(R.id.I);
@@ -354,9 +355,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 imageView_karteGegner2.setVisibility(View.INVISIBLE);
                 imageView_karteMitspieler.setVisibility(View.INVISIBLE);
                 punkteSelbst.setText("0");
-                punkteGegner1.setText("0");
+                //punkteGegner1.setText("0");
                 punkteMitspieler.setText("0");
-                punkteGegner2.setText("0");
+                //punkteGegner2.setText("0");
                 gegnerischeKarte1 = eigeneKarte = gegnerischeKarte2 = mitspielerKarte = null;
                 handAktualisieren();
                 if (selbst.isIstdran()) {
