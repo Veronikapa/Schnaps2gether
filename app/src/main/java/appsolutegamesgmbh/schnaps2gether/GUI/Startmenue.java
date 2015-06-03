@@ -92,6 +92,10 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 startActivity(new Intent(Startmenue.this,Spielfeld2.class));
                 finish();
                 break;
+            case R.id.cmd_spielregeln:
+                startActivity(new Intent(Startmenue.this, Spielregeln.class));
+                finish();
+                break;
             default:;
         }
     }

@@ -260,11 +260,12 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
 
         if (spiel.isZugedreht()) {
-            buttonZudrehen.setVisibility(View.INVISIBLE);
+            //buttonZudrehen.setVisibility(View.INVISIBLE);
             buttonZudrehen.setEnabled(false);
+            buttonZudrehen.setAlpha(0.4f);
+            buttonZudrehen.setText("Zugedreht");
 
-            //buttonZudrehen.setAlpha(0.4f);
-            //buttonZudrehen.setText("Zugedreht");
+            imageView_trumpf.setImageResource(R.drawable.deck);
         }
     }
 
@@ -639,25 +640,25 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                         buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
                     } else if ((spiel.getS2().Gestochen.size() > 2) && (spiel.getS2().Gestochen.size() <= 4)) {
                         stichDeckG.setVisibility(View.VISIBLE);
-                        stichDeckG.setImageResource(R.drawable.deck);
+                        stichDeckG.setImageResource(R.drawable.deck_v);
                         pruefegestochenG = false;
 
                     } else if ((spiel.getS2().Gestochen.size() > 4) && (spiel.getS2().Gestochen.size() <= 6)) {
-                        stichDeckG.setImageResource(R.drawable.deck_2);
-                        stichDeckG.setVisibility(View.VISIBLE);
+                        stichDeckG.setImageResource(R.drawable.deck_2_v);
+                        //stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
 
-                    } else if ((spiel.getS2().Gestochen.size() >6) && (spiel.getS2().Gestochen.size() <= 8)) {
+                    /*} else if ((spiel.getS2().Gestochen.size() >6) && (spiel.getS2().Gestochen.size() <= 8)) {
                         stichDeckG.setImageResource(R.drawable.deck_3);
-                        stichDeckG.setVisibility(View.VISIBLE);
+                       // stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
 
                     } else if ((spiel.getS2().Gestochen.size() > 8) && (spiel.getS2().Gestochen.size() <=10)) {
                         stichDeckG.setImageResource(R.drawable.deck_4);
-                        pruefegestochenG = false;
-                    }
-                    else if (spiel.getS2().Gestochen.size() > 10) {
-                        stichDeckG.setImageResource(R.drawable.deck_5);
+                        pruefegestochenG = false;*/
+
+                    } else if (spiel.getS2().Gestochen.size() > 7) {
+                        stichDeckG.setImageResource(R.drawable.deck_3_v);
                         pruefegestochenG = false;
                     }
 

@@ -81,7 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="66"
-                android:id="@+id/textView3" />
+                android:id="@+id/textView3"
+                android:layout_gravity="top" />
         </LinearLayout>
 
         <Button
@@ -546,8 +547,7 @@
                 android:layout_width="@dimen/stich_breite"
                 android:layout_height="@dimen/stich_hoehe"
                 android:id="@+id/stichK9"
-                android:background="@android:color/transparent"
-                android:layout_marginBottom="10dp" />
+                android:background="@android:color/transparent" />
         </LinearLayout>
 
 
@@ -727,7 +727,7 @@
             android:id="@+id/stichEigeneKarteG"
             android:background="@android:color/transparent"
             android:rotation="-40"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center"
             android:layout_marginRight="0dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="5dp" />
@@ -739,20 +739,25 @@
             android:cropToPadding="true"
             android:background="@android:color/transparent"
             android:rotation="40"
-            android:layout_gravity="center_horizontal|bottom"
+            android:layout_gravity="center"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="5dp" />
 
-        <ImageView
-            android:layout_width="@dimen/karte_hoehe"
-            android:layout_height="@dimen/karte_breite"
-            android:id="@+id/stichDeckG"
-            android:hapticFeedbackEnabled="false"
-            android:background="@drawable/deck"
-            android:layout_gravity="center_horizontal|top"
-            android:visibility="invisible"
-            android:rotation="90"
-            android:layout_marginBottom="30dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_hoehe"
+                android:layout_height="@dimen/karte_breite"
+                android:id="@+id/stichDeckG"
+                android:background="@drawable/deck"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+        </LinearLayout>
 
     </FrameLayout>
 
