@@ -1,11 +1,14 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +30,7 @@ import com.google.android.gms.nearby.connection.Connections;
 import java.util.ArrayList;
 import java.util.List;
 
+import appsolutegamesgmbh.schnaps2gether.Network.NearbyConnectionService;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 public class Lobby extends Activity implements
@@ -40,12 +44,19 @@ public class Lobby extends Activity implements
     private ArrayAdapter<String> adapterSpieleListView;
     private String spielerName = "";
     private int spielTyp= 0; //2 = 2er, 3 = 3er, 4 = 4er
+    NearbyConnectionService mService;
+    boolean mBound = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
+
+        // Bind to NearbyConnectionService
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mService.setLobby(this);
 
         // Get ListView object from xml
         spieleListView = (ListView) findViewById(R.id.list);
@@ -86,6 +97,42 @@ public class Lobby extends Activity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void spielGefunden(String spielId, String spielTypUndName) {
+        int spielTyp = Integer.parseInt(spielTypUndName.substring(0,1));
+        String spielerName = spielTypUndName.substring(1);
+
+        //Neues Spiel zu Liste hinzufügen
+        spieleListe.add(spielTyp+"er Schnapsen von "+spielerName);
+        spieleIdListe.add(spielId);
+
+        adapterSpieleListView = new ArrayAdapter<String>(appContext,
+                android.R.layout.simple_list_item_1, spieleListe);
+
+        // Assign adapter to ListView
+        spieleListView.setAdapter(adapterSpieleListView);
+    }
+
+    public void spielStarten() {
+        if (spielTyp == 2) {
+            startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+        } else if (spielTyp == 3) {
+            startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
+        } else if (spielTyp == 4) {
+            startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
+        }
+    }
+
+    public void spielZurListeHinzufügen() {
+        //Neues Spiel zu Liste hinzufügen
+        spieleListe.add(spielTyp + "er Schnapsen von " + spielerName);
+
+        adapterSpieleListView = new ArrayAdapter<String>(appContext,
+                android.R.layout.simple_list_item_1, spieleListe);
+
+        // Assign adapter to ListView
+        spieleListView.setAdapter(adapterSpieleListView);
     }
 
     //Anlegen eines neuen Spiel-Services
@@ -144,10 +191,25 @@ public class Lobby extends Activity implements
             default: break;
         }
 
-        /*if (m_GoogleApiClient.isConnected()) {
-
-            startAdvertising();
-        }*/
+        mService.spielErstellen(spielTyp, spielerName);
         return false;
     }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }

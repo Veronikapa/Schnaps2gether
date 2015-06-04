@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import appsolutegamesgmbh.schnaps2gether.GUI.Lobby;
+import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld2Client;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld2Host;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld3Client;
@@ -49,7 +50,14 @@ public class NearbyConnectionService extends Service implements
     private static final String CLIENT3 = "18";
     private static final String CLIENT4 = "19";
 
-    private Activity client;
+    private boolean isc1;
+    private boolean isc2;
+
+    private int spielTyp;
+    private String spielerName;
+
+    private Lobby lobby;
+    private Spielfeld spielfeld;
     private Context appContext;
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
@@ -89,12 +97,12 @@ public class NearbyConnectionService extends Service implements
     }
 
     /**
-     * Class used for the client Binder.  Because we know this service always
+     * Class used for the lobby Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
     public class NearbyConnectionBinder extends Binder {
-        NearbyConnectionService getService() {
-            // Return this instance of LocalService so clients can call public methods
+        public NearbyConnectionService getService() {
+            // Return this instance of NearbyConnectionService so clients can call public methods
             return NearbyConnectionService.this;
         }
     }
@@ -122,19 +130,7 @@ public class NearbyConnectionService extends Service implements
      */
     public void onEndpointFound(final String endpointId, String deviceId, String serviceId,
                                 final String endpointName) {
-
-        spielTyp = Integer.parseInt(endpointName.substring(0,1));
-        String spielerName = endpointName.substring(1);
-
-        //Neues Spiel zu Liste hinzufügen
-        spieleListe.add(spielTyp+"er Schnapsen von "+spielerName);
-        spieleIdListe.add(endpointId);
-
-        adapterSpieleListView = new ArrayAdapter<String>(appContext,
-                android.R.layout.simple_list_item_1, spieleListe);
-
-        // Assign adapter to ListView
-        spieleListView.setAdapter(adapterSpieleListView);
+        ((Lobby) lobby).spielGefunden(endpointId, endpointName);
     }
 
     @Override
@@ -152,34 +148,13 @@ public class NearbyConnectionService extends Service implements
             if (message.equals(CLIENT3) && !isc1)
                 isc2 = true;
             if (message.equals(SPIELSTART)) {
-                if (spielTyp == 2) {
-                    startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-                } else if (spielTyp == 3) {
-                    startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
-                } else if (spielTyp == 4) {
-                    startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
-                }
-            } else if (spielTyp == 2) {
-                c2.receiveFromLobby(endpointID, payload, isReliable);
-            } else if (spielTyp == 3) {
-                if (isc1)
-                    c31.receiveFromLobby(endpointID, payload, isReliable);
-                else
-                    c32.receiveFromLobby(endpointID, payload, isReliable);
-            } else if (spielTyp == 4)
-                Spielfeld4Client.receiveFromLobby(endpointID, payload, isReliable);
-        }
-        else
-        {
-            if (spielTyp == 2) {
-                h2.receiveFromLobby(endpointID, payload, isReliable);
+                lobby.spielStarten();
+            } else {
+                spielfeld.receiveFromLobby(endpointID, payload, isReliable);
             }
-
-            else if (spielTyp == 3)
-                h3.receiveFromLobby(endpointID, payload, isReliable);
-
-            else if (spielTyp == 4)
-                Spielfeld4Host.receiveFromLobby(endpointID, payload, isReliable);
+        }
+        else {
+            spielfeld.receiveFromLobby(endpointID, payload, isReliable);
         }
     }
 
@@ -193,23 +168,18 @@ public class NearbyConnectionService extends Service implements
         Toast.makeText(appContext, "Verbindung fehlgeschlagen!", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void onStart() {
-        super.onStart();
-
         //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
         m_GoogleApiClient.connect();
     }
 
-    /*@Override
     public void onStop() {
-        super.onStop();
         //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
         //Verbindung beendet werden.
         if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
             m_GoogleApiClient.disconnect();
         }
-    }*/
+    }
 
     /*
     * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.
@@ -228,48 +198,41 @@ public class NearbyConnectionService extends Service implements
     }
 
     private void startAdvertising() {
-
-        //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
-        if (!isConnectedToNetwork()) {
-            Toast.makeText(appContext, "Sie sind mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Gerät das Service anbietet ist der Host des Spiels.
-        m_IsHost = true;
-
-        //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
-        // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
-        // zu Installation aufgefordert.
-        List<AppIdentifier> appIdentifierList = new ArrayList<>();
-        appIdentifierList.add(new AppIdentifier(getPackageName()));
-        AppMetadata appMetadata = new AppMetadata(appIdentifierList);
-
-        //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
-        //via stopAdvertising();
-        long NO_TIMEOUT = 0L;
-
-        //Anbieten eines Services für andere Geräte.
-        Nearby.Connections.startAdvertising(m_GoogleApiClient, spielTyp+spielerName, appMetadata, NO_TIMEOUT,
-                this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
-            @Override
-            public void onResult(Connections.StartAdvertisingResult result) {
-                if (result.getStatus().isSuccess()) {
-                    //Neues Spiel zu Liste hinzufügen
-                    spieleListe.add(spielTyp+"er Schnapsen von "+spielerName);
-
-                    adapterSpieleListView = new ArrayAdapter<String>(appContext,
-                            android.R.layout.simple_list_item_1, spieleListe);
-
-                    // Assign adapter to ListView
-                    spieleListView.setAdapter(adapterSpieleListView);
-
-                } else {
-                    int statusCode = result.getStatus().getStatusCode();
-                    // Advertising failed - see statusCode for more details
-                }
+        if (m_GoogleApiClient.isConnected()) {
+            //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
+            if (!isConnectedToNetwork()) {
+                Toast.makeText(appContext, "Sie sind mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
+
+            // Gerät das Service anbietet ist der Host des Spiels.
+            m_IsHost = true;
+
+            //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
+            // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
+            // zu Installation aufgefordert.
+            List<AppIdentifier> appIdentifierList = new ArrayList<>();
+            appIdentifierList.add(new AppIdentifier(getPackageName()));
+            AppMetadata appMetadata = new AppMetadata(appIdentifierList);
+
+            //Timeout wird auf unendlich gesetzt. Anbieten des Services wird erst nach Verbindung gestoppt
+            //via stopAdvertising();
+            long NO_TIMEOUT = 0L;
+
+            //Anbieten eines Services für andere Geräte.
+            Nearby.Connections.startAdvertising(m_GoogleApiClient, spielTyp + spielerName, appMetadata, NO_TIMEOUT,
+                    this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
+                @Override
+                public void onResult(Connections.StartAdvertisingResult result) {
+                    if (result.getStatus().isSuccess()) {
+                        lobby.spielZurListeHinzufügen();
+                    } else {
+                        int statusCode = result.getStatus().getStatusCode();
+                        // Advertising failed - see statusCode for more details
+                    }
+                }
+            });
+        }
     }
 
     private void startDiscovery() {
@@ -316,24 +279,6 @@ public class NearbyConnectionService extends Service implements
                         if (status.isSuccess()) {
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
-
-//                            if(endpointIds.size() == 1)
-//                                isc1 = true;
-//                            else if(endpointIds.size() == 2)
-//                                isc2 = true;
-//                            else if(endpointIds.size() == 3)
-//                                isc3 = true;
-                            /*if (spielTyp == 2 && endpointIds.size() == 1) {
-                                startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-                                finish();
-                            } else if (spielTyp == 3 && endpointIds.size() == 2) {
-                                startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
-                                finish();
-                            }
-                            else if (spielTyp == 4 && endpointIds.size() == 3) {
-                                startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
-                                finish();
-                            }*/
                         } else {
                             // Verbindung fehlgeschlagen
                             Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
@@ -372,22 +317,22 @@ public class NearbyConnectionService extends Service implements
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
-                            finish();
+                            startActivity(new Intent(NearbyConnectionService.this, Spielfeld2Host.class));
+                            lobby.finish();
                         } else if (spielTyp == 3 && endpointIds.size() == 2) {
                             //Beenden der Service anzeige nach Verbindung der Geräte
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
-                            finish();
+                            startActivity(new Intent(NearbyConnectionService.this, Spielfeld3Host.class));
+                            lobby.finish();
                         } else if (spielTyp == 4 && endpointIds.size() == 3) {
                             //Beenden der Service anzeige nach Verbindung der Geräte
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
-                            finish();
+                            startActivity(new Intent(NearbyConnectionService.this, Spielfeld4Host.class));
+                            lobby.finish();
                         }
 
                     } else {
@@ -408,8 +353,20 @@ public class NearbyConnectionService extends Service implements
         return mGenerator.nextInt(100);
     }
 
-    public void setClient(Activity client) {
-        this.client = client;
+    public void spielErstellen(int spielTyp, String spielerName) {
+        if (m_GoogleApiClient.isConnected()) {
+            this.spielTyp = spielTyp;
+            this.spielerName = spielerName;
+            startAdvertising();
+        }
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
+    public void setSpielfeld(Spielfeld spielfeld) {
+        this.spielfeld = spielfeld;
     }
 
     @Override

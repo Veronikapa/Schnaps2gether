@@ -30,7 +30,7 @@ import appsolutegamesgmbh.schnaps2gether.R;
 
 
 public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
-        Connections.MessageListener {
+        Connections.MessageListener, Spielfeld {
 
     /*gewünschter Spielablauf:
             - Spiel anlegen (als Parameter AnzahlSpiele von Klasse Bummerl mitgebeben) - jeder Spieler bekommt automatisch die ersten 3 Karten
