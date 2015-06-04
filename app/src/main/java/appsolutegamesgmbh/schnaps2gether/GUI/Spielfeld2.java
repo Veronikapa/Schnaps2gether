@@ -43,10 +43,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private ImageView imageView_eigeneKarte;
     private ImageView imageView_karteGegner;
     private ImageView imageView_trumpfIcon;
-/*
-    private ImageView stichEigeneKarteI;
-    private ImageView stichGegnerKarteI;
-    private ImageView stichDeckI;*/
 
    private ImageView stichEigeneKarteG;
     private ImageView stichGegnerKarteG;
@@ -143,9 +139,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
-/*        stichEigeneKarteI = (ImageView) findViewById(R.id.stichEigeneKarteI);
-        stichGegnerKarteI = (ImageView) findViewById(R.id.stichGegnerKarteI);
-        stichDeckI =(ImageView) findViewById(R.id.stichDeckI);*/
 
         stichEigeneKarteG =(ImageView) findViewById(R.id.stichEigeneKarteG);
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
@@ -636,8 +629,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                     if (spiel.getS2().Gestochen.size() == 2) {
                         stichEigeneKarteG.setImageResource(spiel.getS2().Gestochen.get(0).getImageResourceId());
                         stichGegnerKarteG.setImageResource(spiel.getS2().Gestochen.get(1).getImageResourceId());
-                        /*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
-                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*/
+
                     } else if ((spiel.getS2().Gestochen.size() > 2) && (spiel.getS2().Gestochen.size() <= 4)) {
                         stichDeckG.setVisibility(View.VISIBLE);
                         stichDeckG.setImageResource(R.drawable.deck_v);
@@ -648,54 +640,13 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                         //stichDeckG.setVisibility(View.VISIBLE);
                         pruefegestochenG = false;
 
-                    /*} else if ((spiel.getS2().Gestochen.size() >6) && (spiel.getS2().Gestochen.size() <= 8)) {
-                        stichDeckG.setImageResource(R.drawable.deck_3);
-                       // stichDeckG.setVisibility(View.VISIBLE);
-                        pruefegestochenG = false;
-
-                    } else if ((spiel.getS2().Gestochen.size() > 8) && (spiel.getS2().Gestochen.size() <=10)) {
-                        stichDeckG.setImageResource(R.drawable.deck_4);
-                        pruefegestochenG = false;*/
-
                     } else if (spiel.getS2().Gestochen.size() > 7) {
                         stichDeckG.setImageResource(R.drawable.deck_3_v);
                         pruefegestochenG = false;
                     }
 
                 }
-               /* if(pruefegestochenI) {
-                    if (spiel.getS1().Gestochen.size() == 2) {
-                        stichEigeneKarteI.setImageResource(spiel.getS1().Gestochen.get(0).getImageResourceId());
-                        stichGegnerKarteI.setImageResource(spiel.getS1().Gestochen.get(1).getImageResourceId());
-                        *//*buttonGKarte1I.setText(spiel.getS1().Gestochen.get(0).getFarbe() + spiel.getS1().Gestochen.get(0).getWertigkeit());
-                        buttonGKarte2I.setText(spiel.getS1().Gestochen.get(1).getFarbe() + spiel.getS1().Gestochen.get(1).getWertigkeit());*//*
-                    } else if ((spiel.getS1().Gestochen.size() > 2) && ((spiel.getS1().Gestochen.size() <= 3))) {
-                        stichDeckI.setVisibility(View.VISIBLE);
-                        stichDeckI.setImageResource(R.drawable.deck);
-                        pruefegestochenI = false;
 
-                    } else if ((spiel.getS1().Gestochen.size() > 3) && ((spiel.getS1().Gestochen.size() <= 4))) {
-                        stichDeckI.setImageResource(R.drawable.deck_2);
-                        stichDeckI.setVisibility(View.VISIBLE);
-                        pruefegestochenI = false;
-
-                    } else if (((spiel.getS1().Gestochen.size() > 4) && ((spiel.getS1().Gestochen.size() <= 6)))) {
-                        stichDeckI.setImageResource(R.drawable.deck_3);
-                        stichDeckI.setVisibility(View.VISIBLE);
-                        pruefegestochenI = false;
-
-                    } else if (((spiel.getS1().Gestochen.size() > 6) && ((spiel.getS1().Gestochen.size() <= 8)))) {
-                        stichDeckI.setImageResource(R.drawable.deck_4);
-                        stichDeckI.setVisibility(View.VISIBLE);
-                        pruefegestochenI = false;
-                    }
-                    else if (((spiel.getS1().Gestochen.size() > 8))) {
-                        stichDeckI.setImageResource(R.drawable.deck_5);
-                        stichDeckI.setVisibility(View.VISIBLE);
-                        pruefegestochenI = false;
-                    }
-
-                }*/
                 if(spiel.AnzahlKartenStapel()==0) {
                     imageView_deck.setVisibility(View.INVISIBLE);
 

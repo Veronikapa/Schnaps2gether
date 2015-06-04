@@ -102,6 +102,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static int GestochenS2;
     private static int istdran;
 
+
     private static Button buttonZudrehen;
     private static Button button20er;
     private static Button button40er;

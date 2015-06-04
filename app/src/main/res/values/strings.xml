@@ -5,7 +5,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="buttonE">geg. Karte</string>
     <string name="buttonI">mei. Karte</string>
-    <string name="buttonZ">Zudrehen</string>
+    <string name="buttonZ">zudrehen</string>
     <string name="button20er">20er</string>
     <string name="button40er">40er</string>
     <string name="herz">Herz</string>
@@ -40,7 +40,7 @@
     <string name="title_activity_lobby">Lobby</string>
     <string name="neu">Neues Spiel</string>
     <string name="beitreten">Spiel beitreten</string>
-    <string name="abbrechen">Abbrechen</string>
+    <string name="abbrechen">abbrechen</string>
     <string name="title_activity_neues_spiel">NeuesSpiel</string>
     <string name="AnzahlSpieler">Anzahl Spieler</string>
     <string name="zwei">2</string>
@@ -73,6 +73,7 @@
     <string name="kartenSehen">Gegner in die Karten sehen</string>
     <string name="trumpfansagen">Trumpf</string>
     <string name="title_activity_activity_spielregeln">activity_spielregeln</string>
+    <string name="tauschen">Tauschen</string>
 
 
 </resources>

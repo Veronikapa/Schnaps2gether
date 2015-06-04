@@ -750,19 +750,19 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                     stichGegnerKarteG.setImageResource(gegnerischeKarte.getImageResourceId());
                     stichEigeneKarteG.setVisibility(View.VISIBLE);
                     stichGegnerKarteG.setVisibility(View.VISIBLE);
-                } else if (GestochenGegner > 10) {
+               /* } else if (GestochenGegner > 10) {
                     stichDeckG.setImageResource(R.drawable.deck_5);
                 } else if (GestochenGegner > 8) {
-                    stichDeckG.setImageResource(R.drawable.deck_4);
+                    stichDeckG.setImageResource(R.drawable.deck_4);*/
                 } else if (GestochenGegner > 6) {
-                    stichDeckG.setImageResource(R.drawable.deck_3);
+                    stichDeckG.setImageResource(R.drawable. deck_3_v);
                     stichDeckG.setVisibility(View.VISIBLE);
                 } else if (GestochenGegner > 4) {
-                    stichDeckG.setImageResource(R.drawable.deck_2);
+                    stichDeckG.setImageResource(R.drawable.deck_2_v);
                     stichDeckG.setVisibility(View.VISIBLE);
                 } else if (GestochenGegner > 2) {
                     stichDeckG.setVisibility(View.VISIBLE);
-                    stichDeckG.setImageResource(R.drawable.deck);
+                    stichDeckG.setImageResource(R.drawable.deck_v);
                 }
             }
             else if(istdran == 1) {
@@ -808,6 +808,22 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                     stichK1.setImageResource(gegnerischeKarte.getImageResourceId());
                     stichK1.setVisibility(View.VISIBLE);
                 }
+                if(stapelKartenAnz==0) {
+                    imageView_deck.setVisibility(View.INVISIBLE);
+
+                }else if ((stapelKartenAnz<=2) && (stapelKartenAnz>0))
+                    imageView_deck.setImageResource(R.drawable.deck);
+                else if((stapelKartenAnz<=4) && (stapelKartenAnz>2))
+                    imageView_deck.setImageResource(R.drawable.deck_2);
+                else if((stapelKartenAnz<=6) && (stapelKartenAnz>4))
+                    imageView_deck.setImageResource(R.drawable.deck_3);
+                else if((stapelKartenAnz<=8) && (stapelKartenAnz>6))
+                    imageView_deck.setImageResource(R.drawable.deck_4);
+                else if((stapelKartenAnz<=10) && (stapelKartenAnz>8))
+                    imageView_deck.setImageResource(R.drawable.deck_5);
+                else
+                    imageView_deck.setImageResource(R.drawable.deck_full);
+
             }
 
             punkteAktualisieren();

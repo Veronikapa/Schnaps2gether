@@ -976,7 +976,6 @@
         <Button
             android:layout_width="90dp"
             android:layout_height="28dp"
-            android:text="Abbrechen"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"
             android:background="@drawable/beiger_button"
@@ -986,7 +985,8 @@
             android:onClick="abbrechenSpiel"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:text="@string/abbrechen" />
     </LinearLayout>
 
 

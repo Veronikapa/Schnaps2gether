@@ -1,0 +1,870 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="10dp" android:orientation="vertical"
+    android:paddingTop="0dp"
+    android:paddingBottom="10dp"
+    tools:context=".Spielfeld"
+    android:gravity="center_vertical"
+    android:weightSum="1"
+    android:background="@drawable/holz_hintergrund">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="@dimen/anzeigeG_breite"
+        android:layout_height="@dimen/anzeigeG_hoehe"
+        android:id="@+id/l_NameGegner2"
+        android:gravity="center"
+        android:background="@drawable/name_plakette"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/txt_NameGegner2"
+            android:text="@string/spieler2" android:layout_width="wrap_content"
+
+            android:layout_height="51dp"
+            android:gravity="top|center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:layout_alignBottom="@+id/txt_PunkteGegner2"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingRight="5dp"
+            style="@style/text_buttonsSpielfeld" />
+
+        <ImageView
+            android:layout_width="@dimen/auge"
+            android:layout_height="@dimen/auge"
+            android:id="@+id/i_augeG1"
+            android:background="@drawable/auge"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="5dp"
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/l_ButtonLeiste"
+        android:weightSum="1"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/l_Punkteanzeige"
+        android:layout_toLeftOf="@+id/l_StichAnzeige"
+        android:layout_toStartOf="@+id/l_StichAnzeige">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="86dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="center">
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P:"
+                android:id="@+id/textView2" />
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="66"
+                android:id="@+id/textView3"
+                android:layout_gravity="top" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/main_button20er"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_hoehe"
+            android:text="@string/button20er"
+            style="@style/text_buttonsSpielfeld"
+            android:onClick="popup20er"
+            android:layout_gravity="center"
+
+            android:background="@drawable/beiger_button"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/main_button40er"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_hoehe"
+            android:text="@string/button40er"
+            android:onClick="ansagen40er"
+            style="@style/text_buttonsSpielfeld"
+            android:layout_gravity="center"
+            android:background="@drawable/beiger_button"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false" />
+
+        <ImageButton
+            android:layout_width="@dimen/button_breite"
+            android:layout_height="@dimen/button_hoehe"
+            android:id="@+id/button_kartenSchaun"
+            android:background="@drawable/schummeln1"
+            android:layout_toEndOf="@+id/l_NameGegner2"
+            android:onClick="kartenSchauen"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center" />
+
+        <ImageButton
+            android:layout_width="@dimen/button_breite"
+            android:layout_height="@dimen/button_hoehe"
+            android:id="@+id/btn_kartenTauschen"
+            android:background="@drawable/schummelnbutton2"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/l_abgelegteKarten"
+        android:padding="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:touchscreenBlocksFocus="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/l_NameGegner2"
+        android:layout_above="@+id/l_eigeneKarten">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="35dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_eigeneKarte"
+                android:scaleType="fitXY"
+                android:clickable="false"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/txt_NameGegner2"
+                android:layout_toStartOf="@+id/txt_NameGegner2"
+                android:cropToPadding="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="35dp"
+            android:layout_marginBottom="35dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karteGegner"
+                android:scaleType="fitXY"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/txt_NameGegner2"
+                android:layout_toEndOf="@+id/txt_NameGegner2" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:id="@+id/l_eigeneKarten"
+        android:paddingRight="30dp"
+        android:layout_above="@+id/l_ButtonLeiste"
+        android:layout_toRightOf="@+id/l_Punkteanzeige"
+        android:layout_toLeftOf="@+id/l_StichAnzeige"
+        android:layout_toStartOf="@+id/l_StichAnzeige">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="100dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karte1"
+                android:clickable="true"
+                android:onClick="karte1OnClick"
+                android:scaleType="fitXY"
+                android:background="@android:color/transparent"
+                android:visibility="visible"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:layout_gravity="left|bottom|center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="50dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karte2"
+                android:clickable="true"
+                android:onClick="karte2OnClick"
+                android:scaleType="fitXY"
+                android:background="@android:color/transparent"
+                android:visibility="visible"
+                android:layout_gravity="bottom|center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="0dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karte3"
+                android:clickable="true"
+                android:onClick="karte3OnClick"
+                android:scaleType="fitXY"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom|center"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karte4"
+                android:scaleType="fitXY"
+                android:padding="0dp"
+                android:clickable="true"
+                android:onClick="karte4OnClick"
+                android:background="@android:color/transparent"
+                android:visibility="visible"
+                android:paddingLeft="0dp"
+                android:layout_gravity="bottom|center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_karte5"
+                android:scaleType="fitXY"
+                android:clickable="true"
+                android:onClick="karte5OnClick"
+                android:background="@android:color/transparent"
+                android:visibility="visible"
+                android:layout_gravity="bottom|center" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/l_Deck"
+        android:layout_above="@+id/l_eigeneKarten"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:id="@+id/trumpfIconLayout"
+            android:layout_above="@+id/l_Deck"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageButton
+                android:layout_width="@dimen/trumpfIcon"
+                android:layout_height="@dimen/trumpfIcon"
+                android:id="@+id/imageView_trumpfIcon"
+                android:scaleType="fitXY"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                android:layout_gravity="top|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_trumpf"
+                android:longClickable="true"
+                android:padding="0dp"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom"
+                android:rotation="90"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="0.20"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deckLayout"
+            android:layout_gravity="left|center_vertical">
+
+            <ImageView
+                android:layout_width="@dimen/deck_breite"
+                android:layout_height="@dimen/deck_hoehe"
+                android:id="@+id/imageView_deck"
+                android:background="@drawable/deck_full"
+                android:scaleType="fitXY"
+                android:layout_gravity="left|center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/main_buttonZ"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_hoehe"
+                android:text="@string/buttonZ"
+                android:onClick="zudrehen"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/beiger_button"
+                android:textAllCaps="false"
+                android:elegantTextHeight="true"
+                android:layout_gravity="left"
+                style="@style/text_buttonsSpielfeld" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/main_buttonTtauschen"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_hoehe"
+                android:text="tauschen"
+                style="@style/text_buttonsSpielfeld"
+                android:onClick="trumpfkarteTauschen"
+                android:singleLine="false"
+                android:textColor="@android:color/white"
+                android:background="@drawable/beiger_button"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="230dp"
+        android:layout_gravity="right|center_vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/l_StichAnzeige">
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="210dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK16"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="180dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK15"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="150dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK14"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="120dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK13"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="90dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK12"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK11"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical|right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK10"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK9"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <!--beginn untere reihee  -->
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="210dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK8"
+                android:background="@android:color/transparent"
+                android:layout_gravity="left|bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="180dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK7"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="150dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK6"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="120dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK5"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="90dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK4"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="60dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK3"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK2"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right">
+
+            <ImageView
+                android:layout_width="@dimen/stich_breite"
+                android:layout_height="@dimen/stich_hoehe"
+                android:id="@+id/stichK1"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
+
+
+
+
+
+        <!--        <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/stichGegnerKarteI"
+                    android:background="@android:color/transparent"
+                    android:rotation="-40"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="5dp" />
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/stichEigeneKarteI"
+                    android:cropToPadding="true"
+                    android:background="@android:color/transparent"
+                    android:rotation="40"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginBottom="5dp" />
+
+                <ImageView
+                    android:layout_width="65dp"
+                    android:layout_height="95dp"
+                    android:id="@+id/stichDeckI"
+                    android:hapticFeedbackEnabled="false"
+                    android:background="@drawable/deck"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="invisible"
+                    android:rotation="90"
+                    android:layout_marginTop="35dp" />-->
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:id="@+id/l_StichGegner1"
+        android:layout_above="@+id/l_eigeneKarten"
+        android:layout_alignRight="@+id/linearLayout2"
+        android:layout_alignEnd="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout2">
+
+        <ImageView
+            android:layout_width="@dimen/karte_breite"
+            android:layout_height="@dimen/karte_hoehe"
+            android:id="@+id/stichEigeneKarteG"
+            android:background="@android:color/transparent"
+            android:rotation="-40"
+            android:layout_gravity="center"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="@dimen/karte_breite"
+            android:layout_height="@dimen/karte_hoehe"
+            android:id="@+id/stichGegnerKarteG"
+            android:cropToPadding="true"
+            android:background="@android:color/transparent"
+            android:rotation="40"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_hoehe"
+                android:layout_height="@dimen/karte_breite"
+                android:id="@+id/stichDeckG"
+                android:background="@drawable/deck"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:layout_marginBottom="25dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner"
+        android:id="@+id/l_Punkteanzeige"
+        android:layout_alignBottom="@+id/l_StichAnzeige"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bummerl:"
+                android:id="@+id/txt_Bummerl"
+                android:layout_column="0"
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler2"
+                android:id="@+id/txt_BummerlNameG1"
+                android:layout_column="0"
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_BummerlZahlG1"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp"
+                style="@style/text_punkteanzeige" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/spieler1"
+                android:id="@+id/txt_BummerlNameI"
+                android:layout_column="0"
+                android:textColor="@android:color/white"
+                style="@style/text_punkteanzeige" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:id="@+id/txt_PunkteZahl"
+                android:layout_column="2"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="5dp"
+                style="@style/text_punkteanzeige" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:id="@+id/linearLayout2"
+        android:baselineAligned="false"
+        android:layout_alignParentTop="true">
+
+        <Button
+            style="@style/text_buttonsSpielfeld"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_hoehe"
+            android:text="@string/abbrechen"
+            android:id="@+id/btn_abbrechen"
+            android:background="@drawable/beiger_button"
+            android:elegantTextHeight="false"
+            android:textAllCaps="false"
+            android:onClick="abbrechenSpiel"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/l_StichGegner1"
+            android:layout_alignBottom="@+id/button_kartenSchaun"
+            android:layout_gravity="top|right" />
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+

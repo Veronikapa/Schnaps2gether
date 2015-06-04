@@ -13,7 +13,7 @@
         <item name="android:layout_margin" >5dp</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
-        <item name="android:textSize" >12sp</item>
+        <item name="android:textSize" >10sp</item>
         <item name="android:textStyle" >bold</item>
         <item name="android:shadowColor" >#000000</item>
         <item name="android:shadowDx" >2</item>
@@ -27,7 +27,7 @@
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >wrap_content</item>
         <item name="android:textColor" >#ffffff</item>
-        <item name="android:textSize" >12sp</item>
+        <item name="android:textSize" >10sp</item>
         <item name="android:shadowColor" >#000000</item>
         <item name="android:shadowDx" >2</item>
         <item name="android:shadowDy" >2</item>
@@ -36,25 +36,7 @@
 
     </style>
 
-    <style name="text_buttonsLobby_normal" >
-        <item name="android:layout_width" >fill_parent</item>
-        <item name="android:layout_height" >wrap_content</item>
-        <item name="android:textColor" >#ffffff</item>
-        <item name="android:gravity" >center</item>
-        <item name="android:layout_margin" >5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:textSize" >14sp</item>
-        <item name="android:textStyle" >bold</item>
-        <item name="android:shadowColor" >#000000</item>
-        <item name="android:shadowDx" >2</item>
-        <item name="android:shadowDy" >2</item>
-        <item name="android:shadowRadius" >4</item>
-
-
-    </style>
-
-    <style name="text_buttonsLobby_small" >
+    <style name="text_buttonsLobby" >
         <item name="android:layout_width" >fill_parent</item>
         <item name="android:layout_height" >wrap_content</item>
         <item name="android:textColor" >#ffffff</item>
@@ -71,40 +53,7 @@
 
 
     </style>
-    <style name="text_buttonsLobby_large" >
-        <item name="android:layout_width" >fill_parent</item>
-        <item name="android:layout_height" >wrap_content</item>
-        <item name="android:textColor" >#ffffff</item>
-        <item name="android:gravity" >center</item>
-        <item name="android:layout_margin" >5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:textSize" >18sp</item>
-        <item name="android:textStyle" >bold</item>
-        <item name="android:shadowColor" >#000000</item>
-        <item name="android:shadowDx" >2</item>
-        <item name="android:shadowDy" >2</item>
-        <item name="android:shadowRadius" >4</item>
 
-
-    </style>
-    <style name="text_buttonsLobby_xlarge" >
-        <item name="android:layout_width" >fill_parent</item>
-        <item name="android:layout_height" >wrap_content</item>
-        <item name="android:textColor" >#ffffff</item>
-        <item name="android:gravity" >center</item>
-        <item name="android:layout_margin" >5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:textSize" >28sp</item>
-        <item name="android:textStyle" >bold</item>
-        <item name="android:shadowColor" >#000000</item>
-        <item name="android:shadowDx" >2</item>
-        <item name="android:shadowDy" >2</item>
-        <item name="android:shadowRadius" >4</item>
-
-
-    </style>
 
     <style name="header_Lobby">
         <item name="android:layout_width" >fill_parent</item>
