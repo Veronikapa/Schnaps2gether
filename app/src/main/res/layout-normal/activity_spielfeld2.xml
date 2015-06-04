@@ -125,6 +125,7 @@
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/btn_kartenTauschen"
             android:background="@drawable/schummelnbutton2"
+            android:onClick="kartenTauschen"
             android:layout_marginRight="5dp"
             android:layout_gravity="center" />
 

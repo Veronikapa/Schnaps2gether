@@ -926,6 +926,16 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         finish();
     }
 
+    public void KartenSchauen(View view)
+    {
+        //TODO VP
+    }
+
+    public void KartenTauschen(View view)
+    {
+        //TODO VP
+    }
+
     class Zugende implements Runnable {
 
         @Override

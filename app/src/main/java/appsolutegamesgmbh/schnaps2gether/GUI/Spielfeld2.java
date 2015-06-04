@@ -67,6 +67,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private Karte karte5;
     private Karte gegnerischeKarte;
     private Karte trumpfkarte;
+
+    private boolean schummelnAktiv = false;
+    private int handkartenNummerZumSchummeln;
     /*private TextView punkteGegner;
     private TextView punkteSelbst;
     private TextView txtSelbst;
@@ -94,9 +97,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     private ImageView stichK16;
 
     private int istdran;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,26 +190,82 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     private void zugAusführen(int i) {
-        final Karte k = selbst.Hand.get(i);
-        buttonsNichtKlickbar();
-        spiel.Auspielen(k, selbst);
-        gespielteKarteEntfernen(i);
 
-        imageView_eigeneKarte.setImageResource(k.getImageResourceId());
-
-        if (gegnerischeKarte == null) {
-            gegnerischerZug(karte1);
+        if(schummelnAktiv)
+        {
+            handkartenNummerZumSchummeln = i;
+            try {
+                karteTauschenPopupZeigen();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        spiel.ZugAuswerten(k, gegnerischeKarte, istdran);
 
-        if(selbst.isIstdran())
-            istdran = 0;
-        else
-            istdran = 1;
+        else {
+            final Karte k = selbst.Hand.get(i);
+            buttonsNichtKlickbar();
+            spiel.Auspielen(k, selbst);
+            gespielteKarteEntfernen(i);
 
-        // Execute some code after 2 seconds have passed
-        Handler handler = new Handler();
-        handler.postDelayed(new Zugende(), 2000);
+            imageView_eigeneKarte.setImageResource(k.getImageResourceId());
+
+            if (gegnerischeKarte == null) {
+                gegnerischerZug(karte1);
+            }
+            spiel.ZugAuswerten(k, gegnerischeKarte, istdran);
+
+            if (selbst.isIstdran())
+                istdran = 0;
+            else
+                istdran = 1;
+
+            // Execute some code after 2 seconds have passed
+            Handler handler = new Handler();
+            handler.postDelayed(new Zugende(), 2000);
+        }
+    }
+
+    //Öffnet Popup mit allen bereits gestochenen Karten des Spielers
+    private void karteTauschenPopupZeigen() throws InterruptedException {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        int gestocheneKartenAnz = spiel.getS1().Gestochen.size();
+
+        if(gestocheneKartenAnz == 0)
+        {
+            Toast.makeText(this.getApplicationContext(),"Schummeln nicht möglich - keine Stiche vorhanden",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog alert = null;
+        for (int i=0;i<gestocheneKartenAnz;i++) {
+                Karte k = spiel.getS1().Gestochen.get(i);
+
+                final ImageView imageViewK = new ImageView(this);
+                imageViewK.setClickable(true);
+                imageViewK.setId(i);
+                imageViewK.setImageResource(k.getImageResourceId());
+                layout.addView(imageViewK);
+                imageViewK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int kartenNummerGestochen = imageViewK.getId();
+                        Karte karteHandTauschen = spiel.getS1().Hand.get(handkartenNummerZumSchummeln);
+
+                        spiel.getS1().Hand.set(handkartenNummerZumSchummeln,spiel.getS1().Gestochen.get(kartenNummerGestochen));
+                        spiel.getS1().Gestochen.set(kartenNummerGestochen,karteHandTauschen);
+                        handAktualisieren();
+                        schummelnAktiv= false;
+                    }
+                });
+        }
+        builder.setView(layout);
+        builder.setInverseBackgroundForced(true);
+        alert=builder.create();
+        alert.show();
     }
 
     private void eigenerZug() {
@@ -284,7 +340,6 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
     }
 
     private void stichAktualisieren() {
-
 
         int stichAnzahl = spiel.getS1().Gestochen.size();
         for (int i=0;i<16;i++) {
@@ -606,8 +661,32 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
                 }
             });
 
-            handler.postDelayed(runnable, 3000);
+            handler.postDelayed(runnable, 1000);
         }
+    }
+
+    public void kartenTauschen(View view)
+    {
+        //3 Sekunden Wartezeit damit Gegner abwähren kann --> Bei Computer Zufallszahl 0 oder 1
+        // 0... Schummeln erlaubt, sonst Schummeln nicht erlaubt.
+        double schummelnAbgewehrt = Math.round(Math.random() * 2); // *2, da sonst immer auf 0 gerundet wird!
+
+        //Schummeln wurde per Zufall abgewehrt, Spieler darf nicht in die Karten des Gegners schauen
+        if(schummelnAbgewehrt >= 1.0) {
+            Toast.makeText(this.getApplicationContext(), "Schummelversuch wurde abgewehrt.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        schummelnAktiv = true;
+        Toast.makeText(this.getApplicationContext(),"Wähle Handkarte zum Tauschen",Toast.LENGTH_SHORT).show();
+    }
+
+    public void abbrechenSpiel(View view)
+    {
+        Intent i = new Intent(this, Startmenue.class);
+        startActivity(i);
+        onStop();
+        finish();
     }
 
     class Zugende implements Runnable {
