@@ -18,21 +18,21 @@ public class Rufspiel {
     public Rufspiel(String spiel) throws WrongGameException
     {
         this.spiel = spiel;
-        if(spiel == "normal")
+        if(spiel.equals("normal"))
             this.punkte = 3;
-        else if(spiel == "Schnapser")
+        else if(spiel.equals("Schnapser"))
             this.punkte = 6;
-        else if(spiel == "Land")
+        else if(spiel.equals("Land"))
             this.punkte = 9;
-        else if(spiel == "Kontraschnapser")
+        else if(spiel.equals("Kontraschnapser"))
             this.punkte = 12;
-        else if(spiel == "Bauernschnapser")
+        else if(spiel.equals("Bauernschnapser"))
             this.punkte = 12;
-        else if(spiel == "Kontrabauernschnapser")
+        else if(spiel.equals("Kontrabauernschnapser"))
             this.punkte = 24;
-        else if(spiel == "Herrenjodler")
+        else if(spiel.equals("Herrenjodler"))
             this.punkte = 24;
-        else if(spiel == "Farbenjodler")
+        else if(spiel.equals("Farbenjodler"))
             this.punkte = 18;
         else
         {

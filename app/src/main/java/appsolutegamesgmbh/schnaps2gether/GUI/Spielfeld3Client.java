@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl3;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Rufspiel;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
 
@@ -55,6 +56,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String TRUMPFANSAGEN = "14";
     private static final String SPIEL = "15";
     private static final String AUFGEDECKT = "16";
+    private static final String SPIELANSAGEN = "17";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -90,6 +92,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     private static Button button20er;
     private static Button button40er;
+    private static ArrayList<String> spieleAnsagbar;
 
     private static Button buttonTalonTauschen;
     private static Button buttonSpielAnsagen;
@@ -134,6 +137,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static int p1;
     private static int p2;
 
+    private static Handler handler = new Handler();
 
 
     private static ImageView stichK1;
@@ -180,15 +184,15 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
-        imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte6);
+        imageView_karte6 = (ImageView) findViewById(R.id.imageView_karte6);
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
-        buttonSpielAnsagen = (Button) findViewById(R.id.main_buttonSpielAnsagen);
+        buttonSpielAnsagen = (Button) findViewById(R.id.cmd_rufspiel);
         buttonTrumpfansagen = (Button) findViewById(R.id.cmd_trumpfansagen);
-        buttonFlecken = (Button) findViewById(R.id.main_buttonFlecken);
-        buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
-        buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
+        buttonFlecken = (Button) findViewById(R.id.cmd_flecken);
+        buttonGegenflecken = (Button) findViewById(R.id.cmd_gegenflecken);
+        buttonWeiter = (Button) findViewById(R.id.cmd_weiter);
         buttonTalonTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
 
@@ -208,7 +212,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         handkartenImages.add(2, imageView_karte3);
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
-        handkartenImages.add(4, imageView_karte6);
+        handkartenImages.add(5, imageView_karte6);
 
         stichK1= (ImageView) findViewById(R.id.stichK1);
         stichK2= (ImageView) findViewById(R.id.stichK2);
@@ -275,6 +279,66 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
+    public void popupSpielAnsagen(final View view) {
+        PopupMenu popup = new PopupMenu(Spielfeld3Client.this, buttonSpielAnsagen);
+        popup.inflate(R.menu.popup_menu_spiel_ansagen);
+        MenuItem schnapser = (MenuItem) popup.getMenu().getItem(0);
+        MenuItem land = (MenuItem) popup.getMenu().getItem(1);
+        MenuItem kontraschnapser = (MenuItem) popup.getMenu().getItem(2);
+        MenuItem bauernschnapser = (MenuItem) popup.getMenu().getItem(3);
+        MenuItem kontrabauernschnapser = (MenuItem) popup.getMenu().getItem(4);
+        MenuItem farbenjodler = (MenuItem) popup.getMenu().getItem(5);
+        MenuItem herrenjodler = (MenuItem) popup.getMenu().getItem(6);
+        schnapser.setVisible(false);
+        land.setVisible(false);
+        kontraschnapser.setVisible(false);
+        bauernschnapser.setVisible(false);
+        kontrabauernschnapser.setVisible(false);
+        farbenjodler.setVisible(false);
+        herrenjodler.setVisible(false);
+        try {
+            if (spieleAnsagbar.get(0).equals("1")) schnapser.setVisible(true);
+            if (spieleAnsagbar.get(1).equals("1")) land.setVisible(true);
+            if (spieleAnsagbar.get(2).equals("1")) kontraschnapser.setVisible(true);
+            if (spieleAnsagbar.get(3).equals("1")) bauernschnapser.setVisible(true);
+            if (spieleAnsagbar.get(4).equals("1")) kontrabauernschnapser.setVisible(true);
+        } catch (Exception e) {
+
+        }
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                try {
+                    switch (menuItem.getTitle().toString()) {
+                        case "Schnapser":
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "Schnapser" + ":" + SpielerID).getBytes());
+                            break;
+                        case "Land":
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "Land" + ":" + SpielerID).getBytes());
+                            break;
+                        case "Kontraschnapser":
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "Kontraschnapser" + ":" + SpielerID).getBytes() );
+                            break;
+                        case "Bauernschnapser":
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "Bauernschnapser" + ":" + SpielerID).getBytes());
+                            break;
+                        case "Kontrabauernschnapser":
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "Kontrabauernschnapser" + ":" + SpielerID).getBytes());
+                            break;
+                        default: return false;
+                    }
+                } catch (Exception e) {
+
+                }
+
+                buttonSpielAnsagen.setVisibility(view.INVISIBLE);
+                buttonWeiter.setVisibility(view.INVISIBLE);
+                return true;
+            }
+        });
+        popup.show();
+    }
+
 
     public void popupTrumpfansagen(View view) {
         PopupMenu popup = new PopupMenu(Spielfeld3Client.this, buttonTrumpfansagen);
@@ -282,7 +346,36 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                return false;
+                try {
+                    switch (menuItem.getTitle().toString()) {
+                        case "Herz":
+                            imageView_trumpfIcon.setImageResource(Karte.getIconResourceId("Herz"));
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":Herz").getBytes());
+                            break;
+                        case "Karo":
+                            imageView_trumpfIcon.setImageResource(Karte.getIconResourceId("Karo"));
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":Karo").getBytes());
+                            break;
+                        case "Pik":
+                            imageView_trumpfIcon.setImageResource(Karte.getIconResourceId("Pik"));
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":Pik").getBytes());
+                            break;
+                        case "Kreuz":
+                            imageView_trumpfIcon.setImageResource(Karte.getIconResourceId("Kreuz"));
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":Kreuz").getBytes());
+                            break;
+                        default: return false;
+                    }
+                } catch (Exception e) {
+
+                }
+
+                buttonWeiter.setText("Weiter");
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.4f);
+                buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+                buttonTrumpfansagen.setEnabled(false);
+                return true;
             }
         });
         popup.show();
@@ -364,7 +457,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
-        Handler handler = new Handler();
+        handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -374,6 +467,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         return true;
 
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -399,14 +495,23 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case TRUMPFANSAGEN:
                 buttonWeiter.setText("Aufdecken");
+                buttonTrumpfansagen.setEnabled(true);
                 buttonTrumpfansagen.setVisibility(View.VISIBLE);
                 break;
-            case TRUMPFKARTE: trumpfkarte = new Karte(message.split(":")[1]);
+            case TRUMPFKARTE:
+                trumpfkarte = new Karte(message.split(":")[1]);
+                imageView_trumpf.setVisibility(View.VISIBLE);
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
-                imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Ok wenn Icon hier auch geändert wird?
+                imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView_trumpf.setVisibility(View.INVISIBLE);
+                    }
+                }, 2000);
                 break;
             case HANDKARTEN:
-                if(messageParts[3] == SpielerID) {
+                if(messageParts[3].equals(SpielerID)) {
                     String[] hand = messageParts[1].substring(1).split(",");
                     String[] spielbar = messageParts[2].substring(1).split(" ");
                     selbst.Hand = new ArrayList<Karte>();
@@ -429,7 +534,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
-                else if(SpielerID == "2") {
+                else if(SpielerID.equals("2")) {
                     if(messageParts[2] == "0") {
                         gegnerischeKarte1 = new Karte(message.substring(2));
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
@@ -462,7 +567,20 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                     eigenerZug();
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
-
+            case SPIELANSAGEN:
+                if(messageParts[2].equals(SpielerID)) {
+                    spieleAnsagbar = new ArrayList<String>();
+                    for (String ansagbar : messageParts[1].split(" ")) {
+                        spieleAnsagbar.add(ansagbar);
+                    }
+                    buttonSpielAnsagen.setVisibility(View.VISIBLE);
+                    buttonWeiter.setVisibility(View.VISIBLE);
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                }
+                break;
+            case SPIEL:
+                Toast.makeText(appContext, messageParts[1] + " wird gespielt", Toast.LENGTH_SHORT).show();
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT20ER: String farbe = message.substring(2);
@@ -579,6 +697,14 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         if (buttonWeiter.getText() == "Aufdecken"){
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
+            buttonWeiter.setText("Weiter");
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.4f);
+            buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+            buttonTrumpfansagen.setEnabled(false);
+        }
+        else{
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "weiter" + ":" + SpielerID).getBytes());
         }
     }
 
@@ -660,12 +786,16 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karte4.setAlpha(0.6f);
         imageView_karte5.setEnabled(false);
         imageView_karte5.setAlpha(0.6f);
+        imageView_karte6.setEnabled(false);
+        imageView_karte6.setAlpha(0.6f);
 
 
         button20er.setEnabled(false);
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
+        buttonWeiter.setEnabled(false);
+        buttonWeiter.setAlpha(0.4f);
 
     }
 

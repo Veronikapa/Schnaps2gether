@@ -27,6 +27,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Rufspiel;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel3;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
+import appsolutegamesgmbh.schnaps2gether.DataStructure.WrongGameException;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogListener, PopupMenu.OnMenuItemClickListener,
@@ -54,6 +55,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String TRUMPFANSAGEN = "14";
     private static final String SPIEL = "15";
     private static final String AUFGEDECKT = "16";
+    private static final String SPIELANSAGEN = "17";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -78,6 +80,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_karteGegner1;
     private static ImageView imageView_karteGegner2;
     private static ImageView imageView_trumpfIcon;
+    private static String trumpffarbe;
 
     private static Button button20er;
     private static Button button40er;
@@ -119,6 +122,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Boolean angesagt;
     private static String trumpf;
     private static int siegerID;
+    private static String spieleAnsagbar;
 
 
     private static ImageView stichK1;
@@ -137,6 +141,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView stichK14;
     private static ImageView stichK15;
     private static ImageView stichK16;
+
+    private static Handler handler = new Handler();
+
+    private static String[] messageParts;
 
 
     @Override
@@ -177,11 +185,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
-        buttonSpielAnsagen = (Button) findViewById(R.id.main_buttonSpielAnsagen);
+        buttonSpielAnsagen = (Button) findViewById(R.id.cmd_rufspiel);
         buttonTrumpfansagen = (Button) findViewById(R.id.cmd_trumpfansagen);
-        buttonFlecken = (Button) findViewById(R.id.main_buttonFlecken);
-        buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
-        buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
+        buttonFlecken = (Button) findViewById(R.id.cmd_flecken);
+        buttonGegenflecken = (Button) findViewById(R.id.cmd_gegenflecken);
+        buttonWeiter = (Button) findViewById(R.id.cmd_weiter);
         buttonTalonTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
@@ -235,7 +243,10 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void spielStart() {
-
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
         try {
             spiel = new Spiel3(bummerl.getAnzahlSpiele());
         }
@@ -269,7 +280,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
         //handKartenKlickbar();
-
+        buttonsNichtKlickbar();
         handAktualisieren();
 
         if(bummerl.getAnzahlSpiele() == 0) {
@@ -280,6 +291,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             gegnerischeKarte1 = null;
             gegnerischeKarte2 = null;
 
+            buttonWeiter.setEnabled(true);
+            buttonWeiter.setAlpha(1f);
             buttonWeiter.setText("Aufdecken");
             buttonTrumpfansagen.setVisibility(View.VISIBLE);
         }
@@ -288,8 +301,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             punkteSelbst.setText("0");
 
             if(bummerl.getAnzahlSpiele()%3 == 0){
+                buttonWeiter.setEnabled(true);
+                buttonWeiter.setAlpha(1f);
                 buttonWeiter.setText("Aufdecken");
                 buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                buttonTrumpfansagen.setEnabled(true);
             }
             else if(bummerl.getAnzahlSpiele()%3 == 1) {
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFANSAGEN + ":1").getBytes());
@@ -301,6 +317,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
         //eigenerZug();
+            }
+        }, 2000);
 
     }
 
@@ -344,7 +362,53 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                return false;
+                try {
+                    switch (menuItem.getTitle().toString()) {
+                        case "Herz":
+                            trumpffarbe = "Herz";
+                            break;
+                        case "Karo":
+                            trumpffarbe = "Karo";
+                            break;
+                        case "Pik":
+                            trumpffarbe = "Pik";
+                            break;
+                        case "Kreuz":
+                            trumpffarbe = "Kreuz";
+                            break;
+                        default: return false;
+                    }
+                } catch (Exception e) {
+
+                }
+
+                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":"+trumpffarbe).getBytes());
+                spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
+
+                handAktualisieren();
+
+                buttonWeiter.setText("Weiter");
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.4f);
+                buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+                buttonTrumpfansagen.setEnabled(false);
+
+                if(bummerl.getAnzahlSpiele()%3 == 0){
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                    buttonSpielAnsagen.setVisibility(View.VISIBLE);
+                }
+                else if(bummerl.getAnzahlSpiele()%3 == 1) {
+                    andererSpielerKannSpielAnsagen(gegner1);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+                }
+                else{
+                    andererSpielerKannSpielAnsagen(gegner2);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
+                }
+
+                return true;
             }
         });
         popup.show();
@@ -373,8 +437,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             if (spiel.DarfSpielAnsagen(new Rufspiel("Kontraschnapser"), selbst)) kontraschnapser.setVisible(true);
             if (spiel.DarfSpielAnsagen(new Rufspiel("Bauernschnapser"), selbst)) bauernschnapser.setVisible(true);
             if (spiel.DarfSpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst)) kontrabauernschnapser.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Farbenjodler"), selbst)) farbenjodler.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Herrenjodler"), selbst)) herrenjodler.setVisible(true);
         } catch (Exception e) {
 
         }
@@ -384,24 +446,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 try {
                     switch (menuItem.getTitle().toString()) {
                         case "Schnapser": spiel.SpielAnsagen(new Rufspiel("Schnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel()).getBytes());
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
                             break;
                         case "Land": spiel.SpielAnsagen(new Rufspiel("Land"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":1").getBytes());
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
                             break;
                         case "Kontraschnapser": spiel.SpielAnsagen(new Rufspiel("Kontraschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel()).getBytes());
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
                             break;
                         case "Bauernschnapser": spiel.SpielAnsagen(new Rufspiel("Bauernschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel()).getBytes());
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
                             break;
                         case "Kontrabauernschnapser": spiel.SpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel()).getBytes());
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
                             break;
                         default: return false;
                     }
@@ -411,10 +468,41 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
                 buttonWeiter.setVisibility(view.INVISIBLE);
+
+                if (bummerl.getAnzahlSpiele()%3 == 1) {
+                    Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+                } else {
+                    andererSpielerKannSpielAnsagen(gegner1);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+                }
                 return true;
             }
         });
         popup.show();
+    }
+
+    private static void andererSpielerKannSpielAnsagen(Spieler andererSpieler) {
+        spieleAnsagbar = "";
+        try {
+            if (spiel.DarfSpielAnsagen(new Rufspiel("Schnapser"), andererSpieler))
+                spieleAnsagbar += "1 ";
+            else spieleAnsagbar += "0 ";
+            if (spiel.DarfSpielAnsagen(new Rufspiel("Land"), andererSpieler)) spieleAnsagbar += "1 ";
+            else spieleAnsagbar += "0 ";
+            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontraschnapser"), andererSpieler))
+                spieleAnsagbar += "1 ";
+            else spieleAnsagbar += "0 ";
+            if (spiel.DarfSpielAnsagen(new Rufspiel("Bauernschnapser"), andererSpieler))
+                spieleAnsagbar += "1 ";
+            else spieleAnsagbar += "0 ";
+            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontrabauernschnapser"), andererSpieler))
+                spieleAnsagbar += "1";
+            else spieleAnsagbar += "0";
+        } catch (Exception e) {
+
+        }
+
     }
 
     public void weiterOnClick(View view) {
@@ -444,6 +532,23 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 buttonFlecken.setVisibility(View.INVISIBLE);
             }
         }*/
+
+        if (buttonWeiter.getText() == "Aufdecken"){
+            aufdrehen();
+            //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
+
+            buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+            buttonTrumpfansagen.setEnabled(false);
+        }
+        else {
+            if (bummerl.getAnzahlSpiele()%3 == 1) {
+                Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+            } else {
+                andererSpielerKannSpielAnsagen(gegner1);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+            }
+        }
+
     }
 
     @Override
@@ -501,9 +606,36 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
-            return false;
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.herz_20er:
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
+                break;
+            case R.id.karo_20er:
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
+                break;
+            case R.id.pik_20er:
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
+                break;
+            case R.id.kreuz_20er:
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
+                break;
+            default:
+                return false;
         }
+        button20er.setEnabled(false);
+        button20er.setAlpha(0.4f);
+        button40er.setEnabled(false);
+        button40er.setAlpha(0.4f);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handKartenKlickbar();
+            }
+        }, 1000);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -522,6 +654,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
         String message = new String(payload);
+        messageParts = message.split(":");
         switch (((message.split(":")[0]))) {
             case KARTEGESPIELT:
                 if(message.split(":")[2] == "1") {
@@ -547,6 +680,48 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 }
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
+            case SPIEL:
+                if(messageParts[2].equals("2")){
+                    try {
+                        if(!(messageParts[1].equals("weiter"))) {
+                            spiel.SpielAnsagen(new Rufspiel(messageParts[1]), gegner2);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                    } catch (WrongGameException e) {
+                        e.printStackTrace();
+                    }
+                    if(!(bummerl.getAnzahlSpiele()%3 == 0)) {
+                        buttonWeiter.setEnabled(true);
+                        buttonWeiter.setAlpha(1f);
+                        buttonSpielAnsagen.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else if(messageParts[2].equals("1")){
+                    try {
+                        if(!(messageParts[1].equals("weiter"))) {
+                            spiel.SpielAnsagen(new Rufspiel(messageParts[1]), gegner1);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                            Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                    } catch (WrongGameException e) {
+                        e.printStackTrace();
+                    }
+                    if(!(bummerl.getAnzahlSpiele()%3 == 2)) {
+
+                        andererSpielerKannSpielAnsagen(gegner2);
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
+                    }
+                    else{
+                        Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
             case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
                 punkteAktualisieren();
                 if (spiel.istSpielzuEnde(bummerl)) {
@@ -566,11 +741,15 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 angesagt = true;
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
+            case TRUMPFFARBE:
+                trumpffarbe = message.split(":")[1];
+                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
+                break;
             case TALONGETAUSCHT:
                 Toast.makeText(appContext, "Talon ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             case AUFGEDECKT:
-
+                aufdrehen();
                 break;
             default: break;
         }
@@ -643,23 +822,34 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     private void buttonsNichtKlickbar() {
         imageView_karte1.setEnabled(false);
+        imageView_karte1.setAlpha(0.6f);
         imageView_karte2.setEnabled(false);
+        imageView_karte2.setAlpha(0.6f);
         imageView_karte3.setEnabled(false);
+        imageView_karte3.setAlpha(0.6f);
         imageView_karte4.setEnabled(false);
+        imageView_karte4.setAlpha(0.6f);
         imageView_karte5.setEnabled(false);
+        imageView_karte5.setAlpha(0.6f);
+        imageView_karte6.setEnabled(false);
+        imageView_karte6.setAlpha(0.6f);
 
         button20er.setEnabled(false);
+        button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
+        button40er.setAlpha(0.4f);
+        buttonWeiter.setEnabled(false);
+        buttonWeiter.setAlpha(0.4f);
     }
 
     private static void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        for (int i = 0; i < 6; i++) {
             //Button buttonK = handkartenButtons.get(i);
             ImageView imageViewK = handkartenImages.get(i);
 
 
-            if (i<handkartenAnz) {
+            if (i < handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
                 imageViewK.setImageResource(k.getImageResourceId());
                 imageViewK.setVisibility(View.VISIBLE);
@@ -670,6 +860,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         }
 
         gegnerischeHandAktualisieren();
+
+
     }
 
     private static void gegnerischeHandAktualisieren() {
@@ -753,7 +945,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         for(String farbe: geg20er) {
             hastDie20er += " " + farbe;
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + ":" + hast20er + " " + hast40er + hastDie20er).getBytes());
     }
 
     private static void gegner2hat20er() {
@@ -764,7 +956,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         for(String farbe: geg20er) {
             hastDie20er += " " + farbe;
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 2 + ":" + hast20er + " " + hast40er + hastDie20er).getBytes());
     }
     
 
@@ -799,6 +991,39 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         aufgedrehteKarte = spiel.Aufdrehen();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE+":"+aufgedrehteKarte.toString()).getBytes());
         spiel.Trumpfansagen(aufgedrehteKarte.getFarbe(),bummerl.getAnzahlSpiele());
+
+        imageView_trumpf.setVisibility(View.VISIBLE);
+        imageView_trumpf.setImageResource(aufgedrehteKarte.getImageResourceId());
+        imageView_trumpfIcon.setImageResource(aufgedrehteKarte.getIconResourceId());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imageView_trumpf.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+
+        handAktualisieren();
+
+        buttonWeiter.setText("Weiter");
+        buttonWeiter.setEnabled(false);
+        buttonWeiter.setAlpha(0.4f);
+
+        if(bummerl.getAnzahlSpiele()%3 == 0){
+            buttonWeiter.setEnabled(true);
+            buttonWeiter.setAlpha(1f);
+            buttonSpielAnsagen.setVisibility(View.VISIBLE);
+        }
+        else if(bummerl.getAnzahlSpiele()%3 == 1) {
+            andererSpielerKannSpielAnsagen(gegner1);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+        }
+        else{
+            andererSpielerKannSpielAnsagen(gegner2);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
+        }
+
+
+
     }
 
     private void handKartenKlickbar() {
