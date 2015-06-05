@@ -45,6 +45,7 @@
             android:paddingRight="5dp"
             android:layout_gravity="center_horizontal"
             android:paddingTop="5dp"
+            android:visibility="invisible"
             android:layout_marginTop="5dp" />
 
     </LinearLayout>
@@ -81,8 +82,8 @@
                 style="@style/text_punkteanzeige"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66"
-                android:id="@+id/textView3"
+                android:text="0"
+                android:id="@+id/txt_PunkteSelbst"
                 android:layout_gravity="top" />
         </LinearLayout>
 
@@ -822,7 +823,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="b"
-                android:id="@+id/txt_PunkteZahl"
+                android:id="@+id/txt_BummerlZahlI"
                 android:layout_column="2"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="5dp"
