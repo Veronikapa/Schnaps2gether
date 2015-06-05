@@ -53,11 +53,6 @@ public class Lobby extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
-        // Bind to NearbyConnectionService
-        Intent intent = new Intent(this, NearbyConnectionService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        mService.setLobby(this);
-
         // Get ListView object from xml
         spieleListView = (ListView) findViewById(R.id.list);
 
@@ -75,6 +70,25 @@ public class Lobby extends Activity implements
 
 
         spielerName = Startmenue.SpielerName;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mService.setLobby(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 
     @Override

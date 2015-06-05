@@ -62,11 +62,11 @@ public class NearbyConnectionService extends Service implements
     // Legt fest ob das Gerät der Host ist
     private boolean m_IsHost = false;
     //Api Client der pro Gerät verfügbar sein muss
-    public static GoogleApiClient m_GoogleApiClient;
+    public GoogleApiClient m_GoogleApiClient;
 
     // Speichert die endpoint- und deviceIds von verbundenen Geräten
-    public static ArrayList<String> endpointIds = new ArrayList<String>();
-    public static ArrayList<String> deviceIds = new ArrayList<String>();
+    public ArrayList<String> endpointIds = new ArrayList<String>();
+    public ArrayList<String> deviceIds = new ArrayList<String>();
 
     //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
@@ -81,7 +81,7 @@ public class NearbyConnectionService extends Service implements
     public void onCreate() {
         appContext = this.getApplicationContext();
 
-        //Beim Erstellen der Activity muss auch pro Gerät ein ApiClient für die Wifi Verbindung
+        //Beim Erstellen des Services muss auch pro Gerät ein ApiClient für die Wifi Verbindung
         //angelegt werden
         m_GoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -109,7 +109,6 @@ public class NearbyConnectionService extends Service implements
 
     @Override
     public IBinder onBind(Intent intent) {
-        intent.getComponent().getClassName();
         return mBinder;
     }
 
@@ -348,10 +347,12 @@ public class NearbyConnectionService extends Service implements
         }
     }
 
-    /** method for clients */
-    public int getRandomNumber() {
-        return mGenerator.nextInt(100);
+    @Override
+    public void onDestroy() {
     }
+
+    /** methods for clients */
+
 
     public void spielErstellen(int spielTyp, String spielerName) {
         if (m_GoogleApiClient.isConnected()) {
@@ -361,15 +362,23 @@ public class NearbyConnectionService extends Service implements
         }
     }
 
+    public void delegateSendReliableMessage(String recipient, byte[] message) {
+        Nearby.Connections.sendReliableMessage(m_GoogleApiClient,recipient,message);
+    }
+
+    public void delegateSendReliableMessage(List<String> recipients, byte[] message) {
+        Nearby.Connections.sendReliableMessage(m_GoogleApiClient,recipients,message);
+    }
+
+    public ArrayList<String> getEndpointIds() {
+        return this.endpointIds;
+    }
+
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
     }
 
     public void setSpielfeld(Spielfeld spielfeld) {
         this.spielfeld = spielfeld;
-    }
-
-    @Override
-    public void onDestroy() {
     }
 }

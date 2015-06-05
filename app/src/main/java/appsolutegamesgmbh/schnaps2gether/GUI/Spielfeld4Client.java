@@ -2,10 +2,13 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,13 +27,14 @@ import java.util.ArrayList;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
+import appsolutegamesgmbh.schnaps2gether.Network.NearbyConnectionService;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 /**
  * Created by kirederf on 24.05.2015.
  */
 public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
-        Connections.MessageListener {
+        Connections.MessageListener, Spielfeld {
 
     //Konstanten fuer das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
@@ -50,73 +54,56 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
 
-    // Identify if the device is the host
-    private boolean mIsHost = false;
-    private GoogleApiClient mGoogleApiClient;
     private ArrayList<String> endpointIDs;
+    NearbyConnectionService mService;
+    boolean mBound = false;
 
-    private static Context appContext;
+    private Context appContext;
 
 
 
-    private static ImageView imageView_karte1;
-    private static ImageView imageView_karte2;
-    private static ImageView imageView_karte3;
-    private static ImageView imageView_karte4;
-    private static ImageView imageView_karte5;
+    private ImageView imageView_karte1;
+    private ImageView imageView_karte2;
+    private ImageView imageView_karte3;
+    private ImageView imageView_karte4;
+    private ImageView imageView_karte5;
 
-    private static ArrayList<ImageView> handkartenImages;
-    private static ImageView imageView_eigeneKarte;
-    private static ImageView imageView_karteGegner1;
-    private static ImageView imageView_karteMitspieler;
-    private static ImageView imageView_karteGegner2;
-    private static ImageView imageView_trumpfIcon;
+    private ArrayList<ImageView> handkartenImages;
+    private ImageView imageView_eigeneKarte;
+    private ImageView imageView_karteGegner1;
+    private ImageView imageView_karteMitspieler;
+    private ImageView imageView_karteGegner2;
+    private ImageView imageView_trumpfIcon;
 
-    private static Button button20er;
-    private static Button button40er;
-    private static Button buttonSpielAnsagen;
-    private static Button buttonAufdrehen;
-    private static Button buttonFlecken;
-    private static Button buttonGegenflecken;
-    private static Button buttonWeiter;
+    private Button button20er;
+    private Button button40er;
+    private Button buttonSpielAnsagen;
+    private Button buttonAufdrehen;
+    private Button buttonFlecken;
+    private Button buttonGegenflecken;
+    private Button buttonWeiter;
     private MenuItem herz20er;
     private MenuItem karo20er;
     private MenuItem pik20er;
     private MenuItem kreuz20er;
-    private static Spieler selbst;
-    private static ArrayList<Boolean> kartenSpielbar;
-    private static Karte gegnerischeKarte;
-    private static TextView punkteGegner;
-    //private static TextView punkteSelbst;
-    private static TextView txtSelbst;
-    private static TextView txtGegner;
-    private static Bummerl2 bummerl;
-    private static boolean zugedreht;
-    private static boolean hat20er;
-    private static boolean hat40er;
-    private static ArrayList<String> hab20er;
-    private static int p1;
-    private static int p2;
-    private static String angesagteFarbe;
-    private static ArrayList<String> spieleAnsagbar;
-    private static Boolean spielAngesagt;
-    private static int spielerNummer;
-
-    /*@Override
-    public void onStart() {
-        super.onStart();
-
-        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
-        mGoogleApiClient.connect();
-    }*/
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
+    private Spieler selbst;
+    private ArrayList<Boolean> kartenSpielbar;
+    private Karte gegnerischeKarte;
+    private TextView punkteGegner;
+    //private TextView punkteSelbst;
+    private TextView txtSelbst;
+    private TextView txtGegner;
+    private Bummerl2 bummerl;
+    private boolean zugedreht;
+    private boolean hat20er;
+    private boolean hat40er;
+    private ArrayList<String> hab20er;
+    private int p1;
+    private int p2;
+    private String angesagteFarbe;
+    private ArrayList<String> spieleAnsagbar;
+    private Boolean spielAngesagt;
+    private int spielerNummer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,8 +113,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mGoogleApiClient = Lobby.m_GoogleApiClient;
-        endpointIDs = Lobby.endpointIds;
+        endpointIDs = mService.getEndpointIds();
 
         appContext = this.getApplicationContext();
 
@@ -178,17 +164,36 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         spielStart();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mService.setSpielfeld(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
     private void zugAusfuehren(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (WEITER + ":" + 0).getBytes());
     }
 
-    private static void eigenerZug() {
+    private void eigenerZug() {
             if(hat20er) {
                 button20er.setEnabled(true);
                 button20er.setAlpha(1f);
@@ -207,7 +212,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             }
     }
 
-    private static void handAktualisieren() {
+    private void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
 
@@ -224,7 +229,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         }
     }
 
-    private static void punkteAktualisieren() {
+    private void punkteAktualisieren() {
         //punkteSelbst.setText(Integer.toString(p1));
     }
 
@@ -266,7 +271,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         button40er.setAlpha(0.4f);
     }
 
-    private static void handKartenKlickbar() {
+    private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
 
@@ -282,7 +287,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         }
     }
 
-    private static void spielEnde(boolean win) {
+    private void spielEnde(boolean win) {
         Bundle args = new Bundle();
         imageView_karteGegner1.setImageDrawable(null); // Ansicht der Karten wird fuer naechstes Spiel geloescht
         imageView_eigeneKarte.setImageDrawable(null);
@@ -296,7 +301,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     private void trumpfansagen(String farbe) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE + ":" + farbe).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (TRUMPFFARBE + ":" + farbe).getBytes());
         buttonsNichtKlickbar();
         buttonAufdrehen.setVisibility(View.INVISIBLE);
     }
@@ -368,19 +373,19 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             public boolean onMenuItemClick(MenuItem menuItem) {
                 try {
                     switch (menuItem.getTitle().toString()) {
-                        case "Schnapser": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Schnapser").getBytes());
+                        case "Schnapser": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Schnapser").getBytes());
                             break;
-                        case "Land": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Land").getBytes());
+                        case "Land": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Land").getBytes());
                             break;
-                        case "Kontraschnapser": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Kontraschnapser").getBytes());
+                        case "Kontraschnapser": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Kontraschnapser").getBytes());
                             break;
-                        case "Bauernschnapser": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Bauernschnapser").getBytes());
+                        case "Bauernschnapser": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Bauernschnapser").getBytes());
                             break;
-                        case "Kontrabauernschnapser": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Kontrabauernschnapser").getBytes());
+                        case "Kontrabauernschnapser": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Kontrabauernschnapser").getBytes());
                             break;
-                        case "Farbenjodler": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Farbenjodler").getBytes());
+                        case "Farbenjodler": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Farbenjodler").getBytes());
                             break;
-                        case "Herrenjodler": Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + "Herrenjodler").getBytes());
+                        case "Herrenjodler": mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + "Herrenjodler").getBytes());
                             break;
                         default: return false;
                     }
@@ -397,7 +402,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     public void ansagen40er(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT40ER + ":").getBytes());
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -412,19 +417,19 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     public void fleckenOnClick(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (FLECKEN + ":").getBytes());
         buttonFlecken.setVisibility(View.INVISIBLE);
         buttonWeiter.setVisibility(View.INVISIBLE);
     }
     
     public void weiterOnClick(View view) {
         if (!spielAngesagt)  {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + 0).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (SPIELANSAGEN + ":" + 0).getBytes());
             spielAngesagt = true;
             buttonSpielAnsagen.setVisibility(View.INVISIBLE);
             buttonWeiter.setVisibility(View.INVISIBLE);
         } else {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":" + 0).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (FLECKEN + ":" + 0).getBytes());
             buttonFlecken.setVisibility(View.INVISIBLE);
             buttonWeiter.setVisibility(View.INVISIBLE);
         }
@@ -456,7 +461,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     }
 
     public void aufdrehenOnClick(View view) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFDREHEN + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (AUFDREHEN + ":").getBytes());
         buttonAufdrehen.setVisibility(View.INVISIBLE);
     }
 
@@ -475,16 +480,16 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Herz").getBytes());
                 break;
             case R.id.karo_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Karo").getBytes());
                 break;
             case R.id.pik_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
                 break;
             default:
                 return false;
@@ -503,7 +508,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         return true;
     }
 
-    public static void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
+    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         switch ((message.split(":")[0])) {
             case SPIELSTART: bummerl = new Bummerl2(message.substring(2).split(",")[1]);
@@ -621,7 +626,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     }
 
-    static class Zugende implements Runnable {
+    class Zugende implements Runnable {
 
         @Override
         public void run() {
@@ -633,4 +638,22 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             gegnerischeKarte = null;
         }
     }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
