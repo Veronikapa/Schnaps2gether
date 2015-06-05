@@ -55,7 +55,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_gegenflecken"
-                android:layout_width="wrap_content"
+                android:layout_width="61dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/gegenflecken"
                 android:onClick="fleckenOnClick"
@@ -69,7 +69,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_flecken"
-                android:layout_width="wrap_content"
+                android:layout_width="66dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/flecken"
                 android:onClick="fleckenOnClick"
@@ -85,7 +85,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_rufspiel"
-                android:layout_width="wrap_content"
+                android:layout_width="69dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 android:onClick="popupSpielAnsagen"
@@ -101,7 +101,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_trumpfansagen"
-                android:layout_width="wrap_content"
+                android:layout_width="53dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:onClick="popupTrumpfansagen"
                 android:singleLine="false"
@@ -139,7 +139,7 @@
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="wrap_content"
+            android:layout_width="36dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -150,20 +150,19 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="wrap_content"
+            android:layout_width="32dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
             style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false"
-            android:layout_weight="0.25" />
+            android:textAllCaps="false" />
 
         <Button
             style="@style/text_buttonsSpielfeld"
             android:id="@+id/cmd_weiter"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
@@ -174,7 +173,7 @@
             android:textAllCaps="false"
             android:elegantTextHeight="true"
             android:enabled="false"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 

@@ -74,6 +74,35 @@
     <string name="trumpfansagen">Trumpf</string>
     <string name="title_activity_activity_spielregeln">activity_spielregeln</string>
     <string name="tauschen">Tauschen</string>
+    <string name="karte1">Karte 1</string>
+    <string name="karte2">Karte 2</string>
+    <string name="karte3">Karte 3</string>
+    <string name="karte4">Karte 4</string>
+    <string name="karte5">Karte 5</string>
+    <string name="karte6">Karte 6</string>
+    <string name="trumpfIcon">Trumpf Icon</string>
+    <string name="trumpfKarte">Trumpfkarte</string>
+    <string name="stich11">Stichkarte 11</string>
+    <string name="stich16">Stichkarte 16</string>
+    <string name="stich15">Stichkarte 15</string>
+    <string name="stich12">Stichkarte 12</string>
+    <string name="stich10">Stichkarte 10</string>
+    <string name="stich9">Stichkarte 9</string>
+    <string name="stich8">Stichkarte 8</string>
+    <string name="stich7">Stichkarte 7</string>
+    <string name="stich6">Stichkarte 6</string>
+    <string name="stich5">Stichkarte 5</string>
+    <string name="stich4">Stichkarte 4</string>
+    <string name="stich3">Stichkarte 3</string>
+    <string name="stich2">Stichkarte 2</string>
+    <string name="stich1">Stichkarte 1</string>
+    <string name="talon2">Talonkarte 2</string>
+    <string name="talon1">Talonkarte 1</string>
+    <string name="karteG2">Karte Gegner 2</string>
+    <string name="karteG1">Karte Gegner 1</string>
+    <string name="KarteI">Karte Gegner 1</string>
+    <string name="stich13">Stichkarte 13</string>
+    <string name="stich14">Stichkarte 14</string>
 
 
 </resources>

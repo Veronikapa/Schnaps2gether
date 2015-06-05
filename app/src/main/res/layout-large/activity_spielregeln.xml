@@ -32,7 +32,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/linearLayout4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -40,7 +40,7 @@
         android:layout_above="@+id/linearLayout6">
 
         <ScrollView
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/scrollView2"
             android:background="@android:color/transparent">

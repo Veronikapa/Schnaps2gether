@@ -23,7 +23,7 @@
             android:id="@+id/txt_NameGegner2"
             android:text="@string/spieler2" android:layout_width="match_parent"
 
-            android:layout_height="25dp"
+            android:layout_height="40dp"
             android:gravity="top|center"
             android:textColor="@android:color/white"
             android:paddingLeft="5dp"
@@ -36,14 +36,13 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:id="@+id/l_ButtonLeiste"
         android:weightSum="1"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/l_StichAnzeige"
-        android:layout_below="@+id/l_eigeneKarten"
         android:hapticFeedbackEnabled="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -119,7 +118,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:layout_gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -158,7 +158,7 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:textAllCaps="false"
-            android:layout_weight="0.25" />
+            android:layout_weight="0.04" />
 
         <Button
             style="@style/text_buttonsSpielfeld"
@@ -174,7 +174,7 @@
             android:textAllCaps="false"
             android:elegantTextHeight="true"
             android:enabled="false"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
@@ -212,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="60dp"
             android:id="@+id/l_KarteGegner2">
 
             <ImageView
@@ -252,12 +252,11 @@
         android:paddingLeft="30dp"
         android:id="@+id/l_eigeneKarten"
         android:paddingRight="30dp"
-        android:layout_alignTop="@+id/l_StichAnzeige"
-        android:layout_alignRight="@+id/l_ButtonLeiste"
-        android:layout_alignEnd="@+id/l_ButtonLeiste"
-        android:layout_toEndOf="@+id/l_Deck"
         android:layout_alignLeft="@+id/l_ButtonLeiste"
-        android:layout_alignStart="@+id/l_ButtonLeiste">
+        android:layout_alignStart="@+id/l_ButtonLeiste"
+        android:layout_above="@+id/l_ButtonLeiste"
+        android:layout_toLeftOf="@+id/l_StichAnzeige"
+        android:layout_toStartOf="@+id/l_StichAnzeige">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -266,20 +265,6 @@
             android:layout_gravity="center"
             android:layout_marginRight="100dp"
             android:id="@+id/l_Karte1">
-
-            <ImageView
-                android:layout_width="@dimen/karte_breite"
-                android:layout_height="@dimen/karte_hoehe"
-                android:id="@+id/imageView_karte1"
-                android:clickable="true"
-                android:onClick="karte1OnClick"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:visibility="visible"
-                android:adjustViewBounds="false"
-                android:cropToPadding="false"
-                android:layout_gravity="left|bottom|center"
-                android:contentDescription="@string/karte1" />
 
         </LinearLayout>
 
@@ -388,66 +373,25 @@
                 android:contentDescription="@string/karte6" />
         </LinearLayout>
 
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="136dp"
-        android:layout_height="100dp"
-        android:id="@+id/l_Deck"
-        android:layout_above="@+id/l_eigeneKarten"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:id="@+id/l_TrumpfIcon"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="0dp">
-
-            <ImageButton
-                android:layout_width="@dimen/trumpfIcon"
-                android:layout_height="@dimen/trumpfIcon"
-                android:id="@+id/imageView_trumpfIcon"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                android:background="@android:color/transparent"
-                android:layout_gravity="top|right"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:contentDescription="@string/trumpfIcon" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="105dp"
-            android:layout_height="105dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/l_TrumpfKarte">
-
-            <ImageView
-                android:layout_width="@dimen/karte_breite"
-                android:layout_height="@dimen/karte_hoehe"
-                android:id="@+id/imageView_trumpf"
-                android:longClickable="true"
-                android:padding="0dp"
-                android:background="@android:color/transparent"
-                android:layout_gravity="bottom"
-                android:rotation="90"
-                android:scaleType="fitXY"
-                android:layout_marginLeft="20dp"
-                android:contentDescription="@string/trumpfKarte" />
-
-        </LinearLayout>
+        <ImageView
+            android:layout_width="@dimen/karte_breite"
+            android:layout_height="@dimen/karte_hoehe"
+            android:id="@+id/imageView_karte1"
+            android:clickable="true"
+            android:onClick="karte1OnClick"
+            android:scaleType="fitXY"
+            android:background="@android:color/transparent"
+            android:visibility="visible"
+            android:adjustViewBounds="false"
+            android:cropToPadding="false"
+            android:layout_gravity="left|top"
+            android:contentDescription="@string/karte1" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="150dp"
-        android:layout_height="119dp"
+        android:layout_width="200dp"
+        android:layout_height="160dp"
         android:layout_gravity="right|center_vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -772,7 +716,7 @@
         android:layout_alignParentRight="true">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="26dp"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameGegner1"
             android:text="Gegner1"
@@ -788,17 +732,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/l_Talon"
-        android:layout_above="@+id/l_eigeneKarten"
         android:layout_toLeftOf="@+id/l_abgelegteKarten"
-        android:layout_toStartOf="@+id/l_abgelegteKarten">
+        android:layout_toStartOf="@+id/l_abgelegteKarten"
+        android:layout_above="@+id/l_eigeneKarten">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="40dp">
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="55dp">
 
             <ImageView
                 android:layout_width="@dimen/karte_breite"
@@ -921,6 +865,62 @@
             </TableRow>
 
         </TableLayout>
+
+        <FrameLayout
+            android:layout_width="136dp"
+            android:layout_height="100dp"
+            android:id="@+id/l_Deck"
+            android:layout_above="@+id/l_eigeneKarten"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="left|bottom">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:id="@+id/l_TrumpfIcon"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="0dp">
+
+                <ImageButton
+                    android:layout_width="@dimen/trumpfIcon"
+                    android:layout_height="@dimen/trumpfIcon"
+                    android:id="@+id/imageView_trumpfIcon"
+                    android:scaleType="fitXY"
+                    android:visibility="visible"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="top|right"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="30dp"
+                    android:contentDescription="@string/trumpfIcon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/l_TrumpfKarte">
+
+                <ImageView
+                    android:layout_width="@dimen/karte_breite"
+                    android:layout_height="@dimen/karte_hoehe"
+                    android:id="@+id/imageView_trumpf"
+                    android:longClickable="true"
+                    android:padding="0dp"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="bottom"
+                    android:rotation="90"
+                    android:scaleType="fitXY"
+                    android:layout_marginLeft="20dp"
+                    android:contentDescription="@string/trumpfKarte" />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
         <!--<LinearLayout
             android:orientation="horizontal"
