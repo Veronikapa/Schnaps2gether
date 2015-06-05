@@ -39,10 +39,10 @@ public class Lobby extends Activity implements
         PopupMenu.OnMenuItemClickListener {
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
-    private static final String SPIELSTART = "16";
-    private static final String CLIENT2 = "17";
-    private static final String CLIENT3 = "18";
-    private static final String CLIENT4 = "19";
+    private static final String SPIELSTART = "30";
+    private static final String CLIENT2 = "31";
+    private static final String CLIENT3 = "32";
+    private static final String CLIENT4 = "33";
 
     private Context appContext;
     private ListView spieleListView;
