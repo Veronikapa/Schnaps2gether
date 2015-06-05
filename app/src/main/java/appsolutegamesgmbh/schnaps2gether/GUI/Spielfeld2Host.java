@@ -212,7 +212,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
         //punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);

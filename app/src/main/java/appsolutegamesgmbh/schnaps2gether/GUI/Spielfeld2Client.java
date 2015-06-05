@@ -193,7 +193,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         auge_Icon = (ImageView) findViewById(R.id.i_augeG1);
 
         //punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahl);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
 
