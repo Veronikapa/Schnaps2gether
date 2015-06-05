@@ -1,16 +1,25 @@
 package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +28,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.Connections;
+import com.google.android.gms.wearable.internal.ChannelSendFileResponse;
 
 import java.util.ArrayList;
 
@@ -36,7 +46,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         GoogleApiClient.OnConnectionFailedListener,
         Connections.ConnectionRequestListener,
         Connections.MessageListener,
-        Connections.EndpointDiscoveryListener {
+        Connections.EndpointDiscoveryListener, SensorEventListener {
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
@@ -53,6 +63,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String ZUGENDE = "11";
     private static final String DISCONNECT = "12";
     private static final String STAPELLEER = "13";
+    private static final String SCHUMMELN = "14"; //Erhält Gegner diese Message wird Auge angezeigt
+    private static final String SCHUMMELNUNTERBUNDEN= "15";
+    private static final String SCHUMMELKARTEN = "16";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -69,6 +82,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_karte4;
     private static ImageView imageView_karte5;
 
+
     private static ArrayList<ImageView> handkartenImages;
 
     private static ImageView stichEigeneKarteG;
@@ -80,6 +94,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_eigeneKarte;
     private static ImageView imageView_karteGegner;
     private static ImageView imageView_trumpfIcon;
+    private static ImageView auge_Icon;
 
     private static ImageView stichK1;
     private static ImageView stichK2;
@@ -126,14 +141,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static Bummerl2 bummerl;
     private static Boolean angesagt;
+    private static boolean schummelnDesGegnerErkannt;
+    private static boolean schummelnVonGegnerErkannt;
+    private static boolean schummelnAktiv;
+    private int handkartenNummerZumSchummeln;
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-
-        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
-        mGoogleApiClient.connect();
-    }*/
+    private static SensorManager shakeManager;
+    private static SensorEventListener shakeListener;
+    private double threshold = 1.0d;
 
     @Override
     public void onStop() {
@@ -185,6 +200,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
+        auge_Icon = (ImageView) findViewById(R.id.i_augeG1);
 
         buttonZudrehen = (Button) findViewById(R.id.main_buttonZ);
         button20er = (Button) findViewById(R.id.main_button20er);
@@ -212,35 +228,121 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
 
+        this.threshold = threshold * threshold;
+        this.threshold = this.threshold * SensorManager.GRAVITY_EARTH* SensorManager.GRAVITY_EARTH;
 
+        shakeManager = (SensorManager) this.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+        shakeManager.registerListener(shakeListener,
+                shakeManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
+
+        shakeListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                    double netForce = sensorEvent.values[0] * sensorEvent.values[0];
+
+                    netForce += sensorEvent.values[1] * sensorEvent.values[1];
+                    netForce += sensorEvent.values[2] * sensorEvent.values[2];
+
+                    if (threshold < netForce) {
+                        schummelnDesGegnerErkannt = true;
+                    }
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
         spielStart();
 
     }
 
+
+
     private void zugAusführen(int i) {
-        final Karte k = selbst.Hand.get(i);
-        eigeneKarte = k;
-        buttonsNichtKlickbar();
-        spiel.Auspielen(k, selbst);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
-        gespielteKarteEntfernen(i);
 
-        imageView_eigeneKarte.setImageResource(k.getImageResourceId());
+        if(schummelnAktiv)
+        {
+            handkartenNummerZumSchummeln = i;
+            try {
+                karteTauschenPopupZeigen();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        else {
+            final Karte k = selbst.Hand.get(i);
+            eigeneKarte = k;
+            buttonsNichtKlickbar();
+            spiel.Auspielen(k, selbst);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
+            gespielteKarteEntfernen(i);
+
+            imageView_eigeneKarte.setImageResource(k.getImageResourceId());
 
 
-        if (gegnerischeKarte == null) {
-            gegnerischeHandAktualisieren();
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    gegnerHat20er();
-                }
-            }, 1000);
-        } else {
-            zugEnde();
+            if (gegnerischeKarte == null) {
+                gegnerischeHandAktualisieren();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        gegnerHat20er();
+                    }
+                }, 1000);
+            } else {
+                zugEnde();
+            }
         }
     }
+
+    //Öffnet Popup mit allen bereits gestochenen Karten des Spielers
+    private void karteTauschenPopupZeigen() throws InterruptedException {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        int gestocheneKartenAnz = selbst.Gestochen.size();
+
+        if(gestocheneKartenAnz == 0)
+        {
+            Toast.makeText(this.getApplicationContext(),"Schummeln nicht möglich - keine Stiche vorhanden",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog alert = null;
+        for (int i=0;i<gestocheneKartenAnz;i++) {
+            Karte k = selbst.Gestochen.get(i);
+
+            final ImageView imageViewK = new ImageView(this);
+            imageViewK.setClickable(true);
+            imageViewK.setId(i);
+            imageViewK.setImageResource(k.getImageResourceId());
+            layout.addView(imageViewK);
+            imageViewK.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int kartenNummerGestochen = imageViewK.getId();
+                    Karte karteHandTauschen = selbst.Hand.get(handkartenNummerZumSchummeln);
+
+                    selbst.Hand.set(handkartenNummerZumSchummeln,selbst.Gestochen.get(kartenNummerGestochen));
+                    selbst.Gestochen.set(kartenNummerGestochen,karteHandTauschen);
+                    handAktualisieren();
+                    schummelnAktiv= false;
+                }
+            });
+        }
+        builder.setView(layout);
+        builder.setInverseBackgroundForced(true);
+        alert=builder.create();
+        alert.show();
+    }
+
 
     private void zugEnde() {
         spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte, istdran);
@@ -868,6 +970,36 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     gegnerHat20er();
                 Toast.makeText(appContext, "Trumpfkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
+            case SCHUMMELN:
+                auge_Icon.setVisibility(View.VISIBLE);
+                //3sec auf Schummel abwehr warten, sonst Schummeln erlauben
+                Handler handlerSchummeln = new Handler();
+                handlerSchummeln.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        auge_Icon.setVisibility(View.INVISIBLE);
+
+                        if(schummelnDesGegnerErkannt) {
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":"+" ").getBytes());
+                            Toast.makeText(appContext, "Schummeln wurde von dir unterbunden!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else
+                        {
+                            //Karten an Client senden
+                            for(int i = 0; i< selbst.Hand.size(); i++)
+                            {
+                                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELKARTEN + ":" + selbst.Hand.get(i).getImageResourceId()).getBytes());
+                            }
+                        }
+
+                    }
+                }, 2000);
+                break;
+            case SCHUMMELNUNTERBUNDEN:
+                schummelnVonGegnerErkannt = true;
+                break;
             default: break;
         }
     }
@@ -926,16 +1058,104 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         finish();
     }
 
-    public void KartenSchauen(View view)
+    public void kartenSchauen(View view)
     {
-        //TODO VP
+        schummelnVonGegnerErkannt = false;
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELN + ":" + " ").getBytes());
+
+        // Wait 3 seconds, if host recoginzes
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (schummelnVonGegnerErkannt)
+                    Toast.makeText(appContext, "Schummelversuch wurde abgewehrt.", Toast.LENGTH_SHORT).show();
+
+                    //Wenn Schummeln nicht abgewehrt wird, sieht Spieler Karten vom Gegner
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(appContext);
+                    builder.setCancelable(true);
+                    LinearLayout layout = new LinearLayout(appContext);
+                    layout.setOrientation(LinearLayout.HORIZONTAL);
+                    int handkartenAnz = gegner.Hand.size();
+
+                    for (int i = 0; i < 5; i++) {
+                        if (i < handkartenAnz) {
+                             Karte k = gegner.Hand.get(i);
+
+                            ImageView imageViewK = new ImageView(appContext);
+                            imageViewK.setImageResource(k.getImageResourceId());
+                            layout.addView(imageViewK);
+                        }
+                    }
+                    builder.setView(layout);
+                    builder.setInverseBackgroundForced(true);
+                    final AlertDialog alert = builder.create();
+                    alert.show();
+
+                    // Hide after some seconds
+                    final Handler handlerAlert = new Handler();
+                    final Runnable runnableAlert = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (alert.isShowing()) {
+                                alert.dismiss();
+                            }
+                        }
+                    };
+
+                    alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            handlerAlert.removeCallbacks(runnableAlert);
+                        }
+                    });
+
+                    handlerAlert.postDelayed(runnableAlert, 1000);
+                }
+            }
+        };
+
+        handler.postDelayed(runnable, 3000);
     }
 
     public void KartenTauschen(View view)
     {
-        //TODO VP
+        schummelnVonGegnerErkannt = false;
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELN + ":" + " ").getBytes());
+
+        // Wait 3 seconds, if host recoginzes
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (schummelnVonGegnerErkannt)
+                    Toast.makeText(appContext, "Schummelversuch wurde abgewehrt.", Toast.LENGTH_SHORT).show();
+
+
+                else {
+                    schummelnAktiv = true;
+                    Toast.makeText(appContext,"Wähle Handkarte zum Tauschen",Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        handler.postDelayed(runnable, 3000);
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
     class Zugende implements Runnable {
 
         @Override
