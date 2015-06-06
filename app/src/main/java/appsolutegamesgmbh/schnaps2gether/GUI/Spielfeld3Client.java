@@ -538,21 +538,25 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             case KARTEGESPIELT:
                 if(SpielerID.equals("1")) {
                     if(messageParts[2].equals("2")) {
-                        gegnerischeKarte1 = new Karte(message.substring(2));
+                        gegnerischeKarte1 = new Karte(messageParts[1]);
+                        imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
                     else if(messageParts[2].equals("0")) {
-                        gegnerischeKarte2 = new Karte(message.substring(2));
+                        gegnerischeKarte2 = new Karte(messageParts[1]);
+                        imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
                 else if(SpielerID.equals("2")) {
                     if(messageParts[2].equals("0")) {
-                        gegnerischeKarte1 = new Karte(message.substring(2));
+                        gegnerischeKarte1 = new Karte(messageParts[1]);
+                        imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
                     else if(messageParts[2].equals("1")) {
-                        gegnerischeKarte2 = new Karte(message.substring(2));
+                        gegnerischeKarte2 = new Karte(messageParts[1]);
+                        imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
@@ -561,23 +565,25 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
                 break;
             case WEITER:
-                handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    hat20er = message.substring(4,5).equals("1") ? true : false;
-                    hat40er = message.substring(6,7).equals("1") ? true : false;
-                    hab20er = new ArrayList<String>();
-                    if (hat20er) {
-                        String[] meine20er = message.substring(8).split(" ");
-                        for (String farbe: meine20er) {
-                            hab20er.add(farbe);
+                if(messageParts[1].equals(SpielerID)) {
+                    handKartenKlickbar();
+                    if (messageParts[2].substring(0, 1).equals("1")) {
+                        hat20er = messageParts[2].substring(2, 3).equals("1") ? true : false;
+                        hat40er = message.substring(4, 5).equals("1") ? true : false;
+                        hab20er = new ArrayList<String>();
+                        if (hat20er) {
+                            String[] meine20er = message.substring(8).split(" ");
+                            for (String farbe : meine20er) {
+                                hab20er.add(farbe);
+                            }
                         }
-                    }
 
-                    eigenerZug();
+                        eigenerZug();
+
+                    } else
+                        eigenerZug();
                 }
-                else
-                    eigenerZug();
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+
                 break;
             case SPIELANSAGEN:
                 if(messageParts[2].equals(SpielerID)) {
@@ -893,7 +899,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     public void karte6OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(0);
+            zugAusführen(5);
         else {
             if (talonID.equals("0")) {
                 imageView_karte6.setAlpha(1f);
@@ -1130,6 +1136,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
 
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + SpielerID).getBytes());
+
+
         //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         /*if (gegnerischeKarte == null) {
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
@@ -1169,7 +1179,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<6;i++) {
 
             //Button buttonK = handkartenButtons.get(i);
             ImageView imageViewK = handkartenImages.get(i);

@@ -198,7 +198,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
         imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner1);
-        imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner2);
+        imageView_karteGegner2 = (ImageView) findViewById(R.id.imageView_karteGegner2);
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
@@ -673,18 +673,16 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         messageParts = message.split(":");
         switch (((message.split(":")[0]))) {
             case KARTEGESPIELT:
-                if (message.split(":")[2] == "1") {
-                    gegnerischeKarte1 = new Karte(message.split(":")[1]);
+                if (messageParts[2].equals("1")) {
+                    gegnerischeKarte1 = new Karte(messageParts[1]);
                     spiel.Auspielen(gegnerischeKarte1, gegner1);
                     imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + gegnerischeKarte1.toString() + ":1").getBytes());
                 } else {
-                    gegnerischeKarte2 = new Karte(message.split(":")[1]);
+                    gegnerischeKarte2 = new Karte(messageParts[1]);
                     spiel.Auspielen(gegnerischeKarte2, gegner2);
                     imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
-
-                    if (eigeneKarte == null) {
-                        handKartenKlickbar();
-                    }
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + gegnerischeKarte2.toString() + ":2").getBytes());
                 }
                 break;
             case WEITER:
@@ -697,7 +695,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 if (messageParts[1].equals("2")) {
                     if(!(selbst.equals(spiel.getSpieler()))) {
                         handAktualisieren();
-                        eigenerZug();
                         handKartenKlickbar();
                     }
                     else
@@ -1010,7 +1007,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte6OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(0);
+            zugAusführen(5);
         else {
             if (talonID.equals("0")) {
                 imageView_karte6.setAlpha(1f);
