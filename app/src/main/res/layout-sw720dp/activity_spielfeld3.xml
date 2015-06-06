@@ -41,11 +41,11 @@
         android:gravity="center_horizontal"
         android:id="@+id/l_ButtonLeiste"
         android:weightSum="1"
-        android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/l_StichAnzeige"
         android:hapticFeedbackEnabled="false"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="200dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:id="@+id/l_abgelegteKarten"
         android:padding="10dp"
@@ -716,7 +716,7 @@
         android:layout_alignParentRight="true">
 
         <TextView
-            android:layout_width="26dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameGegner1"
             android:text="Gegner1"

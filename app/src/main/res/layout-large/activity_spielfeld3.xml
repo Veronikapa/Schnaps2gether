@@ -43,7 +43,6 @@
         android:weightSum="1"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/l_StichAnzeige"
-        android:layout_below="@+id/l_eigeneKarten"
         android:hapticFeedbackEnabled="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -157,8 +156,7 @@
             style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false"
-            android:layout_weight="0.25" />
+            android:textAllCaps="false" />
 
         <Button
             style="@style/text_buttonsSpielfeld"
@@ -167,19 +165,16 @@
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:background="@drawable/beiger_button"
             android:textAllCaps="false"
             android:elegantTextHeight="true"
             android:enabled="false"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="200dp"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:id="@+id/l_abgelegteKarten"
         android:padding="10dp"
@@ -252,12 +247,12 @@
         android:paddingLeft="30dp"
         android:id="@+id/l_eigeneKarten"
         android:paddingRight="30dp"
-        android:layout_alignTop="@+id/l_StichAnzeige"
         android:layout_alignRight="@+id/l_ButtonLeiste"
         android:layout_alignEnd="@+id/l_ButtonLeiste"
         android:layout_toEndOf="@+id/l_Deck"
         android:layout_alignLeft="@+id/l_ButtonLeiste"
-        android:layout_alignStart="@+id/l_ButtonLeiste">
+        android:layout_alignStart="@+id/l_ButtonLeiste"
+        android:layout_above="@+id/l_ButtonLeiste">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -780,7 +775,7 @@
             android:autoText="false"
             android:rotation="270"
             android:layout_gravity="left"
-            style="@style/text_buttonsSpielfeld" />
+            style="@style/vertikal_Schrift" />
 
     </LinearLayout>
 

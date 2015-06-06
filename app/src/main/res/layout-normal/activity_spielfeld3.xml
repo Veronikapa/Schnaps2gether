@@ -43,7 +43,6 @@
         android:weightSum="1"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/l_StichAnzeige"
-        android:layout_below="@+id/l_eigeneKarten"
         android:hapticFeedbackEnabled="false"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -139,7 +138,7 @@
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="wrap_content"
+            android:layout_width="54dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -150,20 +149,19 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="wrap_content"
+            android:layout_width="53dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
             style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false"
-            android:layout_weight="0.25" />
+            android:textAllCaps="false" />
 
         <Button
             style="@style/text_buttonsSpielfeld"
             android:id="@+id/cmd_weiter"
-            android:layout_width="wrap_content"
+            android:layout_width="66dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
@@ -174,7 +172,7 @@
             android:textAllCaps="false"
             android:elegantTextHeight="true"
             android:enabled="false"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
@@ -780,7 +778,7 @@
             android:autoText="false"
             android:rotation="270"
             android:layout_gravity="left"
-            style="@style/text_buttonsSpielfeld" />
+            style="@style/vertikal_Schrift" />
 
     </LinearLayout>
 

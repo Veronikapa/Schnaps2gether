@@ -157,8 +157,7 @@
             style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false"
-            android:layout_weight="0.25" />
+            android:textAllCaps="false" />
 
         <Button
             style="@style/text_buttonsSpielfeld"
@@ -725,7 +724,7 @@
             android:autoText="false"
             android:rotation="270"
             android:layout_gravity="left"
-            style="@style/text_buttonsSpielfeld" />
+            style="@style/vertikal_Schrift" />
 
     </LinearLayout>
 

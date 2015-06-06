@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spielregeln"
+            android:text="@string/spielregeln"
             android:id="@+id/txt_Spielregeln"
             style="@style/header_Lobby"
             android:layout_gravity="top|center_vertical" />
@@ -67,13 +67,10 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_hoehe"
-            android:text="abbrechen"
+            android:text="@string/abbrechen"
             android:id="@+id/btn_zurück"
             android:background="@drawable/beiger_button"
             style="@style/text_buttonsLobby"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:onClick="abbrechenSpielregeln"
             android:textAllCaps="false" />
     </LinearLayout>
