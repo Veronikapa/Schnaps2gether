@@ -143,6 +143,9 @@ public class Lobby extends Activity implements
         popupNeuesSpiel(v);
         spieleIdListe.clear();
         spieleListe.clear();
+        isc1 = false;
+        isc2 = false;
+        isc3 = false;
     }
 
     /*
@@ -154,6 +157,11 @@ public class Lobby extends Activity implements
             Toast.makeText(appContext, "Suche nach offenen Spielen...", Toast.LENGTH_SHORT).show();
             startDiscovery();
         }
+        spieleIdListe.clear();
+        spieleListe.clear();
+        isc1 = false;
+        isc2 = false;
+        isc3 = false;
     }
 
     @Override

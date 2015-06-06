@@ -8,7 +8,7 @@ public class Spiel3 {
 
     private ArrayList<Karte> kartendeck;
     private ArrayList<Karte> stapel;
-    private ArrayList<Karte> talon;
+    public ArrayList<Karte> Talon;
     private Spieler s1;
     private Spieler s2;
     private Spieler s3;
@@ -23,7 +23,7 @@ public class Spiel3 {
 
 
     public ArrayList<Karte> getTalon() {
-        return talon;
+        return Talon;
     }
 
     public Spieler getS1() {
@@ -144,9 +144,9 @@ public class Spiel3 {
             stapel.remove(0);
 
             //Talonkarten ausgeben
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
         }
         else if(AnzahlSpiele%3 == 1)
@@ -176,9 +176,9 @@ public class Spiel3 {
             stapel.remove(0);
 
             //Talonkarten ausgeben
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
         }
         else
@@ -208,9 +208,9 @@ public class Spiel3 {
             stapel.remove(0);
 
             //Talonkarten ausgeben
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
-            talon.add(stapel.get(0));
+            Talon.add(stapel.get(0));
             stapel.remove(0);
         }
 
@@ -320,7 +320,7 @@ public class Spiel3 {
     private void KartenMischen()
     {
         stapel = new ArrayList<Karte>(20);
-        talon = new ArrayList<Karte>(2);
+        Talon = new ArrayList<Karte>(2);
         sieger = new ArrayList<Spieler>(2);
         int random = 0;
         for(int a = 20; a > 0; a--)
@@ -925,8 +925,8 @@ public class Spiel3 {
 
     public void TalonAustauschen(Karte talon, Karte spielerkarte, Spieler s)
     {
-        this.talon.remove(talon);
-        this.talon.add(spielerkarte);
+        this.Talon.remove(talon);
+        this.Talon.add(spielerkarte);
         s.Hand.remove(spielerkarte);
         s.Hand.add(talon);
     }

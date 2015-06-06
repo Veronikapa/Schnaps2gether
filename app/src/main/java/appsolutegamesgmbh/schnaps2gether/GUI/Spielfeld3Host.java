@@ -56,6 +56,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String SPIEL = "15";
     private static final String AUFGEDECKT = "16";
     private static final String SPIELANSAGEN = "17";
+    private static final String TALONTAUSCHEN = "18";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -104,8 +105,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Karte aufgedrehteKarte;
 
 
+    private static Karte ka,t;
     private static ImageView imageView_talonkarte1;
     private static ImageView imageView_talonkarte2;
+    private static boolean talontauschen;
+    private static String talonID;
 
     private static ImageView imageView_Stich1;
     private static ImageView imageView_Stich2;
@@ -445,22 +449,28 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             public boolean onMenuItemClick(MenuItem menuItem) {
                 try {
                     switch (menuItem.getTitle().toString()) {
-                        case "Schnapser": spiel.SpielAnsagen(new Rufspiel("Schnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
+                        case "Schnapser":
+                            spiel.SpielAnsagen(new Rufspiel("Schnapser"), selbst);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
                             break;
-                        case "Land": spiel.SpielAnsagen(new Rufspiel("Land"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
+                        case "Land":
+                            spiel.SpielAnsagen(new Rufspiel("Land"), selbst);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
                             break;
-                        case "Kontraschnapser": spiel.SpielAnsagen(new Rufspiel("Kontraschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
+                        case "Kontraschnapser":
+                            spiel.SpielAnsagen(new Rufspiel("Kontraschnapser"), selbst);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
                             break;
-                        case "Bauernschnapser": spiel.SpielAnsagen(new Rufspiel("Bauernschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
+                        case "Bauernschnapser":
+                            spiel.SpielAnsagen(new Rufspiel("Bauernschnapser"), selbst);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
                             break;
-                        case "Kontrabauernschnapser": spiel.SpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst);
-                            Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" angesagt", Toast.LENGTH_SHORT).show();
+                        case "Kontrabauernschnapser":
+                            spiel.SpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst);
+                            Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
                             break;
-                        default: return false;
+                        default:
+                            return false;
                     }
                 } catch (Exception e) {
 
@@ -469,9 +479,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
                 buttonWeiter.setVisibility(view.INVISIBLE);
 
-                if (bummerl.getAnzahlSpiele()%3 == 1) {
+                if (bummerl.getAnzahlSpiele() % 3 == 1) {
                     Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+
+                    if (spiel.getSpieler().equals(selbst)) {
+                        talonzeigen();
+                        buttonWeiter.setEnabled(true);
+                        buttonWeiter.setAlpha(1f);
+                    } else if (spiel.getSpieler().equals(gegner1)) {
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
+                    } else {
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
+                    }
                 } else {
                     andererSpielerKannSpielAnsagen(gegner1);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
@@ -506,49 +526,47 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void weiterOnClick(View view) {
-       /* if (anzSpieleAngesagt<4) {
-            anzSpieleAngesagt++;
-            if (anzSpieleAngesagt<4) {
-                andererSpielerKannSpielAnsagen(gegner1);
-                buttonWeiter.setVisibility(view.INVISIBLE);
-            }
-            else {
-                fleckRunde();
-            }
-            buttonSpielAnsagen.setVisibility(view.INVISIBLE);
-        } else {
-            anzFleckZüge++;
-            if (anzFleckZüge % 2 != 0)
-                andererSpielerAmFlecken(mitspieler, false);
-            else {
-                for (Spieler andererSpieler: andereSpieler) {
-                    if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
-                }
-                if (selbst.isIstdran()) {
-                    handKartenKlickbar();
-                    eigenerZug();
-                }
-                buttonWeiter.setVisibility(View.INVISIBLE);
-                buttonFlecken.setVisibility(View.INVISIBLE);
-            }
-        }*/
 
-        if (buttonWeiter.getText() == "Aufdecken"){
+        if (buttonWeiter.getText() == "Aufdecken") {
             aufdrehen();
             //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
 
             buttonTrumpfansagen.setVisibility(View.INVISIBLE);
             buttonTrumpfansagen.setEnabled(false);
-        }
-        else {
-            if (bummerl.getAnzahlSpiele()%3 == 1) {
+        } else if (talontauschen) {
+            talontauschen = false;
+            handAktualisieren();
+            eigenerZug();
+            handKartenKlickbar();
+            imageView_talonkarte1.setVisibility(View.INVISIBLE);
+            imageView_talonkarte2.setVisibility(View.INVISIBLE);
+        } else {
+            if (bummerl.getAnzahlSpiele() % 3 == 1) {
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.6f);
+                buttonSpielAnsagen.setVisibility(View.INVISIBLE);
                 Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+
+                if(spiel.getSpieler().equals(selbst)) {
+                    talonzeigen();
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                }
+                else if(spiel.getSpieler().equals(gegner1)){
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
+                }
+                else{
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
+                }
             } else {
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.6f);
+                buttonSpielAnsagen.setVisibility(View.INVISIBLE);
                 andererSpielerKannSpielAnsagen(gegner1);
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
             }
         }
-
     }
 
     @Override
@@ -609,16 +627,20 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
+                spiel.Ansagen20er("Herz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Herz").getBytes());
                 break;
             case R.id.karo_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
+                spiel.Ansagen20er("Karo", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Karo").getBytes());
                 break;
             case R.id.pik_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
+                spiel.Ansagen20er("Pik", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
+                spiel.Ansagen20er("Kreuz", selbst);
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Kreuz").getBytes());
                 break;
             default:
                 return false;
@@ -627,13 +649,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         button20er.setAlpha(0.4f);
         button40er.setEnabled(false);
         button40er.setAlpha(0.4f);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handKartenKlickbar();
-            }
-        }, 1000);
+        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        punkteAktualisieren();
+        handKartenKlickbar();
         return true;
     }
 
@@ -681,6 +699,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case SPIEL:
+                //Spiel wurde angesagt (bzw. weiter gesagt)
                 if(messageParts[2].equals("2")){
                     try {
                         if(!(messageParts[1].equals("weiter"))) {
@@ -692,6 +711,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     } catch (WrongGameException e) {
                         e.printStackTrace();
                     }
+                    //wenn nächster Spieler Vorhand --> höchtes angesagtes Spiel wird gespielt, wenn nächster Spieler nicht Vorhand --> nächster Spieler darf Spiel ansagen
                     if(!(bummerl.getAnzahlSpiele()%3 == 0)) {
                         buttonWeiter.setEnabled(true);
                         buttonWeiter.setAlpha(1f);
@@ -699,6 +719,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     }
                     else{
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+
+                        if(spiel.getSpieler().equals(selbst)) {
+                            talonzeigen();
+                            buttonWeiter.setEnabled(true);
+                            buttonWeiter.setAlpha(1f);
+                        }
+                        else if(spiel.getSpieler().equals(gegner1)){
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
+                        }
+                        else{
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
+                        }
                     }
                 }
                 else if(messageParts[2].equals("1")){
@@ -712,6 +745,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     } catch (WrongGameException e) {
                         e.printStackTrace();
                     }
+                    //wenn nächster Spieler Vorhand --> höchtes angesagtes Spiel wird gespielt, wenn nächster Spieler nicht Vorhand --> nächster Spieler darf Spiel ansagen
                     if(!(bummerl.getAnzahlSpiele()%3 == 2)) {
 
                         andererSpielerKannSpielAnsagen(gegner2);
@@ -719,6 +753,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     }
                     else{
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+
+                        if(spiel.getSpieler().equals(selbst)) {
+                            talonzeigen();
+                            buttonWeiter.setEnabled(true);
+                            buttonWeiter.setAlpha(1f);
+                        }
+                        else if(spiel.getSpieler().equals(gegner1)){
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
+                        }
+                        else{
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
+                        }
                     }
                 }
                 break;
@@ -756,27 +803,410 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     public void karte1OnClick(View view) {
-        zugAusführen(0);
+        if (!talontauschen)
+            zugAusführen(0);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte1.setAlpha(1f);
+                talonID = "21";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte1.setImageResource(ka.getImageResourceId());
+                imageView_karte1.setAlpha(0.6f);
+
+                t = selbst.Hand.get(0);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(0, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte1.setImageResource(ka.getImageResourceId());
+                imageView_karte1.setAlpha(0.6f);
+
+                t = selbst.Hand.get(0);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(0, ka);
+                talonID = "0";
+            } else if (talonID.equals("21")) {
+                imageView_karte1.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 
     public void karte2OnClick(View view) {
-        zugAusführen(1);
+        if (!talontauschen)
+            zugAusführen(1);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte2.setAlpha(1f);
+                talonID = "22";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte2.setImageResource(ka.getImageResourceId());
+                imageView_karte2.setAlpha(0.6f);
+
+                t = selbst.Hand.get(1);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(1, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte2.setImageResource(ka.getImageResourceId());
+                imageView_karte2.setAlpha(0.6f);
+
+                t = selbst.Hand.get(1);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(1, ka);
+                talonID = "0";
+            } else if (talonID.equals("22")) {
+                imageView_karte2.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte3OnClick(View view) {
-        zugAusführen(2);
+        if (!talontauschen)
+            zugAusführen(2);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte3.setAlpha(1f);
+                talonID = "23";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte3.setImageResource(ka.getImageResourceId());
+                imageView_karte3.setAlpha(0.6f);
+
+                t = selbst.Hand.get(2);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(2, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte3.setImageResource(ka.getImageResourceId());
+                imageView_karte3.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(2, ka);
+                talonID = "0";
+            } else if (talonID.equals("23")) {
+                imageView_karte3.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte4OnClick(View view) {
-        zugAusführen(3);
+        if (!talontauschen)
+            zugAusführen(3);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte4.setAlpha(1f);
+                talonID = "24";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte4.setImageResource(ka.getImageResourceId());
+                imageView_karte4.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(3, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte4.setImageResource(ka.getImageResourceId());
+                imageView_karte4.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(3, ka);
+                talonID = "0";
+            } else if (talonID.equals("24")) {
+                imageView_karte4.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte5OnClick(View view) {
-        zugAusführen(4);
+        if (!talontauschen)
+            zugAusführen(4);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte5.setAlpha(1f);
+                talonID = "25";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte5.setImageResource(ka.getImageResourceId());
+                imageView_karte5.setAlpha(0.6f);
+
+                t = selbst.Hand.get(4);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(4, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte5.setImageResource(ka.getImageResourceId());
+                imageView_karte5.setAlpha(0.6f);
+
+                t = selbst.Hand.get(4);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(4, ka);
+                talonID = "0";
+            } else if (talonID.equals("25")) {
+                imageView_karte5.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte6OnClick(View view) {
-        zugAusführen(5);
+        if (!talontauschen)
+            zugAusführen(0);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte6.setAlpha(1f);
+                talonID = "26";
+            } else if (talonID.equals("11")) {
+                ka = spiel.Talon.get(0);
+                imageView_karte6.setImageResource(ka.getImageResourceId());
+                imageView_karte6.setAlpha(0.6f);
+
+                t = selbst.Hand.get(5);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                spiel.Talon.set(0, t);
+                selbst.Hand.set(5, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = spiel.Talon.get(1);
+                imageView_karte6.setImageResource(ka.getImageResourceId());
+                imageView_karte6.setAlpha(0.6f);
+
+                t = selbst.Hand.get(5);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                spiel.Talon.set(1, t);
+                selbst.Hand.set(5, ka);
+                talonID = "0";
+            } else if (talonID.equals("26")) {
+                imageView_karte6.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void talon1_onClick(View view) {
+        if (talonID.equals("0")) {
+            imageView_talonkarte1.setAlpha(1f);
+            talonID = "11";
+        } else if (talonID.equals("21")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte1.setImageResource(ka.getImageResourceId());
+            imageView_karte1.setAlpha(0.6f);
+
+            t = selbst.Hand.get(0);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0,t);
+            selbst.Hand.set(0,ka);
+            talonID = "0";
+        } else if (talonID.equals("22")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte2.setImageResource(ka.getImageResourceId());
+            imageView_karte2.setAlpha(0.6f);
+
+            t = selbst.Hand.get(1);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0, t);
+            selbst.Hand.set(1, ka);
+            talonID = "0";
+        } else if (talonID.equals("23")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte3.setImageResource(ka.getImageResourceId());
+            imageView_karte3.setAlpha(0.6f);
+
+            t = selbst.Hand.get(2);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0,t);
+            selbst.Hand.set(2,ka);
+            talonID = "0";
+        } else if (talonID.equals("24")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte4.setImageResource(ka.getImageResourceId());
+            imageView_karte4.setAlpha(0.6f);
+
+            t = selbst.Hand.get(3);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0,t);
+            selbst.Hand.set(3,ka);
+            talonID = "0";
+        }else if (talonID.equals("25")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte5.setImageResource(ka.getImageResourceId());
+            imageView_karte5.setAlpha(0.6f);
+
+            t = selbst.Hand.get(4);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0,t);
+            selbst.Hand.set(4,ka);
+            talonID = "0";
+        }else if (talonID.equals("26")) {
+            ka = spiel.Talon.get(0);
+            imageView_karte6.setImageResource(ka.getImageResourceId());
+            imageView_karte6.setAlpha(0.6f);
+
+            t = selbst.Hand.get(5);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            spiel.Talon.set(0, t);
+            selbst.Hand.set(5, ka);
+            talonID = "0";
+        }else if(talonID.equals("11")){
+            imageView_talonkarte1.setAlpha(0.6f);
+            talonID = "0";
+        }else
+            Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void talon2_onClick(View view) {
+        if (talonID.equals("0")) {
+            imageView_talonkarte2.setAlpha(1f);
+            talonID = "12";
+        } else if (talonID.equals("21")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte1.setImageResource(ka.getImageResourceId());
+            imageView_karte1.setAlpha(0.6f);
+
+            t = selbst.Hand.get(0);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1,t);
+            selbst.Hand.set(0,ka);
+            talonID = "0";
+        } else if (talonID.equals("22")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte2.setImageResource(ka.getImageResourceId());
+            imageView_karte2.setAlpha(0.6f);
+
+            t = selbst.Hand.get(1);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1, t);
+            selbst.Hand.set(1, ka);
+            talonID = "0";
+        } else if (talonID.equals("23")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte3.setImageResource(ka.getImageResourceId());
+            imageView_karte3.setAlpha(0.6f);
+
+            t = selbst.Hand.get(2);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1,t);
+            selbst.Hand.set(2,ka);
+            talonID = "0";
+        } else if (talonID.equals("24")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte4.setImageResource(ka.getImageResourceId());
+            imageView_karte4.setAlpha(0.6f);
+
+            t = selbst.Hand.get(3);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1,t);
+            selbst.Hand.set(3,ka);
+            talonID = "0";
+        }else if (talonID.equals("25")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte5.setImageResource(ka.getImageResourceId());
+            imageView_karte5.setAlpha(0.6f);
+
+            t = selbst.Hand.get(4);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1,t);
+            selbst.Hand.set(4,ka);
+            talonID = "0";
+        }else if (talonID.equals("26")) {
+            ka = spiel.Talon.get(1);
+            imageView_karte6.setImageResource(ka.getImageResourceId());
+            imageView_karte6.setAlpha(0.6f);
+
+            t = selbst.Hand.get(5);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            spiel.Talon.set(1, t);
+            selbst.Hand.set(5, ka);
+            talonID = "0";
+        }else if(talonID.equals("12")){
+            imageView_talonkarte1.setAlpha(0.6f);
+            talonID = "0";
+        }else
+        Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
     }
 
     private void zugAusführen(int i) {
@@ -791,18 +1221,45 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
 
 
-        if (gegnerischeKarte1 == null || gegnerischeKarte2 == null) {
-            gegnerischeHandAktualisieren();
-            Handler handler = new Handler();
+        if (gegnerischeKarte1 == null) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":1").getBytes());
                 }
             }, 1000);
         } else {
             zugEnde();
         }
+    }
+
+    private void talonzeigen()
+    {
+        buttonWeiter.setEnabled(true);
+        buttonWeiter.setAlpha(1f);
+        talontauschen = true;
+        talonID = "0";
+        imageView_talonkarte1.setVisibility(View.VISIBLE);
+        imageView_talonkarte1.setImageResource(spiel.getTalon().get(0).getImageResourceId());
+        imageView_talonkarte1.setEnabled(true);
+        imageView_talonkarte1.setAlpha(0.6f);
+        imageView_talonkarte2.setVisibility(View.VISIBLE);
+        imageView_talonkarte2.setImageResource(spiel.getTalon().get(1).getImageResourceId());
+        imageView_talonkarte2.setEnabled(true);
+        imageView_talonkarte2.setAlpha(0.6f);
+
+        imageView_karte1.setEnabled(true);
+        imageView_karte1.setAlpha(0.6f);
+        imageView_karte2.setEnabled(true);
+        imageView_karte2.setAlpha(0.6f);
+        imageView_karte3.setEnabled(true);
+        imageView_karte3.setAlpha(0.6f);
+        imageView_karte4.setEnabled(true);
+        imageView_karte4.setAlpha(0.6f);
+        imageView_karte5.setEnabled(true);
+        imageView_karte5.setAlpha(0.6f);
+        imageView_karte6.setEnabled(true);
+        imageView_karte6.setAlpha(0.6f);
     }
 
     private void zugEnde() {
@@ -902,8 +1359,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     eigenerZug();
                     handKartenKlickbar();
                 } else {
-                    gegner1hat20er();
-                    gegner2hat20er();
+                    //gegner1hat20er();
+                    //gegner2hat20er();
                 }
             }
         }
@@ -913,15 +1370,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             
         if(hat20er(selbst)) {
             button20er.setEnabled(true);
+            button20er.setAlpha(1f);
         }
         else {               
             button20er.setEnabled(false);
+            button20er.setAlpha(0.6f);
         }
         if(hat40er(selbst)) {
             button40er.setEnabled(true);
+            button40er.setAlpha(1f);
         }
         else {
             button40er.setEnabled(false);
+            button40er.setAlpha(0.6f);
         }
     }
 
