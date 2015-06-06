@@ -536,22 +536,22 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }
                 break;
             case KARTEGESPIELT:
-                if(SpielerID == "1") {
-                    if(messageParts[2] == "2") {
+                if(SpielerID.equals("1")) {
+                    if(messageParts[2].equals("2")) {
                         gegnerischeKarte1 = new Karte(message.substring(2));
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
-                    else if(messageParts[2] == "0") {
+                    else if(messageParts[2].equals("0")) {
                         gegnerischeKarte2 = new Karte(message.substring(2));
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
                 else if(SpielerID.equals("2")) {
-                    if(messageParts[2] == "0") {
+                    if(messageParts[2].equals("0")) {
                         gegnerischeKarte1 = new Karte(message.substring(2));
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
-                    else if(messageParts[2] == "1") {
+                    else if(messageParts[2].equals("1")) {
                         gegnerischeKarte2 = new Karte(message.substring(2));
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
@@ -1107,11 +1107,11 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             buttonTrumpfansagen.setEnabled(false);
         }else if (talontauschen) {
             talontauschen = false;
-            handAktualisieren();
-            eigenerZug();
-            handKartenKlickbar();
             imageView_talonkarte1.setVisibility(View.INVISIBLE);
             imageView_talonkarte2.setVisibility(View.INVISIBLE);
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.4f);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONGETAUSCHT + ":" + SpielerID).getBytes());
         }
         else{
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "weiter" + ":" + SpielerID).getBytes());

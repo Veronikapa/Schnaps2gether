@@ -319,8 +319,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             }
         }
 
-
-        //eigenerZug();
             }
         }, 2000);
 
@@ -670,106 +668,108 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         return super.onOptionsItemSelected(item);
     }
 
-    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable){
+    public void receiveFromLobby(String endpointID, byte[] payload, boolean isReliable) {
         String message = new String(payload);
         messageParts = message.split(":");
         switch (((message.split(":")[0]))) {
             case KARTEGESPIELT:
-                if(message.split(":")[2] == "1") {
+                if (message.split(":")[2] == "1") {
                     gegnerischeKarte1 = new Karte(message.split(":")[1]);
                     spiel.Auspielen(gegnerischeKarte1, gegner1);
                     imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
-                }
-                else
-                {
+                } else {
                     gegnerischeKarte2 = new Karte(message.split(":")[1]);
                     spiel.Auspielen(gegnerischeKarte2, gegner2);
                     imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
 
-                    if(eigeneKarte == null)
-                    {
+                    if (eigeneKarte == null) {
                         handKartenKlickbar();
                     }
                 }
                 break;
-            case WEITER: handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    eigenerZug();
+            case WEITER:
+                if (messageParts[1].equals("1")) {
+                    if(!(gegner2.equals(spiel.getSpieler())))
+                        gegner2hat20er();
+                    else
+                        zugEnde();
                 }
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+                if (messageParts[1].equals("2")) {
+                    if(!(selbst.equals(spiel.getSpieler()))) {
+                        handAktualisieren();
+                        eigenerZug();
+                        handKartenKlickbar();
+                    }
+                    else
+                        zugEnde();
+                }
+
+
                 break;
             case SPIEL:
                 //Spiel wurde angesagt (bzw. weiter gesagt)
-                if(messageParts[2].equals("2")){
+                if (messageParts[2].equals("2")) {
                     try {
-                        if(!(messageParts[1].equals("weiter"))) {
+                        if (!(messageParts[1].equals("weiter"))) {
                             spiel.SpielAnsagen(new Rufspiel(messageParts[1]), gegner2);
                             Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
-                        }
-                        else
+                        } else
                             Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                     } catch (WrongGameException e) {
                         e.printStackTrace();
                     }
                     //wenn nächster Spieler Vorhand --> höchtes angesagtes Spiel wird gespielt, wenn nächster Spieler nicht Vorhand --> nächster Spieler darf Spiel ansagen
-                    if(!(bummerl.getAnzahlSpiele()%3 == 0)) {
+                    if (!(bummerl.getAnzahlSpiele() % 3 == 0)) {
                         buttonWeiter.setEnabled(true);
                         buttonWeiter.setAlpha(1f);
                         buttonSpielAnsagen.setVisibility(View.VISIBLE);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                        if(spiel.getSpieler().equals(selbst)) {
+                        if (spiel.getSpieler().equals(selbst)) {
                             talonzeigen();
                             buttonWeiter.setEnabled(true);
                             buttonWeiter.setAlpha(1f);
-                        }
-                        else if(spiel.getSpieler().equals(gegner1)){
+                        } else if (spiel.getSpieler().equals(gegner1)) {
                             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                        }
-                        else{
+                        } else {
                             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
                         }
                     }
-                }
-                else if(messageParts[2].equals("1")){
+                } else if (messageParts[2].equals("1")) {
                     try {
-                        if(!(messageParts[1].equals("weiter"))) {
+                        if (!(messageParts[1].equals("weiter"))) {
                             spiel.SpielAnsagen(new Rufspiel(messageParts[1]), gegner1);
                             Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " angesagt", Toast.LENGTH_SHORT).show();
-                        }
-                        else
+                        } else
                             Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                     } catch (WrongGameException e) {
                         e.printStackTrace();
                     }
                     //wenn nächster Spieler Vorhand --> höchtes angesagtes Spiel wird gespielt, wenn nächster Spieler nicht Vorhand --> nächster Spieler darf Spiel ansagen
-                    if(!(bummerl.getAnzahlSpiele()%3 == 2)) {
+                    if (!(bummerl.getAnzahlSpiele() % 3 == 2)) {
 
                         andererSpielerKannSpielAnsagen(gegner2);
                         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
-                    }
-                    else{
+                    } else {
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                        if(spiel.getSpieler().equals(selbst)) {
+                        if (spiel.getSpieler().equals(selbst)) {
                             talonzeigen();
                             buttonWeiter.setEnabled(true);
                             buttonWeiter.setAlpha(1f);
-                        }
-                        else if(spiel.getSpieler().equals(gegner1)){
+                        } else if (spiel.getSpieler().equals(gegner1)) {
                             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                        }
-                        else{
+                        } else {
                             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
                         }
                     }
                 }
                 break;
-            case ANGESAGT40ER: spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
+            case ANGESAGT40ER:
+                spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
                 punkteAktualisieren();
                 if (spiel.istSpielzuEnde(bummerl)) {
                     spielEnde();
@@ -778,7 +778,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 angesagt = true;
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case ANGESAGT20ER: String farbe = message.substring(2);
+            case ANGESAGT20ER:
+                String farbe = message.substring(2);
                 spiel.Ansagen20er(farbe, gegner1);
                 punkteAktualisieren();
                 if (spiel.istSpielzuEnde(bummerl)) {
@@ -786,19 +787,23 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 }
                 gegnerischeHandAktualisieren();
                 angesagt = true;
-                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(appContext, farbe + " 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFFARBE:
                 trumpffarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
                 break;
             case TALONGETAUSCHT:
-                Toast.makeText(appContext, "Talon ausgetauscht", Toast.LENGTH_SHORT).show();
+                if(messageParts[1].equals("1"))
+                    gegner1hat20er();
+                else if(messageParts[1].equals("2"))
+                    gegner2hat20er();
                 break;
             case AUFGEDECKT:
                 aufdrehen();
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -1225,7 +1230,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":1").getBytes());
+                    gegner1hat20er();
                 }
             }, 1000);
         } else {
@@ -1268,8 +1273,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
-        Handler handler = new Handler();
-        handler.postDelayed(new Zugende(), 2000);
+        punkteAktualisieren();
+
+
     }
 
 
@@ -1343,7 +1349,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
     
 
-    class Zugende implements Runnable {
+   /* class Zugende implements Runnable {
+
 
     @Override
     public void run() {
@@ -1364,7 +1371,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 }
             }
         }
-    }
+    }*/
 
     private static void eigenerZug() {
             
