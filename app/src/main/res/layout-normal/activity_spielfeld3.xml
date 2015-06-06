@@ -803,7 +803,8 @@
                 android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_talonkarte2"
                 android:layout_gravity="center_horizontal|bottom"
-                android:contentDescription="@string/talon2" />
+                android:contentDescription="@string/talon2"
+                android:onClick="talon2_onClick" />
 
         </LinearLayout>
 
@@ -820,7 +821,8 @@
                 android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_talonkarte1"
                 android:layout_marginBottom="10dp"
-                android:contentDescription="@string/talon1" />
+                android:contentDescription="@string/talon1"
+                android:onClick="talon1_onClick" />
         </LinearLayout>
 
         <TableLayout

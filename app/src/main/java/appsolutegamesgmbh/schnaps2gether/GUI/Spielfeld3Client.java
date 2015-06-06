@@ -57,6 +57,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String SPIEL = "15";
     private static final String AUFGEDECKT = "16";
     private static final String SPIELANSAGEN = "17";
+    private static final String TALONTAUSCHEN = "18";
+
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -157,6 +159,12 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static ImageView stichK15;
     private static ImageView stichK16;
 
+
+    private static ArrayList<Karte> Talon;
+    private static String talonID;
+    private static boolean talontauschen;
+    private static Karte ka, t;
+
     @Override
     public void onStop() {
         super.onStop();
@@ -201,6 +209,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karteGegner2 = (ImageView) findViewById(R.id.imageView_karteGegner2);
         imageView_trumpf = (ImageView) findViewById(R.id.imageView_trumpf);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
+
+        imageView_talonkarte1 =(ImageView)findViewById(R.id.imageView_talonkarte1);
+        imageView_talonkarte2 =(ImageView)findViewById(R.id.imageView_talonkarte2);
 
         //imageView_Stich1 = (ImageView) findViewById(R.id.imageView_Stich1);
         //imageView_Stich2 = (ImageView) findViewById(R.id.imageView_Stich2);
@@ -332,7 +343,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }
 
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
-                buttonWeiter.setVisibility(view.INVISIBLE);
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.4f);
                 return true;
             }
         });
@@ -524,23 +536,27 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }
                 break;
             case KARTEGESPIELT:
-                if(SpielerID == "1") {
-                    if(messageParts[2] == "2") {
-                        gegnerischeKarte1 = new Karte(message.substring(2));
+                if(SpielerID.equals("1")) {
+                    if(messageParts[2].equals("2")) {
+                        gegnerischeKarte1 = new Karte(messageParts[1]);
+                        imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
-                    else if(messageParts[2] == "0") {
-                        gegnerischeKarte2 = new Karte(message.substring(2));
+                    else if(messageParts[2].equals("0")) {
+                        gegnerischeKarte2 = new Karte(messageParts[1]);
+                        imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
                 else if(SpielerID.equals("2")) {
-                    if(messageParts[2] == "0") {
-                        gegnerischeKarte1 = new Karte(message.substring(2));
+                    if(messageParts[2].equals("0")) {
+                        gegnerischeKarte1 = new Karte(messageParts[1]);
+                        imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
                     }
-                    else if(messageParts[2] == "1") {
-                        gegnerischeKarte2 = new Karte(message.substring(2));
+                    else if(messageParts[2].equals("1")) {
+                        gegnerischeKarte2 = new Karte(messageParts[1]);
+                        imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
@@ -549,23 +565,25 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
                 break;
             case WEITER:
-                handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    hat20er = message.substring(4,5).equals("1") ? true : false;
-                    hat40er = message.substring(6,7).equals("1") ? true : false;
-                    hab20er = new ArrayList<String>();
-                    if (hat20er) {
-                        String[] meine20er = message.substring(8).split(" ");
-                        for (String farbe: meine20er) {
-                            hab20er.add(farbe);
+                if(messageParts[1].equals(SpielerID)) {
+                    handKartenKlickbar();
+                    if (messageParts[2].substring(0, 1).equals("1")) {
+                        hat20er = messageParts[2].substring(2, 3).equals("1") ? true : false;
+                        hat40er = message.substring(4, 5).equals("1") ? true : false;
+                        hab20er = new ArrayList<String>();
+                        if (hat20er) {
+                            String[] meine20er = message.substring(8).split(" ");
+                            for (String farbe : meine20er) {
+                                hab20er.add(farbe);
+                            }
                         }
-                    }
 
-                    eigenerZug();
+                        eigenerZug();
+
+                    } else
+                        eigenerZug();
                 }
-                else
-                    eigenerZug();
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
+
                 break;
             case SPIELANSAGEN:
                 if(messageParts[2].equals(SpielerID)) {
@@ -581,10 +599,44 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case SPIEL:
                 Toast.makeText(appContext, messageParts[1] + " wird gespielt", Toast.LENGTH_SHORT).show();
+                break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT20ER: String farbe = message.substring(2);
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+                break;
+            case TALONTAUSCHEN:
+                if(messageParts[2].equals(SpielerID)){
+                    talontauschen = true;
+                    talonID = "0";
+                    Talon = new ArrayList<Karte>(2);
+                    Talon.add(new Karte(messageParts[1].split(",")[0]));
+                    Talon.add(new Karte(messageParts[1].split(",")[1]));
+                    imageView_talonkarte1.setVisibility(View.VISIBLE);
+                    imageView_talonkarte1.setEnabled(true);
+                    imageView_talonkarte1.setImageResource(Talon.get(0).getImageResourceId());
+                    imageView_talonkarte1.setAlpha(0.6f);
+                    imageView_talonkarte2.setVisibility(View.VISIBLE);
+                    imageView_talonkarte2.setEnabled(true);
+                    imageView_talonkarte2.setImageResource(Talon.get(1).getImageResourceId());
+                    imageView_talonkarte2.setAlpha(0.6f);
+
+                    imageView_karte1.setEnabled(true);
+                    imageView_karte1.setAlpha(0.6f);
+                    imageView_karte2.setEnabled(true);
+                    imageView_karte2.setAlpha(0.6f);
+                    imageView_karte3.setEnabled(true);
+                    imageView_karte3.setAlpha(0.6f);
+                    imageView_karte4.setEnabled(true);
+                    imageView_karte4.setAlpha(0.6f);
+                    imageView_karte5.setEnabled(true);
+                    imageView_karte5.setAlpha(0.6f);
+                    imageView_karte6.setEnabled(true);
+                    imageView_karte6.setAlpha(0.6f);
+
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                }
                 break;
             case TALONGETAUSCHT: Toast.makeText(appContext, "Talonkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
@@ -644,57 +696,414 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void karte1OnClick(View view) {
-        zugAusführen(0);
+
+        if (!talontauschen)
+            zugAusführen(0);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte1.setAlpha(1f);
+                talonID = "21";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte1.setImageResource(ka.getImageResourceId());
+                imageView_karte1.setAlpha(0.6f);
+
+                t = selbst.Hand.get(0);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(0, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte1.setImageResource(ka.getImageResourceId());
+                imageView_karte1.setAlpha(0.6f);
+
+                t = selbst.Hand.get(0);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(0, ka);
+                talonID = "0";
+            } else if (talonID.equals("21")) {
+                imageView_karte1.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 
     public void karte2OnClick(View view) {
-        zugAusführen(1);
+        if (!talontauschen)
+            zugAusführen(1);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte2.setAlpha(1f);
+                talonID = "22";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte2.setImageResource(ka.getImageResourceId());
+                imageView_karte2.setAlpha(0.6f);
+
+                t = selbst.Hand.get(1);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(1, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte2.setImageResource(ka.getImageResourceId());
+                imageView_karte2.setAlpha(0.6f);
+
+                t = selbst.Hand.get(1);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(1, ka);
+                talonID = "0";
+            } else if (talonID.equals("22")) {
+                imageView_karte2.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte3OnClick(View view) {
-        zugAusführen(2);
+        if (!talontauschen)
+            zugAusführen(2);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte3.setAlpha(1f);
+                talonID = "23";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte3.setImageResource(ka.getImageResourceId());
+                imageView_karte3.setAlpha(0.6f);
+
+                t = selbst.Hand.get(2);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(2, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte3.setImageResource(ka.getImageResourceId());
+                imageView_karte3.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(2, ka);
+                talonID = "0";
+            } else if (talonID.equals("23")) {
+                imageView_karte3.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte4OnClick(View view) {
-        zugAusführen(3);
+        if (!talontauschen)
+            zugAusführen(3);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte4.setAlpha(1f);
+                talonID = "24";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte4.setImageResource(ka.getImageResourceId());
+                imageView_karte4.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(3, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte4.setImageResource(ka.getImageResourceId());
+                imageView_karte4.setAlpha(0.6f);
+
+                t = selbst.Hand.get(3);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(3, ka);
+                talonID = "0";
+            } else if (talonID.equals("24")) {
+                imageView_karte4.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte5OnClick(View view) {
-        zugAusführen(4);
+        if (!talontauschen)
+            zugAusführen(4);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte5.setAlpha(1f);
+                talonID = "25";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte5.setImageResource(ka.getImageResourceId());
+                imageView_karte5.setAlpha(0.6f);
+
+                t = selbst.Hand.get(4);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(4, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte5.setImageResource(ka.getImageResourceId());
+                imageView_karte5.setAlpha(0.6f);
+
+                t = selbst.Hand.get(4);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(4, ka);
+                talonID = "0";
+            } else if (talonID.equals("25")) {
+                imageView_karte5.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public void karte6OnClick(View view) {
-        zugAusführen(5);
+        if (!talontauschen)
+            zugAusführen(5);
+        else {
+            if (talonID.equals("0")) {
+                imageView_karte6.setAlpha(1f);
+                talonID = "26";
+            } else if (talonID.equals("11")) {
+                ka = Talon.get(0);
+                imageView_karte6.setImageResource(ka.getImageResourceId());
+                imageView_karte6.setAlpha(0.6f);
+
+                t = selbst.Hand.get(5);
+                imageView_talonkarte1.setImageResource(t.getImageResourceId());
+                imageView_talonkarte1.setAlpha(0.6f);
+
+                Talon.set(0, t);
+                selbst.Hand.set(5, ka);
+                talonID = "0";
+            } else if (talonID.equals("12")) {
+                ka = Talon.get(1);
+                imageView_karte6.setImageResource(ka.getImageResourceId());
+                imageView_karte6.setAlpha(0.6f);
+
+                t = selbst.Hand.get(5);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
+
+                Talon.set(1, t);
+                selbst.Hand.set(5, ka);
+                talonID = "0";
+            } else if (talonID.equals("26")) {
+                imageView_karte6.setAlpha(0.6f);
+                talonID = "0";
+            } else
+                Toast.makeText(appContext, "Wählen Sie eine Talonkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void talon1_onClick(View view) {
+        if (talonID.equals("0")) {
+            imageView_talonkarte1.setAlpha(1f);
+            talonID = "11";
+        } else if (talonID.equals("21")) {
+            ka = Talon.get(0);
+            imageView_karte1.setImageResource(ka.getImageResourceId());
+            imageView_karte1.setAlpha(0.6f);
+
+            t = selbst.Hand.get(0);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0,t);
+            selbst.Hand.set(0,ka);
+            talonID = "0";
+        } else if (talonID.equals("22")) {
+            ka = Talon.get(0);
+            imageView_karte2.setImageResource(ka.getImageResourceId());
+            imageView_karte2.setAlpha(0.6f);
+
+            t = selbst.Hand.get(1);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0, t);
+            selbst.Hand.set(1, ka);
+            talonID = "0";
+        } else if (talonID.equals("23")) {
+            ka = Talon.get(0);
+            imageView_karte3.setImageResource(ka.getImageResourceId());
+            imageView_karte3.setAlpha(0.6f);
+
+            t = selbst.Hand.get(2);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0,t);
+            selbst.Hand.set(2,ka);
+            talonID = "0";
+        } else if (talonID.equals("24")) {
+            ka = Talon.get(0);
+            imageView_karte4.setImageResource(ka.getImageResourceId());
+            imageView_karte4.setAlpha(0.6f);
+
+            t = selbst.Hand.get(3);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0,t);
+            selbst.Hand.set(3,ka);
+            talonID = "0";
+        }else if (talonID.equals("25")) {
+            ka = Talon.get(0);
+            imageView_karte5.setImageResource(ka.getImageResourceId());
+            imageView_karte5.setAlpha(0.6f);
+
+            t = selbst.Hand.get(4);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0,t);
+            selbst.Hand.set(4,ka);
+            talonID = "0";
+        }else if (talonID.equals("26")) {
+            ka = Talon.get(0);
+            imageView_karte6.setImageResource(ka.getImageResourceId());
+            imageView_karte6.setAlpha(0.6f);
+
+            t = selbst.Hand.get(5);
+            imageView_talonkarte1.setImageResource(t.getImageResourceId());
+            imageView_talonkarte1.setAlpha(0.6f);
+
+            Talon.set(0, t);
+            selbst.Hand.set(5, ka);
+            talonID = "0";
+        }else if(talonID.equals("11")){
+            imageView_talonkarte1.setAlpha(0.6f);
+            talonID = "0";
+        }else
+            Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void talon2_onClick(View view) {
+        if (talonID.equals("0")) {
+            imageView_talonkarte2.setAlpha(1f);
+            talonID = "12";
+        } else if (talonID.equals("21")) {
+            ka = Talon.get(1);
+            imageView_karte1.setImageResource(ka.getImageResourceId());
+            imageView_karte1.setAlpha(0.6f);
+
+            t = selbst.Hand.get(0);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1,t);
+            selbst.Hand.set(0,ka);
+            talonID = "0";
+        } else if (talonID.equals("22")) {
+            ka = Talon.get(1);
+            imageView_karte2.setImageResource(ka.getImageResourceId());
+            imageView_karte2.setAlpha(0.6f);
+
+            t = selbst.Hand.get(1);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1, t);
+            selbst.Hand.set(1, ka);
+            talonID = "0";
+        } else if (talonID.equals("23")) {
+            ka = Talon.get(1);
+            imageView_karte3.setImageResource(ka.getImageResourceId());
+            imageView_karte3.setAlpha(0.6f);
+
+            t = selbst.Hand.get(2);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1,t);
+            selbst.Hand.set(2,ka);
+            talonID = "0";
+        } else if (talonID.equals("24")) {
+            ka = Talon.get(1);
+            imageView_karte4.setImageResource(ka.getImageResourceId());
+            imageView_karte4.setAlpha(0.6f);
+
+            t = selbst.Hand.get(3);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1,t);
+            selbst.Hand.set(3,ka);
+            talonID = "0";
+        }else if (talonID.equals("25")) {
+            ka = Talon.get(1);
+            imageView_karte5.setImageResource(ka.getImageResourceId());
+            imageView_karte5.setAlpha(0.6f);
+
+            t = selbst.Hand.get(4);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1,t);
+            selbst.Hand.set(4,ka);
+            talonID = "0";
+        }else if (talonID.equals("26")) {
+            ka = Talon.get(1);
+            imageView_karte6.setImageResource(ka.getImageResourceId());
+            imageView_karte6.setAlpha(0.6f);
+
+            t = selbst.Hand.get(5);
+            imageView_talonkarte2.setImageResource(t.getImageResourceId());
+            imageView_talonkarte2.setAlpha(0.6f);
+
+            Talon.set(1, t);
+            selbst.Hand.set(5, ka);
+            talonID = "0";
+        }else if(talonID.equals("12")){
+            imageView_talonkarte1.setAlpha(0.6f);
+            talonID = "0";
+        }else
+            Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
     }
 
     public void weiterOnClick(View view) {
-       /* if (anzSpieleAngesagt<4) {
-            anzSpieleAngesagt++;
-            if (anzSpieleAngesagt<4) {
-                andererSpielerKannSpielAnsagen(gegner1);
-                buttonWeiter.setVisibility(view.INVISIBLE);
-            }
-            else {
-                fleckRunde();
-            }
-            buttonSpielAnsagen.setVisibility(view.INVISIBLE);
-        } else {
-            anzFleckZüge++;
-            if (anzFleckZüge % 2 != 0)
-                andererSpielerAmFlecken(mitspieler, false);
-            else {
-                for (Spieler andererSpieler: andereSpieler) {
-                    if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
-                }
-                if (selbst.isIstdran()) {
-                    handKartenKlickbar();
-                    eigenerZug();
-                }
-                buttonWeiter.setVisibility(View.INVISIBLE);
-                buttonFlecken.setVisibility(View.INVISIBLE);
-            }
-        }*/
-
         if (buttonWeiter.getText() == "Aufdecken"){
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
             buttonWeiter.setText("Weiter");
@@ -702,9 +1111,20 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             buttonWeiter.setAlpha(0.4f);
             buttonTrumpfansagen.setVisibility(View.INVISIBLE);
             buttonTrumpfansagen.setEnabled(false);
+        }else if (talontauschen) {
+            talontauschen = false;
+            imageView_talonkarte1.setVisibility(View.INVISIBLE);
+            imageView_talonkarte2.setVisibility(View.INVISIBLE);
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.4f);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONGETAUSCHT + ":" + SpielerID).getBytes());
         }
         else{
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + "weiter" + ":" + SpielerID).getBytes());
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.4f);
+            buttonSpielAnsagen.setVisibility(View.INVISIBLE);
+            buttonSpielAnsagen.setEnabled(false);
         }
     }
 
@@ -715,6 +1135,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
+
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + SpielerID).getBytes());
+
 
         //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         /*if (gegnerischeKarte == null) {
@@ -755,7 +1179,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     private void handKartenKlickbar() {
         int handkartenAnz = selbst.Hand.size();
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<6;i++) {
 
             //Button buttonK = handkartenButtons.get(i);
             ImageView imageViewK = handkartenImages.get(i);

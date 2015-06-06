@@ -659,7 +659,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         punkteSelbst.setText("0");
 
-
+        eigeneKarte = null;
         gegnerischeKarte = null;
         handAktualisieren();
         if(selbst.isIstdran()) {
