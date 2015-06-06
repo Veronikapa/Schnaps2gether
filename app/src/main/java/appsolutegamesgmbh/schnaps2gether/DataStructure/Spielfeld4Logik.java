@@ -1,5 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether.DataStructure;
 
+import java.util.ArrayList;
+
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld4Host;
 
 /**
@@ -13,8 +15,11 @@ public class Spielfeld4Logik {
     private Spieler mitspieler;
     private Spieler gegner1;
     private Spieler gegner2;
+    private ArrayList<Spieler> alleSpieler;
     private boolean angesagt;
-    private Karte selbstGespielteKarte;
+    private ArrayList<Karte> tischKarten;
+    private Spieler ausspielenderSpieler;
+    private Spieler amZugSpieler;
 
     public Spielfeld4Logik(Spielfeld4Host spielfeld) {
         this.angesagt = false;
@@ -29,12 +34,33 @@ public class Spielfeld4Logik {
         this.mitspieler = spiel.getS3();
         this.gegner1 = spiel.getS2();
         this.gegner2 = spiel.getS4();
+        this.ausspielenderSpieler = this.selbst;
+        this.amZugSpieler = this.selbst;
+        this.alleSpieler = new ArrayList<Spieler>();
+        this.alleSpieler.add(selbst);
+        this.alleSpieler.add(mitspieler);
+        this.alleSpieler.add(gegner1);
+        this.alleSpieler.add(gegner2);
+        this.tischKarten = new ArrayList<Karte>();
         spielfeld.sendStartMessage();
     }
 
-    public Karte karteAusspielen(int handindex) {
-        selbstGespielteKarte = selbst.Hand.get(handindex);
-        spiel.Auspielen(selbstGespielteKarte, selbst);
-        return selbstGespielteKarte;
+    public Karte karteAusspielen(int handindex, int ausspielenderSpielerNr) {
+        Spieler ausspielenderSpieler = alleSpieler.get(ausspielenderSpielerNr);
+        Karte gespielteKarte = ausspielenderSpieler.Hand.get(handindex);
+        tischKarten.add(gespielteKarte);
+        spiel.Auspielen(gespielteKarte, ausspielenderSpieler);
+        if (tischKarten.size()==4) {
+            zugende();
+        } else {
+            //andererSpielerSpieltAus
+        }
+        //gegnerischeHandaktualisieren
+        return gespielteKarte;
+    }
+
+    public Spieler zugende() {
+
+        return null;
     }
 }

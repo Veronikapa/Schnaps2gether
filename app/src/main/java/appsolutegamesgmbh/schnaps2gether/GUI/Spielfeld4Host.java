@@ -64,6 +64,12 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
 
+    //Konstanten für Spielernummern
+    private static final int SPIELER1 = 1;
+    private static final int SPIELER2 = 2;
+    private static final int SPIELER3 = 3;
+    private static final int SPIELER4 = 4;
+
     private ArrayList<String> endpointIDs;
     NearbyConnectionService mService;
     boolean mBound = false;
@@ -208,7 +214,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     }
 
     private void zugAusfuehren(int i) {
-        Karte k = spielfeldlogik.karteAusspielen(i);
+        Karte k = spielfeldlogik.karteAusspielen(i, SPIELER1);
         buttonsNichtKlickbar();
         mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + "1," + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
