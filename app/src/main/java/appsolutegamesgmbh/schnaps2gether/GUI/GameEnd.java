@@ -45,9 +45,9 @@ public class GameEnd extends DialogFragment {
         String dialogText;
         Bundle args = getArguments();
         win = args.getBoolean("win");
-        dialogText = "Sieg";
+        dialogText = "Spiel gewonnen!";
         if (!win) {
-            dialogText = "Niederlage";
+            dialogText = "Spiel verloren!";
         }
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

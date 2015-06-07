@@ -109,7 +109,7 @@
         </activity>
 
         <service
-            android:name=".Network.NearbyConnectionService"
+            android:name=".Services.NearbyConnectionService"
             android:enabled="true"
             android:exported="false" >
         </service>

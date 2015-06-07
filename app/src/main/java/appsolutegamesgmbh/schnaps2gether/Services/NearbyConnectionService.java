@@ -1,6 +1,5 @@
-package appsolutegamesgmbh.schnaps2gether.Network;
+package appsolutegamesgmbh.schnaps2gether.Services;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,11 +25,8 @@ import java.util.Random;
 
 import appsolutegamesgmbh.schnaps2gether.GUI.Lobby;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld;
-import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld2Client;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld2Host;
-import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld3Client;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld3Host;
-import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld4Client;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld4Host;
 import appsolutegamesgmbh.schnaps2gether.R;
 

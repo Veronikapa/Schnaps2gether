@@ -18,8 +18,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.Connections;
 
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ import java.util.ArrayList;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
-import appsolutegamesgmbh.schnaps2gether.Network.NearbyConnectionService;
+import appsolutegamesgmbh.schnaps2gether.Services.NearbyConnectionService;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 /**
@@ -36,15 +34,15 @@ import appsolutegamesgmbh.schnaps2gether.R;
 public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
         Connections.MessageListener, Spielfeld {
 
-    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichten
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichtentypen
     private static final String KARTEGESPIELT = "0";
-    private static final String WEITER = "1";
+    private static final String KARTENSPIELBAR = "1";
     private static final String PUNKTE = "2";
     private static final String TRUMPFANSAGEN = "3";
     private static final String ANGESAGT20ER = "4";
     private static final String ANGESAGT40ER = "5";
     private static final String SPIELANSAGEN = "6";
-    private static final String SPIELENDE = "7";
+    private static final String SPIELRUNDENENDE = "7";
     private static final String SPIELSTART = "8";
     private static final String HANDKARTEN = "9";
     private static final String TRUMPFFARBE = "10";
@@ -53,6 +51,27 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static final String AUFDREHEN = "13";
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
+
+    //Konstanten für Spielernummern
+    private static final int SPIELER1 = 0;
+    private static final int SPIELER2 = 1;
+    private static final int SPIELER3 = 2;
+    private static final int SPIELER4 = 3;
+
+    //Konstanten für Farben
+    private static final String HERZ = "0";
+    private static final String KARO = "1";
+    private static final String PIK = "2";
+    private static final String KREUZ = "3";
+
+    //Konstanten für "Spiele"
+    private static final int SCHNAPSER = 0;
+    private static final int LAND = 1;
+    private static final int KONTRASCHNAPSER = 2;
+    private static final int BAUERNSCHNAPSER = 3;
+    private static final int KONTRABAUERNSCHNAPSER = 4;
+    private static final int FARBENJODLER = 5;
+    private static final int HERRENJODLER = 6;
 
     private ArrayList<String> endpointIDs;
     NearbyConnectionService mService;
@@ -190,7 +209,6 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
-        mService.delegateSendReliableMessage(endpointIDs, (WEITER + ":" + 0).getBytes());
     }
 
     private void eigenerZug() {
@@ -320,16 +338,16 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         ArrayList<String> a = hab20er;
         for (int i = 0; i < a.size(); i++) {
             switch (a.get(i)) {
-                case "Herz":
+                case HERZ:
                     herz20er.setVisible(true);
                     break;
-                case "Karo":
+                case KARO:
                     karo20er.setVisible(true);
                     break;
-                case "Pik":
+                case PIK:
                     pik20er.setVisible(true);
                     break;
-                case "Kreuz":
+                case KREUZ:
                     kreuz20er.setVisible(true);
                     break;
                 default:
@@ -517,21 +535,36 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case HANDKARTEN: String[] messageParts = message.split(":");
-                String[] hand = messageParts[1].substring(1).split(",");
-                String[] spielbar = messageParts[2].substring(1).split(" ");
-                //Toast.makeText(appContext, "spielbar: " + messageParts[2], Toast.LENGTH_SHORT).show();
+                String[] hand = messageParts[1].split(",");
                 selbst.Hand = new ArrayList<Karte>();
-                kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
                     //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
                     selbst.Hand.add(i,new Karte(hand[i]));
-                    kartenSpielbar.add(i,spielbar[i].equals("1") ? true : false);
                 }
                 handAktualisieren();
 
                 break;
-            case KARTEGESPIELT: gegnerischeKarte = new Karte(message.substring(2).split(",")[1]);
-                switch (Math.abs(spielerNummer - Integer.decode(message.substring(2).split(",")[0]))) {
+            case KARTENSPIELBAR: String[] messageParts1 = message.split(":");
+                String[] spielbar = messageParts1[1].split(" ");
+                //Toast.makeText(appContext, "spielbar: " + messageParts[2], Toast.LENGTH_SHORT).show();
+                kartenSpielbar = new ArrayList<Boolean>();
+                for (int i=0; i<spielbar.length; i++) {
+                    //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
+                    kartenSpielbar.add(i,spielbar[i].equals("1") ? true : false);
+                }
+                handKartenKlickbar();
+                break;
+            case KARTEGESPIELT:
+                String[] messageParts2 = message.split(":");
+                gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
+                int ausspielenderSpielerNr = Integer.decode(message.substring(2).split(":")[0]);
+                int position = 1;
+                if (ausspielenderSpielerNr>spielerNummer) {
+                    position = position - spielerNummer;
+                } else {
+                    position = position + spielerNummer;
+                }
+                switch (position) {
                     case 1: imageView_karteGegner1.setImageResource(gegnerischeKarte.getImageResourceId());
                         break;
                     case 2: imageView_karteMitspieler.setImageResource(gegnerischeKarte.getImageResourceId());
@@ -540,21 +573,33 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                         break;
 
                 }
-                break;
-            case WEITER: handKartenKlickbar();
-                if (message.substring(2,3).equals("1")) {
-                    hat20er = message.substring(4,5).equals("1") ? true : false;
-                    hat40er = message.substring(6,7).equals("1") ? true : false;
-                    hab20er = new ArrayList<String>();
-                    if (hat20er) {
-                        String[] meine20er = message.substring(8).split(" ");
-                        for (String farbe: meine20er) {
-                            hab20er.add(farbe);
+                if (ausspielenderSpielerNr+1==spielerNummer) {
+                    String[] spielbar1 = messageParts2[2].split(" ");
+                    //Toast.makeText(appContext, "spielbar: " + messageParts[2], Toast.LENGTH_SHORT).show();
+                    kartenSpielbar = new ArrayList<Boolean>();
+                    for (int i = 0; i < spielbar1.length; i++) {
+                        //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
+                        kartenSpielbar.add(i, spielbar1[i].equals("1") ? true : false);
+                    }
+                    handKartenKlickbar();
+                    if (messageParts2[3].equals("1")) {
+                        eigenerZug();
+                        if (messageParts2[4].equals("1")) {
+                            hat40er = true;
+                        } else {
+                            hat40er = false;
+                        }
+                        if (messageParts2[5].equals("1")) {
+                            hat20er = true;
+                            String[] meine20er = message.substring(8).split(" ");
+                            for (String farbe: meine20er) {
+                                hab20er.add(farbe);
+                            }
+                        } else {
+                            hat20er = false;
                         }
                     }
-                    eigenerZug();
                 }
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -569,9 +614,15 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1]);
                 break;
-            case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
+            case SPIELRUNDENENDE: boolean win = message.substring(2).equals("1") ? true : false;
                 if (spielerNummer==3) win = !win;
-                spielEnde(win);
+                String rundenAusgang = "";
+                if (win) {
+                    rundenAusgang = "Sieg";
+                } else {
+                    rundenAusgang = "Niederlage";
+                }
+                Toast.makeText(appContext, rundenAusgang, Toast.LENGTH_SHORT).show();
                 break;
             case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
                 // Execute some code after 2 seconds have passed
@@ -579,7 +630,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 handler2.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        // finish();
+                        finish();
                     }
                 }, 2000);
                 break;
@@ -600,7 +651,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             } else buttonGegenflecken.setVisibility(View.VISIBLE);
                 buttonWeiter.setVisibility(View.VISIBLE);
                 break;
-            case SPIEL: String spiel = message.split(":")[1];
+            case SPIEL: String spiel = message.split(":")[2];
                 Toast.makeText(appContext, spiel+" wird gespielt", Toast.LENGTH_SHORT).show();
                 break;
             default: break;

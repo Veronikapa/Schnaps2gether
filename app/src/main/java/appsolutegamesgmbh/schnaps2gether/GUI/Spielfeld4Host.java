@@ -18,8 +18,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.Connections;
 
 import java.util.ArrayList;
@@ -27,10 +25,9 @@ import java.util.ArrayList;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl4;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Rufspiel;
-import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel4;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spielfeld4Logik;
-import appsolutegamesgmbh.schnaps2gether.Network.NearbyConnectionService;
+import appsolutegamesgmbh.schnaps2gether.Services.NearbyConnectionService;
 import appsolutegamesgmbh.schnaps2gether.R;
 
 
@@ -46,15 +43,15 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
      */
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    //Konstanten für das Kennzeichnen und Parsen von Nachrichtentypen
     private static final String KARTEGESPIELT = "0";
-    private static final String WEITER = "1";
+    private static final String KARTENSPIELBAR = "1";
     private static final String PUNKTE = "2";
     private static final String TRUMPFANSAGEN = "3";
     private static final String ANGESAGT20ER = "4";
     private static final String ANGESAGT40ER = "5";
     private static final String SPIELANSAGEN = "6";
-    private static final String SPIELENDE = "7";
+    private static final String SPIELRUNDENENDE = "7";
     private static final String SPIELSTART = "8";
     private static final String HANDKARTEN = "9";
     private static final String TRUMPFFARBE = "10";
@@ -65,10 +62,25 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String SPIEL = "15";
 
     //Konstanten für Spielernummern
-    private static final int SPIELER1 = 1;
-    private static final int SPIELER2 = 2;
-    private static final int SPIELER3 = 3;
-    private static final int SPIELER4 = 4;
+    private static final int SPIELER1 = 0;
+    private static final int SPIELER2 = 1;
+    private static final int SPIELER3 = 2;
+    private static final int SPIELER4 = 3;
+
+    //Konstanten für Farben
+    private static final int HERZ = 0;
+    private static final int KARO = 1;
+    private static final int PIK = 2;
+    private static final int KREUZ = 3;
+
+    //Konstanten für "Spiele"
+    private static final int SCHNAPSER = 0;
+    private static final int LAND = 1;
+    private static final int KONTRASCHNAPSER = 2;
+    private static final int BAUERNSCHNAPSER = 3;
+    private static final int KONTRABAUERNSCHNAPSER = 4;
+    private static final int FARBENJODLER = 5;
+    private static final int HERRENJODLER = 6;
 
     private ArrayList<String> endpointIDs;
     NearbyConnectionService mService;
@@ -121,7 +133,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private TextView txtMitspieler;
     private TextView txtGegner1;
     private TextView txtGegner2;
-    private Bummerl4 bummerl;
+    //private Bummerl4 bummerl;
     //private Boolean angesagt;
     private String  gegner1ID;
     private String  mitspielerID;
@@ -191,7 +203,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         handkartenImages.add(4, imageView_karte5);
 
 
-        spielStart();
+        spielRundenStart();
     }
 
     @Override
@@ -214,46 +226,67 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     }
 
     private void zugAusfuehren(int i) {
-        Karte k = spielfeldlogik.karteAusspielen(i, SPIELER1);
+        Karte k = spielfeldlogik.karteAusspielen(i);
+        weiterNachricht(k, endpointIDs);
         buttonsNichtKlickbar();
-        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + "1," + k.toString()).getBytes());
-        gespielteKarteEntfernen(i);
+        handkartenImages.get(i).setVisibility(View.INVISIBLE);
 
-        //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
 
-
-        if (gegnerischeKarte1 == null) {
-            for (Spieler s: andereSpieler) andereHandAktualisieren(s);
+        if (spielfeldlogik.isZugBeginn()) {
+            // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mService.delegateSendReliableMessage(gegner1ID, (WEITER + ":" + 0).getBytes());
-                }
-            }, 1000);
-        } else {
-            zugEnde();
+            handler.postDelayed(new Zugende(), 2000);
         }
     }
 
-    private void zugEnde() {
-        spiel.ZugAuswerten(eigeneKarte, gegnerischeKarte1, mitspielerKarte, gegnerischeKarte2);
-        eigeneKarte = gegnerischeKarte1 = mitspielerKarte = gegnerischeKarte2 = null;
-        mService.delegateSendReliableMessage(endpointIDs, (ZUGENDE + ":").getBytes());
-        // Execute some code after 2 seconds have passed
-        Handler handler = new Handler();
-        handler.postDelayed(new Zugende(), 2000);
+    private String spielbareKartenNachrichtZusammenstellen() {
+        String spielbareKarten = "";
+        for (boolean spielbar: spielfeldlogik.getHandkartenSpielbar()) {
+            spielbareKarten += " " + (spielbar ? "1" : "0");
+        }
+        spielbareKarten.trim();
+        return spielbareKarten;
+    }
+
+    private void weiterNachricht(Karte gespielteKarte, ArrayList<String> recipients) {
+        int neuerZug = spielfeldlogik.isZugBeginn() ? 1 : 0;
+        int spielerAmAusspielen = spielfeldlogik.getAusspielenderSpielerNr();
+        String spielbareKarten = spielbareKartenNachrichtZusammenstellen();
+        int hatZwanziger = spielfeldlogik.hasHatZwanziger() ? 1 : 0;
+        int hatVierziger = spielfeldlogik.hasHatVierziger() ? 1 : 0;
+        String verfuegbareZwanziger = "";
+        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Herz")) {
+            verfuegbareZwanziger += " " + HERZ;
+        }
+        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Karo")) {
+            verfuegbareZwanziger += " " + KARO;
+        }
+        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Pik")) {
+            verfuegbareZwanziger += " " + PIK;
+        }
+        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Kreuz")) {
+            verfuegbareZwanziger += " " + KREUZ;
+        }
+        verfuegbareZwanziger.trim();
+        if (gespielteKarte==null) {
+            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + (spielerAmAusspielen)
+                    + ":" + spielbareKarten + ":" + neuerZug + ":" +
+                    hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
+        }
+        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + ((spielerAmAusspielen+3)%4)
+                + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
+                hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
     }
 
     private void eigenerZug() {
-            if(hat20er(selbst)) {
+            if(spielfeldlogik.hasHatVierziger()) {
                 button20er.setEnabled(true);
             }
             else {
                 button20er.setEnabled(false);
             }
-            if(hat40er(selbst)) {
+            if(spielfeldlogik.hasHatVierziger()) {
                 button40er.setEnabled(true);
             }
             else {
@@ -262,40 +295,38 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     }
 
     private void handAktualisieren() {
+        Spieler selbst = spielfeldlogik.getSelbst();
         int handkartenAnz = selbst.Hand.size();
         for (int i=0;i<5;i++) {
             ImageView imageViewK = handkartenImages.get(i);
-
-
             if (i<handkartenAnz) {
                 Karte k = selbst.Hand.get(i);
-
                 imageViewK.setImageResource(k.getImageResourceId());
                 imageViewK.setVisibility(View.VISIBLE);
             } else {
                 imageViewK.setVisibility(View.INVISIBLE);
             }
+            ArrayList<Spieler> andereSpieler = spielfeldlogik.getAlleSpieler();
+            andereSpieler.remove(selbst);
             for (Spieler s: andereSpieler) andereHandAktualisieren(s);
         }
     }
 
     private void andereHandAktualisieren(Spieler andererSpieler) {
         String andereHand = "";
-        String gegKartenSpielBar = "";
         int andereHandkartenAnz = andererSpieler.Hand.size();
         for (int i=0;i<andereHandkartenAnz;i++) {
             andereHand += ","+andererSpieler.Hand.get(i).toString();
-            gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(andererSpieler.Hand.get(i), andererSpieler) ? 1 : 0);
         }
         String recipientID = "";
-        if (andererSpieler.equals(gegner1)) {
+        if (andererSpieler.equals(spielfeldlogik.getGegner1())) {
             recipientID=gegner1ID;
-        } else if (andererSpieler.equals(mitspieler)) {
+        } else if (andererSpieler.equals(spielfeldlogik.getMitspieler())) {
             recipientID=mitspielerID;
-        } else if (andererSpieler.equals(gegner2)) {
+        } else if (andererSpieler.equals(spielfeldlogik.getGegner2())) {
             recipientID=gegner2ID;
         }
-        mService.delegateSendReliableMessage(recipientID, (HANDKARTEN + ":" + andereHand + ":" + gegKartenSpielBar).getBytes());
+        mService.delegateSendReliableMessage(recipientID, (HANDKARTEN + ":" + andereHand).getBytes());
     }
 
     private void punkteAktualisieren() {
@@ -303,88 +334,32 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         imageView_karteGegner1.setVisibility(View.INVISIBLE);
         imageView_karteMitspieler.setVisibility(View.INVISIBLE);
         imageView_karteGegner2.setVisibility(View.INVISIBLE);
-        int p1 = selbst.getPunkte();
-        int p2 = gegner1.getPunkte();
+        int p1 = spielfeldlogik.getSelbst().getPunkte();
+        int p2 = spielfeldlogik.getGegner1().getPunkte();
         punkteSelbst.setText(Integer.toString(p1));
         mService.delegateSendReliableMessage(endpointIDs, (PUNKTE + ":" + Integer.toString(p2)).getBytes());
     }
 
-    private void gespielteKarteEntfernen(int i) {
-        handkartenImages.get(i).setVisibility(View.INVISIBLE);
-    }
-
-    private boolean hat20er(Spieler s) {
-        if ((spiel.hat20er(s).size()>0 && !hat40er(s)) || spiel.hat20er(s).size()>1)
-            return true;
-        return false;
-    }
-
-    private boolean hat40er(Spieler s) {
-        if(spiel.hat20er(s).contains(spiel.getAngesagteFarbe()))
-            return true;
-        return false;
-    }
-
-    private void andererSpielerAmZug(Spieler andererSpieler) {
-        int hast20er = hat20er(andererSpieler) ? 1 : 0;
-        int hast40er = hat40er(andererSpieler) ? 1 : 0;
-        String hastDie20er = "";
-        ArrayList<String> geg20er = spiel.hat20er(andererSpieler);
-        for(String farbe: geg20er) {
-            hastDie20er += " " + farbe;
-        }
-        String recipientID = "";
-        if (andererSpieler.equals(gegner1)) {
-            recipientID=gegner1ID;
-        } else if (andererSpieler.equals(mitspieler)) {
-            recipientID=mitspielerID;
-        } else if (andererSpieler.equals(gegner2)) {
-            recipientID=gegner2ID;
-        }
-        mService.delegateSendReliableMessage(recipientID, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
-    }
-
-    private void spielStart() {
+    private void spielRundenStart() {
         Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    spiel = new Spiel4(bummerl.getAnzahlSpiele());
-                } catch (Exception e) {
-
-                }
-                selbst = spiel.getS1();
-                gegner1 = spiel.getS2();
-                mitspieler = spiel.getS3();
-                gegner2 = spiel.getS4();
-
-                andereSpieler = new ArrayList<Spieler>();
-                andereSpieler.add(gegner1);
-                andereSpieler.add(mitspieler);
-                andereSpieler.add(gegner2);
-                
-                anzSpieleAngesagt = 0;
-                anzFleckZüge = 0;
-
+                spielfeldlogik.neueSpielRunde();
                 imageView_karteGegner1.setVisibility(View.INVISIBLE);
                 imageView_eigeneKarte.setVisibility(View.INVISIBLE);
                 imageView_karteGegner2.setVisibility(View.INVISIBLE);
                 imageView_karteMitspieler.setVisibility(View.INVISIBLE);
                 punkteSelbst.setText("0");
-                //punkteGegner1.setText("0");
-                //punkteMitspieler.setText("0");
-                //punkteGegner2.setText("0");
-                gegnerischeKarte1 = eigeneKarte = gegnerischeKarte2 = mitspielerKarte = null;
                 handAktualisieren();
-                if (selbst.isIstdran()) {
-                    handKartenKlickbar();
+                if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
+                    handKartenAusspielbar();
                     buttonAufdrehen.setVisibility(View.VISIBLE);
-                } else if (gegner1.isIstdran()) {
+                } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER2) {
                     mService.delegateSendReliableMessage(gegner1ID, (TRUMPFANSAGEN + ":").getBytes());
-                } else if (mitspieler.isIstdran()) {
+                } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER3) {
                     mService.delegateSendReliableMessage(mitspielerID, (TRUMPFANSAGEN + ":").getBytes());
-                } else if (gegner2.isIstdran()) {
+                } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER4) {
                     mService.delegateSendReliableMessage(gegner2ID, (TRUMPFANSAGEN + ":").getBytes());
                 }
             }
@@ -403,42 +378,53 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         button40er.setEnabled(false);
     }
 
-    private void handKartenKlickbar() {
-        int handkartenAnz = selbst.Hand.size();
+    private void handKartenAusspielbar() {
+        ArrayList<Boolean> handkartenSpielbar = spielfeldlogik.getHandkartenSpielbar();
         for (int i=0;i<5;i++) {
             ImageView imageViewK = handkartenImages.get(i);
-
-            if (i<handkartenAnz && spiel.DarfKarteAuswaehlen(selbst.Hand.get(i), selbst)) {
-
+            if (handkartenSpielbar.get(i)) {
                 imageViewK.setEnabled(true);
                 imageViewK.setAlpha(1f);
             } else {
-
                 imageViewK.setEnabled(false);
                 imageViewK.setAlpha(0.2f);
             }
         }
     }
 
-    private void spielEnde() {
-        boolean win = true;
-        int winners = 0;
-        if (selbst.getPunkte()<66) {
-            win = false;
-            winners = 1;
+    private void spielRundenEnde() {
+        if (spielfeldlogik.isSpielZuEnde()) {
+            spielEnde();
+        } else {
+            int winners = spielfeldlogik.getWinners();
+            boolean win = winners == 0 ? true : false;
+            mService.delegateSendReliableMessage(endpointIDs, (SPIELRUNDENENDE + ":" + winners).getBytes());
+            String rundenAusgang = "";
+            if (win) {
+                rundenAusgang = "Sieg";
+            } else {
+                rundenAusgang = "Niederlage";
+            }
+            Toast.makeText(appContext, rundenAusgang, Toast.LENGTH_SHORT).show();
         }
-        mService.delegateSendReliableMessage(endpointIDs, (SPIELENDE + ":" + winners).getBytes());
+    }
+
+    private void spielEnde() {
+        int finalWinners = spielfeldlogik.getFinalWinners();
+        boolean finalWin = finalWinners == 0 ? true : false;
         Bundle args = new Bundle();
-        args.putBoolean("win", win);
+        args.putBoolean("win", finalWin);
         DialogFragment gameEndDialogFragment = new GameEnd();
         gameEndDialogFragment.setArguments(args);
         gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
     }
 
     private void trumpfansagen(String farbe) {
-        spiel.Trumpfansagen(farbe, bummerl.getAnzahlSpiele());
-        mService.delegateSendReliableMessage(endpointIDs, (TRUMPFFARBE + ":" + spiel.getAngesagteFarbe()).getBytes());
-        imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spiel.getAngesagteFarbe()));
+        spielfeldlogik.trumpfAnsagen(farbe);
+        mService.delegateSendReliableMessage(endpointIDs, (TRUMPFFARBE + ":" + spielfeldlogik.getAngesagteFarbe()).getBytes());
+        imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spielfeldlogik.getAngesagteFarbe()));
+        ArrayList<Spieler> andereSpieler = spielfeldlogik.getAlleSpieler();
+        andereSpieler.remove(0);
         for (Spieler s: andereSpieler) andereHandAktualisieren(s);
         buttonsNichtKlickbar();
         buttonAufdrehen.setVisibility(View.INVISIBLE);
@@ -446,68 +432,41 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         buttonWeiter.setVisibility(View.VISIBLE);
     }
 
-    private void andererSpielerKannSpielAnsagen(Spieler andererSpieler) {
+    private void andererSpielerKannSpielRufen() {
         String spieleAnsagbar = "";
-        try {
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Schnapser"), andererSpieler))
-                spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Land"), andererSpieler)) spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontraschnapser"), andererSpieler))
-                spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Bauernschnapser"), andererSpieler))
-                spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontrabauernschnapser"), andererSpieler))
-                spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Farbenjodler"), andererSpieler))
-                spieleAnsagbar += "1 ";
-            else spieleAnsagbar += "0 ";
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Herrenjodler"), andererSpieler))
-                spieleAnsagbar += "1";
-            else spieleAnsagbar += "0";
-        } catch (Exception e) {
-
-        }
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Schnapser"))
+            spieleAnsagbar += " " + SCHNAPSER;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Land"))
+            spieleAnsagbar += " " + LAND;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Kontraschnapser"))
+            spieleAnsagbar += " " + KONTRASCHNAPSER;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Bauernschnapser"))
+            spieleAnsagbar += " " + BAUERNSCHNAPSER;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Kontrabauernschnapser"))
+            spieleAnsagbar += " " + KONTRABAUERNSCHNAPSER;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Farbenjodler"))
+            spieleAnsagbar += " " + FARBENJODLER;
+        if (spielfeldlogik.getSpieleAnsagbar().contains("Herrenjodler"))
+            spieleAnsagbar += " " + HERRENJODLER;
+        spieleAnsagbar.trim();
         String recipientID = "";
-        if (andererSpieler.equals(gegner1)) {
+        int spielerNr = spielfeldlogik.getAmZugSpielerNr();
+        if (spielerNr == SPIELER2) {
             recipientID=gegner1ID;
-        } else if (andererSpieler.equals(mitspieler)) {
+        } else if (spielerNr == SPIELER3) {
             recipientID=mitspielerID;
-        } else if (andererSpieler.equals(gegner2)) {
+        } else if (spielerNr == SPIELER4) {
             recipientID=gegner2ID;
         }
         mService.delegateSendReliableMessage(recipientID, (SPIELANSAGEN + ":" + spieleAnsagbar).getBytes());
     }
 
-    private void andererSpielerAmFlecken(Spieler andererSpieler, boolean gegenflecken) {
-        String recipientID = gegner1ID;
-        if (andererSpieler.equals(gegner2)) recipientID = gegner2ID;
-        else if (andererSpieler.equals(mitspieler)) recipientID = mitspielerID;
-        String gflecken = gegenflecken ? "1" : "0";
+    private void andererSpielerAmFlecken() {
+        int gflecken = -1;
+        if (spielfeldlogik.isGegenFleckRunde()) gflecken = 1;
+        else gflecken = 0;
+        String recipientID = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr()-1);
         mService.delegateSendReliableMessage(recipientID, (FLECKEN + ":" + gflecken).getBytes());
-    }
-
-    private void fleckRunde() {
-        if (rufer.equals(mitspieler)) {
-            Spieler andererSpieler = gegner1;
-            if (bummerl.getAnzahlSpiele() % 4 == 2 || bummerl.getAnzahlSpiele() % 4 == 3) {
-                andererSpieler = gegner2;
-            }
-            andererSpielerAmFlecken(andererSpieler, false);
-            buttonWeiter.setVisibility(View.INVISIBLE);
-        } else {
-            if (bummerl.getAnzahlSpiele() % 4 == 0 || bummerl.getAnzahlSpiele() % 4 == 3) {
-                buttonWeiter.setVisibility(View.VISIBLE);
-                buttonFlecken.setVisibility(View.VISIBLE);
-            } else {
-                andererSpielerAmFlecken(mitspieler, false);
-                buttonWeiter.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     public void popup20er(View view) {
@@ -521,9 +480,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         karo20er.setVisible(false);
         pik20er.setVisible(false);
         kreuz20er.setVisible(false);
-        ArrayList<String> a = spiel.hat20er(selbst);
-        for (int i = 0; i < a.size(); i++) {
-            switch (a.get(i)) {
+        ArrayList<String> verfuegbareZwanziger = spielfeldlogik.getVerfuegbareZwanziger();
+        for (int i = 0; i < verfuegbareZwanziger.size(); i++) {
+            switch (verfuegbareZwanziger.get(i)) {
                 case "Herz":
                     herz20er.setVisible(true);
                     break;
@@ -561,54 +520,34 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         kontrabauernschnapser.setVisible(false);
         farbenjodler.setVisible(false);
         herrenjodler.setVisible(false);
+        ArrayList<String> ansagbareSpiele = spielfeldlogik.getSpieleAnsagbar();
         try {
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Schnapser"), selbst)) schnapser.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Land"), selbst)) land.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontraschnapser"), selbst)) kontraschnapser.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Bauernschnapser"), selbst)) bauernschnapser.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst)) kontrabauernschnapser.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Farbenjodler"), selbst)) farbenjodler.setVisible(true);
-            if (spiel.DarfSpielAnsagen(new Rufspiel("Herrenjodler"), selbst)) herrenjodler.setVisible(true);
+            if (ansagbareSpiele.contains("Schnapser")) schnapser.setVisible(true);
+            if (ansagbareSpiele.contains("Land")) land.setVisible(true);
+            if (ansagbareSpiele.contains("Kontraschnapser")) kontraschnapser.setVisible(true);
+            if (ansagbareSpiele.contains("Bauernschnapser")) bauernschnapser.setVisible(true);
+            if (ansagbareSpiele.contains("Kontrabauernschnapser")) kontrabauernschnapser.setVisible(true);
+            if (ansagbareSpiele.contains("Farbenjodler")) farbenjodler.setVisible(true);
+            if (ansagbareSpiele.contains("Herrenjodler")) herrenjodler.setVisible(true);
         } catch (Exception e) {
 
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                try {
-                switch (menuItem.getTitle().toString()) {
-                    case "Schnapser": spiel.SpielAnsagen(new Rufspiel("Schnapser"), selbst);
-                        break;
-                    case "Land": spiel.SpielAnsagen(new Rufspiel("Land"), selbst);
-                        break;
-                    case "Kontraschnapser": spiel.SpielAnsagen(new Rufspiel("Kontraschnapser"), selbst);
-                        break;
-                    case "Bauernschnapser": spiel.SpielAnsagen(new Rufspiel("Bauernschnapser"), selbst);
-                        break;
-                    case "Kontrabauernschnapser": spiel.SpielAnsagen(new Rufspiel("Kontrabauernschnapser"), selbst);
-                        break;
-                    case "Farbenjodler": spiel.SpielAnsagen(new Rufspiel("Farbenjodler"), selbst);
-                        if (spiel.istSpielzuEnde(bummerl)) {
-                            //TODO: Spielende
-                        }
-                        break;
-                    case "Herrenjodler": spiel.SpielAnsagen(new Rufspiel("Herrenjodler"), selbst);
-                        if (spiel.istSpielzuEnde(bummerl)) {
-                            //TODO: Spielende
-                        }
-                        break;
-                    default: return false;
-                }
-                } catch (Exception e) {
 
-                }
-                rufer = selbst;
-                anzSpieleAngesagt++;
-                if (anzSpieleAngesagt<4) andererSpielerKannSpielAnsagen(gegner1);
+                spielfeldlogik.spielRufen(menuItem.getTitle().toString());
+                if (spielfeldlogik.isSpielRundenEnde()) {
+                    spielRundenEnde();
+                } else if (spielfeldlogik.isSpielRufRunde()) andererSpielerKannSpielRufen();
                 else {
-                    andererSpielerAmZug(gegner1);
-                    Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                    mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
+                    Toast.makeText(appContext, spielfeldlogik.getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
+                    if (spielfeldlogik.getAmZugSpielerNr()==SPIELER1) {
+                        buttonFlecken.setVisibility(View.VISIBLE);
+                        buttonWeiter.setVisibility(View.VISIBLE);
+                    } else {
+                        mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + spielfeldlogik.getAmZugSpielerNr() + ":" + spielfeldlogik.getSpiel()).getBytes());
+                    }
                 }
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
                 buttonWeiter.setVisibility(view.INVISIBLE);
@@ -619,86 +558,82 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     }
 
     public void fleckenOnClick(View view) {
-        anzFleckZüge++;
-        spiel.Flecken();
-        if (bummerl.getAnzahlSpiele() % 4 < 2)  {
-            andererSpielerAmFlecken(gegner1, true);
-        } else {
-            andererSpielerAmFlecken(gegner2, true);
-        }
+        spielfeldlogik.flecken();
+        andererSpielerAmFlecken();
+        buttonWeiter.setVisibility(View.INVISIBLE);
+        buttonFlecken.setVisibility(View.INVISIBLE);
     }
 
     public void weiterOnClick(View view) {
-        if (anzSpieleAngesagt<4) {
-            anzSpieleAngesagt++;
-            if (anzSpieleAngesagt<4) {
-                andererSpielerKannSpielAnsagen(gegner1);
+        if (spielfeldlogik.isSpielRufRunde()) {
+                spielfeldlogik.spielRufen(null);
+                if (spielfeldlogik.isSpielRufRunde())
+                    andererSpielerKannSpielRufen();
+                else {
+                    Toast.makeText(appContext, spielfeldlogik.getSpiel() + " wird gespielt",
+                            Toast.LENGTH_SHORT).show();
+                    mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + SPIELER2 + ":"
+                            + spielfeldlogik.getSpiel()).getBytes());
+                }
+                buttonSpielAnsagen.setVisibility(view.INVISIBLE);
                 buttonWeiter.setVisibility(view.INVISIBLE);
             }
-            else {
-                fleckRunde();
-            }
-            buttonSpielAnsagen.setVisibility(view.INVISIBLE);
-        } else {
-            anzFleckZüge++;
-            if (anzFleckZüge % 2 != 0)
-                andererSpielerAmFlecken(mitspieler, false);
-            else {
-                for (Spieler andererSpieler: andereSpieler) {
-                    if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
-                }
-                if (selbst.isIstdran()) {
-                    handKartenKlickbar();
+        else if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()){
+            spielfeldlogik.nichtFlecken();
+            buttonWeiter.setVisibility(View.INVISIBLE);
+            buttonFlecken.setVisibility(View.INVISIBLE);
+            if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()) {
+                andererSpielerAmFlecken();
+            } else {
+                if (spielfeldlogik.getAmZugSpielerNr()==SPIELER1) {
                     eigenerZug();
+                    handKartenAusspielbar();
+                } else {
+                    weiterNachricht(null, endpointIDs);
                 }
-                buttonWeiter.setVisibility(View.INVISIBLE);
-                buttonFlecken.setVisibility(View.INVISIBLE);
             }
         }
     }
 
     public void ansagen40er(View view) {
-        spiel.Ansagen20er(spiel.getAngesagteFarbe(), selbst);
-        mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT40ER + ":").getBytes());
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        spielfeldlogik.vierzigerAnsagen();
+        mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT40ER + ":" + spielfeldlogik.getAmZugSpielerNr()).getBytes());
         punkteAktualisieren();
         button40er.setEnabled(false);
         button20er.setEnabled(false);
-        handKartenKlickbar();
     }
 
     public void karte1OnClick(View view) {
-        if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(0).getFarbe());
-        else zugAusfuehren(0);
+        zugAusfuehren(0);
     }
 
     public void karte2OnClick(View view) {
-        if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(1).getFarbe());
-        else zugAusfuehren(1);
+        zugAusfuehren(1);
     }
 
     public void karte3OnClick(View view) {
-        if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(2).getFarbe());
-        else zugAusfuehren(2);
+        zugAusfuehren(2);
     }
 
     public void karte4OnClick(View view) {
-        if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(3).getFarbe());
-        else zugAusfuehren(3);
+        zugAusfuehren(3);
     }
 
     public void karte5OnClick(View view) {
-        if (spiel.getAngesagteFarbe()==null) trumpfansagen(selbst.Hand.get(4).getFarbe());
-        else zugAusfuehren(4);
+        zugAusfuehren(4);
     }
 
     public void aufdrehenOnClick(View view) {
-        trumpfansagen(spiel.Aufdrehen().getFarbe());
+        trumpfansagen(null);
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        spielStart();
+        //Screen Lock aktivieren
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Intent intent = new Intent(Spielfeld4Host.this, Lobby.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -714,19 +649,19 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                spiel.Ansagen20er("Herz", selbst);
+                spielfeldlogik.zwanzigerAnsagen("Herz");
                 mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Herz").getBytes());
                 break;
             case R.id.karo_20er:
-                spiel.Ansagen20er("Karo", selbst);
+                spielfeldlogik.zwanzigerAnsagen("Karo");
                 mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Karo").getBytes());
                 break;
             case R.id.pik_20er:
-                spiel.Ansagen20er("Pik", selbst);
+                spielfeldlogik.zwanzigerAnsagen("Pik");
                 mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                spiel.Ansagen20er("Kreuz", selbst);
+                spielfeldlogik.zwanzigerAnsagen("Kreuz");
                 mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" + "Kreuz").getBytes());
                 break;
             default:
@@ -734,9 +669,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         }
         button20er.setEnabled(false);
         button40er.setEnabled(false);
-        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        if (spielfeldlogik.isSpielRundenEnde()) spielRundenEnde();
         punkteAktualisieren();
-        handKartenKlickbar();
+        handKartenAusspielbar();
         return true;
     }
 
@@ -744,160 +679,120 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     {
         ArrayList<String> endpointIDsWithoutSender = new ArrayList<String>(endpointIDs);
         endpointIDsWithoutSender.remove(endpointID);
-        Spieler sender;
-        if (endpointID.equals(gegner1ID)) sender=gegner1;
-        else if (endpointID.equals(mitspielerID)) sender=mitspieler;
-        else sender=gegner2;
+        int sender;
+        if (endpointID.equals(gegner1ID)) sender=SPIELER2;
+        else if (endpointID.equals(mitspielerID)) sender=SPIELER3;
+        else sender=SPIELER4;
         String message = new String(payload);
         switch (((message.split(":")[0]))) {
-            case KARTEGESPIELT: Karte gespielteKarte = new Karte(message.split(":")[1]);
-                String ausspieler = "";
-                if (sender.equals(gegner1)) {
-                    gegnerischeKarte1 = gespielteKarte;
-                    ausspieler = "2,";
-                }
-                else if (sender.equals(mitspieler)) {
-                    mitspielerKarte = gespielteKarte;
-                    ausspieler = "3,";
-                }
-                else {
-                    gegnerischeKarte2 = gespielteKarte;
-                    ausspieler = "4,";
-                }
-                mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + ausspieler + gespielteKarte.toString()).getBytes());
+            case KARTEGESPIELT: int gespielteKarteNr = Integer.decode(message.split(":")[1]);
+                Karte gespielteKarte = spielfeldlogik.karteAusspielen(gespielteKarteNr);
                 //Toast.makeText(appContext,"gegnerischeHand.contains("+gegnerischeKarte.toString()+") "+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
-                spiel.Auspielen(gespielteKarte, sender);
+                spielfeldlogik.karteAusspielen(gespielteKarteNr);
+                weiterNachricht(gespielteKarte, endpointIDsWithoutSender);
                 //Toast.makeText(appContext,gegnerischeKarte.toString()+" entfernt"+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
 
 
                 // buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
-                switch (ausspieler) {
-                    case "2": imageView_karteGegner1.setImageResource(gespielteKarte.getImageResourceId());
+                switch (sender) {
+                    case SPIELER2: imageView_karteGegner1.setImageResource(gespielteKarte.getImageResourceId());
                         break;
-                    case "3": imageView_karteMitspieler.setImageResource(gespielteKarte.getImageResourceId());
+                    case SPIELER3: imageView_karteMitspieler.setImageResource(gespielteKarte.getImageResourceId());
                         break;
-                    case "4": imageView_karteGegner2.setImageResource(gespielteKarte.getImageResourceId());
+                    case SPIELER4: imageView_karteGegner2.setImageResource(gespielteKarte.getImageResourceId());
                         break;
                     default:;
                 }
 
-                if (eigeneKarte!=null && gegnerischeKarte1!=null && mitspielerKarte!=null && gegnerischeKarte2!=null) {
-                    zugEnde();
+                if (spielfeldlogik.isZugBeginn()) {
+                    // Execute some code after 2 seconds have passed
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Zugende(), 2000);
                 }
-                break;
-            case WEITER: String recipientID = "";
-                if (sender.equals(gegner2)) {
-                handKartenKlickbar();
-                } else {
-                    if (sender.equals(gegner1)) recipientID = mitspielerID;
-                    else recipientID = gegner2ID;
-                    mService.delegateSendReliableMessage(recipientID, (WEITER + ":" + 0).getBytes());
-                }
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT40ER:
-                spiel.Ansagen20er(spiel.getAngesagteFarbe(), sender);
+                spielfeldlogik.vierzigerAnsagen();
                 punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    //spielEnde();
+                if (spielfeldlogik.isSpielRundenEnde()) {
+                    spielRundenEnde();
                 }
-                andereHandAktualisieren(sender);
-                angesagt = true;
+                String spielbareKarten = spielbareKartenNachrichtZusammenstellen();
+                String recipientID = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
+                mService.delegateSendReliableMessage(recipientID, (KARTENSPIELBAR + ":" + spielbareKarten).getBytes());
                 mService.delegateSendReliableMessage(endpointIDsWithoutSender, (ANGESAGT40ER + ":").getBytes());
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case ANGESAGT20ER: String farbe = message.substring(2);
-                spiel.Ansagen20er(farbe, sender);
+                spielfeldlogik.zwanzigerAnsagen(farbe);
                 punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    //spielEnde();
+                if (spielfeldlogik.isSpielRundenEnde()) {
+                    spielRundenEnde();
                 }
-                andereHandAktualisieren(sender);
-                angesagt = true;
+                String spielbareKarten1 = spielbareKartenNachrichtZusammenstellen();
+                String recipientID1 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
+                mService.delegateSendReliableMessage(recipientID1, (KARTENSPIELBAR + ":" + spielbareKarten1).getBytes());
                 mService.delegateSendReliableMessage(endpointIDsWithoutSender, (ANGESAGT20ER + ":" + farbe).getBytes());
                 Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case SPIELANSAGEN: String angesagtesSpiel = message.substring(2);
-                try {
                     if (!angesagtesSpiel.equals("0")) {
-                        spiel.SpielAnsagen(new Rufspiel(angesagtesSpiel), sender);
-                        if (spiel.istSpielzuEnde(bummerl)) {
-                            //spielEnde();
+                        spielfeldlogik.spielRufen(angesagtesSpiel);
+                        if (spielfeldlogik.isSpielRundenEnde()) {
+                            spielRundenEnde();
                         }
-                        rufer = sender;
                     }
-                } catch (Exception e) {
-
-                }
-                anzSpieleAngesagt++;
-                if (anzSpieleAngesagt==4) {
-
-                    if (sender.equals(gegner1)) andererSpielerAmZug(mitspieler);
-                    else if (sender.equals(mitspieler)) andererSpielerAmZug(gegner2);
-                    else {
-                        handKartenKlickbar();
-                        eigenerZug();
-                    }
-                    mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
-                    Toast.makeText(appContext, spiel.getSpiel().getSpiel()+" wird gespielt", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (sender.equals(gegner1)) andererSpielerKannSpielAnsagen(mitspieler);
-                    else if (sender.equals(mitspieler)) andererSpielerKannSpielAnsagen(gegner2);
-                    else {
+                if (spielfeldlogik.isSpielRufRunde()) {
+                    if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                         buttonSpielAnsagen.setVisibility(View.VISIBLE);
                         buttonWeiter.setVisibility(View.VISIBLE);
+                    } else {
+                        andererSpielerKannSpielRufen();
+                    }
+                } else {
+                    if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
+                        buttonFlecken.setVisibility(View.VISIBLE);
+                        buttonWeiter.setVisibility(View.VISIBLE);
+                    } else {
+                        String recipientID2 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
+                        mService.delegateSendReliableMessage(recipientID2, (FLECKEN + ":"+0).getBytes());
                     }
                 }
                 break;
             case TRUMPFFARBE: String trumpffarbe = message.split(":")[1];
-                spiel.Trumpfansagen(trumpffarbe, bummerl.getAnzahlSpiele());
-                mService.delegateSendReliableMessage(endpointIDsWithoutSender, (TRUMPFFARBE + ":" + spiel.getAngesagteFarbe()).getBytes());
-                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spiel.getAngesagteFarbe()));
+                spielfeldlogik.trumpfAnsagen(trumpffarbe);
+                mService.delegateSendReliableMessage(endpointIDsWithoutSender, (TRUMPFFARBE + ":" + spielfeldlogik.getAngesagteFarbe()).getBytes());
+                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spielfeldlogik.getAngesagteFarbe()));
+
+                ArrayList<Spieler> andereSpieler = spielfeldlogik.getAlleSpieler();
+                andereSpieler.remove(0);
                 for (Spieler s: andereSpieler) andereHandAktualisieren(s);
-                andererSpielerKannSpielAnsagen(sender);
+                andererSpielerKannSpielRufen();
                 break;
-            case AUFDREHEN: spiel.Trumpfansagen(spiel.Aufdrehen().getFarbe(),bummerl.getAnzahlSpiele());
-                mService.delegateSendReliableMessage(endpointIDs, (TRUMPFFARBE + ":" + spiel.getAngesagteFarbe()).getBytes());
-                andererSpielerKannSpielAnsagen(sender);
+            case AUFDREHEN: spielfeldlogik.trumpfAnsagen(null);
+                mService.delegateSendReliableMessage(endpointIDs, (TRUMPFFARBE + ":" + spielfeldlogik.getAngesagteFarbe()).getBytes());
+                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(spielfeldlogik.getAngesagteFarbe()));
+                ArrayList<Spieler> andereSpieler1 = spielfeldlogik.getAlleSpieler();
+                andereSpieler1.remove(0);
+                for (Spieler s: andereSpieler1) andereHandAktualisieren(s);
+                andererSpielerKannSpielRufen();
                 break;
-            case FLECKEN: if (message.split(":")[1].equals("0")) {
-                    anzFleckZüge++;
-                    if (anzFleckZüge==1) {
-                        if (sender.equals(gegner1))
-                            andererSpielerAmFlecken(gegner2, spiel.isGefleckt());
-                        else if (sender.equals(gegner2))
-                            andererSpielerAmFlecken(gegner1, spiel.isGefleckt());
-                        else if (sender.equals(mitspieler)) {
-                            if (spiel.isGefleckt())
-                                buttonFlecken.setVisibility(View.VISIBLE);
-                            else buttonGegenflecken.setVisibility(View.VISIBLE);
-                            buttonWeiter.setVisibility(View.VISIBLE);
-                        }
-                    } else if (anzFleckZüge==2)  {
-                        for (Spieler andererSpieler: andereSpieler)
-                            if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
-                        if (selbst.isIstdran()) {
-                            handKartenKlickbar();
-                            eigenerZug();
-                        }
+            case FLECKEN: spielfeldlogik.flecken();
+                if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()) {
+                    int gflecken = spielfeldlogik.isGegenFleckRunde() ? 1 : 0;
+                    if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
+                        if (spielfeldlogik.isGegenFleckRunde()) buttonFlecken.setText("Gegenflecken");
+                        buttonFlecken.setVisibility(View.VISIBLE);
+                        buttonWeiter.setVisibility(View.VISIBLE);
+                    } else {
+                        String recipientID3 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
+                        mService.delegateSendReliableMessage(recipientID3, (FLECKEN + ":"+gflecken).getBytes());
                     }
-                } else if (spiel.isGefleckt()) {
-                    spiel.Flecken();
-                    for (Spieler andererSpieler: andereSpieler)
-                        if (andererSpieler.isIstdran()) andererSpielerAmZug(andererSpieler);
-                    if (selbst.isIstdran()) {
-                        handKartenKlickbar();
+                } else {
+                    if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                         eigenerZug();
-                    }
-                } else if (!spiel.isGefleckt()) {
-                    anzFleckZüge=0;
-                    spiel.Flecken();
-                    if (sender.equals(mitspieler)) {
-                        Spieler andererSpieler = gegner1;
-                        if (bummerl.getAnzahlSpiele() % 4 == 2 || bummerl.getAnzahlSpiele() % 4 == 3) {
-                            andererSpieler = gegner2;
-                        }
-                        andererSpielerAmFlecken(andererSpieler, true);
+                        handKartenAusspielbar();
+                    } else {
+                        weiterNachricht(null, endpointIDs);
                     }
                 }
                 break;
@@ -929,20 +824,13 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         @Override
         public void run() {
             punkteAktualisieren();
-            gegnerischeKarte1 = mitspielerKarte = gegnerischeKarte2 = eigeneKarte = null;
-            if (spiel.istSpielzuEnde(bummerl)) {
-                //spielEnde();
+            if (spielfeldlogik.isSpielRundenEnde()) {
+                spielRundenEnde();
             } else {
                 handAktualisieren();
-                if (selbst.isIstdran()) {
+                if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                     eigenerZug();
-                    handKartenKlickbar();
-                } else if (gegner1.isIstdran()) {
-                    andererSpielerAmZug(gegner1);
-                } else if (mitspieler.isIstdran()) {
-                    andererSpielerAmZug(mitspieler);
-                } else {
-                    andererSpielerAmZug(gegner2);
+                    handKartenAusspielbar();
                 }
             }
         }
@@ -967,8 +855,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     };
 
     public void sendStartMessage() {
-        mService.delegateSendReliableMessage(gegner1ID, (SPIELSTART + ":" + "2," + bummerl.toString()).getBytes());
-        mService.delegateSendReliableMessage(mitspielerID, (SPIELSTART + ":" + "3," + bummerl.toString()).getBytes());
-        mService.delegateSendReliableMessage(gegner2ID, (SPIELSTART + ":" + "4," + bummerl.toString()).getBytes());
+        Bummerl4 bummerl = spielfeldlogik.getBummerl();
+        mService.delegateSendReliableMessage(gegner1ID, (SPIELSTART + ":" + SPIELER2 + "," + bummerl.toString()).getBytes());
+        mService.delegateSendReliableMessage(mitspielerID, (SPIELSTART + ":" + SPIELER3 + "," + bummerl.toString()).getBytes());
+        mService.delegateSendReliableMessage(gegner2ID, (SPIELSTART + ":" + SPIELER4 + "," + bummerl.toString()).getBytes());
     }
 }
