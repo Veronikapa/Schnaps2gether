@@ -4,8 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
 
-    <dimen name="logo_hoehe">250dp</dimen>
-    <dimen name="logo_breite">500dp</dimen>
+    <dimen name="logo_hoehe">300dp</dimen>
+    <dimen name="logo_breite">550dp</dimen>
 
     <dimen name="karte_hoehe">113dp</dimen>
     <dimen name="karte_breite">75dp</dimen>
@@ -25,5 +25,7 @@
 
     <dimen name="button_hoehe">38dp</dimen>
     <dimen name="button_breite">50dp</dimen>
+
+    <dimen name="lobbybButton_hoehe">80dp</dimen>
 
 </resources>

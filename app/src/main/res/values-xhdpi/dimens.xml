@@ -26,5 +26,7 @@
     <dimen name="logo_hoehe">150dp</dimen>
     <dimen name="logo_breite">300dp</dimen>
 
+    <dimen name="lobbybButton_hoehe">60dp</dimen>
+
 
 </resources>

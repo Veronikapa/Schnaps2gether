@@ -101,7 +101,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="47dp"
+            android:layout_width="40dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -109,7 +109,8 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_weight="0.38" />
 
         <ImageButton
             android:layout_width="@dimen/button_breite"
@@ -848,7 +849,7 @@
 
         <Button
             style="@style/text_buttonsSpielfeld"
-            android:layout_width="80dp"
+            android:layout_width="64dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             android:id="@+id/btn_abbrechen"

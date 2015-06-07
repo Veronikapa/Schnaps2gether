@@ -854,7 +854,7 @@
 
         <Button
             style="@style/text_buttonsSpielfeld"
-            android:layout_width="wrap_content"
+            android:layout_width="91dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             android:id="@+id/btn_abbrechen"

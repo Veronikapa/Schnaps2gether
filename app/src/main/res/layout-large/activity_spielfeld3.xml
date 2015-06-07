@@ -48,13 +48,13 @@
         android:layout_alignParentStart="true">
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="175dp"
             android:layout_height="match_parent" >
 
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_gegenflecken"
-                android:layout_width="wrap_content"
+                android:layout_width="175dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/gegenflecken"
                 android:onClick="fleckenOnClick"
@@ -68,7 +68,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_flecken"
-                android:layout_width="wrap_content"
+                android:layout_width="176dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/flecken"
                 android:onClick="fleckenOnClick"
@@ -84,7 +84,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_rufspiel"
-                android:layout_width="wrap_content"
+                android:layout_width="203dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 android:onClick="popupSpielAnsagen"
@@ -100,7 +100,7 @@
             <Button
                 style="@style/text_buttonsSpielfeld"
                 android:id="@+id/cmd_trumpfansagen"
-                android:layout_width="wrap_content"
+                android:layout_width="176dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:onClick="popupTrumpfansagen"
                 android:singleLine="false"
@@ -138,7 +138,7 @@
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="wrap_content"
+            android:layout_width="89dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -149,7 +149,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="wrap_content"
+            android:layout_width="69dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -161,7 +161,7 @@
         <Button
             style="@style/text_buttonsSpielfeld"
             android:id="@+id/cmd_weiter"
-            android:layout_width="wrap_content"
+            android:layout_width="102dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
@@ -954,7 +954,7 @@
         android:id="@+id/linearLayout3">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="114dp"
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"

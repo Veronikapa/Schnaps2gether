@@ -86,8 +86,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="@dimen/logo_breite"
-        android:layout_height="@dimen/logo_hoehe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_row="6"
         android:layout_column="0"
         android:weightSum="1"
@@ -98,8 +98,8 @@
         android:layout_centerHorizontal="true">
 
         <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="@dimen/logo_breite"
+            android:layout_height="@dimen/logo_hoehe"
             android:id="@+id/logo"
             android:longClickable="true"
             android:background="@drawable/schnaps2gether_logo"
@@ -140,40 +140,40 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Spielen"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielen"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_weight="0.33" />
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="@string/schnellesSpiel"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_schnellesSpiel"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="0.33" />
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Spielregeln"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielregeln"
                     android:background="@drawable/beiger_button"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="0.33" />
@@ -187,7 +187,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Name ändern"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_name"
@@ -201,7 +201,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Statistik"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_statistik"
@@ -210,12 +210,12 @@
                     android:textStyle="bold"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_weight="0.33" />
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Beenden"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_Beenden"
@@ -224,7 +224,7 @@
                     android:textStyle="bold"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_gravity="top|center"
+                    android:layout_gravity="center"
                     android:layout_weight="0.33" />
 
             </TableRow>

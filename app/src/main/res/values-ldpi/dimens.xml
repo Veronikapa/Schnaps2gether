@@ -18,13 +18,14 @@
     <dimen name="anzeigeG_hoehe">19dp</dimen>
     <dimen name="anzeigeG_breite">83dp</dimen>
 
-    <dimen name="logo_hoehe">150dp</dimen>
-    <dimen name="logo_breite">300dp</dimen>
+    <dimen name="logo_hoehe">125dp</dimen>
+    <dimen name="logo_breite">250dp</dimen>
 
     <dimen name="auge">12dp</dimen>
 
     <dimen name="button_hoehe">23dp</dimen>
     <dimen name="button_breite">30dp</dimen>
 
+    <dimen name="lobbybButton_hoehe">40dp</dimen>
 
 </resources>

@@ -16,8 +16,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="@dimen/logo_breite"
-        android:layout_height="@dimen/logo_hoehe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_row="6"
         android:layout_column="0"
         android:weightSum="1"
@@ -25,11 +25,11 @@
         android:id="@+id/linearLayout"
         android:gravity="top"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerInParent="true">
 
         <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="@dimen/logo_breite"
+            android:layout_height="@dimen/logo_hoehe"
             android:id="@+id/logo"
             android:longClickable="true"
             android:background="@drawable/schnaps2gether_logo"
@@ -47,10 +47,10 @@
         android:layout_row="7"
         android:layout_column="0"
         android:layout_columnSpan="6"
+        android:id="@+id/tableLayout2"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/tableLayout2"
         android:layout_alignParentBottom="true">
 
         <TableLayout
@@ -72,7 +72,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Spielen"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielen"
@@ -85,7 +85,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="70dp"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="@string/schnellesSpiel"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_schnellesSpiel"
@@ -99,7 +99,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Spielregeln"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielregeln"
@@ -119,7 +119,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Name ändern"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_name"
@@ -133,7 +133,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Statistik"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_statistik"
@@ -147,7 +147,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="70dp"
+                    android:layout_height="@dimen/lobbybButton_hoehe"
                     android:text="Beenden"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_Beenden"

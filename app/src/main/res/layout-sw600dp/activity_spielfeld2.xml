@@ -99,7 +99,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -108,7 +108,7 @@
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
             android:textAllCaps="false"
-            android:layout_weight="0.14" />
+            android:layout_weight="0.15" />
 
         <ImageButton
             android:layout_width="@dimen/button_breite"
@@ -206,7 +206,7 @@
                 android:id="@+id/imageView_karte1"
                 android:clickable="true"
                 android:onClick="karte1OnClick"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:background="@android:color/transparent"
                 android:visibility="visible"
                 android:adjustViewBounds="false"
@@ -227,7 +227,7 @@
                 android:id="@+id/imageView_karte2"
                 android:clickable="true"
                 android:onClick="karte2OnClick"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:background="@android:color/transparent"
                 android:visibility="visible"
                 android:layout_gravity="bottom|center" />
@@ -246,7 +246,7 @@
                 android:id="@+id/imageView_karte3"
                 android:clickable="true"
                 android:onClick="karte3OnClick"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:background="@android:color/transparent"
                 android:layout_gravity="bottom|center"
                 android:visibility="visible" />
@@ -285,7 +285,7 @@
                 android:layout_width="@dimen/karte_breite"
                 android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karte5"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:clickable="true"
                 android:onClick="karte5OnClick"
                 android:background="@android:color/transparent"
@@ -850,11 +850,12 @@
         android:layout_alignParentEnd="false"
         android:id="@+id/linearLayout2"
         android:baselineAligned="false"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:weightSum="1">
 
         <Button
             style="@style/text_buttonsSpielfeld"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             android:id="@+id/btn_abbrechen"
@@ -865,7 +866,8 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/l_StichGegner1"
             android:layout_alignBottom="@+id/button_kartenSchaun"
-            android:layout_gravity="top|right" />
+            android:layout_gravity="top|right"
+            android:layout_weight="3.30" />
     </LinearLayout>
 
 

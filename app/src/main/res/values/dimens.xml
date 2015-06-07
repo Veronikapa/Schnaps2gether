@@ -26,12 +26,5 @@
     <dimen name="logo_hoehe">200dp</dimen>
     <dimen name="logo_breite">400dp</dimen>
 
-    <!--<dimen name="logo_small_hoehe">150dp</dimen>
-    <dimen name="logo_small_breite">300dp</dimen>
-
-    <dimen name="logo_large_hoehe">250dp</dimen>
-    <dimen name="logo_large_breite">500dp</dimen>
-
-    <dimen name="logo_xlarge_hoehe">400dp</dimen>
-    <dimen name="logo_xlarge_breite">800dp</dimen>-->
+    <dimen name="lobbybButton_hoehe">10dp</dimen>
 </resources>

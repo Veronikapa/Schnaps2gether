@@ -150,7 +150,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="32dp"
+            android:layout_width="46dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -167,7 +167,6 @@
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:background="@drawable/beiger_button"
             android:textAllCaps="false"
@@ -958,7 +957,7 @@
         android:id="@+id/linearLayout3">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="69dp"
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"
