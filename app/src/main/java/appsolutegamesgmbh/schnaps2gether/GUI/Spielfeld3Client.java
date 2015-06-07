@@ -561,18 +561,18 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                     }
                 }
                 break;
-            case TRUMPFFARBE: angesagteFarbe = message.split(":")[1];
+            case TRUMPFFARBE: angesagteFarbe = messageParts[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
                 break;
             case WEITER:
                 if(messageParts[1].equals(SpielerID)) {
                     handKartenKlickbar();
-                    if (messageParts[2].substring(0, 1).equals("1")) {
-                        hat20er = messageParts[2].substring(2, 3).equals("1") ? true : false;
-                        hat40er = message.substring(4, 5).equals("1") ? true : false;
+                    if (messageParts[2].equals("1")) {
+                        hat20er = messageParts[3].equals("1") ? true : false;
+                        hat40er = messageParts[4].equals("1") ? true : false;
                         hab20er = new ArrayList<String>();
                         if (hat20er) {
-                            String[] meine20er = message.substring(8).split(" ");
+                            String[] meine20er = messageParts[5].split(" ");
                             for (String farbe : meine20er) {
                                 hab20er.add(farbe);
                             }
@@ -641,17 +641,27 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             case TALONGETAUSCHT: Toast.makeText(appContext, "Talonkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGENDE:
-                istdran = Integer.decode(message.split(":")[1].split(" ")[2]);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView_eigeneKarte.setVisibility(View.INVISIBLE);
+                        imageView_karteGegner1.setVisibility(View.INVISIBLE);
+                        imageView_karteGegner2.setVisibility(View.INVISIBLE);
+                        eigeneKarte = null;
+                        gegnerischeKarte1 = null;
+                        gegnerischeKarte2 = null;
+                    }
+                }, 1000);
 
                 break;
             case PUNKTE:
-                p2 = Integer.decode(message.split(":")[1].split(" ")[2]);
-                p1 = Integer.decode(message.split(":")[1].split(" ")[1]);
-                p0 = Integer.decode(message.split(":")[1].split(" ")[0]);
+                p2 = Integer.decode(messageParts[1].split(" ")[2]);
+                p1 = Integer.decode(messageParts[1].split(" ")[1]);
+                p0 = Integer.decode(messageParts[1].split(" ")[0]);
                 punkteAktualisieren();
                 break;
-            case SPIELENDE: boolean win = message.substring(2).equals("1") ? true : false;
-                spielEnde(win);
+            case SPIELENDE:
+
                 break;
             case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
                 // Execute some code after 2 seconds have passed
@@ -801,7 +811,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 imageView_karte3.setImageResource(ka.getImageResourceId());
                 imageView_karte3.setAlpha(0.6f);
 
-                t = selbst.Hand.get(3);
+                t = selbst.Hand.get(2);
                 imageView_talonkarte2.setImageResource(t.getImageResourceId());
                 imageView_talonkarte2.setAlpha(0.6f);
 
@@ -1097,7 +1107,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             selbst.Hand.set(5, ka);
             talonID = "0";
         }else if(talonID.equals("12")){
-            imageView_talonkarte1.setAlpha(0.6f);
+            imageView_talonkarte2.setAlpha(0.6f);
             talonID = "0";
         }else
             Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
@@ -1134,6 +1144,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + eigeneKarte.toString() + ":" + SpielerID).getBytes());
         gespielteKarteEntfernen(i);
 
+        imageView_eigeneKarte.setVisibility(View.VISIBLE);
         imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
 
 
@@ -1151,9 +1162,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     private void punkteAktualisieren() {
-        if (SpielerID == "1")
+        if (SpielerID.equals("1"))
             punkteSelbst.setText(Integer.toString(p1));
-        else if (SpielerID == "2")
+        else if (SpielerID.equals("2"))
             punkteSelbst.setText(Integer.toString(p2));
     }
 
