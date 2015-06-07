@@ -98,14 +98,23 @@ public class Spiel3 {
         if(AnzahlSpiele%3 == 0) {
             s1.setIstdran(true);
             spieler = s1;
+            s1.setMitspieler(s1);
+            s2.setMitspieler(s3);
+            s3.setMitspieler(s2);
         }
         else if(AnzahlSpiele%3 == 1) {
             s2.setIstdran(true);
             spieler = s2;
+            s1.setMitspieler(s3);
+            s2.setMitspieler(s2);
+            s3.setMitspieler(s1);
         }
         else {
             s3.setIstdran(true);
             spieler = s3;
+            s1.setMitspieler(s2);
+            s2.setMitspieler(s1);
+            s3.setMitspieler(s3);
         }
 
         spiel = new Rufspiel("normal");
@@ -338,8 +347,10 @@ public class Spiel3 {
         s.setIstdran(false);
 
         //Überprüfen ob Karte höher als die bereits ausgepielten Karten
-        if(hoechstekarteamTisch == null)
+        if(hoechstekarteamTisch == null) {
             hoechstekarteamTisch = karte;
+            besitzer = s;
+        }
         else
         {
             if(hoechstekarteamTisch.getFarbe().equals(karte.getFarbe()))
@@ -888,7 +899,7 @@ public class Spiel3 {
     {
         spiel = Spiel;
         spieler = s;
-        if(spiel.getSpiel() == "Land")
+        if(spiel.getSpiel().equals("Land"))
         {
             if(s1 == s)
             {
@@ -916,6 +927,26 @@ public class Spiel3 {
                 s2.setIstdran(false);
                 s3.setIstdran(true);
 
+                s3.setMitspieler(s3);
+                s2.setMitspieler(s1);
+                s1.setMitspieler(s2);
+            }
+        }
+        else{
+            if(s1 == s)
+            {
+                s1.setMitspieler(s1);
+                s2.setMitspieler(s3);
+                s3.setMitspieler(s2);
+            }
+            else if(s2 == s)
+            {
+                s2.setMitspieler(s2);
+                s3.setMitspieler(s1);
+                s1.setMitspieler(s3);
+            }
+            else if(s3 == s)
+            {
                 s3.setMitspieler(s3);
                 s2.setMitspieler(s1);
                 s1.setMitspieler(s2);

@@ -345,8 +345,10 @@ public class Spiel4 {
         s.setIstdran(false);
 
         //Überprüfen ob Karte höher als die bereits ausgepielten Karten
-        if(hoechstekarteamTisch == null)
+        if(hoechstekarteamTisch == null) {
             hoechstekarteamTisch = karte;
+            besitzer = s;
+        }
         else
         {
             if(hoechstekarteamTisch.getFarbe().equals(karte.getFarbe()))

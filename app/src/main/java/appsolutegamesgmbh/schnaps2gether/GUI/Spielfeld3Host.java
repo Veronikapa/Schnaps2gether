@@ -538,6 +538,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             handKartenKlickbar();
             imageView_talonkarte1.setVisibility(View.INVISIBLE);
             imageView_talonkarte2.setVisibility(View.INVISIBLE);
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.6f);
         } else {
             if (bummerl.getAnzahlSpiele() % 3 == 1) {
                 buttonWeiter.setEnabled(false);
@@ -765,24 +767,25 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     }
                 }
                 break;
-            case ANGESAGT40ER:
+            case ANGESAGT40ER: //TODO:
                 spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
                 punkteAktualisieren();
                 if (spiel.istSpielzuEnde(bummerl)) {
                     spielEnde();
                 }
-                gegnerischeHandAktualisieren();
+                gegnerischeHand1Aktualisieren();
                 angesagt = true;
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case ANGESAGT20ER:
+            case ANGESAGT20ER: //TODO:
                 String farbe = message.substring(2);
                 spiel.Ansagen20er(farbe, gegner1);
                 punkteAktualisieren();
                 if (spiel.istSpielzuEnde(bummerl)) {
                     spielEnde();
                 }
-                gegnerischeHandAktualisieren();
+                gegnerischeHand1Aktualisieren();
+
                 angesagt = true;
                 Toast.makeText(appContext, farbe + " 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -829,8 +832,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_karte1.setAlpha(0.6f);
 
                 t = selbst.Hand.get(0);
-                imageView_talonkarte1.setImageResource(t.getImageResourceId());
-                imageView_talonkarte1.setAlpha(0.6f);
+                imageView_talonkarte2.setImageResource(t.getImageResourceId());
+                imageView_talonkarte2.setAlpha(0.6f);
 
                 spiel.Talon.set(1, t);
                 selbst.Hand.set(0, ka);
@@ -909,7 +912,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_karte3.setImageResource(ka.getImageResourceId());
                 imageView_karte3.setAlpha(0.6f);
 
-                t = selbst.Hand.get(3);
+                t = selbst.Hand.get(2);
                 imageView_talonkarte2.setImageResource(t.getImageResourceId());
                 imageView_talonkarte2.setAlpha(0.6f);
 
@@ -1205,7 +1208,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             selbst.Hand.set(5, ka);
             talonID = "0";
         }else if(talonID.equals("12")){
-            imageView_talonkarte1.setAlpha(0.6f);
+            imageView_talonkarte2.setAlpha(0.6f);
             talonID = "0";
         }else
         Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
@@ -1269,8 +1272,30 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         eigeneKarte = null;
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
+        imageView_eigeneKarte.setVisibility(View.INVISIBLE);
+        imageView_karteGegner1.setVisibility(View.INVISIBLE);
+        imageView_karteGegner2.setVisibility(View.INVISIBLE);
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
         punkteAktualisieren();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (spiel.istSpielzuEnde(bummerl)) {
+                    spielEnde();
+                } else {
+                    handAktualisieren();
+                    if (selbst.isIstdran()) {
+                        eigenerZug();
+                        handKartenKlickbar();
+                    } else if(gegner1.isIstdran()){
+                        gegner1hat20er();
+                    }else
+                        gegner2hat20er();
+                }
+            }
+        }, 1000);
+
 
 
     }
@@ -1319,27 +1344,34 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         }
 
-        gegnerischeHandAktualisieren();
+        gegnerischeHand1Aktualisieren();
+        gegnerischeHand2Aktualisieren();
 
 
     }
 
-    private static void gegnerischeHandAktualisieren() {
+    private static void gegnerischeHand1Aktualisieren() {
         String gegnerischeHand1 = "";
         String gegKartenSpielBar1 = "";
-        String gegnerischeHand2 = "";
-        String gegKartenSpielBar2 = "";
         int gegnerischeHandkartenAnz1 = gegner1.Hand.size();
-        int gegnerischeHandkartenAnz2 = gegner2.Hand.size();
         
         for (int i=0;i<gegnerischeHandkartenAnz1;i++) {
             gegnerischeHand1 += ","+gegner1.Hand.get(i).toString();
             gegKartenSpielBar1 += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand1+":"+gegKartenSpielBar1+":1").getBytes());
+
+    }
+
+    private static void gegnerischeHand2Aktualisieren() {
+
+        String gegnerischeHand2 = "";
+        String gegKartenSpielBar2 = "";
+        int gegnerischeHandkartenAnz2 = gegner2.Hand.size();
+
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
             gegnerischeHand2 += ","+gegner2.Hand.get(i).toString();
-            gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner1) ? 1 : 0);
+            gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner2) ? 1 : 0);
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand2+":"+gegKartenSpielBar2+":2").getBytes());
 
@@ -1403,25 +1435,41 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private static void gegner1hat20er() {
-        int hast20er = hat20er(gegner1) ? 1 : 0;
-        int hast40er = hat40er(gegner1) ? 1 : 0;
-        String hastDie20er = "";
-        ArrayList<String> geg20er = spiel.hat20er(gegner1);
-        for(String farbe: geg20er) {
-            hastDie20er += " " + farbe;
+        if(gegnerischeKarte2 == null && eigeneKarte == null) {
+            int hast20er = hat20er(gegner1) ? 1 : 0;
+            int hast40er = hat40er(gegner1) ? 1 : 0;
+            String hastDie20er = "";
+            ArrayList<String> geg20er = spiel.hat20er(gegner1);
+            for (String farbe : geg20er) {
+                hastDie20er += " " + farbe;
+            }
+            gegnerischeHand1Aktualisieren();
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + ":1:" + hast20er + ":" + hast40er + ":" + hastDie20er).getBytes());
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + ":" + hast20er + " " + hast40er + hastDie20er).getBytes());
+        else {
+            gegnerischeHand1Aktualisieren();
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + ":0").getBytes());
+        }
+
+
     }
 
     private static void gegner2hat20er() {
-        int hast20er = hat20er(gegner2) ? 1 : 0;
-        int hast40er = hat40er(gegner2) ? 1 : 0;
-        String hastDie20er = "";
-        ArrayList<String> geg20er = spiel.hat20er(gegner2);
-        for(String farbe: geg20er) {
-            hastDie20er += " " + farbe;
+        if(gegnerischeKarte1 == null && eigeneKarte == null) {
+            int hast20er = hat20er(gegner2) ? 1 : 0;
+            int hast40er = hat40er(gegner2) ? 1 : 0;
+            String hastDie20er = "";
+            ArrayList<String> geg20er = spiel.hat20er(gegner2);
+            for (String farbe : geg20er) {
+                hastDie20er += " " + farbe;
+            }
+            gegnerischeHand2Aktualisieren();
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 2 + ":1:" + hast20er + ":" + hast40er + ":" + hastDie20er).getBytes());
+        }else {
+            gegnerischeHand2Aktualisieren();
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 2 + ":0").getBytes());
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 2 + ":" + hast20er + " " + hast40er + hastDie20er).getBytes());
+
     }
     
 
