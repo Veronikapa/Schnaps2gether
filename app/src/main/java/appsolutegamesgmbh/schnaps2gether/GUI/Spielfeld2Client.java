@@ -145,7 +145,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int handkartenNummerZumSchummeln;
     private static SensorManager shakeManager;
     private static SensorEventListener shakeListener;
-    private double threshold = 1.0d;
+    private double threshold = 10.0d;
 
     ArrayList<Integer> hostHandKarten = new ArrayList<Integer>(); //Karten für Schummeln
 

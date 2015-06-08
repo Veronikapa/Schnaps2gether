@@ -136,16 +136,13 @@ public class Lobby extends Activity implements
 
     //Anlegen eines neuen Spiel-Services
     public void neu(View v) {
-
-        //Öffnen der Spielauswahl Activity
-        /*Intent i = new Intent(this, NeuesSpiel.class);
-        startActivityForResult(i, 1);*/
         popupNeuesSpiel(v);
         spieleIdListe.clear();
         spieleListe.clear();
         isc1 = false;
         isc2 = false;
         isc3 = false;
+        Toast.makeText(appContext, "Neues Spiel angelegt. Warte auf Spieler...", Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -267,16 +264,6 @@ public class Lobby extends Activity implements
         m_GoogleApiClient.connect();
     }
 
-    /*@Override
-    public void onStop() {
-        super.onStop();
-        //Wenn Activity beendet wird und eine Verbindung vorhanden ist muss Google Api Client
-        //Verbindung beendet werden.
-        if (m_GoogleApiClient != null && m_GoogleApiClient.isConnected()) {
-            m_GoogleApiClient.disconnect();
-        }
-    }*/
-
     /*
     * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.
     * Diese Methode muss aufgerufen werden, bevor ein Gerät sich mit anderen Geräten verbinden möchte.
@@ -383,23 +370,6 @@ public class Lobby extends Activity implements
                             Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
 
-//                            if(endpointIds.size() == 1)
-//                                isc1 = true;
-//                            else if(endpointIds.size() == 2)
-//                                isc2 = true;
-//                            else if(endpointIds.size() == 3)
-//                                isc3 = true;
-                            /*if (spielTyp == 2 && endpointIds.size() == 1) {
-                                startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
-                                finish();
-                            } else if (spielTyp == 3 && endpointIds.size() == 2) {
-                                startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
-                                finish();
-                            }
-                            else if (spielTyp == 4 && endpointIds.size() == 3) {
-                                startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
-                                finish();
-                            }*/
                         } else {
                             // Verbindung fehlgeschlagen
                             Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
@@ -463,6 +433,9 @@ public class Lobby extends Activity implements
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             finish();
                         }
+                        else {
+                            Toast.makeText(appContext, "Warten auf weitere Spieler...", Toast.LENGTH_SHORT).show();
+                        }
 
                     } else {
                         Toast.makeText(appContext, "Verbindung konnte nicht hergestellt werden." + remoteEndpointName,
@@ -476,20 +449,6 @@ public class Lobby extends Activity implements
             Nearby.Connections.rejectConnectionRequest(m_GoogleApiClient, remoteEndpointId);
         }
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==1) {
-            //Setze gewählten Spieltyp aus Neues Spiel Activity
-            spielTyp = data.getIntExtra("Spieltyp", 2);
-
-            //Anbieten eines neuen Spiels soll nur erfolgen, wenn eine Verbindung verfügbar ist.
-            if (m_GoogleApiClient.isConnected()) {
-
-                startAdvertising();
-            }
-        }
-    }*/
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
