@@ -76,6 +76,7 @@ public class Startmenue extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Intent i;
         switch(v.getId()) {
             case R.id.cmd_name:
                 DialogFragment nameFragment = new ChangeNickname();
@@ -85,15 +86,21 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.cmd_spielen:
-                startActivity(new Intent(Startmenue.this, Lobby.class));
+                i = new Intent(Startmenue.this, Lobby.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
                 break;
             case R.id.cmd_schnellesSpiel:
-                startActivity(new Intent(Startmenue.this,Spielfeld2.class));
+                i = new Intent(Startmenue.this,Spielfeld2.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
                 break;
             case R.id.cmd_spielregeln:
-                startActivity(new Intent(Startmenue.this, Spielregeln.class));
+                i = new Intent(Startmenue.this, Spielregeln.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
                 finish();
                 break;
             default:;
