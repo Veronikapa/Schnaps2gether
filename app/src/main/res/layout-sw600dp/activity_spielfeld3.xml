@@ -114,32 +114,40 @@
 
         </FrameLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
+        <GridLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:layout_gravity="center"
+            android:rowCount="1"
+            android:columnCount="2">
 
             <TextView
+                style="@style/text_punkteanzeige"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="P:"
-                android:id="@+id/txt_p"
-                style="@style/text_punkteanzeige" />
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:paddingRight="5dp" />
 
             <TextView
+                style="@style/text_punkteanzeige"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66"
-                android:id="@+id/txt_punkte"
-                style="@style/text_punkteanzeige" />
+                android:text="0"
+                android:id="@+id/txt_PunkteSelbst"
+                android:layout_gravity="center"
+                android:layout_column="1" />
 
-        </LinearLayout>
+        </GridLayout>
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="106dp"
+            android:layout_width="88dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -162,7 +170,7 @@
         <Button
             style="@style/text_buttonsSpielfeld"
             android:id="@+id/cmd_weiter"
-            android:layout_width="120dp"
+            android:layout_width="89dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/weiter"
             android:onClick="weiterOnClick"
@@ -898,8 +906,8 @@
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="200dp"
+                android:layout_height="104dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:id="@+id/l_TrumpfKarte">

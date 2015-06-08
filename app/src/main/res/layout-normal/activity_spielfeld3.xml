@@ -19,19 +19,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true">
 
-        <TextView
-            android:id="@+id/txt_NameGegner2"
-            android:text="@string/spieler2" android:layout_width="match_parent"
-
-            android:layout_height="25dp"
-            android:gravity="top|center"
-            android:textColor="@android:color/white"
-            android:paddingLeft="5dp"
-            android:paddingBottom="5dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingRight="5dp"
-            style="@style/text_buttonsSpielfeld" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -970,6 +957,22 @@
             android:onClick="abbrechenSpiel"
             android:text="@string/abbrechen" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_NameGegner2"
+        android:text="@string/spieler2" android:layout_width="110dp"
+
+        android:layout_height="25dp"
+        android:gravity="top|center"
+        android:textColor="@android:color/white"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingRight="5dp"
+        style="@style/text_buttonsSpielfeld"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/l_abgelegteKarten" />
 
 
 </RelativeLayout>

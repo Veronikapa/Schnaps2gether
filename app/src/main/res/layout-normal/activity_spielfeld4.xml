@@ -59,8 +59,8 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/main_buttonGegenFlecken"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="@dimen/button_hoehe"
                 android:text="@string/gegenflecken"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="fleckenOnClick"
@@ -70,11 +70,12 @@
                 android:background="@drawable/beiger_button"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonFlecken"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="@dimen/button_hoehe"
                 android:text="@string/flecken"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="fleckenOnClick"
@@ -84,11 +85,12 @@
                 android:background="@drawable/beiger_button"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonSpielAnsagen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="popupSpielAnsagen"
@@ -98,11 +100,12 @@
                 android:background="@drawable/beiger_button"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonTrumpfAnsagen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="75dp"
+                android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="popupTrumpfansagen"
@@ -112,13 +115,45 @@
                 android:background="@drawable/beiger_button"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:layout_gravity="center" />
         </FrameLayout>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="center"
+            android:rowCount="1"
+            android:columnCount="2">
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P:"
+                android:id="@+id/textView2"
+                android:layout_gravity="center"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:paddingRight="5dp" />
+
+            <TextView
+                style="@style/text_punkteanzeige"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/txt_PunkteZahlI"
+                android:layout_gravity="center"
+                android:layout_column="1" />
+
+        </GridLayout>
 
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="51dp"
+            android:layout_width="43dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -149,7 +184,7 @@
 
             <Button
                 android:id="@+id/main_buttonWeiter"
-                android:layout_width="48dp"
+                android:layout_width="75dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/weiter"
                 android:onClick="weiterOnClick"
@@ -164,7 +199,7 @@
 
             <Button
                 android:id="@+id/main_buttonAufdrehen"
-                android:layout_width="wrap_content"
+                android:layout_width="75dp"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/aufdrehen"
                 style="@style/text_buttonsSpielfeld"
@@ -180,26 +215,6 @@
 
         </FrameLayout>
 
-
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_hoehe"
-            android:text="@string/abbrechen"
-            android:id="@+id/cmd_close"
-            style="@style/text_buttonsSpielfeld"
-            android:background="@drawable/beiger_button"
-            android:elegantTextHeight="false"
-            android:capitalize="words"
-            android:textAllCaps="false"
-            android:paddingRight="5dp"
-            android:layout_marginRight="5dp"
-            android:enabled="true"
-            android:clickable="true"
-            android:onClick="abbrechenSpiel"
-            android:layout_weight="0.07"
-            android:layout_gravity="center" />
-
     </LinearLayout>
 
     <FrameLayout
@@ -210,41 +225,25 @@
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
         android:touchscreenBlocksFocus="false"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/eigeneKartenLayout">
+        android:layout_above="@+id/eigeneKartenLayout"
+        android:layout_below="@+id/gegnerNameLayout"
+        android:layout_toRightOf="@+id/deck_layout"
+        android:layout_toLeftOf="@+id/stichAnzeige"
+        android:layout_toStartOf="@+id/stichAnzeige">
+
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center|right">
-
-            <ImageView
-                android:layout_width="@dimen/karte_breite"
-                android:layout_height="@dimen/karte_hoehe"
-                android:id="@+id/imageView_eigeneKarte"
-                android:scaleType="fitXY"
-                android:clickable="false"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/txt_NameG2"
-                android:layout_toStartOf="@+id/txt_NameG2"
-                android:layout_gravity="bottom|right"
-                android:background="@android:color/transparent"
-                android:cropToPadding="true" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left|center">
+            android:layout_gravity="center"
+            android:layout_marginRight="50dp">
 
             <ImageView
                 android:layout_width="@dimen/karte_breite"
                 android:layout_height="@dimen/karte_hoehe"
                 android:id="@+id/imageView_karteGegner1"
                 android:scaleType="fitXY"
-                android:layout_gravity="top|left"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/txt_NameG2"
                 android:layout_toEndOf="@+id/txt_NameG2"
@@ -255,7 +254,8 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|left|center">
+            android:layout_gravity="center"
+            android:layout_marginBottom="33dp">
 
             <ImageView
                 android:layout_width="@dimen/karte_breite"
@@ -273,7 +273,8 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|right|center">
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp">
 
             <ImageView
                 android:layout_width="@dimen/karte_breite"
@@ -286,6 +287,26 @@
                 android:layout_toEndOf="@+id/txt_NameG2"
                 android:background="@android:color/transparent" />
         </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="35dp">
+
+            <ImageView
+                android:layout_width="@dimen/karte_breite"
+                android:layout_height="@dimen/karte_hoehe"
+                android:id="@+id/imageView_eigeneKarte"
+                android:scaleType="fitXY"
+                android:clickable="false"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/txt_NameG2"
+                android:layout_toStartOf="@+id/txt_NameG2"
+                android:background="@android:color/transparent"
+                android:cropToPadding="true" />
+        </LinearLayout>
+
 
     </FrameLayout>
 
@@ -427,14 +448,14 @@
                 android:visibility="visible"
                 android:background="@android:color/transparent"
                 android:layout_gravity="top|right"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="30dp" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="105dp"
-            android:layout_height="105dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="bottom|center"
             android:layout_marginLeft="20dp"
             android:weightSum="1" >
@@ -880,31 +901,6 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Punkte"
-                android:id="@+id/txt_PunkteName"
-                android:layout_column="0"
-                android:textColor="@android:color/white"
-                style="@style/text_punkteanzeige" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/punktestand2"
-                android:id="@+id/txt_PunkteZahlI"
-                android:layout_column="2"
-                android:textColor="@android:color/white"
-                android:paddingRight="5dp"
-                android:layout_marginLeft="5dp"
-                style="@style/text_punkteanzeige" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </TableLayout>
 
@@ -950,6 +946,30 @@
             android:rotation="270"
             style="@style/vertikal_Schrift" />
     </FrameLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <Button
+            android:layout_width="76dp"
+            android:layout_height="@dimen/button_hoehe"
+            android:id="@+id/b_Abbrechen"
+            style="@style/text_buttonsSpielfeld"
+            android:background="@drawable/beiger_button"
+            android:elegantTextHeight="false"
+            android:capitalize="words"
+            android:textAllCaps="false"
+            android:onClick="abbrechenSpiel"
+            android:text="@string/abbrechen"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@+id/l_AnzeigeG1" />
+    </LinearLayout>
 
 
 </RelativeLayout>

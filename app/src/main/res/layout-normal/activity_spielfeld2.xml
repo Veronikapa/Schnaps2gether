@@ -62,13 +62,14 @@
         android:layout_toEndOf="@+id/l_Punkteanzeige"
         android:layout_toRightOf="@+id/l_Punkteanzeige">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <GridLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:rowCount="1"
+            android:columnCount="2">
 
             <TextView
                 style="@style/text_punkteanzeige"
@@ -76,7 +77,10 @@
                 android:layout_height="wrap_content"
                 android:text="P:"
                 android:id="@+id/textView2"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:paddingRight="5dp" />
 
             <TextView
                 style="@style/text_punkteanzeige"
@@ -84,8 +88,11 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:id="@+id/txt_PunkteSelbst"
-                android:layout_gravity="bottom|center" />
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:layout_column="1" />
+
+        </GridLayout>
+
 
         <Button
             android:id="@+id/main_button20er"
