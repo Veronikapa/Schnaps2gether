@@ -95,6 +95,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     private static Button button20er;
     private static Button button40er;
+    private static Button buttonTrumpfAnsagen;
     private static Button buttonSpielAnsagen;
     private static Button buttonAufdrehen;
     private static Button buttonFlecken;
@@ -168,6 +169,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
+        buttonTrumpfAnsagen = (Button) findViewById(R.id.main_buttonTrumpfAnsagen);
         buttonSpielAnsagen = (Button) findViewById(R.id.main_buttonSpielAnsagen);
         buttonAufdrehen = (Button) findViewById(R.id.main_buttonAufdrehen);
         buttonFlecken = (Button) findViewById(R.id.main_buttonFlecken);
@@ -319,6 +321,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE + ":" + farbe).getBytes());
         buttonsNichtKlickbar();
         buttonAufdrehen.setVisibility(View.INVISIBLE);
+        buttonTrumpfAnsagen.setVisibility(View.INVISIBLE);
     }
 
     public void popup20er(View view) {
@@ -352,6 +355,19 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             }
         }
         popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    public void popupTrumpfansagen(View view) {
+        PopupMenu popup = new PopupMenu(Spielfeld4Client.this, buttonTrumpfAnsagen);
+        popup.inflate(R.menu.popup_menu_trumpfansagen);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                trumpfansagen(menuItem.getTitle().toString());
+                return true;
+            }
+        });
         popup.show();
     }
 
@@ -473,6 +489,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     public void aufdrehenOnClick(View view) {
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFDREHEN + ":").getBytes());
         buttonAufdrehen.setVisibility(View.INVISIBLE);
+        buttonTrumpfAnsagen.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -648,6 +665,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 break;
             case TRUMPFANSAGEN: handKartenKlickbar();
                 buttonAufdrehen.setVisibility(View.VISIBLE);
+                buttonTrumpfAnsagen.setVisibility(View.VISIBLE);
                 break;
             case FLECKEN: if (message.split(":")[1].equals("0")) {
                 buttonFlecken.setVisibility(View.VISIBLE);

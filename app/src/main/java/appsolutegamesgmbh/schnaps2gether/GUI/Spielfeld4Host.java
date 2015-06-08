@@ -106,6 +106,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     private static Button button20er;
     private static Button button40er;
+    private static Button buttonTrumpfAnsagen;
     private static Button buttonSpielAnsagen;
     private static Button buttonAufdrehen;
     private static Button buttonFlecken;
@@ -180,6 +181,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
         button20er = (Button) findViewById(R.id.main_button20er);
         button40er = (Button) findViewById(R.id.main_button40er);
+        buttonTrumpfAnsagen = (Button) findViewById(R.id.main_buttonTrumpfAnsagen);
         buttonSpielAnsagen = (Button) findViewById(R.id.main_buttonSpielAnsagen);
         buttonAufdrehen = (Button) findViewById(R.id.main_buttonAufdrehen);
         buttonFlecken = (Button) findViewById(R.id.main_buttonFlecken);
@@ -350,6 +352,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                     handKartenAusspielbar();
                     buttonAufdrehen.setVisibility(View.VISIBLE);
+                    buttonTrumpfAnsagen.setVisibility(View.VISIBLE);
                 } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER2) {
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, gegner1ID, (TRUMPFANSAGEN + ":").getBytes());
                 } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER3) {
@@ -431,6 +434,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         for (Spieler s: andereSpieler) andereHandAktualisieren(s);
         buttonsNichtKlickbar();
         buttonAufdrehen.setVisibility(View.INVISIBLE);
+        buttonTrumpfAnsagen.setVisibility(View.INVISIBLE);
         buttonSpielAnsagen.setVisibility(View.VISIBLE);
         buttonWeiter.setVisibility(View.VISIBLE);
     }
@@ -503,6 +507,19 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
             }
         }
         popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    public void popupTrumpfansagen(View view) {
+        PopupMenu popup = new PopupMenu(Spielfeld4Host.this, buttonTrumpfAnsagen);
+        popup.inflate(R.menu.popup_menu_trumpfansagen);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                trumpfansagen(menuItem.getTitle().toString());
+                return true;
+            }
+        });
         popup.show();
     }
 
@@ -779,12 +796,16 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 for (Spieler s: andereSpieler1) andereHandAktualisieren(s);
                 andererSpielerKannSpielRufen();
                 break;
-            case FLECKEN: spielfeldlogik.flecken();
+            case FLECKEN: if (message.split(":").length>1) {
+                    spielfeldlogik.nichtFlecken();
+                } else {
+                    spielfeldlogik.flecken();
+                }
                 if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()) {
                     int gflecken = spielfeldlogik.isGegenFleckRunde() ? 1 : 0;
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
-                        if (spielfeldlogik.isGegenFleckRunde()) buttonFlecken.setText("Gegenflecken");
-                        buttonFlecken.setVisibility(View.VISIBLE);
+                        if (spielfeldlogik.isGegenFleckRunde()) buttonGegenflecken.setVisibility(View.VISIBLE);
+                        else buttonFlecken.setVisibility(View.VISIBLE);
                         buttonWeiter.setVisibility(View.VISIBLE);
                     } else {
                         String recipientID3 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
