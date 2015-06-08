@@ -148,7 +148,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static SensorManager shakeManager;
     private static SensorEventListener shakeListener;
-    private double threshold = 10.0d;
+    private double threshold = 5.0d;
 
     @Override
     public void onStop() {
