@@ -103,6 +103,11 @@ public class Lobby extends Activity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view,
         int position, long id) {
+
+            //Wenn Gerät zuvor Spiel angelegt hat, muss dieses entfernt werden bevor er spielen kann.
+            m_IsHost = false;
+            Nearby.Connections.stopAdvertising(m_GoogleApiClient);
+
             connectTo(spieleIdListe.get(position),null);
         }
 

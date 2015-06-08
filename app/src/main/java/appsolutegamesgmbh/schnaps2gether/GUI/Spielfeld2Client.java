@@ -149,14 +149,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     ArrayList<Integer> hostHandKarten = new ArrayList<Integer>(); //Karten für Schummeln
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-
-        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
-        mGoogleApiClient.connect();
-    }*/
-
     @Override
     public void onStop() {
         super.onStop();
