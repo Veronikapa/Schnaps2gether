@@ -958,7 +958,7 @@
         android:id="@+id/linearLayout3">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="201dp"
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"
