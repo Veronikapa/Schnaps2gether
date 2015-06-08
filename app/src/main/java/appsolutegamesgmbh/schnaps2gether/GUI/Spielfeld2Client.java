@@ -177,7 +177,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         endpointIDs = Lobby.endpointIds;
 
         appContext = this.getApplicationContext();
-        //endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
@@ -191,11 +190,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonTrumpfTauschen = (Button) findViewById(R.id.main_buttonTtauschen);
 
         auge_Icon = (ImageView) findViewById(R.id.i_augeG1);
-
-        //punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
-        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
-
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
@@ -232,13 +226,16 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
+        shakeImplementation();
+
+        spielStart();
+    }
+
+    private void shakeImplementation() {
         this.threshold = threshold * threshold;
         this.threshold = this.threshold * SensorManager.GRAVITY_EARTH* SensorManager.GRAVITY_EARTH;
 
         shakeManager = (SensorManager) this.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-        shakeManager.registerListener(shakeListener,
-                shakeManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
 
         shakeListener = new SensorEventListener() {
             @Override
@@ -261,8 +258,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             }
         };
 
-
-        spielStart();
+        shakeManager.registerListener(shakeListener,
+                shakeManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
     }
 
     private void zugAusführen(int i) {
@@ -424,6 +422,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
+
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteSelbst);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
+        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
         BpunkteSelbst.setText("0");
         BpunkteGegner.setText("0");
         punkteSelbst.setText("0");
@@ -715,11 +718,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         String message = new String(payload);
         switch ((message.split(":")[0])) {
             case BUMMERL: bummerl = new Bummerl2(message.substring(2));
-                //Toast.makeText(appContext, "bummerl: "+message.substring(2), Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFKARTE: trumpfkarte = new Karte(message.split(":")[1]);
-                //Toast.makeText(appContext, "trumpfbuttonset "+Boolean.toString(buttonTrumpfkarte!=null), Toast.LENGTH_SHORT).show();
-                //buttonTrumpfkarte.setText(trumpfkarte.getFarbe() + trumpfkarte.getWertigkeit());
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId()); // Ok wenn Icon hier auch geändert wird?
                 break;
@@ -727,11 +727,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 stapelKartenAnz = Integer.decode(messageParts[1]);
                 String[] hand = messageParts[2].substring(1).split(",");
                 String[] spielbar = messageParts[3].substring(1).split(" ");
-                //Toast.makeText(appContext, "spielbar: "+messageParts[3], Toast.LENGTH_SHORT).show();
                 selbst.Hand = new ArrayList<Karte>();
                 kartenSpielbar = new ArrayList<Boolean>();
                 for (int i=0; i<hand.length; i++) {
-                    //Toast.makeText(appContext, "karte "+i+": "+hand[i], Toast.LENGTH_SHORT).show();
                     selbst.Hand.add(i,new Karte(hand[i]));
                     kartenSpielbar.add(i,spielbar[i].equals("1") ? true : false);
                 }
@@ -757,7 +755,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 }
                 else
                     eigenerZug();
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: zugedreht = true;
                 Toast.makeText(appContext, "Zugedreht", Toast.LENGTH_SHORT).show();
@@ -823,7 +820,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                         auge_Icon.setVisibility(View.INVISIBLE);
 
                         if(schummelnDesGegnerErkannt) {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":"+" ").getBytes());
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":" + " ").getBytes());
                             Toast.makeText(appContext, "Schummeln wurde von dir unterbunden!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -882,7 +879,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
                 //Wenn Schummeln nicht abgewehrt wird, sieht Spieler Karten vom Gegner
                 else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(appContext);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Spielfeld2Client.this);
                     builder.setCancelable(true);
                     LinearLayout layout = new LinearLayout(appContext);
                     layout.setOrientation(LinearLayout.HORIZONTAL);

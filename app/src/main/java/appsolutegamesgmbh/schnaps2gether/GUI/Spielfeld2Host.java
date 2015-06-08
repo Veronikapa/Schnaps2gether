@@ -46,7 +46,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         GoogleApiClient.OnConnectionFailedListener,
         Connections.ConnectionRequestListener,
         Connections.MessageListener,
-        Connections.EndpointDiscoveryListener, SensorEventListener {
+        Connections.EndpointDiscoveryListener {
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
@@ -211,7 +211,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
-        //punkteSelbst = (TextView) findViewById(R.id.txt_BummerZahl);
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteSelbst);
         BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
 
@@ -228,20 +228,21 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
 
-        this.threshold = threshold * threshold;
-        this.threshold = this.threshold * SensorManager.GRAVITY_EARTH* SensorManager.GRAVITY_EARTH;
+        shakeImplementation();
+        spielStart();
+
+    }
+
+    private void shakeImplementation() {
+        this.threshold = this.threshold * SensorManager.GRAVITY_EARTH;
 
         shakeManager = (SensorManager) this.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-        shakeManager.registerListener(shakeListener,
-                shakeManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
 
         shakeListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                     double netForce = sensorEvent.values[0] * sensorEvent.values[0];
-
                     netForce += sensorEvent.values[1] * sensorEvent.values[1];
                     netForce += sensorEvent.values[2] * sensorEvent.values[2];
 
@@ -250,16 +251,16 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     }
                 }
             }
-
             @Override
             public void onAccuracyChanged(Sensor sensor, int i) {
 
             }
         };
-        spielStart();
 
+        shakeManager.registerListener(shakeListener,
+                shakeManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
     }
-
 
 
     private void zugAusführen(int i) {
@@ -927,7 +928,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 if (message.substring(2,3).equals("1")) {
                     eigenerZug();
                 }
-                Toast.makeText(appContext, "Weiter", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGEDREHT: spiel.Zudrehen(gegner);
                 buttonZudrehen.setEnabled(false);
@@ -1075,7 +1075,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
                     //Wenn Schummeln nicht abgewehrt wird, sieht Spieler Karten vom Gegner
                 else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(appContext);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Spielfeld2Host.this);
                     builder.setCancelable(true);
                     LinearLayout layout = new LinearLayout(appContext);
                     layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -1103,7 +1103,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                             if (alert.isShowing()) {
                                 alert.dismiss();
                             }
-                        }
+                           }
                     };
 
                     alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -1118,10 +1118,10 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             }
         };
 
-        handler.postDelayed(runnable, 3000);
+        handler.postDelayed(runnable, 5000);
     }
 
-    public void KartenTauschen(View view)
+    public void kartenTauschen(View view)
     {
         schummelnVonGegnerErkannt = false;
 
@@ -1147,15 +1147,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handler.postDelayed(runnable, 3000);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
     class Zugende implements Runnable {
 
         @Override
