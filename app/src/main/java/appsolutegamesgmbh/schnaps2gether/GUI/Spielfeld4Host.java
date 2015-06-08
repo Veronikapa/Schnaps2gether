@@ -652,6 +652,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         //Screen Lock aktivieren
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Intent intent = new Intent(Spielfeld4Host.this, Lobby.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
@@ -661,7 +662,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         //Screen Lock aktivieren
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        startActivity(new Intent(Spielfeld4Host.this, Startmenue.class));
+        Intent i = new Intent(Spielfeld4Host.this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
         finish();
     }
 

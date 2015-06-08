@@ -868,7 +868,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        startActivity(new Intent(Spielfeld2Host.this, Startmenue.class));
+        Intent i = new Intent(Spielfeld2Host.this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
         finish();
     }
 
@@ -1053,6 +1055,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Intent i = new Intent(this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         onStop();
         finish();

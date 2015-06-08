@@ -51,6 +51,7 @@ public class NeuesSpiel extends Activity {
 
     public void dreierSchnapsen(View v){
         Intent i = new Intent(this, Lobby.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.putExtra("Spieltyp",3);
         setResult(Activity.RESULT_OK,i);
         finish();
@@ -58,6 +59,7 @@ public class NeuesSpiel extends Activity {
 
     public void viererSchnapsen(View v){
         Intent i = new Intent(this, Lobby.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.putExtra("Spieltyp",4);
         setResult(Activity.RESULT_OK,i);
         finish();
@@ -66,6 +68,8 @@ public class NeuesSpiel extends Activity {
 
     public void abbrechen(View v){
         Intent i = new Intent(this, Lobby.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         setResult(Activity.RESULT_CANCELED,i);
         finish();
     }

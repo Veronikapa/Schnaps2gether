@@ -589,7 +589,9 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         //Screen Lock aktivieren
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        startActivity(new Intent(Spielfeld2.this, Startmenue.class));
+        Intent i = new Intent(Spielfeld2.this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
         finish();
     }
 

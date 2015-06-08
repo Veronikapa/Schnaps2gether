@@ -204,6 +204,7 @@ public class Lobby extends Activity implements
 
     @Override
     public void onMessageReceived(String endpointID, byte[] payload, boolean isReliable) {
+        Intent i;
         String message = new String(payload);
         if (!m_IsHost) {
             if (message.equals(CLIENT2))
@@ -212,11 +213,17 @@ public class Lobby extends Activity implements
                 isc2 = true;
             if (message.equals(SPIELSTART)) {
                 if (spielTyp == 2) {
-                    startActivity(new Intent(Lobby.this, Spielfeld2Client.class));
+                    i = new Intent(new Intent(Lobby.this, Spielfeld2Client.class));
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 } else if (spielTyp == 3) {
-                    startActivity(new Intent(Lobby.this, Spielfeld3Client.class));
+                    i = new Intent(new Intent(Lobby.this, Spielfeld3Client.class));
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 } else if (spielTyp == 4) {
-                    startActivity(new Intent(Lobby.this, Spielfeld4Client.class));
+                    i = new Intent(new Intent(Lobby.this, Spielfeld4Client.class));
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
                 }
             } else if (spielTyp == 2) {
                 c2.receiveFromLobby(endpointID, payload, isReliable);
@@ -426,26 +433,34 @@ public class Lobby extends Activity implements
                         else if (endpointIds.size() == 3)
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT4.getBytes());
 
+                        Intent i;
                         if (spielTyp == 2 && endpointIds.size() == 1) {
                             //Beenden der Service anzeige nach Verbindung der Geräte
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld2Host.class));
+
+                            i = new Intent(Lobby.this, Spielfeld2Host.class);
+                            startActivity(i);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             finish();
                         } else if (spielTyp == 3 && endpointIds.size() == 2) {
                             //Beenden der Service anzeige nach Verbindung der Geräte
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld3Host.class));
+                            i = new Intent(Lobby.this, Spielfeld3Host.class);
+                            startActivity(i);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             finish();
                         } else if (spielTyp == 4 && endpointIds.size() == 3) {
                             //Beenden der Service anzeige nach Verbindung der Geräte
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
-                            startActivity(new Intent(Lobby.this, Spielfeld4Host.class));
+                            i = new Intent(Lobby.this, Spielfeld4Host.class);
+                            startActivity(i);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             finish();
                         }
 
@@ -487,6 +502,7 @@ public class Lobby extends Activity implements
 
     public void abbrechenLobby(View v){
         Intent i = new Intent(this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();
     }

@@ -499,7 +499,9 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        startActivity(new Intent(Spielfeld4Client.this, Startmenue.class));
+        Intent i = new Intent(Spielfeld4Client.this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
         finish();
     }
 
@@ -684,6 +686,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Intent i = new Intent(this, Startmenue.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         finish();
     }
