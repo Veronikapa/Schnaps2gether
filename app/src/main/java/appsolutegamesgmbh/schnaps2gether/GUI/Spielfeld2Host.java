@@ -234,6 +234,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void shakeImplementation() {
+        this.threshold = threshold * threshold;
         this.threshold = this.threshold * SensorManager.GRAVITY_EARTH;
 
         shakeManager = (SensorManager) this.getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
@@ -313,6 +314,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         if(gestocheneKartenAnz == 0)
         {
             Toast.makeText(this.getApplicationContext(),"Schummeln nicht möglich - keine Stiche vorhanden",Toast.LENGTH_SHORT).show();
+            schummelnAktiv = false;
             return;
         }
 
@@ -985,6 +987,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                         if(schummelnDesGegnerErkannt) {
                             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":"+" ").getBytes());
                             Toast.makeText(appContext, "Schummeln wurde von dir unterbunden!", Toast.LENGTH_SHORT).show();
+                            schummelnAktiv = false;
                         }
 
                         else

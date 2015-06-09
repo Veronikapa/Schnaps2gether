@@ -295,6 +295,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         if(gestocheneKartenAnz == 0)
         {
             Toast.makeText(this.getApplicationContext(),"Schummeln nicht möglich - keine Stiche vorhanden",Toast.LENGTH_SHORT).show();
+            schummelnAktiv = false;
             return;
         }
 
@@ -869,8 +870,10 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             @Override
             public void run() {
 
-                if (schummelnVonGegnerErkannt)
+                if (schummelnVonGegnerErkannt) {
                     Toast.makeText(appContext, "Schummelversuch wurde abgewehrt.", Toast.LENGTH_SHORT).show();
+                    schummelnAktiv = false;
+                }
 
                 //Wenn Schummeln nicht abgewehrt wird, sieht Spieler Karten vom Gegner
                 else {

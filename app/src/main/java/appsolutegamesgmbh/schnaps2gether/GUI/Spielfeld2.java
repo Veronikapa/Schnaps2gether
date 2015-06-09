@@ -230,6 +230,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         if(gestocheneKartenAnz == 0)
         {
             Toast.makeText(this.getApplicationContext(),"Schummeln nicht möglich - keine Stiche vorhanden",Toast.LENGTH_SHORT).show();
+            schummelnAktiv = false;
             return;
         }
 
