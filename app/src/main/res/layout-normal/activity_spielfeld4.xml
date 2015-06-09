@@ -42,17 +42,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="46dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:id="@+id/buttons_leiste"
         android:weightSum="1"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/eigeneKartenLayout"
         android:layout_gravity="left|center"
-        android:layout_toLeftOf="@+id/stichAnzeige"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/l_Punkteanzeige"
-        android:layout_toEndOf="@+id/l_Punkteanzeige">
+        android:layout_toLeftOf="@+id/stichAnzeige"
+        android:layout_toStartOf="@+id/stichAnzeige">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -163,7 +163,8 @@
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_weight="0.04" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="43dp"
@@ -175,7 +176,8 @@
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
             android:layout_marginRight="5dp"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:layout_weight="0.05" />
 
 
         <FrameLayout
@@ -316,9 +318,8 @@
         android:paddingLeft="30dp"
         android:id="@+id/eigeneKartenLayout"
         android:paddingRight="30dp"
-        android:layout_alignTop="@+id/stichAnzeige"
-        android:layout_alignRight="@+id/buttons_leiste"
-        android:layout_alignEnd="@+id/buttons_leiste"
+        android:layout_above="@+id/buttons_leiste"
+        android:layout_toLeftOf="@+id/stichAnzeige"
         android:layout_alignLeft="@+id/buttons_leiste"
         android:layout_alignStart="@+id/buttons_leiste">
 
@@ -917,7 +918,7 @@
         android:layout_alignEnd="@+id/stichAnzeige">
 
         <TextView
-            android:layout_width="25dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameG1"
             android:rotation="270"
@@ -935,7 +936,8 @@
         android:background="@drawable/name_plakette_v1"
         android:layout_alignBottom="@+id/l_AnzeigeG1"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -944,7 +946,8 @@
             android:id="@+id/txt_NameG3"
             android:textColor="@android:color/white"
             android:rotation="270"
-            style="@style/vertikal_Schrift" />
+            style="@style/vertikal_Schrift"
+            android:layout_gravity="left|center_vertical" />
     </FrameLayout>
 
     <LinearLayout
@@ -954,10 +957,11 @@
         android:id="@+id/linearLayout3"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:weightSum="1">
 
         <Button
-            android:layout_width="76dp"
+            android:layout_width="100dp"
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"
@@ -966,9 +970,10 @@
             android:capitalize="words"
             android:textAllCaps="false"
             android:onClick="abbrechenSpiel"
-            android:text="@string/abbrechen"
             android:layout_alignParentTop="true"
-            android:layout_alignEnd="@+id/l_AnzeigeG1" />
+            android:layout_alignEnd="@+id/l_AnzeigeG1"
+            android:text="@string/abbrechen"
+            android:layout_weight="1.70" />
     </LinearLayout>
 
 

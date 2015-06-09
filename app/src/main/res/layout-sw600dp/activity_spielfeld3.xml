@@ -724,7 +724,7 @@
         android:layout_alignParentRight="true">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="29dp"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameGegner1"
             android:text="Gegner1"
