@@ -109,7 +109,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private ArrayList<Boolean> kartenSpielbar;
     private Karte gegnerischeKarte;
     private TextView punkteGegner;
-    //private TextView punkteSelbst;
+    private TextView punkteSelbst;
     private TextView txtSelbst;
     private TextView txtGegner;
     private Bummerl2 bummerl;
@@ -132,7 +132,6 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        endpointIDs = mService.getEndpointIds();
 
         appContext = this.getApplicationContext();
 
@@ -159,7 +158,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
 
        // punkteGegner = (TextView) findViewById(R.id.pointsText);
-        //punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
         //txtSelbst = (TextView) findViewById(R.id.I);
         //txtGegner = (TextView) findViewById(R.id.Enemy);
 
@@ -190,6 +189,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         Intent intent = new Intent(this, NearbyConnectionService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mService.setSpielfeld(this);
+        endpointIDs = mService.getEndpointIds();
     }
 
     @Override
@@ -263,7 +263,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         angesagteFarbe = null;
         spielAngesagt = false;
         spieleAnsagbar = new ArrayList<String>();
-        //punkteSelbst.setText("0");
+        punkteSelbst.setText("0");
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
     }
@@ -556,22 +556,24 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 break;
             case KARTEGESPIELT:
                 String[] messageParts2 = message.split(":");
-                gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
                 int ausspielenderSpielerNr = Integer.decode(message.substring(2).split(":")[0]);
-                int position = 1;
-                if (ausspielenderSpielerNr>spielerNummer) {
-                    position = position - spielerNummer;
-                } else {
-                    position = position + spielerNummer;
-                }
-                switch (position) {
-                    case 1: imageView_karteGegner1.setImageResource(gegnerischeKarte.getImageResourceId());
-                        break;
-                    case 2: imageView_karteMitspieler.setImageResource(gegnerischeKarte.getImageResourceId());
-                        break;
-                    case 3: imageView_karteGegner2.setImageResource(gegnerischeKarte.getImageResourceId());
-                        break;
+                if (!messageParts2[2].equals("1")) {
+                    gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
+                    int position = 1;
+                    if (ausspielenderSpielerNr>spielerNummer) {
+                        position = position - spielerNummer;
+                    } else {
+                        position = position + spielerNummer;
+                    }
+                    switch (position) {
+                        case 1: imageView_karteGegner1.setImageResource(gegnerischeKarte.getImageResourceId());
+                            break;
+                        case 2: imageView_karteMitspieler.setImageResource(gegnerischeKarte.getImageResourceId());
+                            break;
+                        case 3: imageView_karteGegner2.setImageResource(gegnerischeKarte.getImageResourceId());
+                            break;
 
+                    }
                 }
                 if (ausspielenderSpielerNr+1==spielerNummer) {
                     String[] spielbar1 = messageParts2[2].split(" ");
@@ -614,7 +616,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             case PUNKTE:
                 p1 = Integer.decode(message.split(":")[1]);
                 break;
-            case SPIELRUNDENENDE: boolean win = message.substring(2).equals("1") ? true : false;
+            case SPIELRUNDENENDE: boolean win = message.substring(2,3).equals("1") ? true : false;
                 if (spielerNummer==3) win = !win;
                 String rundenAusgang = "";
                 if (win) {
@@ -623,6 +625,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                     rundenAusgang = "Niederlage";
                 }
                 Toast.makeText(appContext, rundenAusgang, Toast.LENGTH_SHORT).show();
+                bummerl = new Bummerl2(message.split(":")[2]);
                 break;
             case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
                 // Execute some code after 2 seconds have passed
@@ -643,16 +646,21 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 buttonSpielAnsagen.setVisibility(View.VISIBLE);
                 buttonWeiter.setVisibility(View.VISIBLE);
                 break;
-            case TRUMPFANSAGEN: handKartenKlickbar();
-                buttonAufdrehen.setVisibility(View.VISIBLE);
+            case TRUMPFANSAGEN: buttonAufdrehen.setVisibility(View.VISIBLE);
                 break;
-            case FLECKEN: if (message.split(":")[1].equals("0")) {
-                buttonFlecken.setVisibility(View.VISIBLE);
-            } else buttonGegenflecken.setVisibility(View.VISIBLE);
-                buttonWeiter.setVisibility(View.VISIBLE);
+            case FLECKEN: if(message.split(":")[2].equals(Integer.toString(spielerNummer))) {
+                    if (message.split(":")[1].equals("0")) {
+                        buttonFlecken.setVisibility(View.VISIBLE);
+                    } else buttonGegenflecken.setVisibility(View.VISIBLE);
+                    buttonWeiter.setVisibility(View.VISIBLE);
+                }
                 break;
             case SPIEL: String spiel = message.split(":")[2];
                 Toast.makeText(appContext, spiel+" wird gespielt", Toast.LENGTH_SHORT).show();
+                if (message.split(":")[1].equals(Integer.toString(spielerNummer))) {
+                    buttonFlecken.setVisibility(View.VISIBLE);
+                    buttonWeiter.setVisibility(View.VISIBLE);
+                }
                 break;
             default: break;
         }

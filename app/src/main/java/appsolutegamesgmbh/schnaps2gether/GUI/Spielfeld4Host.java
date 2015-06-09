@@ -150,11 +150,6 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        endpointIDs = mService.getEndpointIds();
-        gegner1ID = endpointIDs.get(0);
-        mitspielerID = endpointIDs.get(1);
-        gegner2ID = endpointIDs.get(2);
-
         spielfeldlogik = new Spielfeld4Logik(this);
 
         appContext = this.getApplicationContext();
@@ -213,6 +208,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         Intent intent = new Intent(this, NearbyConnectionService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mService.setSpielfeld(this);
+        endpointIDs = mService.getEndpointIds();
+        gegner1ID = endpointIDs.get(0);
+        mitspielerID = endpointIDs.get(1);
+        gegner2ID = endpointIDs.get(2);
     }
 
     @Override
@@ -251,7 +250,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     private void weiterNachricht(Karte gespielteKarte, ArrayList<String> recipients) {
         int neuerZug = spielfeldlogik.isZugBeginn() ? 1 : 0;
-        int spielerAmAusspielen = spielfeldlogik.getAusspielenderSpielerNr();
+        int spielerDerKarteSpielt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
         String spielbareKarten = spielbareKartenNachrichtZusammenstellen();
         int hatZwanziger = spielfeldlogik.hasHatZwanziger() ? 1 : 0;
         int hatVierziger = spielfeldlogik.hasHatVierziger() ? 1 : 0;
@@ -270,13 +269,16 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         }
         verfuegbareZwanziger.trim();
         if (gespielteKarte==null) {
-            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + (spielerAmAusspielen)
-                    + ":" + spielbareKarten + ":" + neuerZug + ":" +
+            int spielerDerSpielBeginnt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
+            int nurSpielBeginn = 1;
+            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + spielerDerSpielBeginnt
+                    + ":" + nurSpielBeginn + ":" + spielbareKarten + ":" + neuerZug + ":" +
+                    hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
+        } else {
+            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + spielerDerKarteSpielt
+                    + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
                     hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
         }
-        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + ((spielerAmAusspielen+3)%4)
-                + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
-                hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
     }
 
     private void eigenerZug() {
@@ -353,7 +355,6 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 punkteSelbst.setText("0");
                 handAktualisieren();
                 if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
-                    handKartenAusspielbar();
                     buttonAufdrehen.setVisibility(View.VISIBLE);
                 } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER2) {
                     mService.delegateSendReliableMessage(gegner1ID, (TRUMPFANSAGEN + ":").getBytes());
@@ -398,7 +399,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         } else {
             int winners = spielfeldlogik.getWinners();
             boolean win = winners == 0 ? true : false;
-            mService.delegateSendReliableMessage(endpointIDs, (SPIELRUNDENENDE + ":" + winners).getBytes());
+            spielRundenStart();
+            mService.delegateSendReliableMessage(endpointIDs, (SPIELRUNDENENDE + ":" + winners + ":" + spielfeldlogik.getBummerl().toString()).getBytes());
             String rundenAusgang = "";
             if (win) {
                 rundenAusgang = "Sieg";
@@ -566,13 +568,13 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     public void weiterOnClick(View view) {
         if (spielfeldlogik.isSpielRufRunde()) {
-                spielfeldlogik.spielRufen(null);
+                spielfeldlogik.spielRufen("Weiter");
                 if (spielfeldlogik.isSpielRufRunde())
                     andererSpielerKannSpielRufen();
                 else {
                     Toast.makeText(appContext, spielfeldlogik.getSpiel() + " wird gespielt",
                             Toast.LENGTH_SHORT).show();
-                    mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + SPIELER2 + ":"
+                    mService.delegateSendReliableMessage(endpointIDs, (SPIEL + ":" + spielfeldlogik.getAmZugSpielerNr() + ":"
                             + spielfeldlogik.getSpiel()).getBytes());
                 }
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
@@ -740,6 +742,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                         if (spielfeldlogik.isSpielRundenEnde()) {
                             spielRundenEnde();
                         }
+                    } else {
+                        spielfeldlogik.spielRufen("Weiter");
                     }
                 if (spielfeldlogik.isSpielRufRunde()) {
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
@@ -779,14 +783,13 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
             case FLECKEN: spielfeldlogik.flecken();
                 if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()) {
                     int gflecken = spielfeldlogik.isGegenFleckRunde() ? 1 : 0;
+                    mService.delegateSendReliableMessage(endpointIDsWithoutSender, (FLECKEN + ":"+gflecken+":"+spielfeldlogik.getAmZugSpielerNr()).getBytes());
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                         if (spielfeldlogik.isGegenFleckRunde()) buttonFlecken.setText("Gegenflecken");
                         buttonFlecken.setVisibility(View.VISIBLE);
                         buttonWeiter.setVisibility(View.VISIBLE);
-                    } else {
-                        String recipientID3 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
-                        mService.delegateSendReliableMessage(recipientID3, (FLECKEN + ":"+gflecken).getBytes());
                     }
+
                 } else {
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                         eigenerZug();

@@ -212,7 +212,10 @@ public class Spielfeld4Logik {
         spiel.Flecken();
         if (gegenFleckRunde) {
             gegenFleckRunde = false;
-            amZugSpielerNr = (letzterAmZugSpielerNr + 1) % 4;
+            if (selbst.isIstdran()) amZugSpielerNr = 0;
+            else if (gegner1.isIstdran()) amZugSpielerNr = 1;
+            else if (mitspieler.isIstdran()) amZugSpielerNr = 2;
+            else amZugSpielerNr = 3;
         } else {
             fleckRunde = false;
             gegenFleckRunde = true;
