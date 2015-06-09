@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld4Host;
 
 /**
- * Created by kirederf on 08.06.15.
+ * Created by kirederf on 05.06.2015.
  */
 public class Spielfeld4Logik {
-    //Konstanten für Teams
+    //Konstanten fuer Teams
     private static final int TEAM1 = 0;
     private static final int TEAM2 = 1;
 
@@ -212,7 +212,10 @@ public class Spielfeld4Logik {
         spiel.Flecken();
         if (gegenFleckRunde) {
             gegenFleckRunde = false;
-            amZugSpielerNr = (letzterAmZugSpielerNr + 1) % 4;
+            if (selbst.isIstdran()) amZugSpielerNr = 0;
+            else if (gegner1.isIstdran()) amZugSpielerNr = 1;
+            else if (mitspieler.isIstdran()) amZugSpielerNr = 2;
+            else amZugSpielerNr = 3;
         } else {
             fleckRunde = false;
             gegenFleckRunde = true;

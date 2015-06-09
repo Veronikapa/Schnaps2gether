@@ -41,7 +41,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
      */
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichtentypen
+    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichtentypen
     private static final String KARTEGESPIELT = "0";
     private static final String KARTENSPIELBAR = "1";
     private static final String PUNKTE = "2";
@@ -59,19 +59,19 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
 
-    //Konstanten für Spielernummern
+    //Konstanten fuer Spielernummern
     private static final int SPIELER1 = 0;
     private static final int SPIELER2 = 1;
     private static final int SPIELER3 = 2;
     private static final int SPIELER4 = 3;
 
-    //Konstanten für Farben
+    //Konstanten fuer Farben
     private static final int HERZ = 0;
     private static final int KARO = 1;
     private static final int PIK = 2;
     private static final int KREUZ = 3;
 
-    //Konstanten für "Spiele"
+    //Konstanten fuer "Spiele"
     private static final int SCHNAPSER = 0;
     private static final int LAND = 1;
     private static final int KONTRASCHNAPSER = 2;
@@ -248,7 +248,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     private static void weiterNachricht(Karte gespielteKarte, ArrayList<String> recipients) {
         int neuerZug = spielfeldlogik.isZugBeginn() ? 1 : 0;
-        int spielerAmAusspielen = spielfeldlogik.getAusspielenderSpielerNr();
+        int spielerDerKarteSpielt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
         String spielbareKarten = spielbareKartenNachrichtZusammenstellen();
         int hatZwanziger = spielfeldlogik.hasHatZwanziger() ? 1 : 0;
         int hatVierziger = spielfeldlogik.hasHatVierziger() ? 1 : 0;
@@ -267,14 +267,17 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         }
         verfuegbareZwanziger.trim();
         if (gespielteKarte==null) {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipients, (KARTEGESPIELT + ":" + (spielerAmAusspielen)
-                    + ":" + spielbareKarten + ":" + neuerZug + ":" +
+            int spielerDerSpielBeginnt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
+            int nurSpielBeginn = 1;
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipients, (KARTEGESPIELT + ":" + spielerDerSpielBeginnt
+                    + ":" + nurSpielBeginn + ":" + spielbareKarten + ":" + neuerZug + ":" +
                     hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
+        } else {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipients, (KARTEGESPIELT + ":" + spielerDerKarteSpielt
+                    + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
+                    hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
+            }
         }
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipients, (KARTEGESPIELT + ":" + ((spielerAmAusspielen + 3) % 4)
-                + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
-                hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
-    }
 
     private static void eigenerZug() {
         if(spielfeldlogik.hasHatZwanziger()) {
@@ -337,7 +340,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p2)).getBytes());
     }
 
-    private void spielRundenStart() {
+    private static void spielRundenStart() {
         Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
             @Override
@@ -350,7 +353,6 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 punkteSelbst.setText("0");
                 handAktualisieren();
                 if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
-                    handKartenAusspielbar();
                     buttonAufdrehen.setVisibility(View.VISIBLE);
                     buttonTrumpfAnsagen.setVisibility(View.VISIBLE);
                 } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER2) {
@@ -396,7 +398,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         } else {
             int winners = spielfeldlogik.getWinners();
             boolean win = winners == 0 ? true : false;
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELRUNDENENDE + ":" + winners).getBytes());
+            spielRundenStart();
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELRUNDENENDE + ":" + winners + ":" + spielfeldlogik.getBummerl().toString()).getBytes());
             String rundenAusgang = "";
             if (win) {
                 rundenAusgang = "Sieg";
@@ -586,13 +589,13 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     public void weiterOnClick(View view) {
         if (spielfeldlogik.isSpielRufRunde()) {
-            spielfeldlogik.spielRufen(null);
+            spielfeldlogik.spielRufen("Weiter");
             if (spielfeldlogik.isSpielRufRunde())
                 andererSpielerKannSpielRufen();
             else {
                 Toast.makeText(appContext, spielfeldlogik.getSpiel() + " wird gespielt",
                         Toast.LENGTH_SHORT).show();
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + SPIELER2 + ":"
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spielfeldlogik.getAmZugSpielerNr() + ":"
                         + spielfeldlogik.getSpiel()).getBytes());
             }
             buttonSpielAnsagen.setVisibility(view.INVISIBLE);
@@ -763,6 +766,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                     if (spielfeldlogik.isSpielRundenEnde()) {
                         spielRundenEnde();
                     }
+                } else {
+                    spielfeldlogik.spielRufen("Weiter");
                 }
                 if (spielfeldlogik.isSpielRufRunde()) {
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
@@ -800,19 +805,17 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                 andererSpielerKannSpielRufen();
                 break;
             case FLECKEN: if (message.split(":").length>1) {
-                    spielfeldlogik.nichtFlecken();
-                } else {
-                    spielfeldlogik.flecken();
-                }
+                spielfeldlogik.nichtFlecken();
+            } else {
+                spielfeldlogik.flecken();
+            }
                 if (spielfeldlogik.isFleckRunde() || spielfeldlogik.isGegenFleckRunde()) {
                     int gflecken = spielfeldlogik.isGegenFleckRunde() ? 1 : 0;
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDsWithoutSender, (FLECKEN + ":" + gflecken+":"+spielfeldlogik.getAmZugSpielerNr()).getBytes());
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {
                         if (spielfeldlogik.isGegenFleckRunde()) buttonGegenflecken.setVisibility(View.VISIBLE);
                         else buttonFlecken.setVisibility(View.VISIBLE);
                         buttonWeiter.setVisibility(View.VISIBLE);
-                    } else {
-                        String recipientID3 = endpointIDs.get(spielfeldlogik.getAmZugSpielerNr() - 1);
-                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, recipientID3, (FLECKEN + ":" + gflecken).getBytes());
                     }
                 } else {
                     if (spielfeldlogik.getAmZugSpielerNr() == SPIELER1) {

@@ -567,8 +567,9 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 break;
             case KARTEGESPIELT:
                 String[] messageParts2 = message.split(":");
-                gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
                 int ausspielenderSpielerNr = Integer.decode(message.substring(2).split(":")[0]);
+				if (!messageParts2[2].equals("1")) {
+                gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
                 int position = 1;
                 if (ausspielenderSpielerNr>spielerNummer) {
                     position = position - spielerNummer;
@@ -582,6 +583,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                         break;
                     case 3: imageView_karteGegner2.setImageResource(gegnerischeKarte.getImageResourceId());
                         break;
+					}
 
                 }
                 if (messageParts2[3].equals("1")) {
@@ -635,6 +637,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                     rundenAusgang = "Niederlage";
                 }
                 Toast.makeText(appContext, rundenAusgang, Toast.LENGTH_SHORT).show();
+                bummerl = new Bummerl2(message.split(":")[2]);
                 break;
             case SPIELENDE: boolean finalWin = message.substring(2).equals("1") ? true : false;
                 if (spielerNummer==3) finalWin = !finalWin;
@@ -669,13 +672,19 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 buttonAufdrehen.setVisibility(View.VISIBLE);
                 buttonTrumpfAnsagen.setVisibility(View.VISIBLE);
                 break;
-            case FLECKEN: if (message.split(":")[1].equals("0")) {
-                buttonFlecken.setVisibility(View.VISIBLE);
-            } else buttonGegenflecken.setVisibility(View.VISIBLE);
-                buttonWeiter.setVisibility(View.VISIBLE);
+            case FLECKEN: if(message.split(":")[2].equals(Integer.toString(spielerNummer))) {
+					if (message.split(":")[1].equals("0")) {
+		            	buttonFlecken.setVisibility(View.VISIBLE);
+				    } else buttonGegenflecken.setVisibility(View.VISIBLE);
+				    buttonWeiter.setVisibility(View.VISIBLE);
+				}
                 break;
             case SPIEL: String spiel = message.split(":")[2];
                 Toast.makeText(appContext, spiel+" wird gespielt", Toast.LENGTH_SHORT).show();
+                if (message.split(":")[1].equals(Integer.toString(spielerNummer))) {
+                    buttonFlecken.setVisibility(View.VISIBLE);
+                    buttonWeiter.setVisibility(View.VISIBLE);
+                }
                 break;
             default: break;
         }
