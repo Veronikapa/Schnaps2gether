@@ -39,7 +39,7 @@ public class Spiel2ZugAuswertenTest {
         spiel.getS2().Hand.add(herzbube);
         spiel.getS2().Hand.add(karobube);
 
-        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), spiel.getS2().Hand.get(1));
+        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), spiel.getS2().Hand.get(1), 0);
 
         if (spiel.getTrumpf() == spiel.getS2().Hand.get(1).getFarbe()) {
             assertTrue("Spieler2 gewinnt und ist dran", spiel.getS2().isIstdran());
@@ -70,7 +70,7 @@ public class Spiel2ZugAuswertenTest {
         assertTrue("Spieler1 hat angesagt", spiel.getS1().isAngesagt20er());
         assertTrue("Spieler2 hat nicht angesagt", !spiel.getS2().isAngesagt20er());
 
-        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), spiel.getS2().Hand.get(0));
+        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), spiel.getS2().Hand.get(0), 0);
 
         if (spiel.getTrumpf() == spiel.getS2().Hand.get(0).getFarbe()) {
             assertTrue("Spieler2 gewinnt und ist dran", spiel.getS2().isIstdran());
