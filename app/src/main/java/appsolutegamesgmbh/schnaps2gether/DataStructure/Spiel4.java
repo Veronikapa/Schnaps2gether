@@ -612,7 +612,7 @@ public class Spiel4 {
 
                         bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                         return true;
-                    } else if (s1.Hand.size() == 3) {
+                    } else if (s1.Hand.size() == 2) {
                         if (s1.getPunkte() + s3.getPunkte() >= 66) {
                             bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
                             bummerl.setPunkteS3(bummerl.getPunkteS3() + spiel.getPunkte());
@@ -632,7 +632,7 @@ public class Spiel4 {
 
                         bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                         return true;
-                    } else if (s1.Hand.size() == 3) {
+                    } else if (s1.Hand.size() == 2) {
                         if (s2.getPunkte() + s4.getPunkte() >= 66) {
                             bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
                             bummerl.setPunkteS4(bummerl.getPunkteS4() + spiel.getPunkte());
