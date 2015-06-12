@@ -555,6 +555,7 @@ public class Spiel4 {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + 3 * flecken);
                         bummerl.setPunkteS3(bummerl.getPunkteS3() + 3 * flecken);
                     }
+                    bummerl.setAnzahlSpiele(bummerl.getAnzahlSpiele()+1);
                     return true;
                 } else if (s2.getPunkte() + s4.getPunkte() >= 66) {
                     if (s1.getPunkte() + s3.getPunkte() >= 33) {
