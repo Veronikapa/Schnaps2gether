@@ -476,12 +476,12 @@ public class Spiel4 {
         }
         else
         {
-            s3.Gestochen.add(karteS1);
-            s3.Gestochen.add(karteS2);
-            s3.Gestochen.add(karteS3);
-            s3.Gestochen.add(karteS4);
+            s4.Gestochen.add(karteS1);
+            s4.Gestochen.add(karteS2);
+            s4.Gestochen.add(karteS3);
+            s4.Gestochen.add(karteS4);
 
-            s3.setPunkte(s3.getPunkte()+karteS1.getPunkte()+karteS2.getPunkte()+karteS3.getPunkte()+karteS4.getPunkte());
+            s4.setPunkte(s4.getPunkte()+karteS1.getPunkte()+karteS2.getPunkte()+karteS3.getPunkte()+karteS4.getPunkte());
 
             s1.setIstdran(false);
             s2.setIstdran(false);
