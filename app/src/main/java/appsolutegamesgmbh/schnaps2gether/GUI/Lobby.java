@@ -62,8 +62,9 @@ public class Lobby extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to LocalService
+        // Start NearbyConnectionService and bind to it
         Intent intent = new Intent(this, NearbyConnectionService.class);
+        startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mService.setLobby(this);
     }
@@ -125,7 +126,7 @@ public class Lobby extends Activity implements
         }
     }
 
-    public void spielZurListeHinzufügen() {
+    public void spielZurListeHinzufuegen() {
         //Neues Spiel zu Liste hinzufügen
         spieleListe.add(spielTyp + "er Schnapsen von " + spielerName);
 
@@ -202,7 +203,7 @@ public class Lobby extends Activity implements
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            // We've bound to NearbyConnectionService, cast the IBinder and get NearbyConnectionService instance
             NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
             mService = binder.getService();
             mBound = true;

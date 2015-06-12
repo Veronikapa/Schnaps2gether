@@ -39,7 +39,7 @@ public class NearbyConnectionService extends Service implements
     public NearbyConnectionService() {
     }
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichten
+    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichten
     private static final String SPIELSTART = "16";
     private static final String CLIENT2 = "17";
     private static final String CLIENT3 = "18";
@@ -54,16 +54,16 @@ public class NearbyConnectionService extends Service implements
     private Lobby lobby;
     private Spielfeld spielfeld;
     private Context appContext;
-    // Legt fest ob das Gerät der Host ist
+    // Legt fest ob das Geraet der Host ist
     private boolean m_IsHost = false;
-    //Api Client der pro Gerät verfügbar sein muss
+    //Api Client der pro Geraet verfuegbar sein muss
     public GoogleApiClient m_GoogleApiClient;
 
-    // Speichert die endpoint- und deviceIds von verbundenen Geräten
+    // Speichert die endpoint- und deviceIds von verbundenen Geraeten
     public ArrayList<String> endpointIds = new ArrayList<String>();
     public ArrayList<String> deviceIds = new ArrayList<String>();
 
-    //Geräte die sich verbinden wollen, müssen mit einem Wifi oder einem Ethernet verbunden sein
+    //Geraete die sich verbinden wollen, muessen mit einem Wifi oder einem Ethernet verbunden sein
     private static int[] NETWORK_TYPES = {ConnectivityManager.TYPE_WIFI,
             ConnectivityManager.TYPE_ETHERNET};
 
@@ -76,7 +76,7 @@ public class NearbyConnectionService extends Service implements
     public void onCreate() {
         appContext = this.getApplicationContext();
 
-        //Beim Erstellen des Services muss auch pro Gerät ein ApiClient für die Wifi Verbindung
+        //Beim Erstellen des Services muss auch pro Geraet ein ApiClient fuer die Wifi Verbindung
         //angelegt werden
         m_GoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -114,13 +114,13 @@ public class NearbyConnectionService extends Service implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn die Verbindung
-        //via GoogleApiClient fehlschlägt.
+        //Zurzeit keine Implementierung. Hier waere anzugeben, was passieren soll wenn die Verbindung
+        //via GoogleApiClient fehlschlaegt.
     }
 
     @Override
     /*
-    * Nach dem man ein Gerät gefunden hat verbindet man sich zu diesem Gerät.
+    * Nach dem man ein Geraet gefunden hat verbindet man sich zu diesem Geraet.
      */
     public void onEndpointFound(final String endpointId, String deviceId, String serviceId,
                                 final String endpointName) {
@@ -129,8 +129,8 @@ public class NearbyConnectionService extends Service implements
 
     @Override
     public void onEndpointLost(String s) {
-        //Zurzeit keine Implementierung. Hier wäre anzugeben, was passieren soll wenn ein Service
-        // nicht mehr verfügbar ist.
+        //Zurzeit keine Implementierung. Hier waere anzugeben, was passieren soll wenn ein Service
+        // nicht mehr verfuegbar ist.
     }
 
     @Override
@@ -176,8 +176,8 @@ public class NearbyConnectionService extends Service implements
     }
 
     /*
-    * VP: Überprüft ob ein Gerät mit einem Wifi oder Ethernet Netwerk verbunden ist.
-    * Diese Methode muss aufgerufen werden, bevor ein Gerät sich mit anderen Geräten verbinden möchte.
+    * VP: ueberprueft ob ein Geraet mit einem Wifi oder Ethernet Netwerk verbunden ist.
+    * Diese Methode muss aufgerufen werden, bevor ein Geraet sich mit anderen Geraeten verbinden moechte.
      */
     private boolean isConnectedToNetwork() {
         ConnectivityManager connManager =
@@ -193,16 +193,16 @@ public class NearbyConnectionService extends Service implements
 
     private void startAdvertising() {
         if (m_GoogleApiClient.isConnected()) {
-            //Gerät muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
+            //Geraet muss mit Wifi oder Ethernet verbunden sein, damit es ein Service anbieten kann.
             if (!isConnectedToNetwork()) {
                 Toast.makeText(appContext, "Sie sind mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Gerät das Service anbietet ist der Host des Spiels.
+            // Geraet das Service anbietet ist der Host des Spiels.
             m_IsHost = true;
 
-            //Hiermit wird sichergestellt, dass das Gerät das ein Service anbietet, die aktuelle Version
+            //Hiermit wird sichergestellt, dass das Geraet das ein Service anbietet, die aktuelle Version
             // des Google Play Dienstes installiert hat. Wenn es nicht installiert ist, wird Benutzer
             // zu Installation aufgefordert.
             List<AppIdentifier> appIdentifierList = new ArrayList<>();
@@ -213,13 +213,13 @@ public class NearbyConnectionService extends Service implements
             //via stopAdvertising();
             long NO_TIMEOUT = 0L;
 
-            //Anbieten eines Services für andere Geräte.
+            //Anbieten eines Services fuer andere Geraete.
             Nearby.Connections.startAdvertising(m_GoogleApiClient, spielTyp + spielerName, appMetadata, NO_TIMEOUT,
                     this).setResultCallback(new ResultCallback<Connections.StartAdvertisingResult>() {
                 @Override
                 public void onResult(Connections.StartAdvertisingResult result) {
                     if (result.getStatus().isSuccess()) {
-                        lobby.spielZurListeHinzufügen();
+                        lobby.spielZurListeHinzufuegen();
                     } else {
                         int statusCode = result.getStatus().getStatusCode();
                         // Advertising failed - see statusCode for more details
@@ -230,7 +230,7 @@ public class NearbyConnectionService extends Service implements
     }
 
     private void startDiscovery() {
-        //Gerät das auf der Suche nach Services ist, muss mit einem Wifi oder einem Ethernet
+        //Geraet das auf der Suche nach Services ist, muss mit einem Wifi oder einem Ethernet
         //verbunden sein.
         if (!isConnectedToNetwork()) {
             Toast.makeText(appContext, "Sie sind leider mit keinem Netzwerk verbunden.", Toast.LENGTH_SHORT).show();
@@ -240,10 +240,10 @@ public class NearbyConnectionService extends Service implements
         //Nach Services mit der angegebenen ServiceId wird gesucht.
         final String serviceId = getString(R.string.service_id);
 
-        //Timeout für Serive-Suche ist auf 1 Minute gesetzt.
+        //Timeout fuer Serive-Suche ist auf 1 Minute gesetzt.
         long DISCOVER_TIMEOUT = 6000L;
 
-        // Suche nach Services die in der Nähe sind und unserer App entsprechen.
+        // Suche nach Services die in der Naehe sind und unserer App entsprechen.
         Nearby.Connections.startDiscovery(m_GoogleApiClient, serviceId, DISCOVER_TIMEOUT, this)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
@@ -254,7 +254,7 @@ public class NearbyConnectionService extends Service implements
                             Toast.makeText(appContext, "Offene Spiele gefunden", Toast.LENGTH_SHORT).show();
                         }
 
-                        //Es konnte kein Service in der Nähe gefunden werden.
+                        //Es konnte kein Service in der Naehe gefunden werden.
                         else {
                             Toast.makeText(appContext, "Es konnten leider keine offenen Spiele gefunden werden.:(", Toast.LENGTH_SHORT).show();
                         }
@@ -262,7 +262,7 @@ public class NearbyConnectionService extends Service implements
                 });
     }
 
-    //Senden einer Verbindungsanfrage zu Host und Verbindung wenn möglich.
+    //Senden einer Verbindungsanfrage zu Host und Verbindung wenn moeglich.
     private void connectTo(final String endpointId, final String endpointName) {
         byte[] myPayload = null;
         Nearby.Connections.sendConnectionRequest(m_GoogleApiClient, spielerName, endpointId, myPayload,
@@ -271,11 +271,11 @@ public class NearbyConnectionService extends Service implements
                     public void onConnectionResponse(String remoteEndpointId, Status status,
                                                      byte[] bytes) {
                         if (status.isSuccess()) {
-                            Toast.makeText(appContext, "Geräte wurden verbunden! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(appContext, "Geraete wurden verbunden! ", Toast.LENGTH_SHORT).show();
                             endpointIds.add(endpointId);
                         } else {
                             // Verbindung fehlgeschlagen
-                            Toast.makeText(appContext, "Geräte konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(appContext, "Geraete konnten nicht verbunden werden!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, this);
@@ -307,21 +307,21 @@ public class NearbyConnectionService extends Service implements
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, CLIENT4.getBytes());
 
                         if (spielTyp == 2 && endpointIds.size() == 1) {
-                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            //Beenden der Service anzeige nach Verbindung der Geraete
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(NearbyConnectionService.this, Spielfeld2Host.class));
                             lobby.finish();
                         } else if (spielTyp == 3 && endpointIds.size() == 2) {
-                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            //Beenden der Service anzeige nach Verbindung der Geraete
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
                             startActivity(new Intent(NearbyConnectionService.this, Spielfeld3Host.class));
                             lobby.finish();
                         } else if (spielTyp == 4 && endpointIds.size() == 3) {
-                            //Beenden der Service anzeige nach Verbindung der Geräte
+                            //Beenden der Service anzeige nach Verbindung der Geraete
                             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
 
                             Nearby.Connections.sendReliableMessage(m_GoogleApiClient, endpointIds, SPIELSTART.getBytes());
@@ -337,7 +337,7 @@ public class NearbyConnectionService extends Service implements
             });
         } else {
             // Verbindungsanfragen zu Clients werden unterbunden. Nur zu Hosts sollten
-            // verbindungsanfragen versendet werden können.
+            // verbindungsanfragen versendet werden koennen.
             Nearby.Connections.rejectConnectionRequest(m_GoogleApiClient, remoteEndpointId);
         }
     }

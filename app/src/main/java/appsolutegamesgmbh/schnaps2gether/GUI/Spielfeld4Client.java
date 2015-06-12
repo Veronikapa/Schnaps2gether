@@ -34,8 +34,8 @@ import appsolutegamesgmbh.schnaps2gether.R;
 public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemClickListener, GameEnd.GameEndDialogListener,
         Connections.MessageListener, Spielfeld {
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichtentypen
-    private static final String KARTEGESPIELT = "0";
+    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichtentypen
+    private static final String AUSSPIELEN = "0";
     private static final String KARTENSPIELBAR = "1";
     private static final String PUNKTE = "2";
     private static final String TRUMPFANSAGEN = "3";
@@ -52,19 +52,19 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
 
-    //Konstanten für Spielernummern
+    //Konstanten fuer Spielernummern
     private static final int SPIELER1 = 0;
     private static final int SPIELER2 = 1;
     private static final int SPIELER3 = 2;
     private static final int SPIELER4 = 3;
 
-    //Konstanten für Farben
+    //Konstanten fuer Farben
     private static final String HERZ = "0";
     private static final String KARO = "1";
     private static final String PIK = "2";
     private static final String KREUZ = "3";
 
-    //Konstanten für "Spiele"
+    //Konstanten fuer "Spiele"
     private static final int SCHNAPSER = 0;
     private static final int LAND = 1;
     private static final int KONTRASCHNAPSER = 2;
@@ -185,7 +185,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to LocalService
+        // Bind to NearbyConnectionService
         Intent intent = new Intent(this, NearbyConnectionService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mService.setSpielfeld(this);
@@ -200,12 +200,15 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
             unbindService(mConnection);
             mBound = false;
         }
+        // Stop the service
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        stopService(intent);
     }
 
     private void zugAusfuehren(int i) {
         final Karte k = selbst.Hand.get(i);
         buttonsNichtKlickbar();
-        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (AUSSPIELEN + ":" + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
@@ -554,9 +557,10 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                 }
                 handKartenKlickbar();
                 break;
-            case KARTEGESPIELT:
+            case AUSSPIELEN:
                 String[] messageParts2 = message.split(":");
-                int ausspielenderSpielerNr = Integer.decode(message.substring(2).split(":")[0]);
+                int spielerAmAusspielenNr = Integer.decode(message.substring(2).split(":")[0]);
+                int ausspielenderSpielerNr = (spielerAmAusspielenNr +3) % 4;
                 if (!messageParts2[2].equals("1")) {
                     gegnerischeKarte = new Karte(message.substring(2).split(":")[1]);
                     int position = 1;
@@ -575,7 +579,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
 
                     }
                 }
-                if (ausspielenderSpielerNr+1==spielerNummer) {
+                if (spielerAmAusspielenNr==spielerNummer) {
                     String[] spielbar1 = messageParts2[2].split(" ");
                     //Toast.makeText(appContext, "spielbar: " + messageParts[2], Toast.LENGTH_SHORT).show();
                     kartenSpielbar = new ArrayList<Boolean>();
@@ -704,7 +708,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            // We've bound to NearbyConnectionService, cast the IBinder and get NearbyConnectionService instance
             NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
             mService = binder.getService();
             mBound = true;

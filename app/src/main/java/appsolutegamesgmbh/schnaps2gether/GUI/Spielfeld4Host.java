@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl4;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
-import appsolutegamesgmbh.schnaps2gether.DataStructure.Rufspiel;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spielfeld4Logik;
 import appsolutegamesgmbh.schnaps2gether.Services.NearbyConnectionService;
@@ -43,8 +42,8 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
      */
 
-    //Konstanten für das Kennzeichnen und Parsen von Nachrichtentypen
-    private static final String KARTEGESPIELT = "0";
+    //Konstanten fuer das Kennzeichnen und Parsen von Nachrichtentypen
+    private static final String AUSSPIELEN = "0";
     private static final String KARTENSPIELBAR = "1";
     private static final String PUNKTE = "2";
     private static final String TRUMPFANSAGEN = "3";
@@ -61,19 +60,21 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
 
-    //Konstanten für Spielernummern
+    //Konstanten fuer Spielernummern
     private static final int SPIELER1 = 0;
     private static final int SPIELER2 = 1;
     private static final int SPIELER3 = 2;
     private static final int SPIELER4 = 3;
 
-    //Konstanten für Farben
+    //Konstanten fuer Farben
     private static final int HERZ = 0;
     private static final int KARO = 1;
     private static final int PIK = 2;
     private static final int KREUZ = 3;
+    private static final int[] farbenKonstanten = { HERZ, KARO, PIK, KREUZ };
+    private static final String[] farben = { "Herz", "Karo", "Pik", "Kreuz" };
 
-    //Konstanten für "Spiele"
+    //Konstanten fuer "Spiele"
     private static final int SCHNAPSER = 0;
     private static final int LAND = 1;
     private static final int KONTRASCHNAPSER = 2;
@@ -81,14 +82,14 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final int KONTRABAUERNSCHNAPSER = 4;
     private static final int FARBENJODLER = 5;
     private static final int HERRENJODLER = 6;
+    private static final int[] spielKonstanten = { SCHNAPSER, LAND, KONTRASCHNAPSER, BAUERNSCHNAPSER, KONTRABAUERNSCHNAPSER, FARBENJODLER, HERRENJODLER };
+    private static final String[] spiele = { "Schnapser", "Land", "Kontraschnapser", "Bauernschnapser", "Kontrabauernschnapser", "Farbenjodler", "Herrenjodler" };
 
     private ArrayList<String> endpointIDs;
     NearbyConnectionService mService;
     boolean mBound = false;
 
     private Context appContext;
-
-    //private Spiel4 spiel;
 
     private ImageView imageView_karte1;
     private ImageView imageView_karte2;
@@ -114,32 +115,11 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private Button buttonFlecken;
     private Button buttonGegenflecken;
     private Button buttonWeiter;
-    /*private Spieler selbst;
-    private Spieler gegner1;
-    private Spieler gegner2;
-    private Spieler mitspieler;
-    private ArrayList<Spieler> andereSpieler;
-    private Spieler rufer; //Rufer des gespielten Rufspiels
-    private Karte eigeneKarte;
-    private Karte gegnerischeKarte1;
-    private Karte gegnerischeKarte2;
-    private Karte mitspielerKarte;*/
-    private TextView BpunkteGegner1;
-    private TextView BpunkteGegner2;
 
     private TextView punkteSelbst;
-    private TextView punkteMitspieler;
-    private TextView txtSelbst;
-    private TextView txtMitspieler;
-    private TextView txtGegner1;
-    private TextView txtGegner2;
-    //private Bummerl4 bummerl;
-    //private Boolean angesagt;
     private String  gegner1ID;
     private String  mitspielerID;
     private String  gegner2ID;
-    /*private int anzSpieleAngesagt;
-    private int anzFleckZüge;*/
     private Spielfeld4Logik spielfeldlogik;
 
     @Override
@@ -155,15 +135,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         appContext = this.getApplicationContext();
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
-        //  findViewById(R.id.imageView_karte1).setOnTouchListener(new MyTouchListener());
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
-        //findViewById(R.id.imageView_karte2).setOnTouchListener(new MyTouchListener());
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
-        //findViewById(R.id.imageView_karte3).setOnTouchListener(new MyTouchListener());
         imageView_karte4 = (ImageView) findViewById(R.id.imageView_karte4);
-        //findViewById(R.id.imageView_karte4).setOnTouchListener(new MyTouchListener());
         imageView_karte5 = (ImageView) findViewById(R.id.imageView_karte5);
-        // findViewById(R.id.imageView_karte5).setOnTouchListener(new MyTouchListener());
 
 
         button20er = (Button) findViewById(R.id.main_button20er);
@@ -174,17 +149,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         buttonGegenflecken = (Button) findViewById(R.id.main_buttonGegenFlecken);
         buttonWeiter = (Button) findViewById(R.id.main_buttonWeiter);
 
-        //punkteGegner1 = (TextView) findViewById(R.id.pointsText);
-        //punkteGegner2 = (TextView) findViewById(R.id.pointsText);
         punkteSelbst = (TextView) findViewById(R.id.txt_PunkteZahlI);
-        //punkteMitspieler = (TextView) findViewById(R.id.pointsText2);
-  /*      txtSelbst = (TextView) findViewById(R.id.I);
-        txtMitspieler = (TextView) findViewById(R.id.I);
-        txtGegner1 = (TextView) findViewById(R.id.Enemy);
-        txtGegner2 = (TextView) findViewById(R.id.Enemy);*/
 
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
-        // findViewById(R.id.imageView_eigeneKarte).setOnDragListener(new MyDragListener());
         imageView_karteGegner1 = (ImageView) findViewById(R.id.imageView_karteGegner1);
         imageView_karteMitspieler = (ImageView) findViewById(R.id.imageView_karteMitspieler);
         imageView_karteGegner2 = (ImageView) findViewById(R.id.imageView_karteGegner2);
@@ -204,7 +171,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to LocalService
+        // Bind to NearbyConnectionService
         Intent intent = new Intent(this, NearbyConnectionService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         mService.setSpielfeld(this);
@@ -222,11 +189,14 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
             unbindService(mConnection);
             mBound = false;
         }
+        // Stop the service
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        stopService(intent);
     }
 
     private void zugAusfuehren(int i) {
         Karte k = spielfeldlogik.karteAusspielen(i);
-        weiterNachricht(k, endpointIDs);
+        ausspielenNachricht(k, endpointIDs);
         buttonsNichtKlickbar();
         handkartenImages.get(i).setVisibility(View.INVISIBLE);
 
@@ -248,37 +218,26 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         return spielbareKarten;
     }
 
-    private void weiterNachricht(Karte gespielteKarte, ArrayList<String> recipients) {
+    private void ausspielenNachricht(Karte gespielteKarte, ArrayList<String> recipients) {
         int neuerZug = spielfeldlogik.isZugBeginn() ? 1 : 0;
-        int spielerDerKarteSpielt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
+        int spielerAmAusspielen = spielfeldlogik.getAusspielenderSpielerNr();
+        String gespielteKarteString = "1";
+        if (gespielteKarte!=null) {
+            gespielteKarteString = gespielteKarte.toString();
+        }
         String spielbareKarten = spielbareKartenNachrichtZusammenstellen();
         int hatZwanziger = spielfeldlogik.hasHatZwanziger() ? 1 : 0;
         int hatVierziger = spielfeldlogik.hasHatVierziger() ? 1 : 0;
         String verfuegbareZwanziger = "";
-        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Herz")) {
-            verfuegbareZwanziger += " " + HERZ;
-        }
-        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Karo")) {
-            verfuegbareZwanziger += " " + KARO;
-        }
-        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Pik")) {
-            verfuegbareZwanziger += " " + PIK;
-        }
-        if (spielfeldlogik.getVerfuegbareZwanziger().contains("Kreuz")) {
-            verfuegbareZwanziger += " " + KREUZ;
+        for (int i=0;i<4;i++) {
+            if (spielfeldlogik.getVerfuegbareZwanziger().contains(farben[i])) {
+                verfuegbareZwanziger += " " + farbenKonstanten[i];
+            }
         }
         verfuegbareZwanziger.trim();
-        if (gespielteKarte==null) {
-            int spielerDerSpielBeginnt = (spielfeldlogik.getAusspielenderSpielerNr()+3)%4;
-            int nurSpielBeginn = 1;
-            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + spielerDerSpielBeginnt
-                    + ":" + nurSpielBeginn + ":" + spielbareKarten + ":" + neuerZug + ":" +
-                    hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
-        } else {
-            mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + spielerDerKarteSpielt
-                    + ":" + gespielteKarte.toString() + ":" + spielbareKarten + ":" + neuerZug + ":" +
-                    hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
-        }
+        mService.delegateSendReliableMessage(recipients, (AUSSPIELEN + ":" + spielerAmAusspielen
+                + ":" + gespielteKarteString + ":" + spielbareKarten + ":" + neuerZug + ":" +
+                hatVierziger + ":" + hatZwanziger + ":" + verfuegbareZwanziger).getBytes());
     }
 
     private void eigenerZug() {
@@ -369,11 +328,9 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     private void buttonsNichtKlickbar() {
 
-        imageView_karte1.setEnabled(false);
-        imageView_karte2.setEnabled(false);
-        imageView_karte3.setEnabled(false);
-        imageView_karte4.setEnabled(false);
-        imageView_karte5.setEnabled(false);
+        for (ImageView handkartenView: handkartenImages) {
+            handkartenView.setEnabled(false);
+        }
 
         button20er.setEnabled(false);
         button40er.setEnabled(false);
@@ -436,20 +393,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
 
     private void andererSpielerKannSpielRufen() {
         String spieleAnsagbar = "";
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Schnapser"))
-            spieleAnsagbar += " " + SCHNAPSER;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Land"))
-            spieleAnsagbar += " " + LAND;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Kontraschnapser"))
-            spieleAnsagbar += " " + KONTRASCHNAPSER;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Bauernschnapser"))
-            spieleAnsagbar += " " + BAUERNSCHNAPSER;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Kontrabauernschnapser"))
-            spieleAnsagbar += " " + KONTRABAUERNSCHNAPSER;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Farbenjodler"))
-            spieleAnsagbar += " " + FARBENJODLER;
-        if (spielfeldlogik.getSpieleAnsagbar().contains("Herrenjodler"))
-            spieleAnsagbar += " " + HERRENJODLER;
+        for (int i=0; i<7; i++) {
+            if (spielfeldlogik.getSpieleAnsagbar().contains(spiele[i]))
+                spieleAnsagbar += " " + spielKonstanten[i];
+        }
         spieleAnsagbar.trim();
         String recipientID = "";
         int spielerNr = spielfeldlogik.getAmZugSpielerNr();
@@ -591,7 +538,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                     eigenerZug();
                     handKartenAusspielbar();
                 } else {
-                    weiterNachricht(null, endpointIDs);
+                    ausspielenNachricht(null, endpointIDs);
                 }
             }
         }
@@ -687,15 +634,10 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         else sender=SPIELER4;
         String message = new String(payload);
         switch (((message.split(":")[0]))) {
-            case KARTEGESPIELT: int gespielteKarteNr = Integer.decode(message.split(":")[1]);
+            case AUSSPIELEN: int gespielteKarteNr = Integer.decode(message.split(":")[1]);
                 Karte gespielteKarte = spielfeldlogik.karteAusspielen(gespielteKarteNr);
-                //Toast.makeText(appContext,"gegnerischeHand.contains("+gegnerischeKarte.toString()+") "+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
                 spielfeldlogik.karteAusspielen(gespielteKarteNr);
-                weiterNachricht(gespielteKarte, endpointIDsWithoutSender);
-                //Toast.makeText(appContext,gegnerischeKarte.toString()+" entfernt"+Boolean.toString(gegner.Hand.contains(gegnerischeKarte)),Toast.LENGTH_SHORT).show();
-
-
-                // buttonGegnerischeKarte.setText(gegnerischeKarte.getFarbe() + gegnerischeKarte.getWertigkeit());
+                ausspielenNachricht(gespielteKarte, endpointIDsWithoutSender);
                 switch (sender) {
                     case SPIELER2: imageView_karteGegner1.setImageResource(gespielteKarte.getImageResourceId());
                         break;
@@ -795,7 +737,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                         eigenerZug();
                         handKartenAusspielbar();
                     } else {
-                        weiterNachricht(null, endpointIDs);
+                        ausspielenNachricht(null, endpointIDs);
                     }
                 }
                 break;
@@ -845,7 +787,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            // We've bound to NearbyConnectionService, cast the IBinder and get NearbyConnectionService instance
             NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
             mService = binder.getService();
             mBound = true;

@@ -8,7 +8,7 @@ import appsolutegamesgmbh.schnaps2gether.GUI.Spielfeld4Host;
  * Created by kirederf on 05.06.2015.
  */
 public class Spielfeld4Logik {
-    //Konstanten für Teams
+    //Konstanten fuer Teams
     private static final int TEAM1 = 0;
     private static final int TEAM2 = 1;
 
