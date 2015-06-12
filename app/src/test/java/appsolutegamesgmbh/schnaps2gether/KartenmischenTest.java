@@ -19,6 +19,7 @@ public class KartenmischenTest {
     Karte herzbube = new Karte("Herz", "Bube", 2);
     Karte herzdame = new Karte("Herz", "Dame", 3);
     Karte herzkoenig = new Karte("Herz", "König", 4);
+
     @Before
     public void setUp() {
 

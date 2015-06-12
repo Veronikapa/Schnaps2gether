@@ -26,8 +26,12 @@ public class Spiel3abwechselnSpielerTest {
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
         spiel = new Spiel3((bummerl.getAnzahlSpiele()+1)); //zweite Runde
+        assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist dran", spiel.getS2().isIstdran());
+        assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
         spiel = new Spiel3((bummerl.getAnzahlSpiele()+2)); //dritte Runde
-        assertTrue("Spieler3 ist dran", spiel.getS3().isIstdran());
+        assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
+        assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
+        assertTrue("Spieler3 ist dran", spiel.getS3().isIstdran());;
     }
 }

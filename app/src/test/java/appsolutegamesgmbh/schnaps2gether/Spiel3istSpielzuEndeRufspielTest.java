@@ -307,7 +307,7 @@ public class Spiel3istSpielzuEndeRufspielTest {
         //Karten Spieler1
         spiel.getS1().Hand.add(herzbube);
         spiel.getS1().Hand.add(herzdame);
-        spiel.getS1().Hand.add(herzkoenig);
+        spiel.getS1().Hand.add(herzkoenig);spiel.SpielAnsagen(new Rufspiel("Schnapser"), spiel.getS2());
         spiel.getS1().Hand.add(herz10);
         spiel.getS1().Hand.add(herzass);
         spiel.getS1().Hand.add(karobube);
