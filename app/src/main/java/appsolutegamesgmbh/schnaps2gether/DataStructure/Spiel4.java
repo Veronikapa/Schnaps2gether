@@ -716,6 +716,8 @@ public class Spiel4 {
                 return true;
             if(s.Hand.get(0).getFarbe() == f.get(2) && s.Hand.get(1).getFarbe() == f.get(2) && s.Hand.get(2).getFarbe() == f.get(2) && s.Hand.get(3).getFarbe() == f.get(2) && s.Hand.get(4).getFarbe() == f.get(2))
                 return true;
+            if(s.Hand.get(0).getFarbe() == f.get(3) && s.Hand.get(1).getFarbe() == f.get(3) && s.Hand.get(2).getFarbe() == f.get(3) && s.Hand.get(3).getFarbe() == f.get(3) && s.Hand.get(4).getFarbe() == f.get(3))
+                return true;
             else
                 return false;
 
