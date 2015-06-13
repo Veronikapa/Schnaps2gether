@@ -141,6 +141,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static Bummerl2 bummerl;
     private static Boolean angesagt;
+    private static int stapelKartenAnz;
     private static boolean schummelnDesGegnerErkannt;
     private static boolean schummelnVonGegnerErkannt;
     private static boolean schummelnAktiv;
@@ -432,6 +433,22 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             stichK1.setVisibility(View.VISIBLE);
         }
 
+        stapelKartenAnz = spiel.AnzahlKartenStapel()+1;
+
+
+        if(stapelKartenAnz==8) {
+            imageView_deck.setImageResource(R.drawable.deck_4);
+        }else if (stapelKartenAnz==6)
+            imageView_deck.setImageResource(R.drawable.deck_3);
+        else if(stapelKartenAnz==4)
+            imageView_deck.setImageResource(R.drawable.deck_2);
+        else if(stapelKartenAnz==2)
+            imageView_deck.setImageResource(R.drawable.deck);
+        else if((stapelKartenAnz==0))
+            imageView_deck.setAlpha(0f);
+
+
+
         if(gegner.isIstdran())
             istdran = 1;
         else
@@ -575,6 +592,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
                 imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
 
+                imageView_deck.setAlpha((float)1);
+                imageView_deck.setImageResource(R.drawable.deck_5);
+
                 stichDeckG.setVisibility(View.INVISIBLE);
                 stichEigeneKarteG.setVisibility(View.INVISIBLE);
                 stichGegnerKarteG.setVisibility(View.INVISIBLE);
@@ -624,6 +644,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
 
         imageView_deck.setAlpha((float)1);
+        imageView_deck.setImageResource(R.drawable.deck_5);
         imageView_trumpf.setAlpha((float) 1);
 
         stichDeckG.setVisibility(View.INVISIBLE);

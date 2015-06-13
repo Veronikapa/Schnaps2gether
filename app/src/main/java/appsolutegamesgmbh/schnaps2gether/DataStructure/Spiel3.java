@@ -87,6 +87,14 @@ public class Spiel3 {
         return angesagteFarbe;
     }
 
+    public ArrayList<Spieler> getSieger() {
+        return sieger;
+    }
+
+    public void setSieger(ArrayList<Spieler> sieger) {
+        this.sieger = sieger;
+    }
+
     public Spiel3(int AnzahlSpiele) throws WrongGameException
     {
         kartendeck = Karte.erstelleKartendeck();

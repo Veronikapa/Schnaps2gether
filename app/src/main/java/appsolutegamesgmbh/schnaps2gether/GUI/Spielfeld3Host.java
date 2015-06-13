@@ -149,6 +149,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static Handler handler = new Handler();
 
     private static String[] messageParts;
+    private static ArrayList<Spieler> Sieger;
+    private static String sieger;
 
 
     @Override
@@ -1498,9 +1500,23 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
     private void spielEnde() {
-       /* if(spiel.)
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+":"+).getBytes());*/
+        Sieger = spiel.getSieger();
+        sieger = "";
+        if(Sieger.contains(selbst)){
+            sieger = sieger + ":1";
+            Toast.makeText(appContext,"Gewonnen!",Toast.LENGTH_SHORT);
+        }else
+            Toast.makeText(appContext,"Verloren!",Toast.LENGTH_SHORT);
+
+        if(Sieger.contains(gegner1))
+            sieger = sieger + ":2";
+        if(Sieger.contains(gegner2))
+            sieger = sieger + ":3";
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
+
+        spielStart();
         
     }
     private void aufdrehen(){

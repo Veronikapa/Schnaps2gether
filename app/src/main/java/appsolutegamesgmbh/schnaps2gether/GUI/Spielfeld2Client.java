@@ -411,6 +411,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichK2.setVisibility(View.INVISIBLE);
         stichK1.setVisibility(View.INVISIBLE);
 
+        imageView_deck.setAlpha((float)1);
+        imageView_deck.setImageResource(R.drawable.deck_5);
+
         zugedreht = false;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(1f);
@@ -454,6 +457,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichK1.setVisibility(View.INVISIBLE);
 
         imageView_deck.setAlpha((float) 1);
+        imageView_deck.setImageResource(R.drawable.deck_5);
         imageView_trumpf.setAlpha((float)1);
 
         buttonZudrehen.setEnabled(true);
@@ -1019,23 +1023,19 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                     stichK1.setImageResource(gegnerischeKarte.getImageResourceId());
                     stichK1.setVisibility(View.VISIBLE);
                 }
-                if(stapelKartenAnz==0) {
-                    imageView_deck.setVisibility(View.INVISIBLE);
-
-                }else if ((stapelKartenAnz<=2) && (stapelKartenAnz>0))
-                    imageView_deck.setImageResource(R.drawable.deck);
-                else if((stapelKartenAnz<=4) && (stapelKartenAnz>2))
-                    imageView_deck.setImageResource(R.drawable.deck_2);
-                else if((stapelKartenAnz<=6) && (stapelKartenAnz>4))
-                    imageView_deck.setImageResource(R.drawable.deck_3);
-                else if((stapelKartenAnz<=8) && (stapelKartenAnz>6))
-                    imageView_deck.setImageResource(R.drawable.deck_4);
-                else if((stapelKartenAnz<=10) && (stapelKartenAnz>8))
-                    imageView_deck.setImageResource(R.drawable.deck_5);
-                else
-                    imageView_deck.setImageResource(R.drawable.deck_full);
 
             }
+
+            if(stapelKartenAnz==8) {
+                imageView_deck.setImageResource(R.drawable.deck_4);
+            }else if (stapelKartenAnz==6)
+                imageView_deck.setImageResource(R.drawable.deck_3);
+            else if(stapelKartenAnz==4)
+                imageView_deck.setImageResource(R.drawable.deck_2);
+            else if(stapelKartenAnz==2)
+                imageView_deck.setImageResource(R.drawable.deck);
+            else if((stapelKartenAnz==0))
+                imageView_deck.setAlpha(0f);
 
             punkteAktualisieren();
             gegnerischeKarte = null;
