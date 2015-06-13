@@ -21,13 +21,13 @@ public class Spiel2KartenAusteilenTest {
     }
 
     @Test
-    public void Spieler1besitzt5Handkarten() {
+    public void S1_besitzt5Handkarten() {
         Spiel2 spiel = new Spiel2(0);
         assertEquals("Spieler1 5 Handkarten", 5, spiel.getS1().Hand.size());
     }
 
     @Test
-    public void Spieler2besitzt5Handkarten() {
+    public void S2_besitzt5Handkarten() {
         Spiel2 spiel = new Spiel2(0);
         assertEquals("Spieler2 5 Handkarten", 5, spiel.getS2().Hand.size());
     }

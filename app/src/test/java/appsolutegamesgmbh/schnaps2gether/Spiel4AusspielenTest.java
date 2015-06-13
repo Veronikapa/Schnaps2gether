@@ -61,7 +61,7 @@ public class Spiel4AusspielenTest {
     }
 
     @Test
-    public void Spieler2spieltKarteAus() throws WrongGameException {
+    public void S2_spieltKarteAus() throws WrongGameException {
         Spiel4 spiel = new Spiel4(0);
         spiel.getS2().Hand.removeAll(spiel.getS2().Hand);
 
@@ -77,7 +77,7 @@ public class Spiel4AusspielenTest {
     }
 
     @Test
-    public void Spieler3spieltKarteAus() throws WrongGameException {
+    public void S3_spieltKarteAus() throws WrongGameException {
         Spiel4 spiel = new Spiel4(0);
         spiel.getS3().Hand.removeAll(spiel.getS3().Hand);
 
@@ -93,7 +93,7 @@ public class Spiel4AusspielenTest {
     }
 
     @Test
-    public void Spieler4spieltKarteAus() throws WrongGameException {
+    public void S4_spieltKarteAus() throws WrongGameException {
         Spiel4 spiel = new Spiel4(0);
         spiel.getS4().Hand.removeAll(spiel.getS4().Hand);
 

@@ -11,20 +11,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by n15r2 on 12.05.15.
+ * Created by n15r2 on 12.06.15.
  */
 public class Spiel2abwechselnSpielerTest {
-    public Bummerl2 bummerl = new Bummerl2();
+
     @Before
     public void setUp() {
 
     }
 
     @Test
-    public void abwechselnSpielerNachRunden() {
-        Spiel2 spiel = new Spiel2(bummerl.getAnzahlSpiele()); //erste Runde
+    public void S1_istdran() {
+        Spiel2 spiel = new Spiel2(0); //erste Runde
         assertTrue("Spieler1 ist dran", spiel.getS1().isIstdran());
-        spiel = new Spiel2((bummerl.getAnzahlSpiele()+1)); //zweite Runde
+        assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
+    }
+
+    @Test
+    public void S2_istdran() {
+        Spiel2 spiel = new Spiel2(1); //zweite Runde
+        assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist dran", spiel.getS2().isIstdran());
     }
 }

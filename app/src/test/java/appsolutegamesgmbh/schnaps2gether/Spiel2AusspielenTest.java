@@ -20,14 +20,14 @@ public class Spiel2AusspielenTest {
     }
 
     @Test
-    public void Spieler1spieltKarteAus() {
+    public void S1_spieltKarteAus() {
         Spiel2 spiel = new Spiel2(0);
         spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
         assertEquals("Spieler1 hat Karte ausgespielt", 4, spiel.getS1().Hand.size());
     }
 
     @Test
-    public void Spieler2spieltKarteAus() {
+    public void S2_spieltKarteAus() {
         Spiel2 spiel = new Spiel2(0);
         spiel.Auspielen(spiel.getS2().Hand.get(0), spiel.getS2());
         assertEquals("Spieler2 hat Karte ausgespielt", 4, spiel.getS2().Hand.size());

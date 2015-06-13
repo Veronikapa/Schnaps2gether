@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by n15r2 on 27.05.15.
  */
-public class Spiel3ZugAuswertenTest {
+public class Spiel3ZugAuswertenBummerlTest {
 
     Bummerl3 bummerl = new Bummerl3();
 

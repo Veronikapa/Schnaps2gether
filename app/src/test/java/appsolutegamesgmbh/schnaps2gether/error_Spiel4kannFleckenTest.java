@@ -3,6 +3,7 @@ package appsolutegamesgmbh.schnaps2gether;
 import org.junit.Before;
 import org.junit.Test;
 
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Rufspiel;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel4;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.WrongGameException;
 

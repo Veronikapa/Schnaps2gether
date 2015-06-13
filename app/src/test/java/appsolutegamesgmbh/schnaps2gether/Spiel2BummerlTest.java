@@ -24,11 +24,45 @@ public class Spiel2BummerlTest {
     }
 
     @Test
-    public void bummerlWirdRichtigGezaehlt() {
+    public void S1gewinnt_1Punkt_S1_67Punkte_S2_34Punkte() {
         Bummerl2 bummerl = new Bummerl2();
         Spiel2 spiel = new Spiel2(0);
 
-        assertTrue("Runde ist nicht zu Ende", !spiel.istSpielzuEnde(bummerl));
+        spiel.getS1().setPunkte(67);
+        spiel.getS2().setPunkte(34);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 1 Punkte", 1, bummerl.getPunkteS1());
+        assertEquals("S2 hat 0 Punkte", 0, bummerl.getPunkteS2());
+    }
+
+    @Test
+    public void S1gewinnt_2Punkt_S1_67Punkte_S2_2Punkte() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
+
+        spiel.getS1().setPunkte(67);
+        spiel.getS2().setPunkte(2);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 2 Punkte", 2, bummerl.getPunkteS1());
+        assertEquals("S2 hat 0 Punkte", 0, bummerl.getPunkteS2());
+    }
+
+    @Test
+    public void S1gewinnt_3Punkt_S1_67Punkte_S2_0Punkte() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
+
+        spiel.getS1().setPunkte(67);
+        spiel.getS2().setPunkte(0);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 3 Punkte", 3, bummerl.getPunkteS1());
+        assertEquals("S2 hat 0 Punkte", 0, bummerl.getPunkteS2());
+    }
+
+    @Test
+    public void bummerlZähltRichtig() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
 
         spiel.getS1().setPunkte(67);
         spiel.getS2().setPunkte(34);
@@ -67,9 +101,41 @@ public class Spiel2BummerlTest {
         assertEquals("S1 hat 6 Punkte", 6, bummerl.getPunkteS1());
         assertEquals("S2 hat 7 Punkte", 7, bummerl.getPunkteS2());
         assertTrue("Spiel ist zu Ende", bummerl.istBummerlzuEnde());
-
-
     }
 
+    @Test
+    public void S2gewinnt_1Punkt_S1_67Punkte_S2_34Punkte() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
 
+        spiel.getS1().setPunkte(34);
+        spiel.getS2().setPunkte(67);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 0 Punkte", 0, bummerl.getPunkteS1());
+        assertEquals("S2 hat 1 Punkte", 1, bummerl.getPunkteS2());
+    }
+
+    @Test
+    public void S2gewinnt_2Punkt_S1_67Punkte_S2_2Punkte() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
+
+        spiel.getS1().setPunkte(2);
+        spiel.getS2().setPunkte(67);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 0 Punkte", 0, bummerl.getPunkteS1());
+        assertEquals("S2 hat 2 Punkte", 2, bummerl.getPunkteS2());
+    }
+
+    @Test
+    public void S2gewinnt_3Punkt_S1_67Punkte_S2_0Punkte() {
+        Bummerl2 bummerl = new Bummerl2();
+        Spiel2 spiel = new Spiel2(0);
+
+        spiel.getS1().setPunkte(0);
+        spiel.getS2().setPunkte(67);
+        assertTrue("Runde ist zu Ende", spiel.istSpielzuEnde(bummerl));
+        assertEquals("S1 hat 0 Punkte", 0, bummerl.getPunkteS1());
+        assertEquals("S2 hat 3 Punkte", 3, bummerl.getPunkteS2());
+    }
 }

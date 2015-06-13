@@ -20,23 +20,35 @@ public class Spiel4abwechselnSpielerTest {
     }
 
     @Test
-    public void abwechselnSpielerNachRunden() throws WrongGameException {
+    public void S1_istdran() throws WrongGameException {
         Spiel4 spiel = new Spiel4(0); //erste Runde
         assertTrue("Spieler1 ist dran", spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
         assertTrue("Spieler4 ist nicht dran", !spiel.getS4().isIstdran());
-        spiel = new Spiel4(1); //erste Runde
+    }
+
+    @Test
+    public void S2_istdran() throws WrongGameException {
+        Spiel4 spiel = new Spiel4(1); //zweite Runde
         assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist dran", spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
         assertTrue("Spieler4 ist nicht dran", !spiel.getS4().isIstdran());
-        spiel = new Spiel4(2); //dritte Runde
+    }
+
+    @Test
+    public void S3_istdran() throws WrongGameException {
+        Spiel4 spiel = new Spiel4(2); //dritte Runde
         assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist dran", spiel.getS3().isIstdran());
         assertTrue("Spieler4 ist nicht dran", !spiel.getS4().isIstdran());
-        spiel = new Spiel4(3); //vierte Runde
+    }
+
+    @Test
+    public void S4_istdran() throws WrongGameException {
+        Spiel4 spiel = new Spiel4(3); //vierte Runde
         assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());

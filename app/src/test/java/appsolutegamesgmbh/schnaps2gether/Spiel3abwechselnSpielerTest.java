@@ -20,18 +20,28 @@ public class Spiel3abwechselnSpielerTest {
     }
 
     @Test
-    public void abwechselnSpielerNachRunden() throws WrongGameException {
+    public void S1_istdran() throws WrongGameException {
         Spiel3 spiel = new Spiel3(bummerl.getAnzahlSpiele()); //erste Runde
         assertTrue("Spieler1 ist dran", spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
-        spiel = new Spiel3((bummerl.getAnzahlSpiele()+1)); //zweite Runde
+    }
+
+    @Test
+    public void S2_istdran() throws WrongGameException {
+        Spiel3 spiel = new Spiel3((bummerl.getAnzahlSpiele()+1)); //zweite Runde
         assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist dran", spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist nicht dran", !spiel.getS3().isIstdran());
-        spiel = new Spiel3((bummerl.getAnzahlSpiele()+2)); //dritte Runde
+    }
+
+    @Test
+    public void S3_istdran() throws WrongGameException {;
+        Spiel3 spiel = new Spiel3((bummerl.getAnzahlSpiele()+2)); //dritte Runde
         assertTrue("Spieler1 ist nicht dran", !spiel.getS1().isIstdran());
         assertTrue("Spieler2 ist nicht dran", !spiel.getS2().isIstdran());
         assertTrue("Spieler3 ist dran", spiel.getS3().isIstdran());;
     }
+
+
 }

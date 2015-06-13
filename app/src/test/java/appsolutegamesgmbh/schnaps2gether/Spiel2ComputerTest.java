@@ -1,6 +1,7 @@
 package appsolutegamesgmbh.schnaps2gether;
 
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
+import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl2;
 
@@ -14,22 +15,31 @@ import static org.junit.Assert.assertTrue;
 
 public class Spiel2ComputerTest {
 
-    //private Spiel2 spiel = new Spiel2();
-    private Spiel2random spiel = new Spiel2random();
-    private Spieler s1 = new Spieler();
-    private Spieler s2 = new Spieler();
-    private Bummerl2 bummerl = new Bummerl2();
-    private String trumpf;
-    private Karte aufgedeckterTrumpf;
+    Bummerl2 bummerl = new Bummerl2();
 
-    public void getCards(String spieler, ArrayList<Karte> karten) {
-        System.out.println(spieler);
-        for (Karte k : karten) {
-            System.out.println(k.getPunkte() + " " + k.getFarbe() + " " + k.getWertigkeit());
+    Karte herzbube = new Karte("Herz", "Bube", 2);
+    Karte herzdame = new Karte("Herz", "Dame", 3);
+    Karte herzkoenig = new Karte("Herz", "König", 4);
+    Karte herz10 = new Karte("Herz", "10er", 10);
+    Karte herzass = new Karte("Herz", "Ass", 11);
 
-        }
-    }
+    Karte karobube = new Karte("Karo", "Bube", 2);
+    Karte karodame = new Karte("Karo", "Dame", 3);
+    Karte karokoenig = new Karte("Karo", "König", 4);
+    Karte karo10 = new Karte("Karo", "10er", 10);
+    Karte karoass = new Karte("Karo", "Ass", 11);
 
+    Karte pikbube = new Karte("Pik", "Bube", 2);
+    Karte pikdame = new Karte("Pik", "Dame", 3);
+    Karte pikkoenig = new Karte("Pik", "König", 4);
+    Karte pik10 = new Karte("Pik", "10er", 10);
+    Karte pikass = new Karte("Pik", "Ass", 11);
+
+    Karte kreuzbube = new Karte("Kreuz", "Bube", 2);
+    Karte kreuzdame = new Karte("Kreuz", "Dame", 3);
+    Karte kreuzkoenig = new Karte("Kreuz", "König", 4);
+    Karte kreuz10 = new Karte("Kreuz", "10er", 10);
+    Karte kreuzass = new Karte("Kreuz", "Ass", 11);
 
     @Before
     public void setUp() {
@@ -37,77 +47,18 @@ public class Spiel2ComputerTest {
 
     }
 
-   /** @Test
-    public void computer_kartenzugeben_stechen() {
-
-        //Test mit bestimmten Karten
-
-        //Runde 1
-        Karte ausgespieltS1 = spiel.getS1().Hand.get(0);
-        spiel.Auspielen(spiel.getS1().Hand.get(0)); //2 Herz Bube
-        Karte ausgespieltC = spiel.AuspielenComputer(ausgespieltS1); //11 Herz Ass
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 2
-        ausgespieltC = spiel.AuspielenComputer(null); //2 Pik Bube
-        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespieltC); //4 Pik König
-        spiel.getS1().Hand.remove(0);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 3
-        ausgespieltS1 = spiel.getS1().Hand.get(4); //4 Herz König
-        spiel.getS1().Hand.remove(4);
-        ausgespieltC = spiel.AuspielenComputer(ausgespieltS1); //10 Herz 10er
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 4
-        ausgespieltC = spiel.AuspielenComputer(null); //2 Kreuz Bube
-        spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespieltC); //3 Kreuz Dame
-        spiel.getS1().Hand.remove(0);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 5
-        ausgespieltS1 = spiel.getS1().Hand.get(4); //3 Herz Dame
-        ausgespieltC = spiel.AuspielenComputer(ausgespieltS1); //2 Karo Bube
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.getS1().Hand.remove(4);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 6
-        ausgespieltC = spiel.AuspielenComputer(null); //3 Pik Dame
-        spiel.ZugAuswerten(spiel.getS1().Hand.get(2), ausgespieltC); //3 Karo Dame
-        spiel.getS1().Hand.remove(2);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 7
-        ausgespieltS1 = spiel.getS1().Hand.get(0); //4 Kreuz König
-        ausgespieltC = spiel.AuspielenComputer(ausgespieltS1); // 11 Kreuz Ass
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.getS1().Hand.remove(0);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 8
-        ausgespieltC = spiel.AuspielenComputer(null); //10 Kreuz 10er
-        ausgespieltS1 = spiel.getS1().Hand.get(1); //4 Karo König
-        spiel.getS2().setIstdran(true);
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.getS1().Hand.remove(1);
-        spiel.istSpielzuEnde(bummerl);
-        //Runde 9
-        ausgespieltS1 = spiel.getS1().Hand.get(1); //10 Karo 10er
-        ausgespieltC = spiel.AuspielenComputer(ausgespieltS1); // 11 Karo Ass
-        spiel.ZugAuswerten(ausgespieltS1, ausgespieltC);
-        spiel.getS1().Hand.remove(1);
-        spiel.istSpielzuEnde(bummerl);
-
-    } */
-
     @Test
-    public void zudrehen_computer_farbstich_zwang() {
+    public void zudrehen_computer_farbzwang() {
+        Spiel2 spiel = new Spiel2(0);
         int runde = 0;
         int zudrehen = 0;
         boolean print = true;
 
-        //Runde 1
+        //Zug 1
         Karte ausgespielt1 = spiel.getS1().Hand.get(0);
-        spiel.Auspielen(spiel.getS1().Hand.get(0));
+        spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
         Karte ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
-        spiel.ZugAuswerten(ausgespielt1, ausgespielt2);
+        spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
         spiel.istSpielzuEnde(bummerl);
 
         do {
@@ -115,52 +66,231 @@ public class Spiel2ComputerTest {
             if (spiel.getS2().isIstdran() && !spiel.getS2().Hand.isEmpty()) {
                 ausgespielt2 = spiel.AuspielenComputer(null);
                 if (spiel.isZugedreht() && print) {
-                    getCards("Computer: ", spiel.getS2().Hand);
-                    System.out.println(spiel.getAufgedeckterTrumpf().getFarbe());
                     print = false;
                 }
-                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2);
+                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2, 0);
                 spiel.getS1().Hand.remove(0);
                 spiel.istSpielzuEnde(bummerl);
             }
-            if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
+            else if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
                 ausgespielt1 = spiel.getS1().Hand.get(0);
                 spiel.getS1().Hand.remove(0);
                 ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
                 if (spiel.isZugedreht()) {
-                    System.out.println("Spieler1: " + ausgespielt1.getFarbe()+ausgespielt1.getWertigkeit());
-                    System.out.println("Spieler2: " + ausgespielt2.getFarbe()+ausgespielt2.getWertigkeit());
                     assertTrue("Farb/Stich-Zwang", checkColor(ausgespielt1, ausgespielt2, spiel.getS2().Hand));
                 }
-                spiel.ZugAuswerten(ausgespielt1, ausgespielt2);
+                spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
                 spiel.istSpielzuEnde(bummerl);
             }
             zudrehen++;
         }
         while (!spiel.istSpielzuEnde(bummerl));
-
-
-
-
-
-
-
     }
 
-    public boolean checkColor (Karte ks1, Karte ks2, ArrayList<Karte> hands2) {
+    @Test
+    public void zudrehen_computer_stichzwang() {
+        Spiel2 spiel = new Spiel2(0);
+        int runde = 0;
+        int zudrehen = 0;
+        boolean print = true;
+
+        //Zug 1
+        Karte ausgespielt1 = spiel.getS1().Hand.get(0);
+        spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
+        Karte ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+        spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+        spiel.istSpielzuEnde(bummerl);
+
+        do {
+
+            if (spiel.getS2().isIstdran() && !spiel.getS2().Hand.isEmpty()) {
+                ausgespielt2 = spiel.AuspielenComputer(null);
+                if (spiel.isZugedreht() && print) {
+                    print = false;
+                }
+                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2, 0);
+                spiel.getS1().Hand.remove(0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            else if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
+                ausgespielt1 = spiel.getS1().Hand.get(0);
+                spiel.getS1().Hand.remove(0);
+                ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+                if (spiel.isZugedreht()) {
+                    assertTrue("Farb/Stich-Zwang", checkValue(ausgespielt1, ausgespielt2, spiel.getS2().Hand));
+                }
+                spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            zudrehen++;
+        }
+        while (!spiel.istSpielzuEnde(bummerl));
+    }
+
+    @Test
+    public void zudrehen_S1_stichzwang() {
+        Spiel2 spiel = new Spiel2(0);
+        int runde = 0;
+        int zudrehen = 0;
+        boolean print = true;
+
+        //Zug 1
+        Karte ausgespielt1 = spiel.getS1().Hand.get(0);
+        spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
+        Karte ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+        spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+        spiel.istSpielzuEnde(bummerl);
+        spiel.Zudrehen(spiel.getS1());
+
+        do {
+
+            if (spiel.getS2().isIstdran() && !spiel.getS2().Hand.isEmpty()) {
+                ausgespielt2 = spiel.AuspielenComputer(null);
+                if (spiel.isZugedreht() && print) {
+                    print = false;
+                }
+                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2, 0);
+                spiel.getS1().Hand.remove(0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            else if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
+                ausgespielt1 = spiel.getS1().Hand.get(0);
+                spiel.getS1().Hand.remove(0);
+                ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+                if (spiel.isZugedreht()) {
+                    assertTrue("Farb/Stich-Zwang", checkValue(ausgespielt1, ausgespielt2, spiel.getS2().Hand));
+                }
+                spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            zudrehen++;
+        }
+        while (!spiel.istSpielzuEnde(bummerl));
+    }
+
+
+    @Test
+    public void zudrehen_S1_farbzwang() {
+        Spiel2 spiel = new Spiel2(0);
+        int runde = 0;
+        int zudrehen = 0;
+        boolean print = true;
+
+        //Zug 1
+        Karte ausgespielt1 = spiel.getS1().Hand.get(0);
+        spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
+        Karte ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+        spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+        spiel.istSpielzuEnde(bummerl);
+        spiel.Zudrehen(spiel.getS1());
+
+        do {
+            if (spiel.getS2().isIstdran() && !spiel.getS2().Hand.isEmpty()) {
+                ausgespielt2 = spiel.AuspielenComputer(null);
+                if (spiel.isZugedreht() && print) {
+                    print = false;
+                }
+                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2, 0);
+                spiel.getS1().Hand.remove(0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            else if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
+                ausgespielt1 = spiel.getS1().Hand.get(0);
+                spiel.getS1().Hand.remove(0);
+                ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+                if (spiel.isZugedreht()) {
+                    assertTrue("Farb/Stich-Zwang", checkColor(ausgespielt1, ausgespielt2, spiel.getS2().Hand));
+                }
+                spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            zudrehen++;
+        }
+        while (!spiel.istSpielzuEnde(bummerl));
+    }
+
+    public boolean checkColor (Karte ks1, Karte ks2, ArrayList<Karte> hand2) {
         if (ks1.getFarbe() == ks2.getFarbe()) {
             return true;
         }
-        for (Karte k : hands2) {
+        for (Karte k : hand2) { //überprüfen, ob Computer richtige Farbe hat
             if (ks1.getFarbe() == k.getFarbe()) {
                 return false;
-
             }
+        }
+        return true;
+    }
 
+    public boolean checkValue (Karte ks1, Karte ks2, ArrayList<Karte> hand2) {
+        if (ks1.getPunkte() <= ks2.getPunkte()) {
+            return true;
+        }
+        for (Karte k : hand2) { //überprüfen, ob Computer höherwertige Karte hat
+            if (ks1.getFarbe() == k.getFarbe()) {
+                if (ks1.getPunkte() < k.getPunkte()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Test
+    public void S1_20er_40er() {
+        Spiel2 spiel = new Spiel2(0);
+        int runde = 0;
+        int zudrehen = 0;
+
+        spiel.getS1().Hand.removeAll(spiel.getS1().Hand);
+        spiel.getS2().Hand.removeAll(spiel.getS2().Hand);
+
+        //Karten Spieler1
+        spiel.getS1().Hand.add(herzbube);
+        spiel.getS1().Hand.add(herzdame);
+        spiel.getS1().Hand.add(herzkoenig);
+        spiel.getS1().Hand.add(herz10);
+        spiel.getS1().Hand.add(herzass);
+
+        //Karten Spieler2
+        spiel.getS2().Hand.add(karobube);
+        spiel.getS2().Hand.add(karodame);
+        spiel.getS2().Hand.add(karokoenig);
+        spiel.getS2().Hand.add(karo10);
+        spiel.getS2().Hand.add(karoass);
+
+        //Zug 1
+        spiel.Ansagen20er("Herz", spiel.getS1());
+        if (spiel.getTrumpf() == "Herz") {
+        assertEquals("S1 hat 40er angesagt", 40, spiel.getS1().getMerkePunkte());
+        }
+        if (spiel.getTrumpf() != "Herz") {
+            assertEquals("S1 hat 20er angesagt", 20, spiel.getS1().getMerkePunkte());
         }
 
-        return true;
+        Karte ausgespielt1 = spiel.getS1().Hand.get(0);
+        spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
+        Karte ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+        spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+        spiel.istSpielzuEnde(bummerl);
 
+        do {
+            if (spiel.getS2().isIstdran() && !spiel.getS2().Hand.isEmpty()) {
+                ausgespielt2 = spiel.AuspielenComputer(null);
+                spiel.ZugAuswerten(spiel.getS1().Hand.get(0), ausgespielt2, 0);
+                spiel.getS1().Hand.remove(0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            else if (spiel.getS1().isIstdran() && !spiel.getS1().Hand.isEmpty()) {
+                ausgespielt1 = spiel.getS1().Hand.get(0);
+                spiel.getS1().Hand.remove(0);
+                ausgespielt2 = spiel.AuspielenComputer(ausgespielt1);
+                spiel.ZugAuswerten(ausgespielt1, ausgespielt2, 0);
+                spiel.istSpielzuEnde(bummerl);
+            }
+            zudrehen++;
+        }
+        while (!spiel.istSpielzuEnde(bummerl));
     }
+
 
 }

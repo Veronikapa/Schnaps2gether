@@ -20,21 +20,21 @@ public class Spiel3AusspielenTest {
     }
 
     @Test
-    public void Spieler1spieltKarteAus() throws WrongGameException {
+    public void S1_spieltKarteAus() throws WrongGameException {
         Spiel3 spiel = new Spiel3(0);
         spiel.Auspielen(spiel.getS1().Hand.get(0), spiel.getS1());
         assertEquals("Spieler1 hat Karte ausgespielt", 2, spiel.getS1().Hand.size());
     }
 
     @Test
-    public void Spieler2spieltKarteAus() throws WrongGameException {
+    public void S2_spieltKarteAus() throws WrongGameException {
         Spiel3 spiel = new Spiel3(0);
         spiel.Auspielen(spiel.getS2().Hand.get(0), spiel.getS2());
         assertEquals("Spieler2 hat Karte ausgespielt", 2, spiel.getS2().Hand.size());
     }
 
     @Test
-    public void Spieler3spieltKarteAus() throws WrongGameException {
+    public void S3_spieltKarteAus() throws WrongGameException {
         Spiel3 spiel = new Spiel3(0);
         spiel.Auspielen(spiel.getS3().Hand.get(0), spiel.getS3());
         assertEquals("Spieler2 hat Karte ausgespielt", 2, spiel.getS3().Hand.size());
