@@ -66,6 +66,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String SCHUMMELN = "14"; //Erhält Gegner diese Message wird Auge angezeigt
     private static final String SCHUMMELNUNTERBUNDEN= "15";
     private static final String SCHUMMELKARTEN = "16";
+    private static final String NAMEGEGNER = "17";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -136,8 +137,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static TextView punkteSelbst;
     private static TextView BpunkteSelbst;
     private static TextView BpunkteGegner;
-    private static TextView GegnerName;
-    private static TextView Name;
+    private static TextView txt_GegnerName;
+    private static TextView txt_BummerlNameGegner;
+    private static TextView txt_BummerlMeinName;
 
     private static Bummerl2 bummerl;
     private static Boolean angesagt;
@@ -215,6 +217,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         punkteSelbst = (TextView) findViewById(R.id.txt_PunkteSelbst);
         BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
         BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+        txt_GegnerName = (TextView) findViewById(R.id.txt_NameGegner2);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner = (TextView) findViewById(R.id.txt_BummerlNameG1);
 
         imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_eigeneKarte = (ImageView) findViewById(R.id.imageView_eigeneKarte);
@@ -574,19 +579,11 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handler0.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMEGEGNER +":" + Startmenue.SpielerName).getBytes());
+
                 spiel = new Spiel2(bummerl.getAnzahlSpiele());
                 selbst = spiel.getS1();
                 gegner = spiel.getS2();
-
-                //Toast.makeText(appContext, "OwnEndpointID: "+Nearby.Connections.getLocalEndpointId(mGoogleApiClient), Toast.LENGTH_LONG).show();
-                /*Handler handler3  =  new Handler();
-                handler3.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(appContext, "ClientEndpointID: " + endpointIDs.get(0), Toast.LENGTH_LONG).show();
-                    }
-                }, 2000);*/
-
 
                 trumpfkarte = spiel.getAufgedeckterTrumpf();
                 imageView_trumpf.setImageResource(trumpfkarte.getImageResourceId());
@@ -679,8 +676,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
-
-
 
         punkteSelbst.setText("0");
 
@@ -1026,6 +1021,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case SCHUMMELNUNTERBUNDEN:
                 schummelnVonGegnerErkannt = true;
+                break;
+            case NAMEGEGNER:
+                String nameGegner = message.split(":")[1];
+                txt_GegnerName.setText(nameGegner);
+                txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                txt_BummerlNameGegner.setText(nameGegner);
                 break;
             default: break;
         }

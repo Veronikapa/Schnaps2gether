@@ -62,6 +62,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static final String SCHUMMELN = "14"; //Erhält Gegner diese Message wird Auge angezeigt
     private static final String SCHUMMELNUNTERBUNDEN= "15"; //Gegner erhält Nachricht das Schummeln unterbunden wurde
     private static final String SCHUMMELKARTEN = "16";
+    private static final String NAMEGEGNER = "17";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -101,8 +102,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static TextView punkteSelbst;
     private static TextView BpunkteSelbst;
     private static TextView BpunkteGegner;
-    private static TextView GegnerName;
-    private static TextView Name;
+    private static TextView txt_GegnerName;
+    private static TextView txt_BummerlNameGegner;
+    private static TextView txt_BummerlMeinName;
 
     private static ImageView stichEigeneKarteG;
     private static ImageView stichGegnerKarteG;
@@ -145,7 +147,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int handkartenNummerZumSchummeln;
     private static SensorManager shakeManager;
     private static SensorEventListener shakeListener;
-    private double threshold = 5.0d;
+    private double threshold = 1.0d;
 
     ArrayList<Integer> hostHandKarten = new ArrayList<Integer>(); //Karten für Schummeln
 
@@ -218,6 +220,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
+
+
         shakeImplementation();
 
         spielStart();
@@ -240,6 +244,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
                     if (threshold < netForce) {
                         schummelnDesGegnerErkannt = true;
+                        threshold = 1;
                     }
                 }
             }
@@ -411,7 +416,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichK2.setVisibility(View.INVISIBLE);
         stichK1.setVisibility(View.INVISIBLE);
 
-        imageView_deck.setAlpha((float)1);
+        imageView_deck.setAlpha((float) 1);
         imageView_deck.setImageResource(R.drawable.deck_5);
 
         zugedreht = false;
@@ -428,6 +433,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         punkteSelbst.setText("0");
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
+
+        txt_GegnerName = (TextView) findViewById(R.id.txt_NameGegner2);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner = (TextView) findViewById(R.id.txt_BummerlNameG1);
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMEGEGNER+":" + Startmenue.SpielerName).getBytes());
     }
 
     private void internspielStart() {
@@ -765,7 +775,6 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 buttonTrumpfTauschen.setAlpha(0f);
                 imageView_deck.setAlpha((float) 0);
                 imageView_trumpf.setAlpha((float) 0);
-                buttonZudrehen.setText("Zugedreht");
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -830,6 +839,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case SCHUMMELKARTEN:
                 hostHandKarten.add(Integer.decode(message.split(":")[1])); //resouceId von host hand karte
+                break;
+            case NAMEGEGNER:
+                String nameGegner = message.split(":")[1];
+                txt_GegnerName.setText(nameGegner);
+                txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                txt_BummerlNameGegner.setText(nameGegner);
                 break;
             default: break;
         }

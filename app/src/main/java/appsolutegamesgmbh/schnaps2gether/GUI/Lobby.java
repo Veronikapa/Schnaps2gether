@@ -104,6 +104,10 @@ public class Lobby extends Activity implements
         public void onItemClick(AdapterView<?> parent, View view,
         int position, long id) {
 
+            //Verhindern das man sich zu eigenem Spiel verbindet
+            if(m_IsHost && (spieleIdListe.size()== 0 || Nearby.Connections.getLocalEndpointId(m_GoogleApiClient)==spieleIdListe.get(position)))
+                return;
+
             //Wenn Gerät zuvor Spiel angelegt hat, muss dieses entfernt werden bevor er spielen kann.
             m_IsHost = false;
             Nearby.Connections.stopAdvertising(m_GoogleApiClient);
