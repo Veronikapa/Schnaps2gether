@@ -518,6 +518,8 @@ public class Spiel4 {
                 s3.setAngesagt20er(false);
             }
         }
+
+        hoechstekarteamTisch = null;
     }
 
     //muss auch vor dem Ausspielen der ersten Karte überprüft werden, da bei einem Herren- oder Farbenjodler das Spiel sofort beendet ist

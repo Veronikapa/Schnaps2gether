@@ -477,7 +477,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 }
 
                 buttonSpielAnsagen.setVisibility(view.INVISIBLE);
-                buttonWeiter.setVisibility(view.INVISIBLE);
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.4f);
 
                 if (bummerl.getAnzahlSpiele() % 3 == 1) {
                     Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
@@ -683,23 +684,25 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     gegnerischeKarte1 = new Karte(messageParts[1]);
                     spiel.Auspielen(gegnerischeKarte1, gegner1);
                     imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
+                    imageView_karteGegner1.setVisibility(View.VISIBLE);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + gegnerischeKarte1.toString() + ":1").getBytes());
                 } else {
                     gegnerischeKarte2 = new Karte(messageParts[1]);
                     spiel.Auspielen(gegnerischeKarte2, gegner2);
                     imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
+                    imageView_karteGegner2.setVisibility(View.VISIBLE);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + gegnerischeKarte2.toString() + ":2").getBytes());
                 }
                 break;
             case WEITER:
                 if (messageParts[1].equals("1")) {
-                    if(!(gegner2.equals(spiel.getSpieler())))
+                    if(gegnerischeKarte2 == null)
                         gegner2hat20er();
                     else
                         zugEnde();
                 }
                 if (messageParts[1].equals("2")) {
-                    if(!(selbst.equals(spiel.getSpieler()))) {
+                    if(eigeneKarte == null) {
                         handAktualisieren();
                         handKartenKlickbar();
                     }
@@ -1227,7 +1230,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         gespielteKarteEntfernen(i);
 
         //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
+
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
+        imageView_eigeneKarte.setVisibility(View.VISIBLE);
 
 
         if (gegnerischeKarte1 == null) {
@@ -1333,6 +1338,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     private static void handAktualisieren() {
         int handkartenAnz = selbst.Hand.size();
+
+        spiel.HandkartenSortieren(selbst);
         for (int i = 0; i < 6; i++) {
             //Button buttonK = handkartenButtons.get(i);
             ImageView imageViewK = handkartenImages.get(i);
@@ -1358,6 +1365,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         String gegnerischeHand1 = "";
         String gegKartenSpielBar1 = "";
         int gegnerischeHandkartenAnz1 = gegner1.Hand.size();
+
+        spiel.HandkartenSortieren(gegner1);
         
         for (int i=0;i<gegnerischeHandkartenAnz1;i++) {
             gegnerischeHand1 += ","+gegner1.Hand.get(i).toString();
@@ -1372,6 +1381,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         String gegnerischeHand2 = "";
         String gegKartenSpielBar2 = "";
         int gegnerischeHandkartenAnz2 = gegner2.Hand.size();
+
+        spiel.HandkartenSortieren(gegner2);
 
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
             gegnerischeHand2 += ","+gegner2.Hand.get(i).toString();
@@ -1509,6 +1520,18 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         }else
             Toast.makeText(appContext,"Verloren!",Toast.LENGTH_SHORT);
 
+        eigeneKarte = null;
+        gegnerischeKarte1 = null;
+        gegnerischeKarte2 = null;
+        imageView_karteGegner1.setImageDrawable(null); // Ansicht der Karten wird für nächstes Spiel gelöscht
+        imageView_karteGegner2.setImageDrawable(null);
+        imageView_eigeneKarte.setImageDrawable(null);
+
+        BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS1()));
+        BpunkteGegner1.setText(Integer.toString(bummerl.getPunkteS2()));
+        BpunkteGegner2.setText(Integer.toString(bummerl.getPunkteS3()));
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
+
         if(Sieger.contains(gegner1))
             sieger = sieger + ":2";
         if(Sieger.contains(gegner2))
@@ -1516,7 +1539,17 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
 
-        spielStart();
+
+        if (bummerl.istBummerlzuEnde()) {
+            if (bummerl.getPunkteS1() >= 24)
+                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " gewonnen!", Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " verloren!", Toast.LENGTH_LONG).show();
+
+            spielStart();
+            bummerl = new Bummerl3();
+        } else
+            spielStart();
         
     }
     private void aufdrehen(){

@@ -505,12 +505,17 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         String message = new String(payload);
         String[] messageParts = message.split(":");
         switch ((message.split(":")[0])) {
-            case BUMMERL: bummerl = new Bummerl3(message.substring(2));
+            case BUMMERL:
+                bummerl = new Bummerl3(message.substring(2));
                 break;
             case TRUMPFANSAGEN:
-                buttonWeiter.setText("Aufdecken");
-                buttonTrumpfansagen.setEnabled(true);
-                buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                if(messageParts[1].equals(SpielerID)) {
+                    buttonWeiter.setText("Aufdecken");
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                    buttonTrumpfansagen.setEnabled(true);
+                    buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                }
                 break;
             case TRUMPFKARTE:
                 trumpfkarte = new Karte(message.split(":")[1]);
@@ -525,7 +530,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }, 2000);
                 break;
             case HANDKARTEN:
-                if(messageParts[3].equals(SpielerID)) {
+                if (messageParts[3].equals(SpielerID)) {
                     String[] hand = messageParts[1].substring(1).split(",");
                     String[] spielbar = messageParts[2].substring(1).split(" ");
                     selbst.Hand = new ArrayList<Karte>();
@@ -538,36 +543,34 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }
                 break;
             case KARTEGESPIELT:
-                if(SpielerID.equals("1")) {
-                    if(messageParts[2].equals("2")) {
+                if (SpielerID.equals("1")) {
+                    if (messageParts[2].equals("2")) {
                         gegnerischeKarte1 = new Karte(messageParts[1]);
                         imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
-                    }
-                    else if(messageParts[2].equals("0")) {
+                    } else if (messageParts[2].equals("0")) {
                         gegnerischeKarte2 = new Karte(messageParts[1]);
                         imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
-                }
-                else if(SpielerID.equals("2")) {
-                    if(messageParts[2].equals("0")) {
+                } else if (SpielerID.equals("2")) {
+                    if (messageParts[2].equals("0")) {
                         gegnerischeKarte1 = new Karte(messageParts[1]);
                         imageView_karteGegner1.setVisibility(View.VISIBLE);
                         imageView_karteGegner1.setImageResource(gegnerischeKarte1.getImageResourceId());
-                    }
-                    else if(messageParts[2].equals("1")) {
+                    } else if (messageParts[2].equals("1")) {
                         gegnerischeKarte2 = new Karte(messageParts[1]);
                         imageView_karteGegner2.setVisibility(View.VISIBLE);
                         imageView_karteGegner2.setImageResource(gegnerischeKarte2.getImageResourceId());
                     }
                 }
                 break;
-            case TRUMPFFARBE: angesagteFarbe = messageParts[1];
+            case TRUMPFFARBE:
+                angesagteFarbe = messageParts[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(angesagteFarbe));
                 break;
             case WEITER:
-                if(messageParts[1].equals(SpielerID)) {
+                if (messageParts[1].equals(SpielerID)) {
                     handKartenKlickbar();
                     if (messageParts[2].equals("1")) {
                         hat20er = messageParts[3].equals("1") ? true : false;
@@ -588,7 +591,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
                 break;
             case SPIELANSAGEN:
-                if(messageParts[2].equals(SpielerID)) {
+                if (messageParts[2].equals(SpielerID)) {
                     spieleAnsagbar = new ArrayList<String>();
                     for (String ansagbar : messageParts[1].split(" ")) {
                         spieleAnsagbar.add(ansagbar);
@@ -602,13 +605,15 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             case SPIEL:
                 Toast.makeText(appContext, messageParts[1] + " wird gespielt", Toast.LENGTH_SHORT).show();
                 break;
-            case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
+            case ANGESAGT40ER:
+                Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case ANGESAGT20ER: String farbe = message.substring(2);
-                Toast.makeText(appContext, farbe+" 20er angesagt", Toast.LENGTH_SHORT).show();
+            case ANGESAGT20ER:
+                String farbe = message.substring(2);
+                Toast.makeText(appContext, farbe + " 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TALONTAUSCHEN:
-                if(messageParts[2].equals(SpielerID)){
+                if (messageParts[2].equals(SpielerID)) {
                     talontauschen = true;
                     talonID = "0";
                     Talon = new ArrayList<Karte>(2);
@@ -640,7 +645,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                     buttonWeiter.setAlpha(1f);
                 }
                 break;
-            case TALONGETAUSCHT: Toast.makeText(appContext, "Talonkarte ausgetauscht", Toast.LENGTH_SHORT).show();
+            case TALONGETAUSCHT:
+                Toast.makeText(appContext, "Talonkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGENDE:
                 handler.postDelayed(new Runnable() {
@@ -663,9 +669,25 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 punkteAktualisieren();
                 break;
             case SPIELENDE:
-
+                if (messageParts.length == 2) {
+                    if(messageParts[1].equals(SpielerID) || messageParts[2].equals(SpielerID)){
+                        Toast.makeText(appContext,"Gewonnen!",Toast.LENGTH_SHORT);
+                    }
+                    else{
+                        Toast.makeText(appContext,"Verloren!",Toast.LENGTH_SHORT);
+                    }
+                } else {
+                    if(messageParts[1].equals(SpielerID)){
+                        Toast.makeText(appContext,"Gewonnen!",Toast.LENGTH_SHORT);
+                    }
+                    else{
+                        Toast.makeText(appContext,"Verloren!",Toast.LENGTH_SHORT);
+                    }
+                }
+                spielEnde();
                 break;
-            case DISCONNECT: Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
+            case DISCONNECT:
+                Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
                 // Execute some code after 2 seconds have passed
                 Handler handler2 = new Handler();
                 handler2.postDelayed(new Runnable() {
@@ -675,7 +697,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                     }
                 }, 2000);
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -1046,8 +1069,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             imageView_talonkarte2.setImageResource(t.getImageResourceId());
             imageView_talonkarte2.setAlpha(0.6f);
 
-            Talon.set(1,t);
-            selbst.Hand.set(0,ka);
+            Talon.set(1, t);
+            selbst.Hand.set(0, ka);
             talonID = "0";
         } else if (talonID.equals("22")) {
             ka = Talon.get(1);
@@ -1237,15 +1260,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
-    private void spielEnde(boolean win) {
-
-
-        if (win) {
-            Toast.makeText(appContext, "Gewonnen! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(appContext, "Verloren! Gegner:" + p2 + " Punkte" , Toast.LENGTH_LONG).show();
-        }
+    private void spielEnde() {
 
         BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS2()));
         BpunkteGegner1.setText(Integer.toString(bummerl.getPunkteS1()));
@@ -1256,20 +1271,27 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         imageView_karteGegner2.setImageDrawable(null);
         imageView_eigeneKarte.setImageDrawable(null);
 
+        eigeneKarte = null;
         gegnerischeKarte1 = null;
         gegnerischeKarte2 = null;
 
-        if(bummerl.istBummerlzuEnde()) {
-            if(bummerl.getPunkteS2() >= 24)
-                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS1() + " gewonnen!" , Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS1() + " verloren!" , Toast.LENGTH_LONG).show();
+        if (bummerl.istBummerlzuEnde()) {
+            if (bummerl.getPunkteS2() >= 24 && SpielerID.equals(2))
+                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + ":" + bummerl.getPunkteS1() + " gewonnen!", Toast.LENGTH_LONG).show();
+            else if (bummerl.getPunkteS3() >= 24 && SpielerID.equals(3))
+                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS3() + ":" + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + " gewonnen!", Toast.LENGTH_LONG).show();
+            else {
+                if (SpielerID.equals(2))
+                    Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + ":" + bummerl.getPunkteS1() + " verloren!", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS3() + ":" + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + " verloren!", Toast.LENGTH_LONG).show();
 
+            }
 
             spielStart();
-        }
-        //else
-            //internspielStart();
+            bummerl = new Bummerl3();
+        } else
+            spielStart();
 
     }
 

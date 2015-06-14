@@ -334,6 +334,10 @@ public class Spiel3 {
         Collections.sort(s3.Hand,new KartenKomparator());
     }
 
+    public void HandkartenSortieren(Spieler s){
+        Collections.sort(s.Hand,new KartenKomparator());
+    }
+
     private void KartenMischen()
     {
         stapel = new ArrayList<Karte>(20);
@@ -499,6 +503,9 @@ public class Spiel3 {
             s3.setMerkePunkte(0);
             s3.setAngesagt20er(false);
         }
+
+
+        hoechstekarteamTisch = null;
 
     }
 
