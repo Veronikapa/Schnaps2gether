@@ -45,8 +45,8 @@ public class NearbyConnectionService extends Service implements
     private static final String CLIENT3 = "18";
     private static final String CLIENT4 = "19";
 
-    private boolean isc1;
-    private boolean isc2;
+    public boolean isc1;
+    public boolean isc2;
 
     private int spielTyp;
     private String spielerName;

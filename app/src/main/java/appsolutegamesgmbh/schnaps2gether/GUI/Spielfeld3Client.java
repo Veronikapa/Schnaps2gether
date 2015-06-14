@@ -2,10 +2,13 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +29,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Bummerl3;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
+import appsolutegamesgmbh.schnaps2gether.Services.NearbyConnectionService;
 
 /**
  * Created by Kerstin on 23.05.2015.
@@ -35,7 +39,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         GoogleApiClient.OnConnectionFailedListener,
         Connections.ConnectionRequestListener,
         Connections.MessageListener,
-        Connections.EndpointDiscoveryListener {
+        Connections.EndpointDiscoveryListener,
+        Spielfeld{
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
@@ -56,10 +61,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String SPIEL = "15";
     private static final String AUFGEDECKT = "16";
 
-    // Identify if the device is the host
-    private boolean mIsHost = false;
-    private static GoogleApiClient mGoogleApiClient;
     private static ArrayList<String> endpointIDs;
+    NearbyConnectionService mService;
+    boolean mBound = false;
 
     private static Context appContext;
 
@@ -154,23 +158,12 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static ImageView stichK16;
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielfeld3);
 
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        mGoogleApiClient = Lobby.m_GoogleApiClient;
-        endpointIDs = Lobby.endpointIds;
 
 
         appContext = this.getApplicationContext();
@@ -236,6 +229,29 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to NearbyConnectionService
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mService.setSpielfeld(this);
+        endpointIDs = mService.getEndpointIds();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+        // Stop the service
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        stopService(intent);
+    }
+
     private void spielStart() {
 
         selbst = new Spieler();
@@ -267,9 +283,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         buttonsNichtKlickbar();
 
 
-        if(Lobby.isc1)
+        if(mService.isc1)
             SpielerID = "1";
-        else if(Lobby.isc2)
+        else if(mService.isc2)
             SpielerID = "2";
 
 
@@ -346,16 +362,16 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER+":"+"Herz").getBytes());
                 break;
             case R.id.karo_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER+":"+"Karo").getBytes());
                 break;
             case R.id.pik_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER+":"+"Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER+":"+"Kreuz").getBytes());
                 break;
             default:
                 return false;
@@ -578,21 +594,21 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         }*/
 
         if (buttonWeiter.getText() == "Aufdecken"){
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (AUFGEDECKT).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (AUFGEDECKT).getBytes());
         }
     }
 
     private void zugAusführen(int i) {
         eigeneKarte = selbst.Hand.get(i);
         buttonsNichtKlickbar();
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + eigeneKarte.toString() + ":" + SpielerID).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + eigeneKarte.toString() + ":" + SpielerID).getBytes());
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
 
         //buttonEigeneKarte.setText(k.getFarbe() + k.getWertigkeit());
         /*if (gegnerischeKarte == null) {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER+":"+0).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (WEITER+":"+0).getBytes());
         }*/
     }
 
@@ -716,5 +732,23 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             eigeneKarte = null;
         }
     }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to NearbyConnectionService, cast the IBinder and get NearbyConnectionService instance
+            NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
 }

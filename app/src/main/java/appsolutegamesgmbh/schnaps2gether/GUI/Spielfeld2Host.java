@@ -2,10 +2,13 @@ package appsolutegamesgmbh.schnaps2gether.GUI;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,6 +30,7 @@ import appsolutegamesgmbh.schnaps2gether.DataStructure.Karte;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spiel2;
 import appsolutegamesgmbh.schnaps2gether.DataStructure.Spieler;
 import appsolutegamesgmbh.schnaps2gether.R;
+import appsolutegamesgmbh.schnaps2gether.Services.NearbyConnectionService;
 
 /**
  * Created by kirederf on 06.05.15.
@@ -36,7 +40,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         GoogleApiClient.OnConnectionFailedListener,
         Connections.ConnectionRequestListener,
         Connections.MessageListener,
-        Connections.EndpointDiscoveryListener {
+        Connections.EndpointDiscoveryListener,
+        Spielfeld {
 
     //Konstanten für das Kennzeichnen und Parsen von Nachrichten
     private static final String KARTEGESPIELT = "0";
@@ -54,10 +59,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String DISCONNECT = "12";
     private static final String STAPELLEER = "13";
 
-    // Identify if the device is the host
-    private boolean mIsHost = true;
-    private static GoogleApiClient mGoogleApiClient;
     private static ArrayList<String> endpointIDs;
+    NearbyConnectionService mService;
+    boolean mBound = false;
 
     private static Context appContext;
 
@@ -126,22 +130,6 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
     private static Bummerl2 bummerl;
     private static Boolean angesagt;
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-
-        //Wenn Activity gestartet wird muss eine Verbindung zum GoogleApiClient erfolgen.
-        mGoogleApiClient.connect();
-    }*/
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,16 +138,12 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         //Screen Lock deaktivieren
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        mGoogleApiClient = Lobby.m_GoogleApiClient;
-        endpointIDs = Lobby.endpointIds;
-        endpointIDs.remove(Nearby.Connections.getLocalEndpointId(mGoogleApiClient));
-
         appContext = this.getApplicationContext();
 
         angesagt = false;
 
         bummerl = new Bummerl2();
-        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
+        //mService.delegateSendReliableMessage(endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
 
         stichK1= (ImageView) findViewById(R.id.stichK1);
         stichK2= (ImageView) findViewById(R.id.stichK2);
@@ -216,12 +200,35 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to NearbyConnectionService
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mService.setSpielfeld(this);
+        endpointIDs = mService.getEndpointIds();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+        // Stop the service
+        Intent intent = new Intent(this, NearbyConnectionService.class);
+        stopService(intent);
+    }
+
     private void zugAusführen(int i) {
         final Karte k = selbst.Hand.get(i);
         eigeneKarte = k;
         buttonsNichtKlickbar();
         spiel.Auspielen(k, selbst);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (KARTEGESPIELT + ":" + k.toString()).getBytes());
         gespielteKarteEntfernen(i);
 
         imageView_eigeneKarte.setImageResource(k.getImageResourceId());
@@ -331,7 +338,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         else
             istdran = 0;
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE + ":" + GestochenS2 + " " + GestochenS1 + " " + istdran).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (ZUGENDE + ":" + GestochenS2 + " " + GestochenS1 + " " + istdran).getBytes());
         // Execute some code after 2 seconds have passed
         Handler handler = new Handler();
         handler.postDelayed(new Zugende(), 2000);
@@ -400,14 +407,14 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             gegKartenSpielBar += " "+(spiel.DarfKarteAuswaehlen(eigeneKarte, gegner.Hand.get(i), gegner) ? 1 : 0);
         }
         int stapelKartenAnz = spiel.AnzahlKartenStapel() == 0 ? 0 : spiel.AnzahlKartenStapel()+1;
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN + ":" + stapelKartenAnz + ":" + gegnerischeHand + ":" + gegKartenSpielBar).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (HANDKARTEN + ":" + stapelKartenAnz + ":" + gegnerischeHand + ":" + gegKartenSpielBar).getBytes());
     }
 
     private void punkteAktualisieren() {
         int p1 = selbst.getPunkte();
         int p2 = gegner.getPunkte();
         punkteSelbst.setText(Integer.toString(p1));
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2)).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (PUNKTE + ":" + Integer.toString(p1) + " " + Integer.toString(p2)).getBytes());
     }
 
     private void gespielteKarteEntfernen(int i) {
@@ -436,10 +443,10 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             for (String farbe : geg20er) {
                 hastDie20er += " " + farbe;
             }
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (WEITER + ":" + 1 + " " + hast20er + " " + hast40er + hastDie20er).getBytes());
         }
         else
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (WEITER + ":" + 0).getBytes());
+            mService.delegateSendReliableMessage(endpointIDs, (WEITER + ":" + 0).getBytes());
 
 
     }
@@ -473,7 +480,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                 stichEigeneKarteG.setVisibility(View.INVISIBLE);
                 stichGegnerKarteG.setVisibility(View.INVISIBLE);
 
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
                 stichK16.setVisibility(View.INVISIBLE);
                 stichK15.setVisibility(View.INVISIBLE);
@@ -529,7 +536,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         //imageView_deck = (ImageView) findViewById(R.id.imageView_deck);
         imageView_trumpfIcon.setImageResource(trumpfkarte.getIconResourceId());
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
@@ -629,9 +636,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
         BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS1()));
         BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS2()));
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE + ":" + (win ? 0 : 1)).getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (SPIELENDE + ":" + (win ? 0 : 1)).getBytes());
 
         if(bummerl.istBummerlzuEnde()) {
             if(bummerl.getPunkteS1() >= 7)
@@ -670,7 +677,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_trumpf.setAlpha((float) 0);
 
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (ZUGEDREHT + ":").getBytes());
     }
 
     public void popup20er(View view) {
@@ -709,7 +716,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void ansagen40er(View view) {
         spiel.Ansagen20er(spiel.getTrumpf(), selbst);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT40ER + ":").getBytes());
         if (spiel.istSpielzuEnde(bummerl)) spielEnde();
         punkteAktualisieren();
         button40er.setEnabled(false);
@@ -731,7 +738,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         handAktualisieren();
         buttonTrumpfTauschen.setEnabled(false);
         buttonTrumpfTauschen.setAlpha(0.4f);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFGETAUSCHT + ":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (TRUMPFGETAUSCHT + ":").getBytes());
         eigenerZug();
     }
 
@@ -773,19 +780,19 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Herz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" +"Herz").getBytes());
                 break;
             case R.id.karo_20er:
                 spiel.Ansagen20er("Karo", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Karo").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" +"Karo").getBytes());
                 break;
             case R.id.pik_20er:
                 spiel.Ansagen20er("Pik", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Pik").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" +"Pik").getBytes());
                 break;
             case R.id.kreuz_20er:
                 spiel.Ansagen20er("Kreuz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Kreuz").getBytes());
+                mService.delegateSendReliableMessage(endpointIDs, (ANGESAGT20ER + ":" +"Kreuz").getBytes());
                 break;
             default:
                 return false;
@@ -877,7 +884,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
     @Override
     public void onDisconnected(String s) {
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (DISCONNECT+":").getBytes());
+        mService.delegateSendReliableMessage(endpointIDs, (DISCONNECT+":").getBytes());
         Toast.makeText(appContext, "Verbindungsverlust eines Spielers - Das Spiel wird beendet...", Toast.LENGTH_SHORT).show();
         // Execute some code after 2 seconds have passed
         Handler handler2 = new Handler();
@@ -942,7 +949,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     //buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
                     imageView_deck.setAlpha((float) 0);
                     imageView_trumpf.setAlpha((float)0);
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (STAPELLEER + ":" + 0).getBytes());
+                    mService.delegateSendReliableMessage(endpointIDs, (STAPELLEER + ":" + 0).getBytes());
                 }
                 if (selbst.isIstdran()) {
                     eigenerZug();
@@ -953,4 +960,22 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             }
         }
     }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to NearbyConnectionService, cast the IBinder and get NearbyConnectionService instance
+            NearbyConnectionService.NearbyConnectionBinder binder = (NearbyConnectionService.NearbyConnectionBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
