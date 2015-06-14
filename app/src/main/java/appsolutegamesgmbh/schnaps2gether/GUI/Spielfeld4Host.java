@@ -58,6 +58,7 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static final String AUFDREHEN = "13";
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
+    private static final String NAMENGEGNER = "16";
 
     //Konstanten fuer Spielernummern
     private static final int SPIELER1 = 0;
@@ -140,6 +141,15 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
     private static int anzFleckZüge;*/
     private static Spielfeld4Logik spielfeldlogik;
 
+    private static TextView txt_Gegner1Name;
+    private static TextView txt_BummerlNameGegner1;
+    private static TextView txt_Gegner2Name;
+    private static TextView txt_BummerlNameGegner2;
+    private static TextView txt_Gegner3Name;
+    private static TextView txt_BummerlNameGegner3;
+    private static TextView txt_BummerlMeinName;
+    private static ArrayList<String> spielerNamen;
+
     @Override
     public void onStop() {
         super.onStop();
@@ -211,6 +221,17 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
 
+
+        txt_Gegner1Name = (TextView) findViewById(R.id.txt_NameG3);
+        txt_Gegner2Name = (TextView) findViewById(R.id.txt_NameG2);
+        txt_Gegner3Name = (TextView) findViewById(R.id.txt_NameG1);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner1 = (TextView) findViewById(R.id.txt_BummerlNameG3);
+        txt_BummerlNameGegner2 = (TextView) findViewById(R.id.txt_BummerlNameG2);
+        txt_BummerlNameGegner3 = (TextView) findViewById(R.id.txt_BummerlNameG1);
+
+        spielerNamen = new ArrayList<String>();
+        spielerNamen.add(Startmenue.SpielerName);
 
         spielRundenStart();
     }
@@ -361,6 +382,13 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, mitspielerID, (TRUMPFANSAGEN + ":").getBytes());
                 } else if (spielfeldlogik.getAmZugSpielerNr() == SPIELER4) {
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, gegner2ID, (TRUMPFANSAGEN + ":").getBytes());
+                }
+
+                //TODO Kerstin: Bitte testen ob das funktioniert!
+                //Namen der Spieler an Clients weitergeben
+                if(spielerNamen.size()==3)
+                {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":"+spielerNamen.get(0)+":"+spielerNamen.get(1)+":"+spielerNamen.get(2)+ ":" + spielerNamen.get(3)).getBytes());
                 }
             }
         }, 2000);
@@ -824,6 +852,23 @@ public class Spielfeld4Host extends Activity implements PopupMenu.OnMenuItemClic
                     } else {
                         weiterNachricht(null, endpointIDs);
                     }
+                }
+                break;
+
+            case NAMENGEGNER:
+                String nameGegner = message.split(":")[1];
+
+                spielerNamen.add(nameGegner);
+
+                if(spielerNamen.size()==4)
+                {
+                    txt_Gegner1Name.setText(spielerNamen.get(1));
+                    txt_Gegner2Name.setText(spielerNamen.get(2));
+                    txt_Gegner3Name.setText(spielerNamen.get(3));
+                    txt_BummerlMeinName.setText(spielerNamen.get(0));
+                    txt_BummerlNameGegner1.setText(spielerNamen.get(1));
+                    txt_BummerlNameGegner2.setText(spielerNamen.get(2));
+                    txt_BummerlNameGegner3.setText(spielerNamen.get(3));
                 }
                 break;
             default: break;

@@ -57,6 +57,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String AUFGEDECKT = "16";
     private static final String SPIELANSAGEN = "17";
     private static final String TALONTAUSCHEN = "18";
+    private static final String NAMENGEGNER = "19";
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -128,6 +129,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static int siegerID;
     private static String spieleAnsagbar;
 
+    private static TextView txt_Gegner1Name;
+    private static TextView txt_BummerlNameGegner1;
+    private static TextView txt_Gegner2Name;
+    private static TextView txt_BummerlNameGegner2;
+    private static TextView txt_BummerlMeinName;
 
     private static ImageView stichK1;
     private static ImageView stichK2;
@@ -151,6 +157,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static String[] messageParts;
     private static ArrayList<Spieler> Sieger;
     private static String sieger;
+
+    private static ArrayList<String> spielerNamen;
 
 
     @Override
@@ -243,7 +251,14 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         BpunkteGegner1 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
         BpunkteGegner2 = (TextView) findViewById(R.id.BummerlZahlG2);
 
+        txt_Gegner1Name = (TextView) findViewById(R.id.txt_NameGegner2);
+        txt_Gegner2Name = (TextView) findViewById(R.id.txt_NameGegner1);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner1 = (TextView) findViewById(R.id.txt_BummerlNameG1);
+        txt_BummerlNameGegner2 = (TextView) findViewById(R.id.txt_BummerlNameG2);
 
+        spielerNamen = new ArrayList<String>();
+        spielerNamen.add(Startmenue.SpielerName);
         spielStart();
 
     }
@@ -263,9 +278,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         gegner1 = spiel.getS2();
         gegner2 = spiel.getS3();
         trumpf = "";
-
-
-        //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE + ":" + trumpfkarte.toString()).getBytes());
 
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
@@ -324,6 +336,12 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             }
         }, 2000);
 
+        //TODO Kerstin: Bitte testen ob das funktioniert!
+        //Namen der Spieler an Clients weitergeben
+        if(spielerNamen.size()==3)
+        {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":"+spielerNamen.get(0)+":"+spielerNamen.get(1)+":"+spielerNamen.get(2)).getBytes());
+        }
     }
 
     public void popup20er(View view) {
@@ -808,6 +826,20 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case AUFGEDECKT:
                 aufdrehen();
+                break;
+            case NAMENGEGNER:
+                String nameGegner = message.split(":")[1];
+
+                spielerNamen.add(nameGegner);
+
+                if(spielerNamen.size()==3)
+                {
+                    txt_Gegner1Name.setText(spielerNamen.get(1));
+                    txt_Gegner2Name.setText(spielerNamen.get(2));
+                    txt_BummerlMeinName.setText(spielerNamen.get(0));
+                    txt_BummerlNameGegner1.setText(spielerNamen.get(1));
+                    txt_BummerlNameGegner2.setText(spielerNamen.get(2));
+                }
                 break;
             default:
                 break;

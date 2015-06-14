@@ -49,6 +49,7 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static final String AUFDREHEN = "13";
     private static final String FLECKEN = "14";
     private static final String SPIEL = "15";
+    private static final String NAMENGEGNER = "16";
 
     //Konstanten für Spielernummern
     private static final int SPIELER1 = 0;
@@ -124,6 +125,14 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private static Boolean spielAngesagt;
     private static int spielerNummer;
 
+    private static TextView txt_Gegner1Name;
+    private static TextView txt_BummerlNameGegner1;
+    private static TextView txt_Gegner2Name;
+    private static TextView txt_BummerlNameGegner2;
+    private static TextView txt_Gegner3Name;
+    private static TextView txt_BummerlNameGegner3;
+    private static TextView txt_BummerlMeinName;
+
     /*@Override
     public void onStart() {
         super.onStart();
@@ -189,7 +198,6 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         imageView_karteGegner2 = (ImageView) findViewById(R.id.imageView_karteGegner2);
         imageView_trumpfIcon = (ImageView) findViewById(R.id.imageView_trumpfIcon);
 
-
         handkartenImages = new ArrayList<ImageView>();
         handkartenImages.add(0, imageView_karte1);
         handkartenImages.add(1, imageView_karte2);
@@ -197,6 +205,13 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
         handkartenImages.add(3, imageView_karte4);
         handkartenImages.add(4, imageView_karte5);
 
+        txt_Gegner1Name = (TextView) findViewById(R.id.txt_NameG3);
+        txt_Gegner2Name = (TextView) findViewById(R.id.txt_NameG2);
+        txt_Gegner3Name = (TextView) findViewById(R.id.txt_NameG1);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner1 = (TextView) findViewById(R.id.txt_BummerlNameG3);
+        txt_BummerlNameGegner2 = (TextView) findViewById(R.id.txt_BummerlNameG2);
+        txt_BummerlNameGegner3 = (TextView) findViewById(R.id.txt_BummerlNameG1);
 
         spielStart();
     }
@@ -257,6 +272,9 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
     private void spielStart() {
 
         selbst = new Spieler();
+
+        //Name an Host senden
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + Startmenue.SpielerName).getBytes());
 
         zugedreht = true;
         angesagteFarbe = null;
@@ -685,6 +703,56 @@ public class Spielfeld4Client extends Activity implements PopupMenu.OnMenuItemCl
                     buttonFlecken.setVisibility(View.VISIBLE);
                     buttonWeiter.setVisibility(View.VISIBLE);
                 }
+                break;
+            case NAMENGEGNER:
+                messageParts = message.split(":");
+                String nameHost = messageParts[1];
+                String nameGegner1 = messageParts[2];
+                String nameGegner2 = messageParts[3];
+
+                //nameGegner1 = mein eigener Name --> ich bin Spieler 2
+                if(nameGegner1 == Startmenue.SpielerName)
+                {
+                    nameGegner1 = messageParts[3];
+                    nameGegner2 = messageParts[4];
+
+                    txt_Gegner1Name.setText(nameGegner1);
+                    txt_Gegner2Name.setText(nameGegner2);
+                    txt_Gegner3Name.setText(nameHost);
+                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                    txt_BummerlNameGegner1.setText(nameGegner1);
+                    txt_BummerlNameGegner2.setText(nameGegner2);
+                    txt_BummerlNameGegner3.setText(nameHost);
+                }
+
+                //nameGegner1 = mein eigener Name --> ich bin Spieler 3
+                else if(nameGegner2 == Startmenue.SpielerName)
+                {
+                    nameGegner2 = messageParts[4];
+
+                    txt_Gegner1Name.setText(nameGegner2);
+                    txt_Gegner2Name.setText(nameHost);
+                    txt_Gegner3Name.setText(nameGegner1);
+                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                    txt_BummerlNameGegner1.setText(nameGegner2);
+                    txt_BummerlNameGegner2.setText(nameHost);
+                    txt_BummerlNameGegner3.setText(nameGegner1);
+                }
+
+                //ich bin Spieler 4
+                else
+                {
+                    nameGegner2 = messageParts[4];
+
+                    txt_Gegner1Name.setText(nameHost);
+                    txt_Gegner2Name.setText(nameGegner1);
+                    txt_Gegner3Name.setText(nameGegner2);
+                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                    txt_BummerlNameGegner1.setText(nameHost);
+                    txt_BummerlNameGegner2.setText(nameGegner1);
+                    txt_BummerlNameGegner3.setText(nameGegner2);
+                }
+
                 break;
             default: break;
         }
