@@ -708,10 +708,6 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                     }
                 }, 2000);
                 break;
-<<<<<<< HEAD
-            default:
-                break;
-=======
             case NAMENGEGNER:
 
                 String nameHost = messageParts[1];
@@ -740,7 +736,6 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
                 break;
             default: break;
->>>>>>> origin/master
         }
     }
 
