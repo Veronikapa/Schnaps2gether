@@ -642,6 +642,7 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         selbst = spiel.getS1();
         gegner = spiel.getS2();
 
+        spiel.ZudrehenAufheben();
 
         imageView_deck.setAlpha((float)1);
         imageView_deck.setImageResource(R.drawable.deck_5);

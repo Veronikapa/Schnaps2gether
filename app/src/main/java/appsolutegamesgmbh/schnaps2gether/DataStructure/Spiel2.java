@@ -951,6 +951,11 @@ public class Spiel2 {
         zugedreht = true;
     }
 
+    public void ZudrehenAufheben()
+    {
+        zugedreht = false;
+    }
+
     public Karte TrumpfkarteAustauschen(Karte karte, Spieler s)
     {
         if(karte.getFarbe().equals(trumpf) && karte.getWertigkeit().equals("Bube"))

@@ -390,6 +390,8 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
 
         istdran = 0;
         pruefegestochenG = true;
+        spiel.ZudrehenAufheben();
+        buttonZudrehen.setText("Zugdrehen");
 
         handKartenKlickbar();
         buttonZudrehen.setVisibility(View.VISIBLE);
