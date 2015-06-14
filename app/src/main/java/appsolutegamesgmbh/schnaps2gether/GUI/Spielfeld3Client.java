@@ -58,7 +58,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static final String AUFGEDECKT = "16";
     private static final String SPIELANSAGEN = "17";
     private static final String TALONTAUSCHEN = "18";
-
+    private static final String NAMENGEGNER = "19";
 
     // Identify if the device is the host
     private boolean mIsHost = false;
@@ -66,8 +66,6 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static ArrayList<String> endpointIDs;
 
     private static Context appContext;
-
-
 
     private static ArrayList<Boolean> kartenSpielbar;
     private static ImageView imageView_karte1;
@@ -159,6 +157,11 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
     private static ImageView stichK15;
     private static ImageView stichK16;
 
+    private static TextView txt_Gegner1Name;
+    private static TextView txt_BummerlNameGegner1;
+    private static TextView txt_Gegner2Name;
+    private static TextView txt_BummerlNameGegner2;
+    private static TextView txt_BummerlMeinName;
 
     private static ArrayList<Karte> Talon;
     private static String talonID;
@@ -247,6 +250,12 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         BpunkteGegner1 = (TextView) findViewById(R.id.txt_BummerlZahlG1);
         BpunkteGegner2 = (TextView) findViewById(R.id.BummerlZahlG2);
 
+        txt_Gegner1Name = (TextView) findViewById(R.id.txt_NameGegner2);
+        txt_Gegner2Name = (TextView) findViewById(R.id.txt_NameGegner1);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner1 = (TextView) findViewById(R.id.txt_BummerlNameG1);
+        txt_BummerlNameGegner2 = (TextView) findViewById(R.id.txt_BummerlNameG2);
+
         spielStart();
 
     }
@@ -255,6 +264,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
+        //Name an Host senden
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + Startmenue.SpielerName).getBytes());
 
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
@@ -674,6 +685,33 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                         // finish();
                     }
                 }, 2000);
+                break;
+            case NAMENGEGNER:
+
+                String nameHost = messageParts[1];
+                String nameGegner = messageParts[2];
+
+                //nameGegner nicht mein eigener Name --> ich bin Spieler 3
+                if(nameGegner != Startmenue.SpielerName)
+                {
+                    txt_Gegner1Name.setText(nameHost);
+                    txt_Gegner2Name.setText(nameGegner);
+                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                    txt_BummerlNameGegner1.setText(nameHost);
+                    txt_BummerlNameGegner2.setText(nameGegner);
+                }
+
+                //nameGegner = mein eigener Name --> ich bin Spieler 2
+                else
+                {
+                    nameGegner = messageParts[3];
+                    txt_Gegner1Name.setText(nameGegner);
+                    txt_Gegner2Name.setText(nameHost);
+                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
+                    txt_BummerlNameGegner1.setText(nameGegner);
+                    txt_BummerlNameGegner2.setText(nameHost);
+                }
+
                 break;
             default: break;
         }
