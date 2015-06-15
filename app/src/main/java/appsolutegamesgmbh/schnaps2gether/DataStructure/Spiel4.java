@@ -405,7 +405,7 @@ public class Spiel4 {
                 return false;
             }
             //beim Land zählen keine Trumpf (alle restlichen Varianten mit Trumpf werden nicht mehr überprüft)
-            else if(spiel.getSpiel() == "Land")
+            else if(spiel.getSpiel().equals("Land"))
             {
                 return true;
             }
@@ -526,7 +526,7 @@ public class Spiel4 {
     public boolean istSpielzuEnde(Bummerl4 bummerl) {
         if(s1.Hand.size() == 5)
         {
-            if(spiel.getSpiel() == "Herrenjodler" || spiel.getSpiel() == "Farbenjodler")
+            if(spiel.getSpiel().equals("Herrenjodler") || spiel.getSpiel().equals("Farbenjodler"))
             {
                 if(spieler == s1 || spieler == s3) {
                     bummerl.setPunkteS1(bummerl.getPunkteS1() + spiel.getPunkte());
@@ -545,7 +545,7 @@ public class Spiel4 {
             return false;
         }
         else {
-            if (spiel.getSpiel() == "normal") {
+            if (spiel.getSpiel().equals("normal")) {
                 if (s1.getPunkte() + s3.getPunkte() >= 66) {
                     if (s2.getPunkte() + s4.getPunkte() >= 33) {
                         bummerl.setPunkteS1(bummerl.getPunkteS1() + 1 * flecken);
@@ -606,7 +606,7 @@ public class Spiel4 {
                     return false;
                 }
 
-            } else if (spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Kontraschnapser") {
+            } else if (spiel.getSpiel().equals("Schnapser") || spiel.getSpiel().equals("Kontraschnapser")) {
                 if (s1 == spieler || s3 == spieler) {
                     if (s2.isIstdran() || s4.isIstdran() || spieler.getMitspieler().isIstdran()) {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
@@ -648,7 +648,7 @@ public class Spiel4 {
 
                     return false;
                 }
-            } else if (spiel.getSpiel() == "Bauernschnapser" || spiel.getSpiel() == "Kontrabauernschnapser" || spiel.getSpiel() == "Land") {
+            } else if (spiel.getSpiel().equals("Bauernschnapser") || spiel.getSpiel().equals("Kontrabauernschnapser") || spiel.getSpiel().equals("Land")) {
                 if (s1 == spieler || s3 == spieler) {
                     if (s2.isIstdran() || s4.isIstdran() || spieler.getMitspieler().isIstdran()) {
                         bummerl.setPunkteS2(bummerl.getPunkteS2() + spiel.getPunkte());
@@ -690,21 +690,21 @@ public class Spiel4 {
 
     public boolean DarfSpielAnsagen(Rufspiel Spiel, Spieler s)
     {
-        if(Spiel.getSpiel() == "Schnapser" || Spiel.getSpiel() == "Bauernschnapser")
+        if(Spiel.getSpiel().equals("Schnapser") || Spiel.getSpiel().equals("Bauernschnapser"))
         {
             if(s == spieler)
                 return true;
             else
                 return false;
         }
-        else if(Spiel.getSpiel() == "Land" || Spiel.getSpiel() == "Kontraschnapser" || Spiel.getSpiel() == "Kontrabauernschnapser")
+        else if(Spiel.getSpiel().equals("Land") || Spiel.getSpiel().equals("Kontraschnapser") || Spiel.getSpiel().equals("Kontrabauernschnapser"))
         {
             if(Spiel.getPunkte() > spiel.getPunkte() && !(s==spieler))
                 return true;
             else
                 return false;
         }
-        else if(Spiel.getSpiel() == "Farbenjodler")
+        else if(Spiel.getSpiel().equals("Farbenjodler"))
         {
             ArrayList<String> f = new ArrayList<String>(4);
             f.add("Herz");
@@ -713,20 +713,20 @@ public class Spiel4 {
             f.add("Kreuz");
             f.remove(trumpf);
 
-            if(s.Hand.get(0).getFarbe() == f.get(0) && s.Hand.get(1).getFarbe() == f.get(0) && s.Hand.get(2).getFarbe() == f.get(0) && s.Hand.get(3).getFarbe() == f.get(0) && s.Hand.get(4).getFarbe() == f.get(0))
+            if(s.Hand.get(0).getFarbe().equals(f.get(0)) && s.Hand.get(1).getFarbe().equals(f.get(0)) && s.Hand.get(2).getFarbe().equals(f.get(0)) && s.Hand.get(3).getFarbe().equals(f.get(0)) && s.Hand.get(4).getFarbe().equals(f.get(0)))
                 return true;
-            if(s.Hand.get(0).getFarbe() == f.get(1) && s.Hand.get(1).getFarbe() == f.get(1) && s.Hand.get(2).getFarbe() == f.get(1) && s.Hand.get(3).getFarbe() == f.get(1) && s.Hand.get(4).getFarbe() == f.get(1))
+            if(s.Hand.get(0).getFarbe().equals(f.get(1)) && s.Hand.get(1).getFarbe().equals(f.get(1)) && s.Hand.get(2).getFarbe().equals(f.get(1)) && s.Hand.get(3).getFarbe().equals(f.get(1)) && s.Hand.get(4).getFarbe().equals(f.get(1)))
                 return true;
-            if(s.Hand.get(0).getFarbe() == f.get(2) && s.Hand.get(1).getFarbe() == f.get(2) && s.Hand.get(2).getFarbe() == f.get(2) && s.Hand.get(3).getFarbe() == f.get(2) && s.Hand.get(4).getFarbe() == f.get(2))
+            if(s.Hand.get(0).getFarbe().equals(f.get(2)) && s.Hand.get(1).getFarbe().equals(f.get(2)) && s.Hand.get(2).getFarbe().equals(f.get(2)) && s.Hand.get(3).getFarbe().equals(f.get(2)) && s.Hand.get(4).getFarbe().equals(f.get(2)))
                 return true;
-            if(s.Hand.get(0).getFarbe() == f.get(3) && s.Hand.get(1).getFarbe() == f.get(3) && s.Hand.get(2).getFarbe() == f.get(3) && s.Hand.get(3).getFarbe() == f.get(3) && s.Hand.get(4).getFarbe() == f.get(3))
+            if(s.Hand.get(0).getFarbe().equals(f.get(3)) && s.Hand.get(1).getFarbe().equals(f.get(3)) && s.Hand.get(2).getFarbe().equals(f.get(3)) && s.Hand.get(3).getFarbe().equals(f.get(3)) && s.Hand.get(4).getFarbe().equals(f.get(3)))
                 return true;
             else
                 return false;
 
         }
         else{
-            if(s.Hand.get(0).getFarbe() == trumpf && s.Hand.get(1).getFarbe() == trumpf && s.Hand.get(2).getFarbe() == trumpf && s.Hand.get(3).getFarbe() == trumpf && s.Hand.get(4).getFarbe() == trumpf)
+            if(s.Hand.get(0).getFarbe().equals(trumpf) && s.Hand.get(1).getFarbe().equals(trumpf) && s.Hand.get(2).getFarbe().equals(trumpf) && s.Hand.get(3).getFarbe().equals(trumpf) && s.Hand.get(4).getFarbe().equals(trumpf))
                 return true;
             else
                 return false;
@@ -739,7 +739,7 @@ public class Spiel4 {
     {
         spiel = Spiel;
         spieler = s;
-        if(spiel.getSpiel() == "Land" || spiel.getSpiel() == "Farbenjodler" || spiel.getSpiel() == "Herrenjodler")
+        if(spiel.getSpiel().equals("Land") || spiel.getSpiel().equals("Farbenjodler") || spiel.getSpiel().equals("Herrenjodler"))
         {
             if(s1 == s)
             {
@@ -766,7 +766,7 @@ public class Spiel4 {
     {
         ArrayList<String> h20er = new ArrayList<String>(4);
 
-        if(spiel.getSpiel() == "normal" || spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Bauernschnapser") {
+        if(spiel.getSpiel().equals("normal") || spiel.getSpiel().equals("Schnapser") || spiel.getSpiel().equals("Bauernschnapser")) {
             if (s.Hand.contains(new Karte("Herz", "Dame", 3)) && s.Hand.contains(new Karte("Herz", "König", 4)))
                 h20er.add("Herz");
             if (s.Hand.contains(new Karte("Pik", "Dame", 3)) && s.Hand.contains(new Karte("Pik", "König", 4)))

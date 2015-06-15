@@ -419,7 +419,7 @@ public class Spiel3 {
                 return false;
             }
             //beim Land zählen keine Trumpf (alle restlichen Varianten mit Trumpf werden nicht mehr überprüft)
-            else if(spiel.getSpiel() == "Land")
+            else if(spiel.getSpiel().equals("Land"))
             {
                 return true;
             }
@@ -510,7 +510,7 @@ public class Spiel3 {
     }
 
     public boolean istSpielzuEnde(Bummerl3 bummerl) {
-        if(spiel.getSpiel() == "normal") {
+        if(spiel.getSpiel().equals("normal")) {
             if (s1 == spieler) {
                 if (s1.getPunkte() >= 66) {
                     if (s2.getPunkte() + s3.getPunkte() >= 33)
@@ -701,7 +701,7 @@ public class Spiel3 {
                 return false;
             }
         }
-        else if(spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Kontraschnapser"){
+        else if(spiel.getSpiel().equals("Schnapser") || spiel.getSpiel().equals("Kontraschnapser")){
             if(s1 == spieler)
             {
                 if(s2.isIstdran() || s3.isIstdran())
@@ -810,7 +810,7 @@ public class Spiel3 {
                 return false;
             }
         }
-        else if(spiel.getSpiel() == "Bauernschnapser" || spiel.getSpiel() == "Kontrabauernschnapser" || spiel.getSpiel() == "Land"){
+        else if(spiel.getSpiel().equals("Bauernschnapser") || spiel.getSpiel().equals("Kontrabauernschnapser") || spiel.getSpiel().equals("Land")){
             if(s1 == spieler)
             {
                 if(s2.isIstdran() || s3.isIstdran())
@@ -893,14 +893,14 @@ public class Spiel3 {
 
     public boolean DarfSpielAnsagen(Rufspiel Spiel, Spieler s)
     {
-        if(Spiel.getSpiel() == "Schnapser" || Spiel.getSpiel() == "Bauernschnapser")
+        if(Spiel.getSpiel().equals("Schnapser") || Spiel.getSpiel().equals("Bauernschnapser"))
         {
             if(s == spieler)
                 return true;
             else
                 return false;
         }
-        else if(Spiel.getSpiel() == "Land" || Spiel.getSpiel() == "Kontraschnapser" || Spiel.getSpiel() == "Kontrabauernschnapser")
+        else if(Spiel.getSpiel().equals("Land") || Spiel.getSpiel().equals("Kontraschnapser") || Spiel.getSpiel().equals("Kontrabauernschnapser"))
         {
             if(Spiel.getPunkte() > spiel.getPunkte())
                 return true;
@@ -981,7 +981,7 @@ public class Spiel3 {
     {
         ArrayList<String> h20er = new ArrayList<String>(4);
 
-        if(spiel.getSpiel() == "normal" || spiel.getSpiel() == "Schnapser" || spiel.getSpiel() == "Bauernschnapser") {
+        if(spiel.getSpiel().equals("normal") || spiel.getSpiel().equals("Schnapser") || spiel.getSpiel().equals("Bauernschnapser")) {
             if (s.Hand.contains(new Karte("Herz", "Dame", 3)) && s.Hand.contains(new Karte("Herz", "König", 4)))
                 h20er.add("Herz");
             if (s.Hand.contains(new Karte("Pik", "Dame", 3)) && s.Hand.contains(new Karte("Pik", "König", 4)))

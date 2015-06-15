@@ -58,6 +58,13 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static final String SPIELANSAGEN = "17";
     private static final String TALONTAUSCHEN = "18";
     private static final String NAMENGEGNER = "19";
+    private static final String GEGENFLECKEN = "20";
+    private static final String GEGENGEFLECKT = "21";
+    private static final String GEFLECKT = "22";
+    private static final String NICHTGEFLECKT = "23";
+    private static final String NICHTGEGENGEFLECKT = "24";
+
+
 
     // Identify if the device is the host
     private boolean mIsHost = true;
@@ -110,6 +117,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static ImageView imageView_talonkarte1;
     private static ImageView imageView_talonkarte2;
     private static boolean talontauschen;
+    private static boolean flecken;
+    private static boolean gegenflecken;
+    private static boolean nichtgefleckt;
     private static String talonID;
 
     private static ImageView imageView_Stich1;
@@ -124,7 +134,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static TextView txtGegner1;
     private static TextView txtGegner2;
     private static Bummerl3 bummerl;
-    private static Boolean angesagt;
+    //private static Boolean angesagt;
     private static String trumpf;
     private static int siegerID;
     private static String spieleAnsagbar;
@@ -157,8 +167,16 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     private static String[] messageParts;
     private static ArrayList<Spieler> Sieger;
     private static String sieger;
+    String[] hand;
 
     private static ArrayList<String> spielerNamen;
+
+    private static int GestochenS1;
+    private static int GestochenS2;
+    private static int GestochenS3;
+
+    private static int istdranG1;
+    private static int istdranG2;
 
 
     @Override
@@ -183,7 +201,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
         appContext = this.getApplicationContext();
 
-        angesagt = false;
+        //angesagt = false;
 
         bummerl = new Bummerl3();
         //Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL+":"+bummerl.toString()).getBytes());
@@ -264,6 +282,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     }
 
     private void spielStart() {
+
+        talontauschen = false;
+        flecken = false;
+        gegenflecken = false;
+        nichtgefleckt = false;
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -502,15 +525,14 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                    if (spiel.getSpieler().equals(selbst)) {
-                        talonzeigen();
-                        buttonWeiter.setEnabled(true);
-                        buttonWeiter.setAlpha(1f);
-                    } else if (spiel.getSpieler().equals(gegner1)) {
-                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                    } else {
-                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
-                    }
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            darfFlecken();
+
+                        }
+                    }, 1000);
+
                 } else {
                     andererSpielerKannSpielAnsagen(gegner1);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
@@ -543,6 +565,60 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         }
 
     }
+    public void darfFlecken(){
+        if (spiel.getSpieler().equals(selbst)) {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":1").getBytes());
+        } else if (spiel.getSpieler().equals(gegner1)) {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":2").getBytes());
+        } else {
+            flecken = true;
+            buttonFlecken.setVisibility(View.VISIBLE);
+            buttonFlecken.setEnabled(true);
+            buttonFlecken.setAlpha(1f);
+            buttonWeiter.setEnabled(true);
+            buttonWeiter.setAlpha(1f);
+        }
+    }
+
+    public void Flecken(View view) {
+        buttonFlecken.setVisibility(View.INVISIBLE);
+        buttonFlecken.setEnabled(false);
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEFLECKT + ":0").getBytes());
+        spiel.Flecken();
+
+        if (spiel.getSpieler().equals(gegner1))
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENFLECKEN + ":1").getBytes());
+        else
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENFLECKEN + ":2").getBytes());
+    }
+
+
+    public void Gegenflecken(View view) {
+        buttonGegenflecken.setVisibility(View.INVISIBLE);
+        buttonGegenflecken.setEnabled(false);
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENGEFLECKT + ":0").getBytes());
+        spiel.Flecken();
+
+        Talontauschen();
+
+
+    }
+
+
+
+    public void Talontauschen(){
+        if (spiel.getSpieler().equals(selbst)) {
+            talonzeigen();
+            buttonWeiter.setEnabled(true);
+            buttonWeiter.setAlpha(1f);
+        } else if (spiel.getSpieler().equals(gegner1)) {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
+        } else {
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
+        }
+    }
 
     public void weiterOnClick(View view) {
 
@@ -561,7 +637,33 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             imageView_talonkarte2.setVisibility(View.INVISIBLE);
             buttonWeiter.setEnabled(false);
             buttonWeiter.setAlpha(0.6f);
-        } else {
+        } else if (flecken) {
+            buttonFlecken.setVisibility(View.INVISIBLE);
+            buttonFlecken.setEnabled(false);
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.6f);
+            flecken = false;
+
+            if(!nichtgefleckt) {
+                if (spiel.kannFlecken(gegner1)) {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":1").getBytes());
+                } else {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":2").getBytes());
+                }
+            }else
+                Talontauschen();
+
+        } else if (gegenflecken) {
+            buttonGegenflecken.setVisibility(View.INVISIBLE);
+            buttonGegenflecken.setEnabled(false);
+            buttonWeiter.setEnabled(false);
+            buttonWeiter.setAlpha(0.6f);
+            gegenflecken = false;
+
+            Talontauschen();
+        }
+        else
+         {
             if (bummerl.getAnzahlSpiele() % 3 == 1) {
                 buttonWeiter.setEnabled(false);
                 buttonWeiter.setAlpha(0.6f);
@@ -569,17 +671,14 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                if(spiel.getSpieler().equals(selbst)) {
-                    talonzeigen();
-                    buttonWeiter.setEnabled(true);
-                    buttonWeiter.setAlpha(1f);
-                }
-                else if(spiel.getSpieler().equals(gegner1)){
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                }
-                else{
-                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
-                }
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        darfFlecken();
+
+                    }
+                }, 1000);
+
             } else {
                 buttonWeiter.setEnabled(false);
                 buttonWeiter.setAlpha(0.6f);
@@ -651,19 +750,19 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         switch (menuItem.getItemId()) {
             case R.id.herz_20er:
                 spiel.Ansagen20er("Herz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Herz").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Herz:0").getBytes());
                 break;
             case R.id.karo_20er:
                 spiel.Ansagen20er("Karo", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Karo").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Karo:0").getBytes());
                 break;
             case R.id.pik_20er:
                 spiel.Ansagen20er("Pik", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Pik").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Pik:0").getBytes());
                 break;
             case R.id.kreuz_20er:
                 spiel.Ansagen20er("Kreuz", selbst);
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Kreuz").getBytes());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT20ER + ":" +"Kreuz:0").getBytes());
                 break;
             default:
                 return false;
@@ -714,17 +813,16 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case WEITER:
                 if (messageParts[1].equals("1")) {
-                    if(gegnerischeKarte2 == null)
+                    if (gegnerischeKarte2 == null)
                         gegner2hat20er();
                     else
                         zugEnde();
                 }
                 if (messageParts[1].equals("2")) {
-                    if(eigeneKarte == null) {
+                    if (eigeneKarte == null) {
                         handAktualisieren();
                         handKartenKlickbar();
-                    }
-                    else
+                    } else
                         zugEnde();
                 }
 
@@ -751,15 +849,14 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                        if (spiel.getSpieler().equals(selbst)) {
-                            talonzeigen();
-                            buttonWeiter.setEnabled(true);
-                            buttonWeiter.setAlpha(1f);
-                        } else if (spiel.getSpieler().equals(gegner1)) {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                        } else {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
-                        }
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                darfFlecken();
+
+                            }
+                        }, 1000);
+
                     }
                 } else if (messageParts[2].equals("1")) {
                     try {
@@ -780,38 +877,118 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                         Toast.makeText(appContext, spiel.getSpiel().getSpiel() + " wird gespielt", Toast.LENGTH_SHORT).show();
                         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIEL + ":" + spiel.getSpiel().getSpiel()).getBytes());
 
-                        if (spiel.getSpieler().equals(selbst)) {
-                            talonzeigen();
-                            buttonWeiter.setEnabled(true);
-                            buttonWeiter.setAlpha(1f);
-                        } else if (spiel.getSpieler().equals(gegner1)) {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":1").getBytes());
-                        } else {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONTAUSCHEN + ":" + spiel.getTalon().get(0).toString() + "," + spiel.getTalon().get(1).toString() + ":2").getBytes());
-                        }
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                darfFlecken();
+
+                            }
+                        }, 1000);
+
                     }
                 }
                 break;
-            case ANGESAGT40ER: //TODO:
-                spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
-                punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    spielEnde();
+            case GEFLECKT:
+                nichtgefleckt = false;
+                Toast.makeText(appContext,"Spiel gefleckt!",Toast.LENGTH_SHORT).show();
+                spiel.Flecken();
+
+                if (spiel.getSpieler().equals(gegner1))
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENFLECKEN + ":1").getBytes());
+                else if(spiel.getSpieler().equals(gegner2))
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENFLECKEN + ":2").getBytes());
+                else{
+                    gegenflecken = true;
+                    buttonGegenflecken.setVisibility(View.VISIBLE);
+                    buttonGegenflecken.setEnabled(true);
+                    buttonGegenflecken.setAlpha(1f);
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
                 }
-                gegnerischeHand1Aktualisieren();
-                angesagt = true;
+                break;
+            case GEGENGEFLECKT:
+                Toast.makeText(appContext,"Spiel retourgefleckt!",Toast.LENGTH_SHORT).show();
+                spiel.Flecken();
+                Talontauschen();
+                break;
+            case NICHTGEFLECKT:
+                if(!nichtgefleckt) {
+                    nichtgefleckt = true;
+
+                    if (messageParts[1].equals("1")) {
+                        if (spiel.kannFlecken(gegner2)) {
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":2").getBytes());
+                        } else {
+                            flecken = true;
+                            buttonFlecken.setVisibility(View.VISIBLE);
+                            buttonFlecken.setEnabled(true);
+                            buttonFlecken.setAlpha(1f);
+                            buttonWeiter.setEnabled(true);
+                            buttonWeiter.setAlpha(1f);
+                        }
+                    } else {
+                        if (spiel.kannFlecken(gegner1)) {
+                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (FLECKEN + ":1").getBytes());
+                        } else {
+                            flecken = true;
+                            buttonFlecken.setVisibility(View.VISIBLE);
+                            buttonFlecken.setEnabled(true);
+                            buttonFlecken.setAlpha(1f);
+                            buttonWeiter.setEnabled(true);
+                            buttonWeiter.setAlpha(1f);
+                        }
+                    }
+
+
+                }else{
+                    nichtgefleckt = false;
+                    Talontauschen();
+                }
+                break;
+            case NICHTGEGENGEFLECKT:
+                Talontauschen();
+                break;
+            case ANGESAGT40ER:
+                if (messageParts[1].equals("1")) {
+                    spiel.Ansagen20er(spiel.getTrumpf(), gegner1);
+                    punkteAktualisieren();
+                    if (spiel.istSpielzuEnde(bummerl)) {
+                        spielEnde();
+                    }
+                    gegnerischeHand1Aktualisieren();
+                } else {
+                    spiel.Ansagen20er(spiel.getTrumpf(), gegner2);
+                    punkteAktualisieren();
+                    if (spiel.istSpielzuEnde(bummerl)) {
+                        spielEnde();
+                    }
+                    gegnerischeHand2Aktualisieren();
+
+                }
+
+                //angesagt = true;
                 Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
-            case ANGESAGT20ER: //TODO:
-                String farbe = message.substring(2);
-                spiel.Ansagen20er(farbe, gegner1);
-                punkteAktualisieren();
-                if (spiel.istSpielzuEnde(bummerl)) {
-                    spielEnde();
-                }
-                gegnerischeHand1Aktualisieren();
+            case ANGESAGT20ER:
+                String farbe = messageParts[1];
+                if(messageParts[2].equals("1")) {
 
-                angesagt = true;
+                    spiel.Ansagen20er(farbe, gegner1);
+                    punkteAktualisieren();
+                    if (spiel.istSpielzuEnde(bummerl)) {
+                        spielEnde();
+                    }
+                    gegnerischeHand1Aktualisieren();
+                }else{
+                    spiel.Ansagen20er(farbe, gegner2);
+                    punkteAktualisieren();
+                    if (spiel.istSpielzuEnde(bummerl)) {
+                        spielEnde();
+                    }
+                    gegnerischeHand2Aktualisieren();
+                }
+
+                //angesagt = true;
                 Toast.makeText(appContext, farbe + " 20er angesagt", Toast.LENGTH_SHORT).show();
                 break;
             case TRUMPFFARBE:
@@ -819,10 +996,23 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
                 break;
             case TALONGETAUSCHT:
-                if(messageParts[1].equals("1"))
+                if (messageParts[1].equals("1")) {
+                    hand = messageParts[2].split(",");
+                    gegner1.Hand = new ArrayList<Karte>();
+                    for (int i = 0; i < hand.length; i++) {
+                        gegner1.Hand.add(i, new Karte(hand[i]));
+                    }
+                    gegnerischeHand1Aktualisieren();
                     gegner1hat20er();
-                else if(messageParts[1].equals("2"))
+                } else if (messageParts[1].equals("2")) {
+                    hand = messageParts[2].split(",");
+                    gegner2.Hand = new ArrayList<Karte>();
+                    for (int i = 0; i < hand.length; i++) {
+                        gegner2.Hand.add(i, new Karte(hand[i]));
+                    }
+                    gegnerischeHand2Aktualisieren();
                     gegner2hat20er();
+                }
                 break;
             case AUFGEDECKT:
                 aufdrehen();
@@ -832,8 +1022,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
                 spielerNamen.add(nameGegner);
 
-                if(spielerNamen.size()==3)
-                {
+                if (spielerNamen.size() == 3) {
                     txt_Gegner1Name.setText(spielerNamen.get(1));
                     txt_Gegner2Name.setText(spielerNamen.get(2));
                     txt_BummerlMeinName.setText(spielerNamen.get(0));
@@ -1316,8 +1505,67 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         imageView_eigeneKarte.setVisibility(View.INVISIBLE);
         imageView_karteGegner1.setVisibility(View.INVISIBLE);
         imageView_karteGegner2.setVisibility(View.INVISIBLE);
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":").getBytes());
         punkteAktualisieren();
+
+
+        GestochenS1 = spiel.getS1().Gestochen.size();
+        GestochenS2 = spiel.getS2().Gestochen.size();
+        GestochenS3 = spiel.getS3().Gestochen.size();
+
+        if(GestochenS1 > 12) {
+            stichK15.setImageResource(spiel.getS1().Gestochen.get(14).getImageResourceId());
+            stichK15.setVisibility(View.VISIBLE);
+            stichK14.setImageResource(spiel.getS1().Gestochen.get(13).getImageResourceId());
+            stichK14.setVisibility(View.VISIBLE);
+            stichK13.setImageResource(spiel.getS1().Gestochen.get(12).getImageResourceId());
+            stichK13.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 9) {
+            stichK12.setImageResource(spiel.getS1().Gestochen.get(11).getImageResourceId());
+            stichK12.setVisibility(View.VISIBLE);
+            stichK11.setImageResource(spiel.getS1().Gestochen.get(10).getImageResourceId());
+            stichK11.setVisibility(View.VISIBLE);
+            stichK10.setImageResource(spiel.getS1().Gestochen.get(9).getImageResourceId());
+            stichK10.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 6) {
+            stichK9.setImageResource(spiel.getS1().Gestochen.get(8).getImageResourceId());
+            stichK9.setVisibility(View.VISIBLE);
+            stichK8.setImageResource(spiel.getS1().Gestochen.get(7).getImageResourceId());
+            stichK8.setVisibility(View.VISIBLE);
+            stichK7.setImageResource(spiel.getS1().Gestochen.get(6).getImageResourceId());
+            stichK7.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 3) {
+            stichK6.setImageResource(spiel.getS1().Gestochen.get(5).getImageResourceId());
+            stichK6.setVisibility(View.VISIBLE);
+            stichK5.setImageResource(spiel.getS1().Gestochen.get(4).getImageResourceId());
+            stichK5.setVisibility(View.VISIBLE);
+            stichK4.setImageResource(spiel.getS1().Gestochen.get(3).getImageResourceId());
+            stichK4.setVisibility(View.VISIBLE);
+        }
+        else if(GestochenS1 > 0) {
+            stichK3.setImageResource(spiel.getS1().Gestochen.get(2).getImageResourceId());
+            stichK3.setVisibility(View.VISIBLE);
+            stichK2.setImageResource(spiel.getS1().Gestochen.get(1).getImageResourceId());
+            stichK2.setVisibility(View.VISIBLE);
+            stichK1.setImageResource(spiel.getS1().Gestochen.get(0).getImageResourceId());
+            stichK1.setVisibility(View.VISIBLE);
+        }
+
+        if(gegner1.isIstdran()){
+            istdranG1 = 1;
+            istdranG2 = 0;
+        }else if(gegner2.isIstdran()){
+            istdranG1 = 0;
+            istdranG2 = 1;
+        }else{
+            istdranG1 = 0;
+            istdranG2 = 0;
+        }
+
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGENDE+":"+GestochenS2+":"+GestochenS3+":"+istdranG1+":"+istdranG2).getBytes());
+
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -1547,7 +1795,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         Sieger = spiel.getSieger();
         sieger = "";
         if(Sieger.contains(selbst)){
-            sieger = sieger + ":1";
+            sieger = sieger + ":0";
             Toast.makeText(appContext,"Gewonnen!",Toast.LENGTH_SHORT);
         }else
             Toast.makeText(appContext,"Verloren!",Toast.LENGTH_SHORT);
@@ -1565,9 +1813,9 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
 
         if(Sieger.contains(gegner1))
-            sieger = sieger + ":2";
+            sieger = sieger + ":1";
         if(Sieger.contains(gegner2))
-            sieger = sieger + ":3";
+            sieger = sieger + ":2";
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
 
@@ -1584,6 +1832,18 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             spielStart();
         
     }
+    public void ansagen40er(View view) {
+        spiel.Ansagen20er(spiel.getTrumpf(), selbst);
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ANGESAGT40ER + ":0").getBytes());
+        if (spiel.istSpielzuEnde(bummerl)) spielEnde();
+        punkteAktualisieren();
+        button40er.setEnabled(false);
+        button40er.setAlpha(0.4f);
+        button20er.setEnabled(false);
+        button20er.setAlpha(0.4f);
+        handKartenKlickbar();
+    }
+
     private void aufdrehen(){
         aufgedrehteKarte = spiel.Aufdrehen();
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFKARTE+":"+aufgedrehteKarte.toString()).getBytes());
