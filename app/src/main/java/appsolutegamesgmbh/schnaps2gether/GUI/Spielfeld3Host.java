@@ -1649,7 +1649,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.HandkartenSortieren(gegner1);
         
         for (int i=0;i<gegnerischeHandkartenAnz1;i++) {
-            if(i!=0) {
+            if(i==0) {
                 gegnerischeHand1 += gegner1.Hand.get(i).toString();
                 gegKartenSpielBar1 += (spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
             }
@@ -1672,7 +1672,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.HandkartenSortieren(gegner2);
 
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
-            if(i!=0) {
+            if(i==0) {
                 gegnerischeHand2 += gegner2.Hand.get(i).toString();
                 gegKartenSpielBar2 += (spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner2) ? 1 : 0);
             }
