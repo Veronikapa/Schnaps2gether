@@ -358,6 +358,8 @@ public class Spiel3 {
         s.Hand.remove(karte);
         s.setIstdran(false);
 
+        angesagteFarbe = null;
+
         //Überprüfen ob Karte höher als die bereits ausgepielten Karten
         if(hoechstekarteamTisch == null) {
             hoechstekarteamTisch = karte;

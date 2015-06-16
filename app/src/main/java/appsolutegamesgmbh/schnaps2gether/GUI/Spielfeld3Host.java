@@ -1457,12 +1457,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
 
         if (gegnerischeKarte1 == null) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
                     gegner1hat20er();
-                }
-            }, 1000);
+
         } else {
             zugEnde();
         }
