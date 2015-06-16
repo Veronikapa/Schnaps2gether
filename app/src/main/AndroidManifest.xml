@@ -113,6 +113,12 @@
             android:screenOrientation="sensorLandscape">
             <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" > -->
         </activity>
+        <activity
+            android:name=".GUI.Statistik"
+            android:label="Statistik"
+            android:screenOrientation="sensorLandscape">
+            <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen" > -->
+        </activity>
     </application>
 
 </manifest>

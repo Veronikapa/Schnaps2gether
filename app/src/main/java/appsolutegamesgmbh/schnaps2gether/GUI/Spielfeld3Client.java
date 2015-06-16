@@ -1470,7 +1470,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         buttonFlecken.setVisibility(View.INVISIBLE);
         buttonFlecken.setEnabled(false);
         buttonWeiter.setEnabled(false);
-        buttonWeiter.setAlpha(0.6f);
+        buttonWeiter.setAlpha(0.4f);
     }
     public void Gegenflecken(View view){
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENGEFLECKT + ":" + SpielerID).getBytes());
@@ -1479,7 +1479,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         buttonGegenflecken.setVisibility(View.INVISIBLE);
         buttonGegenflecken.setEnabled(false);
         buttonWeiter.setEnabled(false);
-        buttonWeiter.setAlpha(0.6f);
+        buttonWeiter.setAlpha(0.4f);
     }
 
 
@@ -1515,19 +1515,5 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             bummerl = new Bummerl3();
         } else
             spielStart();
-
     }
-
-
-    /*class Zugende implements Runnable {
-
-        @Override
-        public void run() {
-            punkteAktualisieren();
-            gegnerischeKarte1 = null;
-            gegnerischeKarte2 = null;
-            eigeneKarte = null;
-        }
-    }*/
-
 }

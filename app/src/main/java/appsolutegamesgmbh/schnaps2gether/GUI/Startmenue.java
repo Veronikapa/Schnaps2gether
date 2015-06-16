@@ -103,6 +103,12 @@ public class Startmenue extends Activity implements View.OnClickListener {
                 startActivity(i);
                 finish();
                 break;
+            case R.id.cmd_statistik:
+                i = new Intent(Startmenue.this, Statistik.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+                break;
             default:;
         }
     }

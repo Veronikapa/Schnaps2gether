@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,6 +14,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -780,12 +782,42 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             //gameEndDialogFragment.show(getFragmentManager(), "GameEnd"); */
         }
 
+        spielStatistikSpeichern(win,bummerl.getPunkteS2(),selbst.getPunkte());
+
         internSpielStart();
         /*Bundle args = new Bundle();
         args.putBoolean("win", win);
         DialogFragment gameEndDialogFragment = new GameEnd();
         gameEndDialogFragment.setArguments(args); */
        // gameEndDialogFragment.show(getFragmentManager(), "GameEnd");
+    }
+
+    private void spielStatistikSpeichern(boolean gewonnen, int punkte, int bummerlPunkte)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        int gewonnenBisher = Integer.parseInt(sharedPreferences.getString("spieleGewonnen", "0"));
+        int verlorenBisher = Integer.parseInt(sharedPreferences.getString("spieleVerloren", "0"));
+        int bummerl = Integer.parseInt(sharedPreferences.getString("Bummerl", "0"));
+        int maxPunkte = Integer.parseInt(sharedPreferences.getString("maxPunkte", "0"));
+
+        if(gewonnen)
+            gewonnenBisher++;
+
+        else
+            verlorenBisher++;
+
+        bummerl+= bummerl-bummerlPunkte;
+
+        if(punkte>maxPunkte)
+            maxPunkte = punkte;
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("spieleGewonnen", String.valueOf(gewonnenBisher));
+        editor.putString("spieleVerloren", String.valueOf(verlorenBisher));
+        editor.putString("Bummerl", String.valueOf(bummerl));
+        editor.putString("maxPunkte", String.valueOf(maxPunkte));
+        editor.commit();
     }
 
     public void zudrehen(View view) {

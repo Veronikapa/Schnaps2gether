@@ -11,37 +11,9 @@
     android:rowCount="11"
     android:columnCount="6">
 
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="@dimen/logo_breite"
-        android:layout_height="@dimen/logo_hoehe"
-        android:layout_row="6"
-        android:layout_column="0"
-        android:weightSum="1"
-        android:layout_gravity="center"
-        android:id="@+id/linearLayout"
-        android:gravity="top"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/logo"
-            android:longClickable="true"
-            android:background="@drawable/schnaps2gether_logo"
-            android:padding="0dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/s2g_logo"
-            android:layout_above="@+id/tableLayout2"
-            android:layout_alignLeft="@+id/linearLayout"
-            android:layout_alignStart="@+id/linearLayout" />
-    </LinearLayout>
-
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_row="7"
         android:layout_column="0"
         android:layout_columnSpan="6"
@@ -53,25 +25,100 @@
 
         <TableLayout
             android:layout_width="wrap_content"
-            android:layout_height="157dp"
+            android:layout_height="300dp"
             android:layout_row="8"
             android:layout_column="0"
             android:layout_marginLeft="40dp"
-            android:layout_marginBottom="20dp"
             android:layout_marginRight="40dp"
             android:layout_gravity="fill_horizontal|top|center"
             android:weightSum="1">
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spielsiege gesamt:"
+                    android:layout_column="0"
+                    android:textColor="@android:color/white"
+                    style="@style/text_punkteanzeige" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/txt_Spielsiege"
+                    style="@style/text_punkteanzeige" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:paddingBottom="10dp">
 
-               <TextView>
-               </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verlorene Spiele gesamt:"
+                    android:layout_column="0"
+                    android:textColor="@android:color/white"
+                    style="@style/text_punkteanzeige" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/txt_Spieleverloren"
+                    style="@style/text_punkteanzeige" />
 
             </TableRow>
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bummerl gesamt:"
+                    android:layout_column="0"
+                    android:textColor="@android:color/white"
+                    style="@style/text_punkteanzeige" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/txt_Bummerlstatistik"
+                    style="@style/text_punkteanzeige" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Höchste Punkte gesamt:"
+                    android:layout_column="0"
+                    android:textColor="@android:color/white"
+                    style="@style/text_punkteanzeige" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/txt_MaxPunkteStatistik"
+                    style="@style/text_punkteanzeige" />
+            </TableRow>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -88,11 +135,9 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_gravity="center"
-                    android:layout_weight="0.33" />
-
+                    android:layout_weight="0.33"
+                    android:onClick="abbrechenStatistik"/>
             </TableRow>
         </TableLayout>
-
     </TableLayout>
-
 </RelativeLayout>
