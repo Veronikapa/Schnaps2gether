@@ -72,7 +72,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="Spielen"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielen"
@@ -85,7 +85,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="@string/schnellesSpiel"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_schnellesSpiel"
@@ -99,7 +99,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="Spielregeln"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_spielregeln"
@@ -119,7 +119,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="Name ändern"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_name"
@@ -133,7 +133,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="Statistik"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_statistik"
@@ -147,7 +147,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/lobbybButton_hoehe"
+                    android:layout_height="@dimen/menueButton_hoehe"
                     android:text="Beenden"
                     style="@style/text_buttonsLobby"
                     android:id="@+id/cmd_Beenden"

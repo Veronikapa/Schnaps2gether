@@ -37,7 +37,7 @@
         android:weightSum="1">
 
         <Button
-            android:layout_width="158dp"
+            android:layout_width="@dimen/lobbybButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/neu"
             style="@style/text_buttonsLobby"
@@ -50,7 +50,7 @@
             android:background="@drawable/beiger_button" />
 
         <Button
-            android:layout_width="145dp"
+            android:layout_width="@dimen/lobbybButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/beitreten"
             style="@style/text_buttonsLobby"
@@ -65,7 +65,7 @@
             android:layout_weight="2" />
 
         <Button
-            android:layout_width="190dp"
+            android:layout_width="@dimen/lobbybButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             style="@style/text_buttonsLobby"

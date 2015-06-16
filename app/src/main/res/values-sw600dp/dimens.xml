@@ -26,6 +26,7 @@
     <dimen name="button_hoehe">45dp</dimen>
     <dimen name="button_breite">60dp</dimen>
 
-    <dimen name="lobbybButton_hoehe">90dp</dimen>
+    <dimen name="menueButton_hoehe">90dp</dimen>
+    <dimen name="lobbybButton_breite">180dp</dimen>
 
 </resources>

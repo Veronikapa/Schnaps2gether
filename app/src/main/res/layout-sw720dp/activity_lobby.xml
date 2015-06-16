@@ -36,7 +36,7 @@
         android:layout_gravity="center">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/neu"
             style="@style/text_buttonsLobby"
@@ -49,7 +49,7 @@
             android:background="@drawable/beiger_button" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/beitreten"
             style="@style/text_buttonsLobby"
@@ -63,7 +63,7 @@
             android:background="@drawable/beiger_button" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             style="@style/text_buttonsLobby"
