@@ -750,9 +750,15 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
             Toast.makeText(appContext, "Gewonnen! Gegner:" + gegner.getPunkte() + " Punkte" , Toast.LENGTH_LONG).show();
         }
 
+        gegnerischeKarte = null;
+        eigeneKarte = null;
         BpunkteSelbst.setText(Integer.toString(bummerl.getPunkteS1()));
         BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS2()));
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
+
+        imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
+        imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
+
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE + ":" + (win ? 0 : 1)).getBytes());
 

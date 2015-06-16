@@ -291,80 +291,76 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-        try {
-            spiel = new Spiel3(bummerl.getAnzahlSpiele());
-        }
-        catch(Exception e){
+                try {
+                    spiel = new Spiel3(bummerl.getAnzahlSpiele());
+                } catch (Exception e) {
 
-        }
-        selbst = spiel.getS1();
-        gegner1 = spiel.getS2();
-        gegner2 = spiel.getS3();
-        trumpf = "";
+                }
+                selbst = spiel.getS1();
+                gegner1 = spiel.getS2();
+                gegner2 = spiel.getS3();
+                trumpf = "";
 
-        stichK16.setVisibility(View.INVISIBLE);
-        stichK15.setVisibility(View.INVISIBLE);
-        stichK14.setVisibility(View.INVISIBLE);
-        stichK13.setVisibility(View.INVISIBLE);
-        stichK12.setVisibility(View.INVISIBLE);
-        stichK11.setVisibility(View.INVISIBLE);
-        stichK10.setVisibility(View.INVISIBLE);
-        stichK9.setVisibility(View.INVISIBLE);
-        stichK8.setVisibility(View.INVISIBLE);
-        stichK7.setVisibility(View.INVISIBLE);
-        stichK6.setVisibility(View.INVISIBLE);
-        stichK5.setVisibility(View.INVISIBLE);
-        stichK4.setVisibility(View.INVISIBLE);
-        stichK3.setVisibility(View.INVISIBLE);
-        stichK2.setVisibility(View.INVISIBLE);
-        stichK1.setVisibility(View.INVISIBLE);
+                stichK16.setVisibility(View.INVISIBLE);
+                stichK15.setVisibility(View.INVISIBLE);
+                stichK14.setVisibility(View.INVISIBLE);
+                stichK13.setVisibility(View.INVISIBLE);
+                stichK12.setVisibility(View.INVISIBLE);
+                stichK11.setVisibility(View.INVISIBLE);
+                stichK10.setVisibility(View.INVISIBLE);
+                stichK9.setVisibility(View.INVISIBLE);
+                stichK8.setVisibility(View.INVISIBLE);
+                stichK7.setVisibility(View.INVISIBLE);
+                stichK6.setVisibility(View.INVISIBLE);
+                stichK5.setVisibility(View.INVISIBLE);
+                stichK4.setVisibility(View.INVISIBLE);
+                stichK3.setVisibility(View.INVISIBLE);
+                stichK2.setVisibility(View.INVISIBLE);
+                stichK1.setVisibility(View.INVISIBLE);
 
 
-        //handKartenKlickbar();
-        buttonsNichtKlickbar();
-        handAktualisieren();
+                //handKartenKlickbar();
+                buttonsNichtKlickbar();
+                handAktualisieren();
 
-        if(bummerl.getAnzahlSpiele() == 0) {
-            punkteSelbst.setText("0");
-            BpunkteSelbst.setText("0");
-            BpunkteGegner1.setText("0");
-            BpunkteGegner2.setText("0");
-            gegnerischeKarte1 = null;
-            gegnerischeKarte2 = null;
+                if (bummerl.getAnzahlSpiele() == 0) {
+                    punkteSelbst.setText("0");
+                    BpunkteSelbst.setText("0");
+                    BpunkteGegner1.setText("0");
+                    BpunkteGegner2.setText("0");
+                    gegnerischeKarte1 = null;
+                    gegnerischeKarte2 = null;
 
-            buttonWeiter.setEnabled(true);
-            buttonWeiter.setAlpha(1f);
-            buttonWeiter.setText("Aufdecken");
-            buttonTrumpfansagen.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            punkteSelbst.setText("0");
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                    buttonWeiter.setText("Aufdecken");
+                    buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                } else {
+                    punkteSelbst.setText("0");
 
-            if(bummerl.getAnzahlSpiele()%3 == 0){
-                buttonWeiter.setEnabled(true);
-                buttonWeiter.setAlpha(1f);
-                buttonWeiter.setText("Aufdecken");
-                buttonTrumpfansagen.setVisibility(View.VISIBLE);
-                buttonTrumpfansagen.setEnabled(true);
+                    if (bummerl.getAnzahlSpiele() % 3 == 0) {
+                        buttonWeiter.setEnabled(true);
+                        buttonWeiter.setAlpha(1f);
+                        buttonWeiter.setText("Aufdecken");
+                        buttonTrumpfansagen.setVisibility(View.VISIBLE);
+                        buttonTrumpfansagen.setEnabled(true);
+                    } else if (bummerl.getAnzahlSpiele() % 3 == 1) {
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFANSAGEN + ":1").getBytes());
+                    } else {
+                        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFANSAGEN + ":2").getBytes());
+                    }
+
+                }
+                //TODO Kerstin: Bitte testen ob das funktioniert!
+                //Namen der Spieler an Clients weitergeben
+                if (spielerNamen.size() == 3) {
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + spielerNamen.get(0) + ":" + spielerNamen.get(1) + ":" + spielerNamen.get(2)).getBytes());
+                }
+
             }
-            else if(bummerl.getAnzahlSpiele()%3 == 1) {
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFANSAGEN + ":1").getBytes());
-            }
-            else{
-                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFANSAGEN + ":2").getBytes());
-            }
-        }
+        }, 4000);
 
-            }
-        }, 2000);
 
-        //TODO Kerstin: Bitte testen ob das funktioniert!
-        //Namen der Spieler an Clients weitergeben
-        if(spielerNamen.size()==3)
-        {
-            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":"+spielerNamen.get(0)+":"+spielerNamen.get(1)+":"+spielerNamen.get(2)).getBytes());
-        }
     }
 
     public void popup20er(View view) {
@@ -583,6 +579,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     public void Flecken(View view) {
         buttonFlecken.setVisibility(View.INVISIBLE);
         buttonFlecken.setEnabled(false);
+        flecken = false;
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEFLECKT + ":0").getBytes());
         spiel.Flecken();
@@ -597,6 +594,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
     public void Gegenflecken(View view) {
         buttonGegenflecken.setVisibility(View.INVISIBLE);
         buttonGegenflecken.setEnabled(false);
+        gegenflecken = false;
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENGEFLECKT + ":0").getBytes());
         spiel.Flecken();
@@ -638,6 +636,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             buttonWeiter.setEnabled(false);
             buttonWeiter.setAlpha(0.6f);
         } else if (flecken) {
+            flecken = false;
             buttonFlecken.setVisibility(View.INVISIBLE);
             buttonFlecken.setEnabled(false);
             buttonWeiter.setEnabled(false);
@@ -654,6 +653,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 Talontauschen();
 
         } else if (gegenflecken) {
+            gegenflecken = false;
             buttonGegenflecken.setVisibility(View.INVISIBLE);
             buttonGegenflecken.setEnabled(false);
             buttonWeiter.setEnabled(false);
@@ -1649,8 +1649,15 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.HandkartenSortieren(gegner1);
         
         for (int i=0;i<gegnerischeHandkartenAnz1;i++) {
-            gegnerischeHand1 += ","+gegner1.Hand.get(i).toString();
-            gegKartenSpielBar1 += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
+            if(i!=0) {
+                gegnerischeHand1 += gegner1.Hand.get(i).toString();
+                gegKartenSpielBar1 += (spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
+            }
+            else{
+                gegnerischeHand1 += "," + gegner1.Hand.get(i).toString();
+                gegKartenSpielBar1 += " "+(spiel.DarfKarteAuswaehlen(gegner1.Hand.get(i), gegner1) ? 1 : 0);
+            }
+
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand1+":"+gegKartenSpielBar1+":1").getBytes());
 
@@ -1665,8 +1672,15 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         spiel.HandkartenSortieren(gegner2);
 
         for (int i=0;i<gegnerischeHandkartenAnz2;i++) {
-            gegnerischeHand2 += ","+gegner2.Hand.get(i).toString();
-            gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner2) ? 1 : 0);
+            if(i!=0) {
+                gegnerischeHand2 += gegner2.Hand.get(i).toString();
+                gegKartenSpielBar2 += (spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner2) ? 1 : 0);
+            }
+            else{
+                gegnerischeHand2 += "," + gegner2.Hand.get(i).toString();
+                gegKartenSpielBar2 += " "+(spiel.DarfKarteAuswaehlen(gegner2.Hand.get(i), gegner2) ? 1 : 0);
+            }
+
         }
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (HANDKARTEN+":"+gegnerischeHand2+":"+gegKartenSpielBar2+":2").getBytes());
 

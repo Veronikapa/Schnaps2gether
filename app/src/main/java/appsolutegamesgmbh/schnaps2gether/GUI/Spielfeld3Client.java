@@ -475,6 +475,40 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     }
 
+    public void popup20er(View view) {
+        PopupMenu popup = new PopupMenu(Spielfeld3Client.this, button20er);
+        popup.inflate(R.menu.popup_menu_20er);
+        herz20er = (MenuItem) popup.getMenu().getItem(0);
+        karo20er = (MenuItem) popup.getMenu().getItem(1);
+        pik20er = (MenuItem) popup.getMenu().getItem(2);
+        kreuz20er = (MenuItem) popup.getMenu().getItem(3);
+        herz20er.setVisible(false);
+        karo20er.setVisible(false);
+        pik20er.setVisible(false);
+        kreuz20er.setVisible(false);
+        ArrayList<String> a = hab20er;
+        for (int i = 0; i < a.size(); i++) {
+            switch (a.get(i)) {
+                case "Herz":
+                    herz20er.setVisible(true);
+                    break;
+                case "Karo":
+                    karo20er.setVisible(true);
+                    break;
+                case "Pik":
+                    pik20er.setVisible(true);
+                    break;
+                case "Kreuz":
+                    kreuz20er.setVisible(true);
+                    break;
+                default:
+                    ;
+            }
+        }
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -557,8 +591,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             case HANDKARTEN:
                 if (messageParts[3].equals(SpielerID)) {
-                    String[] hand = messageParts[1].substring(1).split(",");
-                    String[] spielbar = messageParts[2].substring(1).split(" ");
+                    String[] hand = messageParts[1].split(",");
+                    String[] spielbar = messageParts[2].split(" ");
                     selbst.Hand = new ArrayList<Karte>();
                     kartenSpielbar = new ArrayList<Boolean>();
                     for (int i = 0; i < hand.length; i++) {
@@ -623,6 +657,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
                 break;
             case FLECKEN:
+                flecken = true;
                 if (messageParts[1].equals(SpielerID)) {
                     buttonFlecken.setVisibility(View.VISIBLE);
                     buttonFlecken.setEnabled(true);
@@ -632,6 +667,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 }
                 break;
             case GEGENFLECKEN:
+                gegenflecken = true;
                 if (messageParts[1].equals(SpielerID)) {
                     buttonGegenflecken.setVisibility(View.VISIBLE);
                     buttonGegenflecken.setEnabled(true);
@@ -1428,15 +1464,21 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
     public void Flecken(View view){
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEFLECKT + ":" + SpielerID).getBytes());
+        flecken = false;
 
         buttonFlecken.setVisibility(View.INVISIBLE);
         buttonFlecken.setEnabled(false);
+        buttonWeiter.setEnabled(false);
+        buttonWeiter.setAlpha(0.6f);
     }
     public void Gegenflecken(View view){
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (GEGENGEFLECKT + ":" + SpielerID).getBytes());
+        gegenflecken = false;
 
         buttonGegenflecken.setVisibility(View.INVISIBLE);
         buttonGegenflecken.setEnabled(false);
+        buttonWeiter.setEnabled(false);
+        buttonWeiter.setAlpha(0.6f);
     }
 
 
