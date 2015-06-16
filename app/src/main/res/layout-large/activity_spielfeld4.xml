@@ -108,9 +108,11 @@
                 android:text="@string/rufspiel"
                 style="@style/text_buttonsSpielfeld"
                 android:onClick="popupTrumpfansagen"
+                android:layout_marginLeft="0dp"
                 android:singleLine="false"
                 android:textColor="@android:color/white"
                 android:background="@drawable/beiger_button"
+                android:layout_marginRight="5dp"
                 android:textAllCaps="false"
                 android:visibility="invisible"
                 android:layout_gravity="center" />
@@ -158,17 +160,23 @@
             android:layout_gravity="center"
 
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false" />
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:textAllCaps="false"
+            android:layout_weight="0.04" />
         <Button
             android:id="@+id/main_button40er"
             android:layout_width="@dimen/button_breite"
             android:layout_height="@dimen/button_hoehe"
+            android:layout_marginLeft="5dp"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
             style="@style/text_buttonsSpielfeld"
             android:layout_gravity="center"
             android:background="@drawable/beiger_button"
-            android:textAllCaps="false" />
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false"
+            android:layout_weight="0.05" />
 
 
         <FrameLayout
@@ -177,7 +185,7 @@
 
             <Button
                 android:id="@+id/main_buttonWeiter"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/weiter"
                 android:onClick="weiterOnClick"
@@ -188,11 +196,11 @@
                 android:layout_marginLeft="5dp"
                 android:textAllCaps="false"
                 android:elegantTextHeight="true"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
 
             <Button
                 android:id="@+id/main_buttonAufdrehen"
-                android:layout_width="61dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/aufdrehen"
                 style="@style/text_buttonsSpielfeld"
@@ -201,8 +209,9 @@
                 android:singleLine="false"
                 android:textColor="@android:color/white"
                 android:background="@drawable/beiger_button"
+                android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:layout_gravity="left|center" />
 
         </FrameLayout>
@@ -446,7 +455,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="150dp"
-            android:layout_height="126dp"
+            android:layout_height="150dp"
             android:layout_gravity="bottom|center"
             android:layout_marginLeft="20dp"
             android:weightSum="1" >
@@ -909,7 +918,7 @@
         android:layout_alignEnd="@+id/stichAnzeige">
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameG1"
             android:rotation="270"
@@ -931,7 +940,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Gegner3"
             android:id="@+id/txt_NameG3"

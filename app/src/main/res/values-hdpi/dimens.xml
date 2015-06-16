@@ -29,4 +29,7 @@
 
     <dimen name="button_3er4er_breite">90dp</dimen>
     <dimen name="button_2er_breite">65dp</dimen>
+
+    <dimen name="anzeigeG_hoehe">25dp</dimen>
+    <dimen name="anzeigeG_breite">110dp</dimen>
 </resources>

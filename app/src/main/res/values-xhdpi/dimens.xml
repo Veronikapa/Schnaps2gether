@@ -31,7 +31,7 @@
 
     <dimen name="abbrButton_breite">90dp</dimen>
 
-    <dimen name="button_3er4er_breite">90dp</dimen>
+    <dimen name="button_3er4er_breite">85dp</dimen>
     <dimen name="button_2er_breite">75dp</dimen>
 
 </resources>

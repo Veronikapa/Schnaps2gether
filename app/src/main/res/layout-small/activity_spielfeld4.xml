@@ -116,41 +116,10 @@
                 android:layout_gravity="center" />
         </FrameLayout>
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_gravity="center"
-            android:rowCount="1"
-            android:columnCount="2">
-
-            <TextView
-                style="@style/text_punkteanzeige"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="P:"
-                android:id="@+id/textView2"
-                android:layout_gravity="center"
-                android:layout_column="0"
-                android:layout_row="0"
-                android:paddingRight="5dp" />
-
-            <TextView
-                style="@style/text_punkteanzeige"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:id="@+id/txt_PunkteZahlI"
-                android:layout_gravity="center"
-                android:layout_column="1" />
-
-        </GridLayout>
-
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="@dimen/button_breite"
+            android:layout_width="37dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -161,7 +130,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="@dimen/button_breite"
+            android:layout_width="33dp"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -177,7 +146,7 @@
 
             <Button
                 android:id="@+id/main_buttonWeiter"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/weiter"
                 android:onClick="weiterOnClick"
@@ -188,11 +157,11 @@
                 android:layout_marginLeft="5dp"
                 android:textAllCaps="false"
                 android:elegantTextHeight="true"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
 
             <Button
                 android:id="@+id/main_buttonAufdrehen"
-                android:layout_width="61dp"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/aufdrehen"
                 style="@style/text_buttonsSpielfeld"
@@ -201,8 +170,9 @@
                 android:singleLine="false"
                 android:textColor="@android:color/white"
                 android:background="@drawable/beiger_button"
+                android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="visible"
+                android:visibility="invisible"
                 android:layout_gravity="left|center" />
 
         </FrameLayout>
@@ -446,7 +416,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="150dp"
-            android:layout_height="126dp"
+            android:layout_height="150dp"
             android:layout_gravity="bottom|center"
             android:layout_marginLeft="20dp"
             android:weightSum="1" >
@@ -909,7 +879,7 @@
         android:layout_alignEnd="@+id/stichAnzeige">
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_height="match_parent"
             android:id="@+id/txt_NameG1"
             android:rotation="270"
@@ -931,7 +901,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_height="match_parent"
             android:text="Gegner3"
             android:id="@+id/txt_NameG3"
@@ -966,6 +936,40 @@
             android:text="@string/abbrechen"
             android:layout_weight="1.70" />
     </LinearLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_gravity="center"
+        android:rowCount="1"
+        android:columnCount="2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            style="@style/text_punkteanzeige"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P:"
+            android:id="@+id/textView2"
+            android:layout_gravity="center"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:paddingRight="5dp" />
+
+        <TextView
+            style="@style/text_punkteanzeige"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/txt_PunkteZahlI"
+            android:layout_gravity="center"
+            android:layout_column="1" />
+
+    </GridLayout>
 
 
 </RelativeLayout>
