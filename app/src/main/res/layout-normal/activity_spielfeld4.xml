@@ -59,7 +59,7 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/main_buttonGegenFlecken"
-                android:layout_width="75dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/gegenflecken"
                 style="@style/text_buttonsSpielfeld"
@@ -70,11 +70,11 @@
                 android:background="@drawable/beiger_button"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonFlecken"
-                android:layout_width="75dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/flecken"
                 style="@style/text_buttonsSpielfeld"
@@ -89,7 +89,7 @@
                 android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonSpielAnsagen"
-                android:layout_width="75dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 style="@style/text_buttonsSpielfeld"
@@ -104,7 +104,7 @@
                 android:layout_gravity="center" />
             <Button
                 android:id="@+id/main_buttonTrumpfAnsagen"
-                android:layout_width="75dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/rufspiel"
                 style="@style/text_buttonsSpielfeld"
@@ -197,11 +197,11 @@
                 android:layout_marginLeft="5dp"
                 android:textAllCaps="false"
                 android:elegantTextHeight="true"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
 
             <Button
                 android:id="@+id/main_buttonAufdrehen"
-                android:layout_width="75dp"
+                android:layout_width="@dimen/button_3er4er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/aufdrehen"
                 style="@style/text_buttonsSpielfeld"
@@ -961,7 +961,7 @@
         android:weightSum="1">
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="@dimen/abbrButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:id="@+id/b_Abbrechen"
             style="@style/text_buttonsSpielfeld"

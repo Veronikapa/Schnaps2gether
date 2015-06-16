@@ -95,7 +95,7 @@
 
         <Button
             android:id="@+id/main_button20er"
-            android:layout_width="41dp"
+            android:layout_width="@dimen/button_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button20er"
             style="@style/text_buttonsSpielfeld"
@@ -106,7 +106,7 @@
             android:textAllCaps="false" />
         <Button
             android:id="@+id/main_button40er"
-            android:layout_width="34dp"
+            android:layout_width="@dimen/button_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/button40er"
             android:onClick="ansagen40er"
@@ -323,7 +323,6 @@
                 android:rotation="90"
                 android:scaleType="fitXY"
                 android:layout_marginLeft="20dp"
-                android:layout_weight="0.20"
                 android:visibility="visible" />
 
         </LinearLayout>
@@ -354,7 +353,7 @@
 
             <Button
                 android:id="@+id/main_buttonZ"
-                android:layout_width="62dp"
+                android:layout_width="@dimen/button_2er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="@string/buttonZ"
                 android:onClick="zudrehen"
@@ -379,7 +378,7 @@
 
             <Button
                 android:id="@+id/main_buttonTtauschen"
-                android:layout_width="66dp"
+                android:layout_width="@dimen/button_2er_breite"
                 android:layout_height="@dimen/button_hoehe"
                 android:text="tauschen"
                 style="@style/text_buttonsSpielfeld"
@@ -850,7 +849,7 @@
 
         <Button
             style="@style/text_buttonsSpielfeld"
-            android:layout_width="64dp"
+            android:layout_width="@dimen/abbrButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             android:id="@+id/btn_abbrechen"

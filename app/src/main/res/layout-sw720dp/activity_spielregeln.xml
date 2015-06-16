@@ -65,7 +65,7 @@
         android:weightSum="1">
 
         <Button
-            android:layout_width="180dp"
+            android:layout_width="@dimen/abbrButton_breite"
             android:layout_height="@dimen/button_hoehe"
             android:text="@string/abbrechen"
             android:id="@+id/btn_zurück"
