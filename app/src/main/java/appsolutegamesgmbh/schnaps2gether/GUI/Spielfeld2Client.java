@@ -147,7 +147,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int handkartenNummerZumSchummeln;
     private static SensorManager shakeManager;
     private static SensorEventListener shakeListener;
-    private double threshold = 1.0d;
+    private double threshold = 5.0d;
 
     ArrayList<Integer> hostHandKarten = new ArrayList<Integer>(); //Karten für Schummeln
 
@@ -828,8 +828,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                         auge_Icon.setVisibility(View.INVISIBLE);
 
                         if(schummelnDesGegnerErkannt) {
-                            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":" + " ").getBytes());
-                            Toast.makeText(appContext, "Schummeln wurde von dir unterbunden!", Toast.LENGTH_SHORT).show();
+                            SchummelnUnterbundenInfoAnHost();
                         }
                     }
                 }, 2000);
@@ -848,6 +847,11 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 break;
             default: break;
         }
+    }
+
+    private void SchummelnUnterbundenInfoAnHost() {
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SCHUMMELNUNTERBUNDEN + ":" + " ").getBytes());
+        Toast.makeText(appContext, "Schummeln wurde von dir unterbunden!", Toast.LENGTH_SHORT).show();
     }
 
     public void abbrechenSpiel(View v){

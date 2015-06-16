@@ -201,6 +201,10 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         appContext = this.getApplicationContext();
 
+
+        //Name an Host senden
+        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + Startmenue.SpielerName).getBytes());
+
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
         imageView_karte3 = (ImageView) findViewById(R.id.imageView_karte3);
@@ -278,9 +282,6 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         gegenflecken = false;
 
         selbst = new Spieler();
-
-        //Name an Host senden
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + Startmenue.SpielerName).getBytes());
 
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
@@ -797,11 +798,11 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
                 //nameGegner nicht mein eigener Name --> ich bin Spieler 3
                 if (nameGegner != Startmenue.SpielerName) {
-                    txt_Gegner1Name.setText(nameHost);
-                    txt_Gegner2Name.setText(nameGegner);
+                    txt_Gegner1Name.setText(nameGegner);
+                    txt_Gegner2Name.setText(nameHost);
                     txt_BummerlMeinName.setText(Startmenue.SpielerName);
-                    txt_BummerlNameGegner1.setText(nameHost);
-                    txt_BummerlNameGegner2.setText(nameGegner);
+                    txt_BummerlNameGegner1.setText(nameGegner);
+                    txt_BummerlNameGegner2.setText(nameHost);
                 }
 
                 //nameGegner = mein eigener Name --> ich bin Spieler 2

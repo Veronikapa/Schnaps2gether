@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".GUI.Startmenue"
+    android:background="@drawable/holz_hintergrund"
+    android:showDividers="middle|beginning|end"
+    android:paddingStart="10dp"
+    android:rowCount="11"
+    android:columnCount="6">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="@dimen/logo_breite"
+        android:layout_height="@dimen/logo_hoehe"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:weightSum="1"
+        android:layout_gravity="center"
+        android:id="@+id/linearLayout"
+        android:gravity="top"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/logo"
+            android:longClickable="true"
+            android:background="@drawable/schnaps2gether_logo"
+            android:padding="0dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/s2g_logo"
+            android:layout_above="@+id/tableLayout2"
+            android:layout_alignLeft="@+id/linearLayout"
+            android:layout_alignStart="@+id/linearLayout" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:layout_columnSpan="6"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableLayout2"
+        android:layout_alignParentBottom="true">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="157dp"
+            android:layout_row="8"
+            android:layout_column="0"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_gravity="fill_horizontal|top|center"
+            android:weightSum="1">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:paddingBottom="10dp">
+
+               <TextView>
+               </TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/menueButton_hoehe"
+                    android:text="Beenden"
+                    style="@style/text_buttonsLobby"
+                    android:id="@+id/cmd_Beenden"
+                    android:background="@drawable/beiger_button"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.33" />
+
+            </TableRow>
+        </TableLayout>
+
+    </TableLayout>
+
+</RelativeLayout>

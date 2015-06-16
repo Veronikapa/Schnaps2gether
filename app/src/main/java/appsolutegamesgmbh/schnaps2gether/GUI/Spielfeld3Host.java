@@ -1023,11 +1023,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 spielerNamen.add(nameGegner);
 
                 if (spielerNamen.size() == 3) {
-                    txt_Gegner1Name.setText(spielerNamen.get(1));
-                    txt_Gegner2Name.setText(spielerNamen.get(2));
+                    txt_Gegner1Name.setText(spielerNamen.get(2));
+                    txt_Gegner2Name.setText(spielerNamen.get(1));
                     txt_BummerlMeinName.setText(spielerNamen.get(0));
-                    txt_BummerlNameGegner1.setText(spielerNamen.get(1));
-                    txt_BummerlNameGegner2.setText(spielerNamen.get(2));
+                    txt_BummerlNameGegner1.setText(spielerNamen.get(2));
+                    txt_BummerlNameGegner2.setText(spielerNamen.get(1));
                 }
                 break;
             default:
