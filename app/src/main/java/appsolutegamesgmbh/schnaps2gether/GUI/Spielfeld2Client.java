@@ -262,7 +262,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 SensorManager.SENSOR_DELAY_UI);
     }
 
-    private void zugAusführen(int i) {
+    private void zugAusfuehren(int i) {
 
         if(schummelnAktiv)
         {
@@ -664,23 +664,23 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     }
 
     public void karte1OnClick(View view) {
-        zugAusführen(0);
+        zugAusfuehren(0);
     }
 
     public void karte2OnClick(View view) {
-        zugAusführen(1);
+        zugAusfuehren(1);
     }
 
     public void karte3OnClick(View view) {
-        zugAusführen(2);
+        zugAusfuehren(2);
     }
 
     public void karte4OnClick(View view) {
-        zugAusführen(3);
+        zugAusfuehren(3);
     }
 
     public void karte5OnClick(View view) {
-        zugAusführen(4);
+        zugAusfuehren(4);
     }
 
     @Override

@@ -1037,7 +1037,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte1OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(0);
+            zugAusfuehren(0);
         else {
             if (talonID.equals("0")) {
                 imageView_karte1.setAlpha(1f);
@@ -1078,7 +1078,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte2OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(1);
+            zugAusfuehren(1);
         else {
             if (talonID.equals("0")) {
                 imageView_karte2.setAlpha(1f);
@@ -1118,7 +1118,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte3OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(2);
+            zugAusfuehren(2);
         else {
             if (talonID.equals("0")) {
                 imageView_karte3.setAlpha(1f);
@@ -1158,7 +1158,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte4OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(3);
+            zugAusfuehren(3);
         else {
             if (talonID.equals("0")) {
                 imageView_karte4.setAlpha(1f);
@@ -1198,7 +1198,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte5OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(4);
+            zugAusfuehren(4);
         else {
             if (talonID.equals("0")) {
                 imageView_karte5.setAlpha(1f);
@@ -1238,7 +1238,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
     public void karte6OnClick(View view) {
         if (!talontauschen)
-            zugAusführen(5);
+            zugAusfuehren(5);
         else {
             if (talonID.equals("0")) {
                 imageView_karte6.setAlpha(1f);
@@ -1442,7 +1442,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         Toast.makeText(appContext, "Wählen Sie eine Handkarte zum Tauschen!", Toast.LENGTH_SHORT).show();
     }
 
-    private void zugAusführen(int i) {
+    private void zugAusfuehren(int i) {
         final Karte k = selbst.Hand.get(i);
         eigeneKarte = k;
         buttonsNichtKlickbar();
