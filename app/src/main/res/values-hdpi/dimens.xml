@@ -32,4 +32,6 @@
 
     <dimen name="anzeigeG_hoehe">25dp</dimen>
     <dimen name="anzeigeG_breite">110dp</dimen>
+
+    <dimen name="statistikIcon">50dp</dimen>
 </resources>
