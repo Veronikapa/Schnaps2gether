@@ -21,7 +21,8 @@ public class Spiel4kannFleckenTest {
 
     @Test
     public void Spielstart_S2_S4_kannflecken() throws WrongGameException {
-        Spiel4 spiel = new Spiel4(0);
+        Spiel4 spiel = new Spiel4(2);
+        spiel.SpielAnsagen(new Rufspiel("Land"), spiel.getS3());
         assertTrue("Spieler1 kann flecken", spiel.kannFlecken(spiel.getS1()));
         assertTrue("Spieler2 kann flecken", spiel.kannFlecken(spiel.getS2()));
         assertTrue("Spieler3 kann flecken", spiel.kannFlecken(spiel.getS3()));
