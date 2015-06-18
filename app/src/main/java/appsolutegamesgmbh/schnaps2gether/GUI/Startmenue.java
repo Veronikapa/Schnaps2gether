@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,8 +47,8 @@ public class Startmenue extends Activity implements View.OnClickListener {
         schnellesSpiel = (Button) findViewById(R.id.cmd_schnellesSpiel);
         schnellesSpiel.setOnClickListener(this);
 
-        SharedPreferences settings = this.getPreferences(this.MODE_PRIVATE);
-        SpielerName = settings.getString("nickname", "Nickname");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SpielerName = sharedPreferences.getString("nickname", "Nickname");
 
     }
 

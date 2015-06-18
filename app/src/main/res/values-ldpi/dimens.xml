@@ -33,4 +33,6 @@
 
     <dimen name="button_3er4er_breite">50dp</dimen>
     <dimen name="button_2er_breite">60dp</dimen>
+
+    <dimen name="statistikIcon">40dp</dimen>
 </resources>
