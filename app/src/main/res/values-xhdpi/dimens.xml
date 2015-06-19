@@ -34,6 +34,6 @@
     <dimen name="button_3er4er_breite">85dp</dimen>
     <dimen name="button_2er_breite">75dp</dimen>
 
-    <dimen name="statistikIcon">50dp</dimen>
+    <dimen name="statistikIcon">40dp</dimen>
 
 </resources>
