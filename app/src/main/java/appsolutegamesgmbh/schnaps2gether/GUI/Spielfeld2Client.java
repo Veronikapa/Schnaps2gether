@@ -563,7 +563,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
 
     private void spielStatistikSpeichern(boolean gewonnen, int punkte, int bummerlPunkte)
     {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(appContext);
 
         int gewonnenBisher = Integer.parseInt(sharedPreferences.getString("spieleGewonnen", "0"));
         int verlorenBisher = Integer.parseInt(sharedPreferences.getString("spieleVerloren", "0"));
