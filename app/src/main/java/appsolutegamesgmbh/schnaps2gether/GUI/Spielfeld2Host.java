@@ -755,9 +755,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         BpunkteGegner.setText(Integer.toString(bummerl.getPunkteS2()));
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (BUMMERL + ":" + bummerl.toString()).getBytes());
 
-        imageView_karteGegner.setImageResource(gegnerischeKarte.getImageResourceId());
-        imageView_eigeneKarte.setImageResource(eigeneKarte.getImageResourceId());
-
+        imageView_eigeneKarte.setImageDrawable(null);
+        imageView_karteGegner.setImageDrawable(null);
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE + ":" + (win ? 0 : 1)).getBytes());
 
