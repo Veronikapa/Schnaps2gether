@@ -222,6 +222,14 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichGegnerKarteG =(ImageView) findViewById(R.id.stichGegnerKarteG);
         stichDeckG = (ImageView) findViewById (R.id.stichDeckG);
 
+        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteSelbst);
+        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
+        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
+        txt_GegnerName = (TextView) findViewById(R.id.txt_NameGegner2);
+        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
+        txt_BummerlNameGegner = (TextView) findViewById(R.id.txt_BummerlNameG1);
+
 
 
         shakeImplementation();
@@ -426,9 +434,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonZudrehen.setAlpha(1f);
         buttonZudrehen.setText(R.string.buttonZ);
 
-        punkteSelbst = (TextView) findViewById(R.id.txt_PunkteSelbst);
-        BpunkteSelbst = (TextView) findViewById(R.id.txt_BummerlZahlI);
-        BpunkteGegner = (TextView) findViewById(R.id.txt_BummerlZahlG1);
+
 
         BpunkteSelbst.setText("0");
         BpunkteGegner.setText("0");
@@ -436,9 +442,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
 
-        txt_GegnerName = (TextView) findViewById(R.id.txt_NameGegner2);
-        txt_BummerlMeinName = (TextView) findViewById(R.id.txt_BummerlNameI);
-        txt_BummerlNameGegner = (TextView) findViewById(R.id.txt_BummerlNameG1);
+
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMEGEGNER+":" + Startmenue.SpielerName).getBytes());
     }
 
