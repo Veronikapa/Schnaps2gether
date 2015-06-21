@@ -1276,7 +1276,11 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             int HandkartenAnz = selbst.Hand.size();
 
             for (int i=0;i<HandkartenAnz;i++) {
-                Hand += ","+selbst.Hand.get(i).toString();
+                if(i==0){
+                    Hand += selbst.Hand.get(i).toString();
+                }else {
+                    Hand += "," + selbst.Hand.get(i).toString();
+                }
             }
             Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONGETAUSCHT + ":" + SpielerID + ":" + Hand + ":" + Talon.get(0).toString() + "," + Talon.get(1).toString()).getBytes());
 

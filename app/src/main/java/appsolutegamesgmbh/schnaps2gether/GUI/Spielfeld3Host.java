@@ -634,6 +634,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             imageView_talonkarte2.setVisibility(View.INVISIBLE);
             buttonWeiter.setEnabled(false);
             buttonWeiter.setAlpha(0.6f);
+            Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TALONGETAUSCHT).getBytes());
+
         } else if (flecken) {
             flecken = false;
             buttonFlecken.setVisibility(View.INVISIBLE);
@@ -996,7 +998,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case TALONGETAUSCHT:
                 if (messageParts[1].equals("1")) {
-                    hand = messageParts[3].split(",");
+                    hand = messageParts[2].split(",");
                     gegner1.Hand = new ArrayList<Karte>();
                     for (int i = 0; i < hand.length; i++) {
                         gegner1.Hand.add(i, new Karte(hand[i]));
@@ -1004,7 +1006,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     gegnerischeHand1Aktualisieren();
                     gegner1hat20er();
                 } else if (messageParts[1].equals("2")) {
-                    hand = messageParts[3].split(",");
+                    hand = messageParts[2].split(",");
                     gegner2.Hand = new ArrayList<Karte>();
                     for (int i = 0; i < hand.length; i++) {
                         gegner2.Hand.add(i, new Karte(hand[i]));
