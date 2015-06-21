@@ -142,6 +142,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
     private static int istdran;
 
     private static Bummerl2 bummerl;
+    private static boolean istErstesBummerl;
 
     private static boolean schummelnDesGegnerErkannt;
     private static boolean schummelnVonGegnerErkannt;
@@ -173,6 +174,7 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         endpointIDs = Lobby.endpointIds;
 
         appContext = this.getApplicationContext();
+        istErstesBummerl = true;
 
         imageView_karte1 =(ImageView) findViewById(R.id.imageView_karte1);
         imageView_karte2 = (ImageView) findViewById(R.id.imageView_karte2);
@@ -442,8 +444,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         gegnerischeKarte = null;
         buttonsNichtKlickbar();
 
+       if(istErstesBummerl) {
+           Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMEGEGNER + ":" + Startmenue.SpielerName).getBytes());
+           istErstesBummerl = false;
+       }
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMEGEGNER+":" + Startmenue.SpielerName).getBytes());
+
     }
 
     private void internspielStart() {
