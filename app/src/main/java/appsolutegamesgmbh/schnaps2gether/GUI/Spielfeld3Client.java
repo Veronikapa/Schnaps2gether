@@ -735,9 +735,9 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 Toast.makeText(appContext, "Talonkarte ausgetauscht", Toast.LENGTH_SHORT).show();
                 break;
             case ZUGENDE:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                //handler.postDelayed(new Runnable() {
+                   // @Override
+                   // public void run() {
                         if (SpielerID.equals("1")) {
                             GestochenSelbst = Integer.decode(messageParts[1]);
                             istdran = Integer.decode(messageParts[3]);
@@ -753,8 +753,8 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                         eigeneKarte = null;
                         gegnerischeKarte1 = null;
                         gegnerischeKarte2 = null;
-                    }
-                }, 1000);
+                //    }
+               // }, 1000);
 
                 break;
             case PUNKTE:
