@@ -617,6 +617,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
 
                 handKartenKlickbar();
                 buttonZudrehen.setEnabled(false);
+                buttonZudrehen.setVisibility(View.VISIBLE);
+                buttonTrumpfTauschen.setVisibility(View.VISIBLE);
                 buttonZudrehen.setAlpha(1f);
                 buttonZudrehen.setText(R.string.buttonZ);
 
@@ -671,6 +673,9 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         stichK3.setVisibility(View.INVISIBLE);
         stichK2.setVisibility(View.INVISIBLE);
         stichK1.setVisibility(View.INVISIBLE);
+
+        buttonZudrehen.setVisibility(View.VISIBLE);
+        buttonTrumpfTauschen.setVisibility(View.VISIBLE);
 
         buttonZudrehen.setEnabled(true);
         buttonZudrehen.setAlpha(1f);
@@ -825,6 +830,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
         buttonTrumpfTauschen.setAlpha(0f);
         imageView_deck.setAlpha((float) 0);
         imageView_trumpf.setAlpha((float) 0);
+
+        buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
 
 
         Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (ZUGEDREHT + ":").getBytes());
@@ -1227,6 +1234,8 @@ public class Spielfeld2Host extends Activity implements GameEnd.GameEndDialogLis
                     //buttonStapel.setText(Integer.toString(spiel.AnzahlKartenStapel()+1));
                     imageView_deck.setAlpha((float) 0);
                     imageView_trumpf.setAlpha((float)0);
+                    buttonZudrehen.setVisibility(View.INVISIBLE);
+                    buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (STAPELLEER + ":" + 0).getBytes());
                 }
                 if (selbst.isIstdran()) {

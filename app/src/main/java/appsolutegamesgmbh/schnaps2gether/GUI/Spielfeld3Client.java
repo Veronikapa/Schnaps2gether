@@ -764,7 +764,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
                 punkteAktualisieren();
                 break;
             case SPIELENDE:
-                if (messageParts.length == 2) {
+                if (messageParts.length == 3) {
                     if (messageParts[1].equals(SpielerID) || messageParts[2].equals(SpielerID)) {
                         Toast.makeText(appContext, "Gewonnen!", Toast.LENGTH_SHORT);
                     } else {

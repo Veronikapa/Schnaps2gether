@@ -431,6 +431,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         imageView_deck.setAlpha((float) 1);
         imageView_deck.setImageResource(R.drawable.deck_5);
 
+        buttonZudrehen.setVisibility(View.VISIBLE);
+        buttonTrumpfTauschen.setVisibility(View.VISIBLE);
+
         zugedreht = false;
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(1f);
@@ -460,6 +463,9 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         stichDeckG.setVisibility(View.INVISIBLE);
         stichEigeneKarteG.setVisibility(View.INVISIBLE);
         stichGegnerKarteG.setVisibility(View.INVISIBLE);
+
+        buttonZudrehen.setVisibility(View.VISIBLE);
+        buttonTrumpfTauschen.setVisibility(View.VISIBLE);
 
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
@@ -603,8 +609,12 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
         buttonZudrehen.setEnabled(false);
         buttonZudrehen.setAlpha(0.4f);
         buttonZudrehen.setText("Zugedreht");
+        //buttonZudrehen.setVisibility(View.VISIBLE);
+
         buttonTrumpfTauschen.setEnabled(false);
         buttonTrumpfTauschen.setAlpha(0f);
+        buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
+
         imageView_deck.setAlpha((float) 0);
         imageView_trumpf.setAlpha((float) 0);
 
@@ -816,6 +826,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
                 buttonTrumpfTauschen.setAlpha(0f);
                 imageView_deck.setAlpha((float) 0);
                 imageView_trumpf.setAlpha((float) 0);
+                buttonZudrehen.setVisibility(View.INVISIBLE);
+                buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
                 break;
             case ANGESAGT40ER: Toast.makeText(appContext, "40er angesagt", Toast.LENGTH_SHORT).show();
                 break;
@@ -857,6 +869,8 @@ public class Spielfeld2Client extends Activity implements GameEnd.GameEndDialogL
             case STAPELLEER:
                 imageView_deck.setAlpha((float) 0);
                 imageView_trumpf.setAlpha((float)0);
+                buttonZudrehen.setVisibility(View.INVISIBLE);
+                buttonTrumpfTauschen.setVisibility(View.INVISIBLE);
             case SCHUMMELN:
                 auge_Icon.setVisibility(View.VISIBLE);
 
