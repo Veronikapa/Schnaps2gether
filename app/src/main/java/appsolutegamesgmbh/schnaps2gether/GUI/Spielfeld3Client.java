@@ -793,24 +793,24 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
             case NAMENGEGNER:
 
                 String nameHost = messageParts[1];
-                String nameGegner = messageParts[2];
+                String nameGegner1 = messageParts[2];
+                String nameGegner2 = messageParts[3];
 
                 //nameGegner nicht mein eigener Name --> ich bin Spieler 3
-                if (nameGegner != Startmenue.SpielerName) {
-                    txt_Gegner1Name.setText(nameGegner);
+                if (nameGegner1 != Startmenue.SpielerName) {
+                    txt_Gegner1Name.setText(nameGegner1);
                     txt_Gegner2Name.setText(nameHost);
-                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
-                    txt_BummerlNameGegner1.setText(nameGegner);
+                    txt_BummerlMeinName.setText(nameGegner2);
+                    txt_BummerlNameGegner1.setText(nameGegner1);
                     txt_BummerlNameGegner2.setText(nameHost);
                 }
 
                 //nameGegner = mein eigener Name --> ich bin Spieler 2
                 else {
-                    nameGegner = messageParts[3];
-                    txt_Gegner1Name.setText(nameGegner);
+                    txt_Gegner1Name.setText(nameGegner2);
                     txt_Gegner2Name.setText(nameHost);
-                    txt_BummerlMeinName.setText(Startmenue.SpielerName);
-                    txt_BummerlNameGegner1.setText(nameGegner);
+                    txt_BummerlMeinName.setText(nameGegner1);
+                    txt_BummerlNameGegner1.setText(nameGegner2);
                     txt_BummerlNameGegner2.setText(nameHost);
                 }
 

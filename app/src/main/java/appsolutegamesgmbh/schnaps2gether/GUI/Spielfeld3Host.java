@@ -351,7 +351,6 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     }
 
                 }
-                //TODO Kerstin: Bitte testen ob das funktioniert!
                 //Namen der Spieler an Clients weitergeben
                 if (spielerNamen.size() == 3) {
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (NAMENGEGNER + ":" + spielerNamen.get(0) + ":" + spielerNamen.get(1) + ":" + spielerNamen.get(2)).getBytes());
@@ -997,7 +996,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 break;
             case TALONGETAUSCHT:
                 if (messageParts[1].equals("1")) {
-                    hand = messageParts[2].split(",");
+                    hand = messageParts[3].split(",");
                     gegner1.Hand = new ArrayList<Karte>();
                     for (int i = 0; i < hand.length; i++) {
                         gegner1.Hand.add(i, new Karte(hand[i]));
@@ -1005,7 +1004,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                     gegnerischeHand1Aktualisieren();
                     gegner1hat20er();
                 } else if (messageParts[1].equals("2")) {
-                    hand = messageParts[2].split(",");
+                    hand = messageParts[3].split(",");
                     gegner2.Hand = new ArrayList<Karte>();
                     for (int i = 0; i < hand.length; i++) {
                         gegner2.Hand.add(i, new Karte(hand[i]));
@@ -1020,7 +1019,8 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             case NAMENGEGNER:
                 String nameGegner = message.split(":")[1];
 
-                spielerNamen.add(nameGegner);
+                if(!spielerNamen.contains(nameGegner))
+                    spielerNamen.add(nameGegner);
 
                 if (spielerNamen.size() == 3) {
                     txt_Gegner1Name.setText(spielerNamen.get(2));
