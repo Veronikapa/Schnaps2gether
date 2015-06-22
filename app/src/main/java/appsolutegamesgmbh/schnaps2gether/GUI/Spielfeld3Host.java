@@ -1844,19 +1844,26 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         if(Sieger.contains(gegner2))
             sieger = sieger + ":2";
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
 
 
-        if (bummerl.istBummerlzuEnde()) {
-            if (bummerl.getPunkteS1() >= 24)
-                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " gewonnen!", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " verloren!", Toast.LENGTH_LONG).show();
+                if (bummerl.istBummerlzuEnde()) {
+                    if (bummerl.getPunkteS1() >= 24)
+                        Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " gewonnen!", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " verloren!", Toast.LENGTH_LONG).show();
 
-            spielStart();
-            bummerl = new Bummerl3();
-        } else
-            spielStart();
+                    spielStart();
+                    bummerl = new Bummerl3();
+                } else
+                    spielStart();
+
+            }
+        }, 2000);
+
         
     }
     public void ansagen40er(View view) {
