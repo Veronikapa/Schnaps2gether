@@ -1003,18 +1003,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
 
                 handAktualisieren();
 
-                buttonWeiter.setText("Weiter");
-                buttonWeiter.setEnabled(false);
-                buttonWeiter.setAlpha(0.4f);
-                buttonTrumpfansagen.setVisibility(View.INVISIBLE);
-                buttonTrumpfansagen.setEnabled(false);
-
-                if(bummerl.getAnzahlSpiele()%3 == 0){
-                    buttonWeiter.setEnabled(true);
-                    buttonWeiter.setAlpha(1f);
-                    buttonSpielAnsagen.setVisibility(View.VISIBLE);
-                }
-                else if(bummerl.getAnzahlSpiele()%3 == 1) {
+                if(bummerl.getAnzahlSpiele()%3 == 1) {
                     andererSpielerKannSpielAnsagen(gegner1);
                     Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
                 }
