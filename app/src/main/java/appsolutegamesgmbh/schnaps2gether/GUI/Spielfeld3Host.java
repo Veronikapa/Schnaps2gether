@@ -980,6 +980,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                         spielEnde();
                     }
                     gegnerischeHand1Aktualisieren();
+
                 }else{
                     spiel.Ansagen20er(farbe, gegner2);
                     punkteAktualisieren();
