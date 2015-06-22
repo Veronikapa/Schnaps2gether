@@ -997,10 +997,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 trumpffarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
                 spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
-
-                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
                 Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":"+trumpffarbe).getBytes());
-                spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
 
                 handAktualisieren();
 
