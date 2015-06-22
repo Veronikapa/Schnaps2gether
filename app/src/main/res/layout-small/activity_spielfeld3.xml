@@ -784,9 +784,10 @@
             android:text="Gegner1"
             android:textColor="@android:color/white"
             android:autoText="false"
-            android:rotation="270"
+            android:rotation="0"
             style="@style/vertikal_Schrift"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:phoneNumber="false" />
 
     </LinearLayout>
 

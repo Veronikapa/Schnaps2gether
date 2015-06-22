@@ -566,7 +566,7 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
         messageParts = message.split(":");
         switch ((message.split(":")[0])) {
             case BUMMERL:
-                bummerl = new Bummerl3(message.substring(2));
+                bummerl = new Bummerl3(messageParts[1]);
                 break;
             case TRUMPFANSAGEN:
                 if (messageParts[1].equals(SpielerID)) {

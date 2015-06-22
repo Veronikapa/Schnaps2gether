@@ -980,6 +980,7 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                         spielEnde();
                     }
                     gegnerischeHand1Aktualisieren();
+
                 }else{
                     spiel.Ansagen20er(farbe, gegner2);
                     punkteAktualisieren();
@@ -995,6 +996,20 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             case TRUMPFFARBE:
                 trumpffarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
+                spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":"+trumpffarbe).getBytes());
+
+                handAktualisieren();
+
+                if(bummerl.getAnzahlSpiele()%3 == 1) {
+                    andererSpielerKannSpielAnsagen(gegner1);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+                }
+                else{
+                    andererSpielerKannSpielAnsagen(gegner2);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
+                }
+
                 break;
             case TALONGETAUSCHT:
                 if (messageParts[1].equals("1")) {
@@ -1829,19 +1844,26 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
         if(Sieger.contains(gegner2))
             sieger = sieger + ":2";
 
-        Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELENDE+sieger).getBytes());
 
 
-        if (bummerl.istBummerlzuEnde()) {
-            if (bummerl.getPunkteS1() >= 24)
-                Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " gewonnen!", Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " verloren!", Toast.LENGTH_LONG).show();
+                if (bummerl.istBummerlzuEnde()) {
+                    if (bummerl.getPunkteS1() >= 24)
+                        Toast.makeText(appContext, "Gratulation! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " gewonnen!", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(appContext, "Oje! Bummerl " + bummerl.getPunkteS1() + ":" + bummerl.getPunkteS2() + ":" + bummerl.getPunkteS3() + " verloren!", Toast.LENGTH_LONG).show();
 
-            spielStart();
-            bummerl = new Bummerl3();
-        } else
-            spielStart();
+                    spielStart();
+                    bummerl = new Bummerl3();
+                } else
+                    spielStart();
+
+            }
+        }, 2000);
+
         
     }
     public void ansagen40er(View view) {

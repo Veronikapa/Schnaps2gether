@@ -729,7 +729,6 @@
             android:text="Gegner1"
             android:textColor="@android:color/white"
             android:autoText="false"
-            android:rotation="270"
             android:layout_gravity="left"
             style="@style/vertikal_Schrift" />
 
