@@ -995,6 +995,34 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
             case TRUMPFFARBE:
                 trumpffarbe = message.split(":")[1];
                 imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
+                spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
+
+                imageView_trumpfIcon.setImageResource(Karte.getIconResourceId(trumpffarbe));
+                Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (TRUMPFFARBE+":"+trumpffarbe).getBytes());
+                spiel.Trumpfansagen(trumpffarbe,bummerl.getAnzahlSpiele());
+
+                handAktualisieren();
+
+                buttonWeiter.setText("Weiter");
+                buttonWeiter.setEnabled(false);
+                buttonWeiter.setAlpha(0.4f);
+                buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+                buttonTrumpfansagen.setEnabled(false);
+
+                if(bummerl.getAnzahlSpiele()%3 == 0){
+                    buttonWeiter.setEnabled(true);
+                    buttonWeiter.setAlpha(1f);
+                    buttonSpielAnsagen.setVisibility(View.VISIBLE);
+                }
+                else if(bummerl.getAnzahlSpiele()%3 == 1) {
+                    andererSpielerKannSpielAnsagen(gegner1);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":1").getBytes());
+                }
+                else{
+                    andererSpielerKannSpielAnsagen(gegner2);
+                    Nearby.Connections.sendReliableMessage(mGoogleApiClient, endpointIDs, (SPIELANSAGEN + ":" + spieleAnsagbar + ":2").getBytes());
+                }
+
                 break;
             case TALONGETAUSCHT:
                 if (messageParts[1].equals("1")) {
