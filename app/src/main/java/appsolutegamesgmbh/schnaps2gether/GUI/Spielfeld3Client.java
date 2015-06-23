@@ -282,6 +282,11 @@ public class Spielfeld3Client extends Activity implements GameEnd.GameEndDialogL
 
         selbst = new Spieler();
 
+        buttonGegenflecken.setVisibility(View.INVISIBLE);
+        buttonFlecken.setVisibility(View.INVISIBLE);
+        buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+        buttonSpielAnsagen.setVisibility(View.INVISIBLE);
+
         stichK16.setVisibility(View.INVISIBLE);
         stichK15.setVisibility(View.INVISIBLE);
         stichK14.setVisibility(View.INVISIBLE);

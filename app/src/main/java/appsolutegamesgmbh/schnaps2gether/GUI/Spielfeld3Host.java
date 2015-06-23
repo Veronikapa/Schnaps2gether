@@ -323,6 +323,11 @@ public class Spielfeld3Host extends Activity implements GameEnd.GameEndDialogLis
                 buttonsNichtKlickbar();
                 handAktualisieren();
 
+                buttonGegenflecken.setVisibility(View.INVISIBLE);
+                buttonFlecken.setVisibility(View.INVISIBLE);
+                buttonTrumpfansagen.setVisibility(View.INVISIBLE);
+                buttonSpielAnsagen.setVisibility(View.INVISIBLE);
+
                 if (bummerl.getAnzahlSpiele() == 0) {
                     punkteSelbst.setText("0");
                     BpunkteSelbst.setText("0");
