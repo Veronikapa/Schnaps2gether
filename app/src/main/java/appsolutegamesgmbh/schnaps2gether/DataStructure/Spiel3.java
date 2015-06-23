@@ -904,7 +904,9 @@ public class Spiel3 {
         }
         else if(Spiel.getSpiel().equals("Land") || Spiel.getSpiel().equals("Kontraschnapser") || Spiel.getSpiel().equals("Kontrabauernschnapser"))
         {
-            if(Spiel.getPunkte() > spiel.getPunkte())
+            if(s == spieler && !(Spiel.getSpiel().equals("Land")))
+                return false;
+            else if(Spiel.getPunkte() > spiel.getPunkte())
                 return true;
             else
                 return false;
