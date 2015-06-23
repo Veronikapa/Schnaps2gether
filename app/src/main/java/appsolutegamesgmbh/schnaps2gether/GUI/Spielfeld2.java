@@ -485,7 +485,7 @@ public class Spielfeld2 extends Activity implements GameEnd.GameEndDialogListene
         else
             verlorenBisher++;
 
-        bummerl+= bummerl-bummerlPunkte;
+        bummerl+= bummerlPunkte;
 
         if(punkte>maxPunkte)
             maxPunkte = punkte;
