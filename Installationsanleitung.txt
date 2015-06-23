@@ -1,0 +1,14 @@
+/*
+* Installationsanleitung Schnaps2gether
+* Erstellt am: 23.06.2015
+*/
+
+Falls Sie bereits eine Version von Schnaps2gether auf Ihrem Android Gerät installiert haben, deinstallieren Sie diese bitte.
+
+1. Kopieren von "Schnaps2gether.apk" in den Download-Ordner eines Android Gerätes (>= Android 4.0)
+2. Öffnen von "Schnaps2gether.apk" auf Android Gerät
+3. Wenn notwenig Installation von APK erlauben
+4. Installation starten
+5. Zugriffe der APK auf Gerät akzeptieren
+6. Die App befindet sich nun in Ihrem App Menü.
+
